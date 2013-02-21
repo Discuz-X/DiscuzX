@@ -1,0 +1,11 @@
+<div class="bm">
+	<div class="bm_h">
+		<h2>提示信息</h2>
+	</div>
+	<div class="bm_c infobox"{if $type == 'window'} style="width: 250px"{/if}>
+		$message
+	</div>
+	<!--{if $type == 'window'}-->
+		<script>$('cpcontainer').style.width = '100%';</script>
+	<!--{/if}-->
+</div>

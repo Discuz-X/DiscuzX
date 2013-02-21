@@ -1,0 +1,31 @@
+<!--{if $action == 'edit'}-->
+	<div class="tbmu bbda mbm">
+		<a href="develop.php?mod=plugin&action=edit&operation=regplugin&pluginid=$pluginid" $cur_operation['regplugin']>基本信息</a>
+		<span class="pipe">|</span>
+		<a href="develop.php?mod=plugin&action=edit&operation=script&pluginid=$pluginid" $cur_operation['script']>脚本管理</a>
+		<span class="pipe">|</span>
+		<a href="develop.php?mod=plugin&action=edit&operation=setting&pluginid=$pluginid" $cur_operation['setting']>插件变量设置</a>
+		<span class="pipe">|</span>
+		<a href="develop.php?mod=plugin&action=edit&operation=language&pluginid=$pluginid" $cur_operation['language']>语言包管理</a>
+		<span class="pipe">|</span>
+		<a href="develop.php?mod=plugin&action=edit&operation=style&pluginid=$pluginid" $cur_operation['style']>样式管理</a>
+		<span class="pipe">|</span>
+		<a href="develop.php?mod=plugin&action=edit&operation=export&pluginid=$pluginid" $cur_operation['export']>导出插件包</a>
+	</div>
+<!--{/if}-->
+
+<!--{if $action == 'create'}-->
+	<ul class="step cl">
+		<li{if $operation == 'regplugin'} class="a"{/if}><em>1</em><p>创建插件</p></li>
+		<li class="arrow">&rsaquo;</li>
+		<li{if $operation == 'script'} class="a"{/if}><em>2</em><p>编辑脚本</p></li>
+		<li class="arrow">&rsaquo;</li>
+		<li{if $operation == 'setting'} class="a"{/if}><em>3</em><p>设置变量</p></li>
+		<li class="arrow">&rsaquo;</li>
+		<li{if $operation == 'language'} class="a"{/if}><em>4</em><p>编辑语言包</p></li>
+		<li class="arrow">&rsaquo;</li>
+		<li{if $operation == 'style'} class="a"{/if}><em>5</em><p>编辑扩展 CSS</p></li>
+		<li class="arrow">&rsaquo;</li>
+		<li><em>6</em><p>导出插件包</p></li>
+	</ul>
+<!--{/if}-->

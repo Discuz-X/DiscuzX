@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* CSS Document */
+.xwb-plugin, .xwb-plugin p, .xwb-plugin h3, .xwb-plugin h4{ margin:0; padding:0;}
+.xwb-plugin{ font-family:Tahoma, Geneva, sans-serif; font-size:12px;}
+.hidden{ display:none;}
+
+/*新浪微博奖章*/
+.popavatar .xwb-plugin-medal-sinawb { display:none;} /*鼠标经过头像，隐藏*/
+.xwb-plugin-medal-sinawb { display:inline-block; vertical-align:middle; float:right; margin-right:20px; margin-top:-43px;}
+
+/*注册和登录*/
+.xwb-plugin-sinawb-login { margin-bottom:15px; margin-top:-50px; width:170px; _position:relative;}
+.logininfo .xwb-plugin-sinawb-login h4 { margin:5px 0; font-size:12px;}
+.xwb-plugin-login-btn { display:inline-block; background:url(bgimg/sina_login_btn.png) no-repeat; width:126px; height:24px;}
+
+/*第一帖的功能按钮区域*/
+div.useraction { width:310px;}
+
+/*转发按钮（帖子）*/
+#mibicon {background-image:url(bgimg/icon_logo.png)}
+
+/*转发按钮（日志）*/
+#xwb_blog_mibicon {background:url(bgimg/icon_logo.png) no-repeat scroll 5px 50% #FFFFFF}
+
+/*按钮*/
+.xwb-plugin-btn, .xwb-plugin-btn input { background:url(bgimg/form_btn.gif) no-repeat}
+.xwb-plugin-btn { display:block; width:72px; cursor:pointer;}
+.xwb-plugin-btn input { margin-left:5px; padding:0 5px 0 0; width:67px; height:25px; background-position:right; border:none; cursor:pointer;}
+
+/*用户注册浮层*/
+#xwb-plugin-register-layer { margin:0; padding:15px 20px;}
+#xwb-plugin-register-layer .xwb-plugin-layer-title { margin:0; font-size:14px; color:#333; font-weight:normal; margin-bottom:14px; font-weight: bold;}
+#xwb-plugin-register-layer .xwb-plugin-form label { display:block; font-size:14px; color:#333; font-weight:normal; margin:10px 0 5px;}
+#xwb-plugin-register-layer .xwb-plugin-input-a { vertical-align:middle; width:195px; padding:3px 5px; border:1px solid; border-color: #989898 #dfdfdf #dfdfdf #989898; background-color:#fcfcfc;}
+#xwb-plugin-register-layer .xwb-plugin-input-select { width:207px; padding:2px 5px; *height:26px;} /* 增加注册绑定样式 2010-10-27 */
+#xwb-plugin-register-layer .xwb-plugin-table { width:100%; height:100%;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-tr { height:20px;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-tr-btn {}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-tr-error { vertical-align:bottom; height:22px;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-msg { text-align:right; width:90px;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-input { padding-top:8px; width:220px;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-right-msg { padding-left:20px; padding-top:10px; vertical-align:top; font-size:12px; border-left: 1px solid #CCCCCC;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-right-a { color:#214FA3; text-decoration:none;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-btn { padding-left:190px;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-btn .xwb-plugin-btn { display:block; width:110px; cursor:pointer;}
+#xwb-plugin-register-layer .xwb-plugin-table .xwb-plugin-td-btn .xwb-plugin-btn input { margin-left:5px; padding:0 5px 0 0; width:105px; height:25px; background-position:right; border:none; cursor:pointer;}
+
+#xwb-plugin-register-layer .xwb-plugin-error { display:inline-block; vertical-align:middle; padding: 0 8px 0 95px; line-height:20px; font-size:12px; font-weight:normal; font-style:normal; color:#ec0000;}
+#xwb-plugin-register-layer .xwb-plugin-btn { margin-top:20px; *margin-top:10px;}
+
+#xwb-plugin-register-layer .xwb-plugin-regSuccess { font-size:13px; color:#999; line-height:1.6; margin-right:40px;}
+#xwb-plugin-register-layer .xwb-plugin-regSuccess strong { font-size:14px; color:#14ac00; display:block; margin-bottom:15px;}
+#xwb-plugin-register-layer .xwb-plugin-regSuccess em{ font-style:normal; color:#F00;}
+
+.xwb-plugin-reg-successBox { padding-left:40px;_padding-left:0px;margin-top:30px; text-align:left;} /* 增加注册绑定成功样式 2010-10-28 */
+.xwb-plugin-reg-successBox-btn { padding-left:220px; *padding-left:0px; _padding-top:10px; text-align:center;}
+.xwb-plugin-reg-successBox-p { min-height:80px;}
+.xwb-plugin-reg-successBox-forIE6 { _padding-left:40px;}
+
+/*绑定提示*/
+.xwb-plugin-bindingset { position:relative; _zoom:1; background:url(bgimg/icon_on.gif) no-repeat 5px center}
+.xwb-plugin-bindingset-tips { position:absolute; background:url(bgimg/bindingset_tips.gif) no-repeat; width:178px; height:91px; top:-40px; left:-178px;}
+.xwb-plugin-bindingset-tips a.xwb-plugin-close-btn { position:absolute; right:20px; text-decoration:none;}
+.xwb-plugin-bindingset-tips p { margin:20px 20px 2px 10px; line-height:1.5;}
+.xwb-plugin-bindingset .xwb-plugin-bindingset-tips a { color:#2f8de4; margin-left:10px;}
+
+/*发贴时同步到微博*/
+.xwb-plugin-syn-off { padding-top:2px; padding-right:20px; background:url(bgimg/icon_off.gif) no-repeat right;}
+.xwb-plugin-syn-on { padding-top:2px; padding-right:20px; background:url(bgimg/icon_on.gif) no-repeat right;}
+#postbox a.xwb-plugin-syn-set { color:red; text-decoration:none;}
+#postbox a.xwb-plugin-syn-set:hover {text-decoration:underline;}
+
+/*同步选框样式调整*/
+.xwb-plugin-send-syn {position:relative;top:-3px;#top:-2px;_top:-2px; _padding-top:4px;}
+
+/*绑定设置*/
+.bind-setting{ padding:20px 20px 0; _zoom:1;}
+.setting-box{ margin-bottom:30px;}
+.setting-box h3{ margin-bottom:15px; padding-bottom:5px; border-bottom:1px solid #c9c9c9; font-size:14px; text-indent:5px;}
+.setting-box .radio-box{ margin-bottom:15px;}
+.setting-box .radio{ margin-top:7px}
+.setting-box .radio input{ vertical-align:-3px;}
+.setting-box a, .setting-box a:visited{ color:#f10000; text-decoration:none;}
+.setting-box a:hover{ text-decoration:underline;}
+.setting-box .tips{ margin-top:15px; color:#999;}
+.setting-box p{ margin-bottom:18px;}
+
+.bind-setting .bing-text{ margin:30px 0 40px;}
+.bind-setting .bing-text h4{ margin-bottom:15px; font-size:12px;}
+.bind-setting .bing-text p{ text-indent:14px; line-height:22px; background:url(bgimg/dot.gif) no-repeat 3px 8px;}
+.bind-setting .txtb{ margin-top:10px; color:#999;}
+.bind-setting .txtb a{ color:#389df2; text-decoration:underline;}
+
+.success-tipx{ padding:3px 0 3px 5px; background:#f2fff0; border:1px solid #14ac00; color:#14ac00; font-weight:bold;}
+.alert-tips{ height:30px; border:1px solid #c2a181; line-height:30px; background:#fffdef url(bgimg/talert_icon.gif) no-repeat 6px 5px; font-size:14px; font-weight:bold; color:#333; text-indent:29px;}
+.bind-btn{ margin-top:50px; display:block; width:144px; height:36px; background:url(bgimg/bing_button.gif) no-repeat;}
+.tips-text{ margin:15px;}
+
+/*重复绑定*/
+.unrebind{ position:absolute; top:15px; left:15px; width:300px; height:100px;}
+.unrebind strong{ display:block; color:#F00; background:url(bgimg/alert_icon.gif) no-repeat; text-indent:25px;}
+.unrebind p{ margin-top:15px; color:#666;}
+.unrebind p a{ color:#0000ff; text-decoration:underline;}
+
+
+/*个人绑定资料*/
+.profile-bind img{ vertical-align:-3px;}
+
+/*用户资料页微博标识*/
+.tipGetCount-top{margin-top:10px;}
+.tipGetCount-text{padding-right:12px; color:#0000FF;}
+.tipGetCount-num{padding-right:15px;}
+.tipGetCount-already-attention-btn, .tipGetCount-attention-btn, .tipGetCount-attention-btn:hover{background:url("bgimg/all_bg.png") no-repeat scroll 0 0 transparent !important;}
+.tipGetCount-already-attention-btn{background-position:-151px -72px !important; display:inline-block !important; height:21px; width:58px; cursor:text;}
+.tipGetCount-attention-btn{background-position:-151px -10px !important; display:inline-block !important; height:21px; width:58px;}
+.tipGetCount-attention-btn:hover{background-position:-151px -41px !important;}

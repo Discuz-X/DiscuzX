@@ -1,0 +1,22 @@
+/*
+[name]少女时代[/name]
+Powered by Discuz! X
+*/
+
+body { background: #FAF9F1; }
+#pt { margin-top: 76px; margin-bottom:6px; padding-left: 3px; background: none; }
+#pt, #pt a { color: #FFF; }
+#ft, #ft a { color: #FF99FF; }
+#ft {  }
+#ft:hover {  }
+.frame, .frame-tab { margin-bottom: 0; border: none; background: transparent; color: #FFB693; filter:none; }
+
+
+.block{background-color: rgba(40, 68, 92, 0.25);*filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#4028445C,endcolorstr=#4028445C);zoom:1;}
+/*div[id$='content']{background:transparent;filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#00000000,endcolorstr=#00000000);}*/
+.block:hover { background-color: rgba(40, 68, 92, 0.80);*filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#9028445C,endcolorstr=#9028445C);}
+.title, .block .title { margin-bottom: 10px; height: 40px; border-bottom-width: 0 !important; background: transparent url(images/title.png) no-repeat 0 100%; color: #5289C0; line-height: 40px; }
+	.title a, .block .title a { color: #5289C0; }
+.col-r .block { background: #CC33FF; }
+	.col-r .block .title { margin-bottom: 10px; padding: 0 10px; height: 44px; background: #389CD0 url(images/title-2.png) repeat-x 0 0; color: #FFF; }
+		.col-r .block .title a { color: #28445C; }
