@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: forum_ajax.php 32446 2013-01-17 08:10:12Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -493,18 +493,23 @@ EOF;
 } elseif($_GET['action'] == 'quickreply') {
 	$tid = intval($_GET['tid']);
 	$fid = intval($_GET['fid']);
-	$list = C::t('forum_post')->fetch_all_by_tid('tid:'.$tid, $tid, true, 'DESC', 0, 10, null, 0);
-	loadcache('smilies');
-	foreach($list as $pid => $post) {
-		if($post['first']) {
-			unset($list[$pid]);
-		} else {
-			$post['message'] = preg_replace($_G['cache']['smilies']['searcharray'], '', $post['message']);
-			$post['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '', $post['message']);
-			$list[$pid]['message'] = cutstr(preg_replace("/\[.+?\]/ies", '', dhtmlspecialchars($post['message'])), 300) ;
+	if($tid) {
+		$thread = C::t('forum_thread')->fetch($tid);
+		if($thread && !getstatus($thread['status'], 2)) {
+			$list = C::t('forum_post')->fetch_all_by_tid('tid:'.$tid, $tid, true, 'DESC', 0, 10, null, 0);
+			loadcache('smilies');
+			foreach($list as $pid => $post) {
+				if($post['first']) {
+					unset($list[$pid]);
+				} else {
+					$post['message'] = preg_replace($_G['cache']['smilies']['searcharray'], '', $post['message']);
+					$post['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '', $post['message']);
+					$list[$pid]['message'] = cutstr(preg_replace("/\[.+?\]/ies", '', dhtmlspecialchars($post['message'])), 300) ;
+				}
+			}
+			krsort($list);
 		}
 	}
-	krsort($list);
 	$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
 	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
 

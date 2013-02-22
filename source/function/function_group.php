@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_group.php 29394 2012-04-10 07:26:16Z liulanbo $
+ *      $Id: function_group.php 32368 2013-01-07 02:31:01Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,7 +32,7 @@ function groupperm(&$forum, $uid, $action = '', $isgroupuser = '') {
 	if(!$forum['gviewperm'] && !$isgroupuser) {
 		return 2;
 	}
-	if($forum['jointype'] == 2 && !$forum['gviewperm'] && !empty($isgroupuser['uid']) && $isgroupuser['level'] == 0) {
+	if($forum['jointype'] == 2 && (!$forum['gviewperm'] || $action == 'post') && !empty($isgroupuser['uid']) && $isgroupuser['level'] == 0) {
 		return 3;
 	}
 	if($action == 'post' && !$isgroupuser) {

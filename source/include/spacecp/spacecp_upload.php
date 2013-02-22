@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_upload.php 28297 2012-02-27 08:35:59Z monkey $
+ *      $Id: spacecp_upload.php 32041 2012-11-01 07:28:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -90,6 +90,7 @@ if(submitcheck('albumsubmit') && helper_access::check_module('album')) {
 	$havetitle = trim(implode('', $_POST['title']));
 	if(!empty($havetitle)) {
 		foreach($_POST['title'] as $picid => $title) {
+			$title = dhtmlspecialchars($title);
 			C::t('home_pic')->update_for_uid($_G['uid'], $picid, array('title'=>$title, 'albumid' => $albumid));
 		}
 	} else {

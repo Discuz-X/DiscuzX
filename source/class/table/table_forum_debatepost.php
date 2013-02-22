@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_debatepost.php 27745 2012-02-14 01:43:38Z monkey $
+ *      $Id: table_forum_debatepost.php 32144 2012-11-15 09:38:27Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ class table_forum_debatepost extends discuz_table
 		if(!$excludeuids) {
 			return;
 		}
-		return DB::result_first("SELECT stand FROM %t WHERE tid=%d AND uid=%d AND stand>'0' AND %i LIMIT 1", array($this->_table, $tid, $bestuid, DB::field('uid', $excludeuids)));
+		return DB::result_first("SELECT stand FROM %t WHERE tid=%d AND uid=%d AND stand>'0' AND %i LIMIT 1", array($this->_table, $tid, $bestuid, DB::field('uid', $excludeuids,'notin')));
 	}
 
 	public function get_numbers_by_bestuid($tid, $bestuid) {

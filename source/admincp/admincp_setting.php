@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 31744 2012-09-27 06:40:33Z zhangguosheng $
+ *      $Id: admincp_setting.php 32438 2013-01-17 03:02:49Z liulanbo $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -181,6 +181,7 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_basic_sitename', 'settingnew[sitename]', $setting['sitename'], 'text');
 		showsetting('setting_basic_siteurl', 'settingnew[siteurl]', $setting['siteurl'], 'text');
 		showsetting('setting_basic_adminemail', 'settingnew[adminemail]', $setting['adminemail'], 'text');
+		showsetting('setting_basic_site_qq', 'settingnew[site_qq]', $setting['site_qq'], 'text',$disabled = '', $hidden = 0, $comment = '', $extra = 'id="settingnew[site_qq]"');
 		showsetting('setting_basic_icp', 'settingnew[icp]', $setting['icp'], 'text');
 		showsetting('setting_basic_boardlicensed', 'settingnew[boardlicensed]', $setting['boardlicensed'], 'radio');
 		showsetting('setting_basic_stat', 'settingnew[statcode]', $setting['statcode'], 'textarea');
@@ -2304,7 +2305,7 @@ EOT;
 
 	isset($settingnew['regname']) && empty($settingnew['regname']) && $settingnew['regname'] = 'register';
 	isset($settingnew['reglinkname']) && empty($settingnew['reglinkname']) && $settingnew['reglinkname'] = cplang('reglinkname_default');
-	$nohtmlarray = array('bbname', 'regname', 'reglinkname', 'icp', 'sitemessage');
+	$nohtmlarray = array('bbname', 'regname', 'reglinkname', 'icp', 'sitemessage', 'site_qq');
 	foreach($nohtmlarray as $k) {
 		if(isset($settingnew[$k])) {
 			$settingnew[$k] = dhtmlspecialchars($settingnew[$k]);

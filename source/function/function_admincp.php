@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 30773 2012-06-19 03:41:56Z zhengqingpeng $
+ *      $Id: function_admincp.php 32470 2013-01-23 06:46:49Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -708,7 +708,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		}
 	} elseif($type == 'mcheckbox' || $type == 'mcheckbox2') {
 		$nocomment = $type != 'mcheckbox2' && count($varname[1]) > 3 && !isset($_G['showsetting_multi']) ? true : false;
-		$addstyle = $nocomment ? ' style="float: left;'.(empty($_G['showsetting_multirow']) ? ' width: 18%' : '').'"' : '';
+		$addstyle = $nocomment ? ' style="float: left;'.(empty($_G['showsetting_multirow']) ? ' width: 18%;overflow: hidden;' : '').'"' : '';
 		$ulstyle = $nocomment && empty($_G['showsetting_multirow']) ? ' style="width: 790px"' : '';
 		$s .= '<ul class="nofloat" onmouseover="altStyle(this'.$check['disabledaltstyle'].');"'.$ulstyle.'>';
 		foreach($varname[1] as $varary) {
@@ -718,7 +718,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 				}
 				$onclick = !isset($_G['showsetting_multi']) && !empty($varary[2]) ? ' onclick="$(\''.$varary[2].'\').style.display = $(\''.$varary[2].'\').style.display == \'none\' ? \'\' : \'none\';"' : '';
 				$checked = is_array($value) && in_array($varary[0], $value) ? ' checked' : '';
-				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
+				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.' title="'.dhtmlspecialchars($varary[1]).'"><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
 			}
 		}
 		$s .= '</ul>';

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 30309 2012-05-21 03:47:30Z zhengqingpeng $
+ *      $Id: cache_setting.php 32372 2013-01-07 04:28:23Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -764,7 +764,7 @@ function get_cachedata_mainnav() {
 		}
 		if($nav['type'] == 0) {
 			$domainkey = substr($purl['path'], 0, -strlen(strrchr($purl['path'], '.')));
-			if(!empty($_G['setting']['domain']['app'][$domainkey]) && !in_array(strtolower($nav['title']), array('follow', 'guide', 'collection'))) {
+			if(!empty($_G['setting']['domain']['app'][$domainkey]) && !in_array(strtolower($nav['title']), array('follow', 'guide', 'collection', 'blog', 'album', 'favorite', 'friend', 'share', 'doing'))) {
 				$nav['url'] = 'http://'.$_G['setting']['domain']['app'][$domainkey];
 			}
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_upload.php 31201 2012-07-25 07:37:51Z zhengqingpeng $
+ *      $Id: forum_upload.php 32057 2012-11-05 08:16:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -147,7 +147,7 @@ class forum_upload {
 		if($this->simple == 1) {
 			echo 'DISCUZUPLOAD|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'].'|'.$this->error_sizelimit;
 		} elseif($this->simple == 2) {
-			echo 'DISCUZUPLOAD|'.($_GET['type'] == 'image' ? '1' : '0').'|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'].'|'.$this->attach['attachment'].'|'.$this->attach['name'].'|'.$this->error_sizelimit;
+			echo 'DISCUZUPLOAD|'.($_GET['type'] == 'image' ? '1' : '0').'|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'].'|'.($this->attach['isimage'] ? $this->attach['attachment'] : '').'|'.$this->attach['name'].'|'.$this->error_sizelimit;
 		} else {
 			echo $statusid ? -$statusid : $this->aid;
 		}

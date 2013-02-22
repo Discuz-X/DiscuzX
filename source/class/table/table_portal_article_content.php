@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_article_content.php 27824 2012-02-15 06:46:05Z zhangguosheng $
+ *      $Id: table_portal_article_content.php 32272 2012-12-13 07:20:34Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -53,6 +53,10 @@ class table_portal_article_content extends discuz_table
 
 	public function count_by_aid($aid) {
 		return $aid ? DB::result_first('SELECT COUNT(*) FROM %t WHERE aid=%d', array($this->_table, $aid)) : 0;
+	}
+
+	public function delete_by_aid($aid) {
+		return dintval($aid, true) ? DB::delete($this->_table, DB::field('aid', $aid)) : 0;
 	}
 }
 

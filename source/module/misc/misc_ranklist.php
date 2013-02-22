@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ranklist.php 30273 2012-05-18 02:34:19Z monkey $
+ *      $Id: misc_ranklist.php 32068 2012-11-06 07:26:19Z chenmengshu $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -375,7 +375,7 @@ function getranklist_member_gender($gender, $num = 20) {
 	$uids = array_keys($users);
 	if($uids) {
 		foreach(C::t('common_member')->fetch_all($uids, false, 0) as $uid => $value) {
-			$users[$uids] = array_merge($users[$uids], $value);
+			$users[$uid] = array_merge($users[$uid], $value);
 		}
 	}
 	return $users;

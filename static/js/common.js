@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 31593 2012-09-12 03:22:13Z zhangguosheng $
+	$Id: common.js 32580 2013-02-22 03:40:28Z monkey $
 */
 
 var BROWSER = {};
@@ -1013,7 +1013,6 @@ function showMenu(v) {
 		menuObj.fade = false;
 	}
 	menuObj.style.display = '';
-	//document.body.appendChild(menuObj);
 	if(ctrlObj && ctrlclass) {
 		ctrlObj.className += ' ' + ctrlclass;
 		menuObj.setAttribute('ctrlid', ctrlid);
@@ -1781,6 +1780,7 @@ function parseurl(str, mode, parsecode) {
 function codetag(text) {
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n');
+	text = text.replace(/\$/ig, '$$$$');
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }

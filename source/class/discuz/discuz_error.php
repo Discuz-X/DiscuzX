@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_error.php 31845 2012-10-17 03:21:58Z zhangguosheng $
+ *      $Id: discuz_error.php 32496 2013-01-29 08:43:01Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -384,7 +384,7 @@ EOT;
 		$uri = 'Request: '.dhtmlspecialchars(discuz_error::clear($_SERVER['REQUEST_URI']));
 		$message = "<?PHP exit;?>\t{$time}\t$message\t$hash\t$user $uri\n";
 		if($fp = @fopen($file, 'rb')) {
-			$lastlen = 10000;
+			$lastlen = 50000;
 			$maxtime = 60 * 10;
 			$offset = filesize($file) - $lastlen;
 			if($offset > 0) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_blog.php 32007 2012-10-30 09:59:48Z zhangjie $
+ *      $Id: function_blog.php 32069 2012-11-06 07:30:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -308,7 +308,7 @@ function blog_bbcode($message) {
 function blog_flash($swf_url, $type='') {
 	$width = '520';
 	$height = '390';
-	preg_match("/((https?){1}:\/\/|www\.)[^\[\"']+/i", $swf_url, $matches);
+	preg_match("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^\[\"']+/i", $swf_url, $matches);
 	$swf_url = $matches[0];
 	if ($type == 'media') {
 		$html = '<object classid="clsid:6bf52a52-394a-11d3-b153-00c04f79faa6" width="'.$width.'" height="'.$height.'">

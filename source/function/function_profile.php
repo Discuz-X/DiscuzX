@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_profile.php 31228 2012-07-27 07:34:25Z liulanbo $
+ *      $Id: function_profile.php 32503 2013-01-30 02:44:38Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -136,6 +136,8 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		} else {
 			$html = '<p id="residedistrictbox">'.showdistrict($values, $elems, 'residedistrictbox', 1, 'reside').'</p>';
 		}
+	} elseif($fieldid=='qq') {
+		$html = "<input type=\"text\" name=\"$fieldid\" id=\"$fieldid\" class=\"px\" value=\"$space[$fieldid]\" tabindex=\"1\" /><p><a href=\"\" class=\"xi2\" onclick=\"this.href='http://wp.qq.com/set.html?from=discuz&uin='+$('$fieldid').value\" target=\"_blank\">".lang('spacecp', 'qq_set_status')."</a></p>";
 	} else {
 		if($field['unchangeable'] && $space[$fieldid]!='') {
 			if($field['formtype']=='file') {
@@ -286,31 +288,31 @@ function profile_check($fieldid, &$value, $space=array()) {
 	return true;
 }
 
-function profile_show($fieldid, $space=array()) {
+function profile_show($fieldid, $space=array(), $getalone = false) {
 	global $_G;
 
 	if(empty($_G['cache']['profilesetting'])) {
 		loadcache('profilesetting');
 	}
 	$field = $_G['cache']['profilesetting'][$fieldid];
-	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince'))) {
+	if(empty($field) || !$field['available'] || (!$getalone && in_array($fieldid, array('uid', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince')))) {
 		return false;
 	}
 
 	if($fieldid=='gender') {
 		return lang('space', 'gender_'.intval($space['gender']));
-	} elseif($fieldid=='birthday') {
+	} elseif($fieldid=='birthday' && !$getalone) {
 		$return = $space['birthyear'] ? $space['birthyear'].' '.lang('space', 'year').' ' : '';
 		if($space['birthmonth'] && $space['birthday']) {
 			$return .= $space['birthmonth'].' '.lang('space', 'month').' '.$space['birthday'].' '.lang('space', 'day');
 		}
 		return $return;
-	} elseif($fieldid=='birthcity') {
+	} elseif($fieldid=='birthcity' && !$getalone) {
 		return $space['birthprovince']
 				.(!empty($space['birthcity']) ? ' '.$space['birthcity'] : '')
 				.(!empty($space['birthdist']) ? ' '.$space['birthdist'] : '')
 				.(!empty($space['birthcommunity']) ? ' '.$space['birthcommunity'] : '');
-	} elseif($fieldid=='residecity') {
+	} elseif($fieldid=='residecity' && !$getalone) {
 		return $space['resideprovince']
 				.(!empty($space['residecity']) ? ' '.$space['residecity'] : '')
 				.(!empty($space['residedist']) ? ' '.$space['residedist'] : '')
@@ -320,6 +322,8 @@ function profile_show($fieldid, $space=array()) {
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
 	} elseif($fieldid == 'position') {
 		return nl2br($space['office'] ? $space['office'] : $space['position']);
+	} elseif($fieldid == 'qq') {
+		return '<a href="http://wpa.qq.com/msgrd?V=3&Uin='.$space[$fieldid].'&Site='.$_G['setting']['bbname'].'&Menu=yes&from=discuz" target="_blank" title="'.lang('spacecp', 'qq_dialog').'"><img src="'.STATICURL.'/image/common/qq.gif" alt="QQ" style="margin:0px;"/></a>';
 	} else {
 		return nl2br($space[$fieldid]);
 	}

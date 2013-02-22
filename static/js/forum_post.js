@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 31449 2012-08-28 09:19:06Z monkey $
+	$Id: forum_post.js 32414 2013-01-15 03:30:57Z monkey $
 */
 
 var forum_post_inited = true;
@@ -118,17 +118,9 @@ function validate(theform) {
 			return false;
 		}
 	}
-	if($(editorid + '_attachlist')) {
-		$('postbox').appendChild($(editorid + '_attachlist'));
-		$(editorid + '_attachlist').style.display = 'none';
-	}
-	if($(editorid + '_imgattachlist')) {
-		$('postbox').appendChild($(editorid + '_imgattachlist'));
-		$(editorid + '_imgattachlist').style.display = 'none';
-	}
-	hideMenu();
 	theform.message.value = message;
 	if($('postsubmit').name == 'editsubmit') {
+		postsubmit(theform);
 		return true;
 	} else if(in_array($('postsubmit').name, ['topicsubmit', 'replysubmit'])) {
 		if(seccodecheck || secqaacheck) {
@@ -164,6 +156,16 @@ function validate(theform) {
 }
 
 function postsubmit(theform) {
+	if($(editorid + '_attachlist')) {
+		$('postbox').appendChild($(editorid + '_attachlist'));
+		$(editorid + '_attachlist').style.display = 'none';
+	}
+	if($(editorid + '_imgattachlist')) {
+		$('postbox').appendChild($(editorid + '_imgattachlist'));
+		$(editorid + '_imgattachlist').style.display = 'none';
+	}
+	hideMenu();
+
 	theform.replysubmit ? theform.replysubmit.disabled = true : (theform.editsubmit ? theform.editsubmit.disabled = true : theform.topicsubmit.disabled = true);
 	theform.submit();
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_member.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_member.php 32370 2013-01-07 03:00:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -363,7 +363,7 @@ class block_member extends discuz_block {
 			while($data = DB::fetch($query)) {
 				$profile = array();
 				foreach($data as $fieldid=>$fieldvalue) {
-					$fieldvalue = profile_show($fieldid, $data);
+					$fieldvalue = profile_show($fieldid, $data, true);
 					if(false !== $fieldvalue) {
 						$profile[$fieldid] = $fieldvalue;
 					}

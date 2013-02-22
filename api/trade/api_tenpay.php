@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: api_tenpay.php 31606 2012-09-13 07:26:35Z monkey $
+ *      $Id: api_tenpay.php 32222 2012-12-03 02:28:43Z monkey $
  */
 
 
@@ -477,9 +477,9 @@ function trade_notifycheck($type) {
 	if($type == 'credit' || $type == 'invite') {
 		if($resHandler->isTenpaySign() && DISCUZ_PARTNER == $_GET['partner']) {
 			return array(
-				'validator'	=> !$_GET['trade_state'],
+				'validator'	=> isset($_GET['trade_state']) ? !$_GET['trade_state'] : 0,
 				'order_no' 	=> $_GET['out_trade_no'],
-				'trade_no'	=> $_GET['transaction_id'],
+				'trade_no'	=> isset($_GET['transaction_id']) ? $_GET['transaction_id'] : '',
 				'price' 	=> $_GET['total_fee'] / 100,
 				'bargainor_id' => $_GET['partner'],
 				'location'	=> true,
@@ -491,7 +491,7 @@ function trade_notifycheck($type) {
 				'validator' => $resHandler->getParameter('retcode') == '0',
 				'order_no' => $resHandler->getParameter('mch_vno'),
 				'trade_no' => $resHandler->getParameter('cft_tid'),
-				'price' => $resHandler->getParameter('total_fee') / 100.0,
+				'price' => $resHandler->getParameter('total_fee') / 100,
 				'status' => $resHandler->getParameter('status'),
 				'location'	=> true,
 			);

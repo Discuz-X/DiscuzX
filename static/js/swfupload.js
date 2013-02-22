@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: swfupload.js 28981 2012-03-21 06:43:44Z zhengqingpeng $
+	$Id: swfupload.js 32391 2013-01-08 08:06:04Z zhengqingpeng $
 */
 
 var SWFUpload;
@@ -265,7 +265,7 @@ SWFUpload.prototype.loadFlash = function () {
 
 SWFUpload.prototype.getFlashHTML = function (flashVersion) {
 	if(BROWSER.ie && !BROWSER.opera) {
-		return AC_FL_RunContent('id', this.movieName, 'width', this.settings.button_width, 'height', this.settings.button_height, 'src', this.settings.flash_url, 'quality', 'high', 'wmode', this.settings.button_window_mode, 'flashvars', this.getFlashVars());
+		return AC_FL_RunContent('id', this.movieName, 'width', this.settings.button_width, 'height', this.settings.button_height, 'src', this.settings.flash_url, 'quality', 'high', 'wmode', this.settings.button_window_mode, 'flashvars', this.getFlashVars(), 'AllowScriptAccess', 'always');
 	} else {
 		return ['<object id="', this.movieName, '" type="application/x-shockwave-flash" data="', (this.support.imageResize ? this.settings.flash_url : this.settings.flash9_url), '" width="', this.settings.button_width, '" height="', this.settings.button_height, '" class="swfupload">',
 					'<param name="wmode" value="', this.settings.button_window_mode, '" />',

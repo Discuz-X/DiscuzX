@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 30837 2012-06-25 08:24:29Z zhangguosheng $
+ *      $Id: function_forum.php 32127 2012-11-14 04:21:12Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,8 +22,8 @@ function dunlink($attach) {
 	$havethumb = $attach['thumb'];
 	$remote = $attach['remote'];
 	if($remote) {
-		ftpcmd('delete', $_G['setting']['ftp']['attachdir'].'/forum/'.$filename);
-		$havethumb && ftpcmd('delete', $_G['setting']['ftp']['attachdir'].'/forum/'.getimgthumbname($filename));
+		ftpcmd('delete', 'forum/'.$filename);
+		$havethumb && ftpcmd('delete', 'forum/'.getimgthumbname($filename));
 	} else {
 		@unlink($_G['setting']['attachdir'].'/forum/'.$filename);
 		$havethumb && @unlink($_G['setting']['attachdir'].'/forum/'.getimgthumbname($filename));

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_ftp.php 30582 2012-06-05 06:09:06Z chenmengshu $
+ *      $Id: discuz_ftp.php 32473 2013-01-24 07:11:38Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ class discuz_ftp
 		if(empty($this->config['on']) || empty($this->config['host'])) {
 			$this->set_error(FTP_ERR_CONFIG_OFF);
 		} else {
-			$this->func = $this->config['ftpssl'] && function_exists('ftp_ssl_connect') ? 'ftp_ssl_connect' : 'ftp_connect';
+			$this->func = $this->config['ssl'] && function_exists('ftp_ssl_connect') ? 'ftp_ssl_connect' : 'ftp_connect';
 			if($this->func == 'ftp_connect' && !function_exists('ftp_connect')) {
 				$this->set_error(FTP_ERR_SERVER_DISABLED);
 			} else {

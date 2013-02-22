@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 31513 2012-09-04 08:47:57Z zhangguosheng $
+ *      $Id: modcp_moderate.php 32076 2012-11-07 04:37:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -358,10 +358,11 @@ if($op == 'replies') {
 		$attachtablearr = array();
 		$_fids = array();
 		foreach(C::t('common_moderate')->fetch_all_by_search_for_post($posttable, $moderatestatus, 0, ($modfids ? explode(',', $modfids) : null), null, null, null, $start_limit, $ppp) as $post) {
-			$_fids[$_post['fid']] = $post['fid'];
+			$_fids[$post['fid']] = $post['fid'];
+			$_tids[$post['tid']] = $post['tid'];
 			$post['id'] = $post['pid'];
 			$post['dateline'] = dgmdate($post['dateline']);
-			$post['subject'] = $post['subject'] ? '<b>'.$post['subject'].'</b>' : '<i>'.lang('admincp', 'nosubject').'</i>';
+			$post['subject'] = $post['subject'] ? '<b>'.$post['subject'].'</b>' : '';
 			$post['message'] = nl2br(dhtmlspecialchars($post['message']));
 
 			if($post['attachment']) {
@@ -370,7 +371,7 @@ if($op == 'replies') {
 			}
 			$postlist[$post['pid']] = $post;
 		}
-		$_forums = array();
+		$_threads = $_forums = array();
 		if($_fids) {
 			$_forums = C::t('forum_forum')->fetch_all($_fids);
 			foreach($postlist as &$_post) {
@@ -383,6 +384,12 @@ if($op == 'replies') {
 					'allowimgcode' => $_forum['allowimgcode'],
 				);
 				$_post = array_merge($_post, $_arr);
+			}
+		}
+		if($_tids) {
+			$_threads = C::t('forum_thread')->fetch_all($_tids);
+			foreach($postlist as &$_post) {
+				$_post['tsubject'] = $_threads[$_post['tid']]['subject'];
 			}
 		}
 

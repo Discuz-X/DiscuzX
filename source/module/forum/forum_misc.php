@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 31609 2012-09-13 09:09:43Z liulanbo $
+ *      $Id: forum_misc.php 32454 2013-01-21 02:57:23Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -566,7 +566,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 
 	$maxratetoday = getratingleft($_G['group']['raterange']);
 
-	if(!submitcheck('ratesubmit', 1)) {
+	if(!submitcheck('ratesubmit')) {
 		$referer = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$_G['tid'].'&page='.$page.($_GET['from'] ? '&from='.$_GET['from'] : '').'#pid'.$_GET['pid'];
 		$ratelist = getratelist($_G['group']['raterange']);
 		include template('forum/rate');
@@ -1024,7 +1024,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				'payment' => $payment,
 				'ufielddata' => $ufielddata
 			);
-			C::t('forum_activityapply')->update($applyinfo['appyid'], $newinfo);
+			C::t('forum_activityapply')->update($applyinfo['applyid'], $newinfo);
 		} else {
 			$data = array('tid' => $_G['tid'], 'username' => $_G['username'], 'uid' => $_G['uid'], 'message' => $message, 'verified' => $verified, 'dateline' => $_G['timestamp'], 'payment' => $payment, 'ufielddata' => $ufielddata);
 			C::t('forum_activityapply')->insert($data);
@@ -1461,6 +1461,9 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	dsetcookie('discuz_recommend', '', -1, 0);
 	if(empty($_G['uid'])) {
 		showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));
+	}
+	if(empty($_GET['hash']) || $_GET['hash'] != formhash()) {
+		showmessage('submit_invalid');
 	}
 	if(!$_G['setting']['recommendthread']['status'] || !$_G['group']['allowrecommend']) {
 		showmessage('no_privilege_recommend');

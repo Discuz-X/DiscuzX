@@ -1121,4 +1121,11 @@ if(!submitcheck('editsubmit')) {
 
 }
 
+?> $param);
+			}
+		}
+	}
+
+}
+
 ?>

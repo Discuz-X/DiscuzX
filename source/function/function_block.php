@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 32018 2012-10-31 06:49:32Z zhangguosheng $
+ *      $Id: function_block.php 32297 2012-12-20 10:29:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -369,20 +369,20 @@ function block_template($bid) {
 				if($field['datatype'] == 'int') {// int
 					$replacevalue = intval($replacevalue);
 				} elseif($field['datatype'] == 'string') {
-					$replacevalue = preg_replace("/([\$|\\\\])/", '\\\\$1', $replacevalue);
+					$replacevalue = preg_quote($replacevalue);
 				} elseif($field['datatype'] == 'date') {
 					$replacevalue = dgmdate($replacevalue, $block['dateuformat'] ? 'u' : $block['dateformat'], '9999', $block['dateuformat'] ? $block['dateformat'] : '');
 				} elseif($field['datatype'] == 'title') {//title
-					$replacevalue = preg_replace("/([\$|\\\\])/", '\\\\$1', $replacevalue);
 					$searcharr[] = '{title-title}';
-					$replacearr[] = !empty($blockitem['fields']['fulltitle']) ? $blockitem['fields']['fulltitle'] : dhtmlspecialchars($replacevalue);
+					$replacearr[] = preg_quote(!empty($blockitem['fields']['fulltitle']) ? $blockitem['fields']['fulltitle'] : dhtmlspecialchars($replacevalue));
 					$searcharr[] = '{alt-title}';
-					$replacearr[] = !empty($blockitem['fields']['fulltitle']) ? $blockitem['fields']['fulltitle'] : dhtmlspecialchars($replacevalue);
+					$replacearr[] = preg_quote(!empty($blockitem['fields']['fulltitle']) ? $blockitem['fields']['fulltitle'] : dhtmlspecialchars($replacevalue));
+					$replacevalue = preg_quote($replacevalue);
 					if($blockitem['showstyle'] && ($style = block_showstyle($blockitem['showstyle'], 'title'))) {
 						$replacevalue = '<font style="'.$style.'">'.$replacevalue.'</font>';
 					}
 				} elseif($field['datatype'] == 'summary') {//summary
-					$replacevalue = preg_replace("/([\$|\\\\])/", '\\\\$1', $replacevalue);
+					$replacevalue = preg_quote($replacevalue);
 					if($blockitem['showstyle'] && ($style = block_showstyle($blockitem['showstyle'], 'summary'))) {
 						$replacevalue = '<font style="'.$style.'">'.$replacevalue.'</font>';
 					}
@@ -445,7 +445,7 @@ function block_template($bid) {
 		foreach($dynamicparts as $value) {
 			$template = preg_replace($value[0], $value[1], $template);
 		}
-		$template = stripslashes($template);
+		$template = str_replace('\\', '&#92;', stripslashes($template));
 	}
 	$template = preg_replace('/\s*\[(order\d*)=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
 	$template = preg_replace('/\s*\[(index\d*)=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
@@ -629,7 +629,7 @@ function block_updateitem($bid, $items=array()) {
 			unset($oldvalue[$key]);
 			$processkeys[$key] = 1;
 		} elseif(isset($processkeys[$key])) {
-			unset($item[$k]);
+			unset($items[$k]);
 		}
 	}
 

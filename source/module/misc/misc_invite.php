@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_invite.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
+ *      $Id: misc_invite.php 32494 2013-01-29 08:09:58Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -157,11 +157,6 @@ if($_GET['action'] == 'group') {
 			showmessage('group_invite_choose_member', "portal.php?mod=view&aid=$id");
 		}
 	}
-}
-
-function uc_avatar($uid, $size = '', $returnsrc = FALSE) {
-	global $_G;
-	return avatar($uid, $size, $returnsrc, FALSE, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']);
 }
 
 include template('common/invite');

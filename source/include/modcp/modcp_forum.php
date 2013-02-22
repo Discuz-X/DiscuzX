@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_forum.php 25782 2011-11-22 05:29:19Z zhangguosheng $
+ *      $Id: modcp_forum.php 32563 2013-02-21 03:38:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -96,7 +96,6 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 				C::t('forum_forumrecommend')->update($id, array(
 					'subject' => $item['subject'],
 					'displayorder' => $item['displayorder'],
-					'moderatorid' => $_G['uid'],
 					'expiration' => $item['expiration']
 				));
 			}

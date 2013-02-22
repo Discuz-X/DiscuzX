@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: OAuth.php 32188 2012-11-26 08:08:12Z liudongdong $
+ *      $Id: OAuth.php 32189 2012-11-26 08:08:25Z liudongdong $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,16 +23,8 @@ class Cloud_Service_Client_OAuth {
 	const OAUTH_VERSION = '1.0';
 	const OAUTH_SIGNATURE_METHOD = 'HMAC-SHA1';
 
-	/**
-	 * $_instance
-	 */
 	protected static $_instance;
 
-	/**
-	 * getInstance
-	 *
-	 * @return self
-	 */
 	public static function getInstance() {
 
 		if (!(self::$_instance instanceof self)) {
@@ -42,19 +34,8 @@ class Cloud_Service_Client_OAuth {
 		return self::$_instance;
 	}
 
-	/**
-	 * getRequest
-	 * OAuth 的请求
-	 *
-	 * @param string $requestURL OAuth请求地址
-	 * @param array $extra 除OAuth1.0协议规定参数外的参数组成的数组
-	 * @param string $oauthMethod 请求的方法 GET/POST
-	 *
-	 * @return 返回的结果
-	 */
 	public function getRequest($requestURL, $extra = array(), $oauthMethod = 'GET', $multi = array()) {
 
-		// 处理 multipartFile
 		if($multi) {
 			$imageFile = $this->_getImageBinary($multi);
 			$extra = array_merge($extra, $imageFile['binary']);
@@ -95,13 +76,11 @@ class Cloud_Service_Client_OAuth {
 		$this->_apiIp = $apiIp;
 	}
 
-	// 自定义的HMAC_SHA1函数，针对PHP版本低于5.1.2的环境
 	public function customHmac($str, $key) {
 		$utilService = Cloud::loadClass('Service_Util');
 		return base64_encode($utilService->hashHmac('sha1', $str, $key, true));
 	}
 
-	// OAuth请求参数
 	private function _getOAuthSignatureParams($extra = array()) {
 
 		$params = array(
@@ -120,11 +99,6 @@ class Cloud_Service_Client_OAuth {
 		return $params;
 	}
 
-	/*
-	 * _httpBuildQuery
-	 * 生成请求包的方法 支持 multi
-	 *
-	*/
 	private function _httpBuildQuery($params, $multi = array()) {
 
 		if(!$params) {
@@ -163,18 +137,13 @@ class Cloud_Service_Client_OAuth {
 		return $multiPartBody;
 	}
 
-	// 生成OAuth签名
 	private function _getOAuthSignature($url, $params, $method = 'POST', $multi = FALSE) {
 
-		// http method
 		$method = strtoupper($method);
 		if(!in_array($method, array ('GET', 'POST'))) {
 			throw new Exception('Request Method Invlid');
 		}
 
-		// OAuth请求参数
-		//$utilService = Cloud::loadClass('Service_Util');
-		//$param_str = $utilService->httpBuildQuery($params, '', '&');
 		if ($params['oauth_callback']) {
 			$params['oauth_callback'] = rawurlencode($params['oauth_callback']);
 		}
@@ -184,28 +153,18 @@ class Cloud_Service_Client_OAuth {
 			$comma = '&';
 		}
 
-		// Signature Base String
 		if($multi) {
-			// qzone 上传图片 Content-Type: multipart/form-data 非正规OAuth协议
 			$base_string = $method.'&'.$url.'&'.$param_str;
 		} else {
 			$base_string = $method.'&'.$this->rawurlencode($url).'&'.$this->rawurlencode($param_str);
 		}
 
-		// 密钥
 		$key = $this->_appSecret.'&'.$this->_tokenSecret;
 		$signature = $this->customHmac($base_string, $key);
 
 		return $signature;
 	}
 
-	/*
-	 * rawurlencode
-	 * 根据 OAuth 协议中第 5.1.  Parameter Encoding 按 RFC3986 对请求串进行转义，非保留字符，不得转义
-	 * [RFC3986] section 2.3, Characters in the unreserved character set MUST NOT be encoded
-	 * unreserved = ALPHA, DIGIT, '-', '.', '_', '~'
-	 *
-	*/
 	public function rawurlencode($input) {
 		if(is_array($input)) {
 			return array_map(array(__CLASS__, 'rawurlencode'), $input);

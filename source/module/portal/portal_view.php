@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 29055 2012-03-23 09:25:15Z zhangguosheng $
+ *      $Id: portal_view.php 32362 2013-01-06 09:17:06Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,9 +17,9 @@ if(empty($aid)) {
 }
 $article = C::t('portal_article_title')->fetch($aid);
 require_once libfile('function/portalcp');
-$permission = getallowcategory($_G['uid']);
+$categoryperm = getallowcategory($_G['uid']);
 
-if(empty($article) || ($article['status'] > 0 && $article['uid'] != $_G['uid'] && !$_G['group']['allowmanagearticle'] && empty($permission[$article['catid']]['allowmanage']) && $_G['adminid'] != 1 && $_GET['modarticlekey'] != modauthkey($article['aid']))) {
+if(empty($article) || ($article['status'] > 0 && $article['uid'] != $_G['uid'] && !$_G['group']['allowmanagearticle'] && empty($categoryperm[$article['catid']]['allowmanage']) && $_G['adminid'] != 1 && $_GET['modarticlekey'] != modauthkey($article['aid']))) {
 	showmessage('view_article_no_exist');
 }
 

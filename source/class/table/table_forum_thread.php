@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_thread.php 32004 2012-10-30 09:02:57Z zhengqingpeng $
+ *      $Id: table_forum_thread.php 32229 2012-12-03 03:12:13Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -247,7 +247,7 @@ class table_forum_thread extends discuz_table
 
 	public function fetch_all_by_displayorder($displayorder = 0, $glue = '>=', $start = 0, $limit = 0, $tableid = 0) {
 		$glue = helper_util::check_glue($glue);
-		$displayorder = dintval($displayorder);
+		$displayorder = dintval($displayorder, true);
 		return DB::fetch_all('SELECT * FROM %t WHERE %i '.DB::limit($start, $limit), array($this->get_table_name($tableid), DB::field('displayorder', $displayorder, $glue)));
 	}
 
