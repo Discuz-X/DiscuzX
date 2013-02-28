@@ -12,7 +12,12 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function xml2array(&$xml, $isnormal = FALSE) {
-	$xml_parser = new XMLparse($isnormal);
+	$regex = '/^<\?xml[^>]*encoding=(?:\'|")([^\'"]+)(?:\'|")[^>]*\?>/i';
+	if(preg_match($regex, $xml, $matches){
+		$xml_parser = new XMLparse($isnormal, $metches[1]);
+	} else {
+		$xml_parser = new XMLparse($isnormal);
+	};
 	$data = $xml_parser->parse($xml);
 	$xml_parser->destruct();
 	return $data;
@@ -47,9 +52,9 @@ class XMLparse {
 		$this->XMLparse($isnormal);
 	}
 
-	function XMLparse($isnormal) {
+	function XMLparse($isnormal, $encoding = 'ISO-8859') {
 		$this->isnormal = $isnormal;
-		$this->parser = xml_parser_create('UTF-8');//ISO-8859-1
+		$this->parser = xml_parser_create($encoding);//ISO-8859-1
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
 		xml_set_object($this->parser, $this);
 		xml_set_element_handler($this->parser, 'open','close');
