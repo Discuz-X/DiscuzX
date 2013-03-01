@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}">
+<title>Discuz! 应用开发助手{$titlesuffix}</title>
+<meta content="Comsenz Inc." name="Copyright" />
+<link rel="stylesheet" href="{$_G[siteurl]}develop/template/common/developer.css" type="text/css" media="all" />
+<link rel="icon" href="{$_G[siteurl]}image/favicon.ico" type="image/x-icon" />
+<script type="text/javascript">
+var STYLEID = '{STYLEID}'
+, STATICURL = '{STATICURL}'
+, IMGDIR = '{IMGDIR}'
+, VERHASH = '{VERHASH}'
+, charset = '{CHARSET}'
+, discuz_uid = '$_G[uid]'
+, cookiepre = '{$_G[config][cookie][cookiepre]}'
+, cookiedomain = '{$_G[config][cookie][cookiedomain]}'
+, cookiepath = '{$_G[config][cookie][cookiepath]}'
+, showusercard = '{$_G[setting][showusercard]}'
+, attackevasive = '{$_G[config][security][attackevasive]}'
+, disallowfloat = '{$_G[setting][disallowfloat]}'
+, creditnotice = "<!--{if $_G['setting']['creditnotice']}-->$_G['setting']['creditnames']<!--{/if}-->"
+, defaultstyle = '$_G[style][defaultextstyle]'
+, REPORTURL = '$_G[currenturl_encode]'
+, SITEURL = '$_G[siteurl]'
+, JSPATH = '$_G[setting][jspath]';
+</script>
+<script src="./develop/template/common.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="append_parent"></div>
+<div id="cpcontainer" class="container">
+	<div id="hd" class="cl">
+		<h1 class="z xs3"><a href="develop.php">Discuz! 应用开发助手</a></h1>
+		<ul id="menu">
+			<li{if $action == 'list'} class="a"{/if}><a href="develop.php" hidefocus="true">插件列表</a></li>
+			<li{if $action == 'create'} class="a"{/if}><a href="develop.php?mod=plugin&action=create" hidefocus="true">创建新插件</a></li>
+		</ul>
+	</div>

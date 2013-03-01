@@ -1,0 +1,403 @@
+<!--{if $scriptList}-->
+	<ul class="tbmu bbda mbw">
+		<li>先填写相应的脚本文件名称，然后再点击“详情”进行相应的设置</li>
+	</ul>
+
+	<table class="dt mbw">
+		<tr>
+			<td class="time">普通页面嵌入脚本</td>
+			<td width="300"><input type="text" name="script[general]" class="px" value="$scripts[general][name]" />.class.php</td>
+			<td></td>
+			<td class="details">
+				<!--{if $scripts[general][name]}-->
+				<a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=general&filename=$scripts[general][name]">详情</a>
+				<!--{/if}-->
+			</td>
+		</tr>
+		<tr>
+			<td>特殊主题嵌入脚本</td>
+			<td><input type="text" name="script[special]" class="px" value="$scripts[special][name]" />.class.php</td>
+			<td></td>
+			<td class="details">
+				<!--{if $scripts[special][name]}-->
+				<a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=special&filename=$scripts[special][name]">详情</a>
+				<!--{/if}-->
+			</td>
+		</tr>
+		<tr>
+			<td>手机页面嵌入脚本</td>
+			<td><input type="text" name="script[mobile]" class="px" value="$scripts[mobile][name]" />.class.php</td>
+			<td></td>
+			<td class="details">
+				<!--{if $scripts[mobile][name]}-->
+				<a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=mobile&filename=$scripts[mobile][name]">详情</a>
+				<!--{/if}-->
+			</td>
+		</tr>
+	</table>
+
+	<!--{loop $scripttype $type}-->
+	<!--{eval $langkey = 'plugins_script_'.$type;}-->
+	<table class="dt mbw">
+		<tr>
+			<th class="time">{eval echo $devlang[$langkey];}</th>
+			<th width="300"><a href="javascript:;" onclick="addTableRow('$type');">{eval echo $devlang['plugins_script_add'];}</a></th>
+			<th></th>
+			<th class="details"></th>
+		</tr>
+		<tbody id="{$type}box">
+			<tr id="{$type}row" style="display: none;">
+				<td></td>
+				<td>
+					<!--{if $type != 'navigation'}-->
+					{$type}/{$type}_<input type="text" name="script[$type][]" class="px" value="" />.php
+					<!--{else}-->
+						<input type="text" name="script[$type][]" class="px" value="" />.inc.php
+					<!--{/if}-->
+				</td>
+				<td></td>
+				<td class="details">
+					<a href="javascript:;" onclick="removeTableRow('$type', this);">{eval echo $devlang['plugins_script_delete'];}</a>
+				</td>
+			</tr>
+			<!--{if $scripts[$type]}-->
+			<!--{loop $scripts[$type] $filename $script}-->
+			<tr>
+				<td>
+					<label><input type="checkbox" name="delete[$type][$filename]" class="pc vm" value="$filename" />删</label>
+				</td>
+				<td>
+					<!--{if $type != 'navigation'}-->
+					{$type}/{$type}_<input type="text" name="script[$type][$filename]" class="px" value="$filename" />.php
+					<!--{else}-->
+						<input type="text" name="script[$type][$filename]" class="px" value="$filename" />.inc.php
+					<!--{/if}-->
+				</td>
+				<td class="xg1"><!--{if $type == 'navigation'}--><!--{eval echo $navtypes['g1'][$script['type']] ? $navtypes['g1'][$script['type']]['desc'] : $navtypes['g2'][$script['type']]['desc']}--> <!--{if $script[description]}--> - <!--{/if}--><!--{/if}-->$script[description]</td>
+				<td class="details">
+					<!--a href="javascript:;" onclick="removeTableRow('$type', this);">-{eval echo $devlang['plugins_script_delete'];}</a-->
+					<a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=$type&filename=$filename">详情</a>
+				</td>
+			</tr>
+			<!--{/loop}-->
+			<!--{/if}-->
+		</tbody>
+	</table>
+	<!--{/loop}-->
+
+	<table class="dt mbw">
+		<tr>
+			<td class="time">安装脚本</td>
+			<td width="300">install.php</td>
+			<td></td>
+			<td class="details"><a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=system&filename=install">详情</a></td>
+		</tr>
+		<tr>
+			<td>卸载脚本</td>
+			<td>uninstall.php</td>
+			<td></td>
+			<td class="details"><a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=system&filename=uninstall">详情</a></td>
+		</tr>
+		<tr>
+			<td>升级脚本</td>
+			<td>upgrade.php</td>
+			<td></td>
+			<td class="details"><a href="develop.php?mod=plugins&action=edit&operation=script&pluginid=$pluginid&type=system&filename=upgrade">详情</a></td>
+		</tr>
+	</table>
+
+	<div class="mtm pbm">
+		<button value="true" class="pn pnc" name="addsubmit" type="submit"><strong><!--{if $action == 'edit'}-->提 交<!--{else}-->下一步<!--{/if}--></strong></button>
+		<!--{if $action == 'create'}-->
+			&nbsp;<a href="develop.php?mod=plugins&action=create&operation=setting&pluginid=$pluginid">跳过</a>
+		<!--{/if}-->
+	</div>
+	<script type="text/javascript">
+		function addTableRow(type) {
+			var newNode;
+			newNode = $(type+'row').cloneNode(true);
+			newNode.removeAttribute('id');
+			newNode.removeAttribute('style');
+			$(type+'box').appendChild(newNode);
+		}
+		function removeTableRow(type, obj) {
+			$(type+'box').removeChild(obj.parentNode.parentNode);
+		}
+	</script>
+<!--{elseif in_array($type, $basetype)}-->
+	<ul class="tbmu bbda">
+		<li>HookId_output类型的钩子只有在启用了HookId后，才有效</li>
+	</ul>
+	<table class="dt mbm">
+		<!--{if $module[hooks]}-->
+			<!--{loop $module[hooks] $sort $value}-->
+			<!--{loop $value $file $allhook}-->
+			<tr>
+				<td>
+					<strong>$hooklist[$sort]['lang'] -> $file</strong>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<ul>
+					<!--{loop $hooklist[$sort][$file] $key $hval}-->
+						<li class="pbn"><label{if in_array($key, $allhook)} class="xi1"{/if}><input type="checkbox" name="hooks[$sort][$file][$key]" class="pc" value="$key" {if in_array($key, $allhook)} checked="checked"{/if} />($hval[return]) $key{if $hval[version]} <span class="cv">$hval[version]</span>{/if}</label></li>
+						<!--{eval $outputkey = $key.'_output';}-->
+						<li class="pbn"><label{if in_array($outputkey, $allhook)} class="xi1"{/if}><input type="checkbox" name="hooks[$sort][$file][$outputkey]" class="pc" value="$outputkey" {if in_array($outputkey, $allhook)} checked="checked"{/if} />($hval[return]) $outputkey{if $hval[version]} <span class="cv">$hval[version]</span>{/if}</label></li>
+					<!--{/loop}-->
+					</ul>
+				</td>
+			</tr>
+			<!--{/loop}-->
+			<!--{/loop}-->
+		<!--{/if}-->
+		<tr>
+			<td>
+				<div id="hookbox">
+					<select name="sort" id="sort" onchange="showhooklist()">
+						<option value="0">钩子分类</option>
+						<!--{loop $hooklist $group $page}-->
+						<option value="$group">$page['lang']</option>
+						<!--{/loop}-->
+					</select>&nbsp;
+				</div>
+				<script type="text/javascript">
+					function showhooklist() {
+						var url = 'develop.php?mod=plugin&action=ajax&operation=gethook&type=$type&sort='+$('sort').value;
+						if($('page')) {
+							url += '&page='+$('page').value;
+						}
+						ajaxget(url, 'hookbox');
+					}
+				</script>
+			</td>
+		</tr>
+		<tr class="bw0_all">
+			<td>
+				<button type="submit" class="pn pnc" name="addsubmit"><strong>提 交</strong></button>
+				<input type="hidden" name="addhook" value="true" />
+				<input type="hidden" name="type" value="$type" />
+				<input type="hidden" name="filename" value="$filename" />
+			</td>
+		</tr>
+	</table>
+<!--{elseif $type == 'cron'}-->
+	<table class="tfm mbm">
+		<tr>
+			<th>脚本文件</th>
+			<td>{$type}/{$type}_$module[name].php</td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>计划任务名称</th>
+			<td><input type="text" class="px" name="description" value="$module[description]"></td>
+			<td class="xg1">为了方便记忆请填写计划任务的名称</td>
+		</tr>
+		<tr>
+			<th>每周</th>
+			<td>
+				<select name="newweekday">
+					<!--{loop $days $value}-->
+					<!--{if 6 < $value}--><!--{eval break;}--><!--{/if}-->
+					<option value="$value"{if $module[weekday] == $value} selected="selected"{/if}><!--{if $value==-1}-->*<!--{else}-->$week[$value]<!--{/if}--></option>
+					<!--{/loop}-->
+				</select>
+			</td>
+			<td class="xg1">设置星期几执行本任务，“*”为不限制，本设置会覆盖下面的“日”设定</td>
+		</tr>
+		<tr>
+			<th>每月</th>
+			<td>
+				<select name="newday">
+					<!--{loop $days $value}-->
+					<!--{if $value == 0}--><!--{eval continue;}--><!--{/if}-->
+					<option value="$value"{if $module[day] == $value} selected="selected"{/if}><!--{if $value==-1}-->*<!--{else}-->{$value}日<!--{/if}--></option>
+					<!--{/loop}-->
+				</select>
+			</td>
+			<td class="xg1">设置哪一日执行本任务，“*”为不限制</td>
+		</tr>
+		<tr>
+			<th>小时</th>
+			<td>
+				<select name="newhour">
+					<!--{loop $days $value}-->
+					<!--{if 23 < $value}--><!--{eval break;}--><!--{/if}-->
+					<option value="$value"{if $module[hour] == $value} selected="selected"{/if}><!--{if $value==-1}-->*<!--{else}-->{$value}时<!--{/if}--></option>
+					<!--{/loop}-->
+				</select>
+			</td>
+			<td class="xg1">设置哪一小时执行本任务，“*”为不限制</td>
+		</tr>
+		<tr>
+			<th>分钟</th>
+			<td><input type="text" class="px" name="newminute" value="$module[minute]"></td>
+			<td class="xg1">设置哪些分钟执行本任务，至多可以设置 12 个分钟值，多个值之间用半角逗号 "," 隔开，留空为不限制</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td colspan="2">
+				<button type="submit" name="addsubmit" class="pn pnc"><strong>提 交</strong></button>
+				<input type="hidden" name="editcron" value="true" />
+				<input type="hidden" name="type" value="$type" />
+				<input type="hidden" name="filename" value="$filename" />
+			</td>
+		</tr>
+	</table>
+<!--{elseif in_array($type, array('magic', 'adv', 'task', 'secqaa', 'seccode'))}-->
+	<table class="tfm mbm">
+		<tr>
+			<th>脚本文件</th>
+			<td>{$type}/{$type}_$module[name].php</td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>脚本名称</th>
+			<td><input type="text" class="px" name="description" value="$module[description]"></td>
+			<td class="xg1">为了方便记忆请填写脚本名称</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td colspan="2">
+				<button type="submit" name="addsubmit" class="pn pnc"><strong>提 交</strong></button>
+				<input type="hidden" name="editadv" value="true" />
+				<input type="hidden" name="type" value="$type" />
+				<input type="hidden" name="filename" value="$filename" />
+			</td>
+		</tr>
+	</table>
+<!--{elseif $type == 'navigation'}-->
+	<table class="tfm mbm">
+		<tr>
+			<th>脚本文件</th>
+			<td><input type="text" name="name" class="px" value="$module[name]" style="width:120px"><span id="e_$module[name]">.inc.php</span></td>
+			<td class="xg1"></td>
+		</tr>
+		<tr>
+			<th>模块类型</th>
+			<td>
+				<select id="s_$module[name]" name="newtype" onchange="shide(this, '$module[name]')" class="ps">
+					<!--{loop $navtypes $group $navs}-->
+						<optgroup label="{eval echo $devlang['plugins_edit_modules_type_'.$group]}">
+							<!--{loop $navs $typeid $nav}-->
+								<option value="$typeid" h="$nav[h]", e="$nav[e]"{if $typeid == $module[type]} selected="selected"{/if}>$nav[desc]</option>
+							<!--{/loop}-->
+						</optgroup>
+					<!--{/loop}-->
+				</select>
+			</td>
+			<td class="xg1"></td>
+		</tr>
+		<tr id="m_$module[name]">
+			<th>链接名称</th>
+			<td><input type="text" name="menu" class="px" value="$module[menu]"></td>
+			<td class="xg1"></td>
+		</tr>
+		<tr id="u_$module[name]">
+			<th>链接 URL</th>
+			<td>
+				<input type="text" name="url" onchange="shide($('s_{$module[name]}'), '{$module[name]}')" id="url_$module[name]" class="px" value="$module[url]">
+			</td>
+			<td class="xg1"></td>
+		</tr>
+		<tr id="a_$module[name]">
+			<th>使用等级</th>
+			<td>
+				<select name="adminid">
+					<!--{loop $allowgroup $key $desc}-->
+					<option value="$key"{if $key == $module[adminid]} selected="selected"{/if}>$desc</option>
+					<!--{/loop}-->
+				</select>
+			</td>
+			<td class="xg1"></td>
+		</tr>
+		<tr id="o_$module[name]">
+			<th>显示顺序</th>
+			<td><input type="text" name="order" class="px" value="$module[displayorder]"></td>
+			<td class="xg1"></td>
+		</tr>
+		<tbody id="n_$module[name]">
+			<tr id="nt_$module[name]">
+				<th>导航说明</th>
+				<td><input type="text" name="navtitle" class="px" value="$module[navtitle]"></td>
+				<td class="xg1"></td>
+			</tr>
+			<tr id="ni_$module[name]">
+				<th>导航图标</th>
+				<td><input type="text" name="navicon" class="px" value="$module[navicon]"></td>
+				<td class="xg1"></td>
+			</tr>
+			<tr id="nsn_$module[name]">
+				<th>副导航名称</th>
+				<td><input type="text" name="navsubname" class="px" value="$module[navsubname]"></td>
+				<td class="xg1"></td>
+			</tr>
+			<tr id="nsu_$module[name]">
+				<th>副导航链接</th>
+				<td><input type="text" name="navsuburl" class="px" value="$module[navsuburl]"></td>
+				<td class="xg1"></td>
+			</tr>
+		</tbody>
+		<tr>
+			<th></th>
+			<td colspan="2">
+				<button type="submit" name="addsubmit" class="pn pnc"><strong>提 交</strong></button>
+				<input type="hidden" name="editnav" value="true" />
+				<input type="hidden" name="type" value="$type" />
+				<input type="hidden" name="filename" value="$filename" />
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+		function shide(obj, id) {
+			v = obj.options[obj.selectedIndex].getAttribute("h");
+			$("m_" + id).style.display = v.substr(0,1) == "1" ? "" : "none";
+			$("u_" + id).style.display = v.substr(1,1) == "1" ? "" : "none";
+			$("a_" + id).style.display = v.substr(2,1) == "1" ? "" : "none";
+			$("o_" + id).style.display = v.substr(3,1) == "1" ? "" : "none";
+			if(v.substr(4,1)) {
+				$("n_" + id).style.display = v.substr(4,1) == "1" ? "" : "none";
+				$("nt_" + id).style.display = v.substr(4,1) == "1" ? "" : "none";
+				$("ni_" + id).style.display = v.substr(5,1) == "1" ? "" : "none";
+				$("nsn_" + id).style.display = v.substr(6,1) == "1" ? "" : "none";
+				$("nsu_" + id).style.display = v.substr(6,1) == "1" ? "" : "none";
+			} else {
+				$("n_" + id).style.display = "none";
+			}
+			e = obj.options[obj.selectedIndex].getAttribute("e");
+			$("e_" + id).innerHTML = e && ($("url_" + id).value == '' || $("u_" + id).style.display == "none") ? "." + e + ".php" : "";
+		}
+		shide($('s_{$module[name]}'), '{$module[name]}');
+	</script>
+<!--{elseif $type == 'system'}-->
+	<table class="tfm mbm">
+		<!--{if $filename == 'install'}-->
+		<tr>
+			<th>安装SQL语句</th>
+			<td><textarea class="pt" cols="60" rows="5" name="install">$extra[install]</textarea></td>
+			<td class="xg1">填写本插件的表结构SQL</td>
+		</tr>
+		<!--{elseif $filename == 'uninstall'}-->
+		<tr>
+			<th>卸载SQL语句</th>
+			<td><textarea class="pt" cols="60" rows="5" name="uninstall">$extra[uninstall]</textarea></td>
+			<td class="xg1">填写本插件的卸载SQL语句</td>
+		</tr>
+		<!--{elseif $filename == 'upgrade'}-->
+		<tr>
+			<th>插件升级代码</th>
+			<td><textarea class="pt" cols="60" rows="5" name="upgrade">$extra[upgrade]</textarea></td>
+			<td class="xg1">填写本插件的PHP升级代码</td>
+		</tr>
+		<!--{/if}-->
+		<tr>
+			<th></th>
+			<td class="ptm">
+				<button value="true" class="pn pnc" name="pluginsbt" type="submit"><strong>提 交</strong></button>
+				<input type="hidden" name="editsystem" value="true" />
+				<input type="hidden" name="type" value="$type" />
+				<input type="hidden" name="filename" value="$filename" />
+			</td>
+		</tr>
+	</table>
+<!--{/if}-->
