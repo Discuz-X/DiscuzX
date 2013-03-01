@@ -65,10 +65,10 @@ function devmessage($message, $url = '', $type = '', $values = array(), $extra =
 			}
 		} elseif($type != 'succeed' && $type != 'window') {
 			$message .= '<p class="marginbot">'.
-				"<script type=\"text/javascript\">".
-				"if(history.length > (BROWSER.ie ? 0 : 1)) document.write('<a href=\"javascript:history.go(-1);\" class=\"lightlink\">返回</a>');".
-				"</script>".
-				'</p>';
+			"<script type=\"text/javascript\">".
+			"if(history.length > (BROWSER.ie ? 0 : 1)) document.write('<a href=\"javascript:history.go(-1);\" class=\"lightlink\">返回</a>');".
+			"</script>".
+			'</p>';
 		}
 	}
 	include template('header', 0, 'develop/template/common');
