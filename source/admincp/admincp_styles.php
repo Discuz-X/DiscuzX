@@ -147,7 +147,7 @@ if($operation == 'admin') {
 		uasort($narray, 'filemtimesort');
 		$sarray += $narray;
 
-		$stylelist = '';
+		$stylelist = '<tr><td style="border:none;">';
 		$i = 0;
 		$updatestring = array();
 		foreach($sarray as $id => $style) {
@@ -164,9 +164,9 @@ if($operation == 'admin') {
 					$updatestring[$addonids[$style['styleid']]] = '';
 				}
 			}
-			$stylelist .= ($i == 0 ? '<tr>' : '').
-				'<td width="33%"><table cellspacing="0" cellpadding="0" style="margin-left: 10px; width: 200px;"><tr><td style="width: 120px; text-align: center; border-top: none;">'.
-				($id > 0 ? "<p style=\"margin-bottom: 2px;\">&nbsp;<img ".($previewlarge ? 'style="cursor:pointer" title="'.$lang['preview_large'].'" onclick="zoom(this, \''.$previewlarge.'\', 1)" ' : '')."src=\"$preview\" alt=\"$lang[preview]\"/></p>
+			$stylelist .= ''.//($i == 0 ? '<tr>' : '').
+				'<div style="border-top: 1px dotted #DEEFFB;float:left;padding:7px;"><table cellspacing="0" cellpadding="0" style="margin-left: 10px; width: 200px;"><tr><td style="width: 120px; text-align: center; border-top: none;">'.
+				($id > 0 ? "<p style=\"margin-bottom: 2px;\">&nbsp;<img ".($previewlarge ? 'style="cursor:pointer" title="'.$lang['preview_large'].'" onclick="zoom(this, \''.$previewlarge.'\', 1)" ' : '')."src=\"$preview\" alt=\"$lang[preview]\" class=\"stylepreview\" /></p>
 				<p style=\"margin: 2px 0\"><input type=\"text\" class=\"txt\" name=\"namenew[$id]\" value=\"$style[name]\" size=\"30\" style=\"margin-right:0; width: 80px;\"></p>
 				<p class=\"lightfont\">$style[tplname]</p>".$updatestring[$addonids[$style['styleid']]]."</td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
 				<p style=\"margin: 2px 0\"><label>$lang[default] <input type=\"radio\" class=\"radio\" name=\"defaultnew\" value=\"$id\" $isdefault /></label></p>
@@ -175,22 +175,23 @@ if($operation == 'admin') {
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=export&id=$id\">$lang[export]</a></p>
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=copy&id=$id\">$lang[copy]</a></p>
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=import&dir=yes&restore=$id\">$lang[restore]</a></p>" :
-				"<p style=\"margin-bottom: 2px;\">&nbsp;</p>
+					"<p style=\"margin-bottom: 2px;\">&nbsp;</p>
 				<img src=\"$preview\" />
 				<p style=\"margin: 13px 0\" class=\"lightfont\">($style[tplname])</p></td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=import&dir=$style[name]\">$lang[styles_install]</a></p>
 				<p style=\"margin: 2px 0\">$lang[styles_stylecount]$style[stylecount]</p>".
-				($style['filemtime'] > $timestamp - 86400 ? '<p style=\"margin-bottom: 2px;\"><font color="red">New!</font></p>' : '')).
-				"</td></tr></table></td>\n".($i == 3 ? '</tr>' : '');
-			$i++;
-			if($i == 3) {
-				$i = 0;
-			}
+						($style['filemtime'] > $timestamp - 86400 ? '<p style=\"margin-bottom: 2px;\"><font color="red">New!</font></p>' : '')).
+				"</td></tr></table></div>\n";//.($i == 3 ? '</tr>' : '');
+//			$i++;
+//			if($i == 3) {
+//				$i = 0;
+//			}
 		}
-		if($i > 0) {
-			$stylelist .= str_repeat('<td></td>', 3 - $i);
-		}
-
+//		if($i > 0) {
+//			$stylelist .= str_repeat('<td></td>', 3 - $i);
+//			$stylelist .= '</tr>';
+//		}
+		$stylelist .='</td></tr>';
 		shownav('style', 'styles_admin');
 		showsubmenu('styles_admin', array(
 			array('admin', 'styles', '1'),
