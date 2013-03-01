@@ -12,12 +12,12 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function xml2array(&$xml, $isnormal = FALSE) {
-	$regex = '/^<\?xml[^>]*encoding=(?:\'|")([^\'"]+)(?:\'|")[^>]*\?>/i';
-	if(preg_match($regex, $xml, $matches){
-		$xml_parser = new XMLparse($isnormal, $metches[1]);
+	$encoding_regex = '/^<\?xml[^>]*encoding=(?:\'|")([^\'"]+)(?:\'|")[^>]*\?>/i';
+	if(preg_match($encoding_regex, $xml, $encoding_matches)){
+		$xml_parser = new XMLparse($isnormal, $encoding_matches[1]);
 	} else {
 		$xml_parser = new XMLparse($isnormal);
-	};
+	}
 	$data = $xml_parser->parse($xml);
 	$xml_parser->destruct();
 	return $data;
