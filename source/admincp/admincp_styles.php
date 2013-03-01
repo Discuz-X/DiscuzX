@@ -165,7 +165,7 @@ if($operation == 'admin') {
 				}
 			}
 			$stylelist .= ''.//($i == 0 ? '<tr>' : '').
-				'<div style="border-top: 1px dotted #DEEFFB;float:left;padding:7px;"><table cellspacing="0" cellpadding="0" style="margin-left: 10px; width: 200px;"><tr><td style="width: 120px; text-align: center; border-top: none;">'.
+				'<div style="border-top: 1px dotted #DEEFFB;float:left;padding:7px;height:180px;"><table cellspacing="0" cellpadding="0" style="margin-left: 10px; width: 200px;table-layout:fixed;"><tr><td style="width: 120px; text-align: center; border-top: none;">'.
 				($id > 0 ? "<p style=\"margin-bottom: 2px;\">&nbsp;<img ".($previewlarge ? 'style="cursor:pointer" title="'.$lang['preview_large'].'" onclick="zoom(this, \''.$previewlarge.'\', 1)" ' : '')."src=\"$preview\" alt=\"$lang[preview]\" class=\"stylepreview\" /></p>
 				<p style=\"margin: 2px 0\"><input type=\"text\" class=\"txt\" name=\"namenew[$id]\" value=\"$style[name]\" size=\"30\" style=\"margin-right:0; width: 80px;\"></p>
 				<p class=\"lightfont\" style=\"white-space:nowrap;\">$style[tplname]</p>".$updatestring[$addonids[$style['styleid']]]."</td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
