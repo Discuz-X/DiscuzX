@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Data">
+		<item id="0"><![CDATA[source/plugin/qqconnect/connect.class.php]]></item>
+		<item id="1"><![CDATA[source/plugin/qqconnect/spacecp.inc.php]]></item>
+		<item id="2"><![CDATA[source/plugin/qqconnect/template/module.htm]]></item>
+		<item id="3"><![CDATA[source/plugin/qqconnect/template/spacecp.htm]]></item>
+	</item>
+</root>
