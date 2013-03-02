@@ -52,7 +52,7 @@ class XMLparse {
 		$this->XMLparse($isnormal);
 	}
 
-	function XMLparse($isnormal, $encoding = 'ISO-8859') {
+	function XMLparse($isnormal, $encoding = 'ISO-8859-1') {
 		$this->isnormal = $isnormal;
 		$this->parser = xml_parser_create($encoding);//ISO-8859-1
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
