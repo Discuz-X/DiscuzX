@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Data">
+		<item id="0"><![CDATA[source/plugin/soso_smilies/soso.class.php]]></item>
+		<item id="1"><![CDATA[source/plugin/soso_smilies/js/soso_smilies.js]]></item>
+	</item>
+</root>

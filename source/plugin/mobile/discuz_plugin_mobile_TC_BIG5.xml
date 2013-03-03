@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2.5]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[¤â¾÷«È¤áºÝ]]></item>
+			<item id="identifier"><![CDATA[mobile]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[mobile/]]></item>
+			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
+			<item id="version"><![CDATA[1.07]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[mobile]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[28]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[mobile]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2.5]]></item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="mobile_tip_ios"><![CDATA[<a href="http://www.discuz.net/mobile.php?platform=ios">¥Î´x¤W½×¾Â³X°Ý¥»¯¸,¾Ö¦³§ó¦n¾\\ÅªÅéÅç</a>]]></item>
+				<item id="mobile_tip_android"><![CDATA[<a href="http://www.discuz.net/mobile.php?platform=android">¥Î´x¤W½×¾Â³X°Ý¥»¯¸,¾Ö¦³§ó¦n¾\\ÅªÅéÅç</a>]]></item>
+				<item id="mobile_tip_wp7"><![CDATA[<a href="http://www.discuz.net/mobile.php?platform=windowsphone">¥Î´x¤W½×¾Â³X°Ý¥»¯¸,¾Ö¦³§ó¦n¾\\ÅªÅéÅç</a>]]></item>
+				<item id="mobile_extend_newthread"><![CDATA[³Ì·sµoªí]]></item>
+				<item id="mobile_extend_newreply"><![CDATA[³Ì·s¦^´_]]></item>
+				<item id="mobile_extend_digest"><![CDATA[³Ì·sºëµØ]]></item>
+				<item id="mobile_extend_newpic"><![CDATA[³Ì·s¹Ï¤ù]]></item>
+				<item id="mobile_fromtype_ios"><![CDATA[¨Ó¦Û: iPhone«È¤áºÝ]]></item>
+				<item id="mobile_fromtype_android"><![CDATA[¨Ó¦Û: Android«È¤áºÝ]]></item>
+				<item id="mobile_fromtype_windowsphone"><![CDATA[¨Ó¦Û: WindowsPhone«È¤áºÝ]]></item>
+				<item id="mobile_post_author_visible"><![CDATA[¸Ó©«¶È§@ªÌ¥i¨£]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="mobile_tips"><![CDATA[±ÀÂË¨Ï¥Î¤Gºû½X¦¬ÂÃ¨Ã³X°Ý½×¾Â<br />¨Ï¥Î¤Gºû½X¦¬ÂÃ½×¾Âªº¤èªk¡J<br />1¡A¸Ë´x¤W½×¾ÂÀ³¥Î«á¡AÂIÀ»¨Ï¥Î¤Gºû½X¦¬ÂÃ½×¾Â¡C<br />2¡A±N¤Gºû½X¸m¤_¬Û¾÷µJÂI¤¤§Y¥i¦¬ÂÃ¦¨¥\\¡C]]></item>
+				<item id="username"><![CDATA[¥Î¤á¦W]]></item>
+				<item id="password"><![CDATA[±K½X]]></item>
+				<item id="password_confirm"><![CDATA[½T»{±K½X]]></item>
+				<item id="email"><![CDATA[Email]]></item>
+				<item id="invite_code"><![CDATA[ÁÜ½Ð½X]]></item>
+				<item id="register_message"><![CDATA[ª`¥U­ì¦]]]></item>
+				<item id="seccode"><![CDATA[ÅçÃÒ½X]]></item>
+				<item id="change_seccode"><![CDATA[´«¤@­Ó]]></item>
+				<item id="secqaa"><![CDATA[ÅçÃÒ°Ýµª]]></item>
+				<item id="close"><![CDATA[Ãö³¬]]></item>
+				<item id="admin_tips"><![CDATA[´L·qªº¯¸ªø¡A±z¥i¥H¦bDiscuz!µ{§Ç®Ú¥Ø¿ý¤W¶Ç"mobile.png"¹Ï¤ù(¤Ø¤o178x178)¡A¥H½T«O½×¾Â«È¤áºÝ¯à¦¨¥\\Àò±o¨ì½×¾Âªºlogo]]></item>
+				<item id="iphone_alt"><![CDATA[iphone-¾A¥Î¤_°¦ªG¤â¾÷]]></item>
+				<item id="android_alt"><![CDATA[Android-¾A¥Î¤_¸Ë¦³¦w¨ô¨t²Îªº¤T¬P/HTC/¤p¦Ìµ¥¤â¾÷]]></item>
+				<item id="windowsphone_alt"><![CDATA[WinodwsPhone-¾A¥Î¤_¸Ë¦³·L³nWindowsPhone7 ¨t²Îªº¤â¾÷]]></item>
+				<item id="discuzmobile_alt"><![CDATA[´x¤W½×¾ÂÀu¶Õ]]></item>
+				<item id="tips_1"><![CDATA[ÀH®ÉÀH¦a¡A§Ö³t³X°Ý]]></item>
+				<item id="tips_1_desc"><![CDATA[¥u­n¤â¾÷¦b¤â¡A±z³£¥i¥H§Ö³t¡B¤è«K¦a¬Ý¶Kµo©«¡A»P½×¾Â¦n¤Í¦¬µoµu®ø®§¡C]]></item>
+				<item id="tips_2"><![CDATA[·¥­PÀu¤Æ¡AºZ§Ö"®®"Åª]]></item>
+				<item id="tips_2_desc"><![CDATA[¿W¦³ªº½×¾Â¬É­±©MÄ²«Ì³]­p¡A¤â¾÷½×¾Â¤]ÅÜ±o½à¤ß®®¥Ø¡A¾Þ§@¦Û¦p¡C]]></item>
+				<item id="tips_3"><![CDATA[§Y©ç§Yµo¡A¤À¨É¥Í¬¡]]></item>
+				<item id="tips_3_desc"><![CDATA[¤£ºÞ¬O­·´º¹Ïµe¡AÁÙ¬O·s»D²{³õ¡A©ç·Óµo©«¤@®ð¨þ¦¨¡AÅý±z¦b½×¾Â¥XºÉ­·ÀY¡C]]></item>
+				<item id="qr_desc"><![CDATA[¤U¸ü«È¤áºÝ«á¡A©çÄá¤Gºû½X§Ö³t³X°Ý¥»¯¸:]]></item>
+				<item id="qr"><![CDATA[¤Gºû½X]]></item>
+				<item id="wapmode"><![CDATA[©ÎªÌ³q¹L¥H¤U¦a§}³X°Ý:]]></item>
+				<item id="qqregmode1"><![CDATA[§¹µ½±b¸¹«H®§]]></item>
+				<item id="qqregmode2"><![CDATA[¸j©w¤w¦³±b¸¹]]></item>
+				<item id="register_validate_email_tips"><![CDATA[ª`¥U»Ý­nÅçÃÒ¶l½c¡A½Ð°È¥²¶ñ¼g¥¿½Tªº¶l½c¡A´£¥æ«á½Ð¤Î®É¬d¦¬¶l¥ó¡C]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
+	</item>
+</root>
