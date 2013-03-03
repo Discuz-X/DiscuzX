@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_spacecp.php 28195 2012-02-24 02:59:57Z svn_project_zhangjie $
+ *      $Id: lang_spacecp.php 32425 2013-01-15 09:31:40Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -328,6 +328,8 @@ $lang = array(
 	'email_acitve_message' => '<img src="{imgdir}/mail_inactive.png" alt="未验证" class="vm" /> <span class="xi1">新邮箱({newemail})等待验证中...</span><br />
 								系统已经向该邮箱发送了一封验证激活邮件，请查收邮件，进行验证激活。<br>
 								如果没有收到验证邮件，您可以更换一个邮箱，或者<a href="home.php?mod=spacecp&ac=profile&op=password&resend=1" class="xi2">重新接收验证邮件</a>',
+	'qq_set_status' => '设置我的QQ在线状态',
+	'qq_dialog' => '发起QQ聊天',
 
 );
 

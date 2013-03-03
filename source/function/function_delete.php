@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 32007 2012-10-30 09:59:48Z zhangjie $
+ *      $Id: function_delete.php 32272 2012-12-13 07:20:34Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -870,7 +870,7 @@ function deletearticlepush($pushs) {
 function deletearticlerelated($dels) {
 
 	C::t('portal_article_count')->delete($dels);
-	C::t('portal_article_content')->delete($dels);
+	C::t('portal_article_content')->delete_by_aid($dels);
 
 	if($attachment = C::t('portal_attachment')->fetch_all_by_aid($dels)) {
 		require_once libfile('function/home');

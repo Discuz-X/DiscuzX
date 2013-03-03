@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 31012 2012-07-09 03:10:43Z liulanbo $
+ *      $Id: forum_post.php 32368 2013-01-07 02:31:01Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,7 +46,7 @@ if($_G['forum']['status'] == 3) {
 	} elseif($status == 2) {
 		showmessage('forum_group_noallowed', "forum.php?mod=group&fid=$_G[fid]");
 	} elseif($status == 3) {
-		showmessage('forum_group_moderated', "forum.php?mod=group&fid=$_G[fid]");
+		showmessage('forum_group_moderated');
 	} elseif($status == 4) {
 		if($_G['uid']) {
 			showmessage('forum_group_not_groupmember', "", array('fid' => $_G['fid']), array('showmsg' => 1));

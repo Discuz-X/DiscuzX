@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Search.php 31868 2012-10-18 03:38:22Z zhouxiaobo $
+ *      $Id: Search.php 32355 2013-01-06 03:11:36Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -492,7 +492,7 @@ class Cloud_Service_Server_Search extends Cloud_Service_Server_Restful {
 
 			if($_tids) {
 				if($isRecycle) {
-					C::t('forum_thread')->update($_tIds, array('displayorder' => -1), false, false, $tableid);
+					C::t('forum_thread')->update($_tids, array('displayorder' => -1), false, false, $tableid);
 					continue;
 				}
 

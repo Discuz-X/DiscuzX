@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 31980 2012-10-30 01:53:07Z zhengqingpeng $
+ *      $Id: post_editpost.php 32176 2012-11-23 03:23:39Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -752,7 +752,7 @@ if(!submitcheck('editsubmit')) {
 				}
 				if($atlist) {
 					foreach($atlist as $atuid => $atusername) {
-						$atsearch[] = "/@$atusername /i";
+						$atsearch[] = "/@".str_replace('/', '\/', preg_quote($atusername))." /i";
 						$atreplace[] = "[url=home.php?mod=space&uid=$atuid]@{$atusername}[/url] ";
 					}
 					$message = preg_replace($atsearch, $atreplace, $message.' ', 1);

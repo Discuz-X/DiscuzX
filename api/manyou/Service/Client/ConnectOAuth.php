@@ -34,20 +34,11 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 
 	private $_getReportListURL = 'http://openapi.qzone.qq.com/t/get_repost_list';
 
-	// 用于请求失败或返回空时抛出的异常
 	const RESPONSE_ERROR = 999;
 	const RESPONSE_ERROR_MSG = 'request failed';
 
-	/**
-	 * $_instance
-	 */
 	protected static $_instance;
 
-	/**
-	 * getInstance
-	 *
-	 * @return self
-	 */
 	public static function getInstance($connectAppId = '', $connectAppKey = '', $apiIp = '') {
 
 		if (!(self::$_instance instanceof self)) {
@@ -57,11 +48,6 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		return self::$_instance;
 	}
 
-	/**
-	 * __construct
-	 *
-	 * @return void
-	 */
 	public function __construct($connectAppId = '', $connectAppKey = '', $apiIp = '') {
 
 		if(!$connectAppId || !$connectAppKey) {
@@ -84,19 +70,8 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		}
 	}
 
-	/**
-	 * connectGetRequestToken
-	 * 	向Qzone发送request，请求临时token
-	 *
-	 * @param string $clientIp 用户的IP地址（可选）
-	 *
-	 * @return array
-	 *  + oauth_token => *************	未授权的临时token
-	 *  + oauth_token_secret => *************	未授权的临时token对应的密钥
-	 */
 	public function connectGetRequestToken($callback, $clientIp = '') {
 
-		//$extra = $clientIp ? array('oauth_client_ip' => $clientIp) : array();
 		$extra = array();
 
 		$extra['oauth_callback'] = rawurlencode($callback);
@@ -118,20 +93,11 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 
 	}
 
-	/**
-	 * getOAuthAuthorizeURL
-	 * 获取OAuthAuthorizeURL
-	 *
-	 * @param string $requestToken 通过connectGetRequestToken()获取的requestToken
-	 *
-	 * @return string 引导用户授权页的OAuthAuthorizeURL
-	 */
 	public function getOAuthAuthorizeURL($requestToken) {
 
 		$params = array(
 			'oauth_consumer_key' => $this->_appKey,
 			'oauth_token' => $requestToken,
-			//'oauth_callback' => rawurlencode($callback),
 		);
 		$utilService = Cloud::loadClass('Service_Util');
 		$oAuthAuthorizeURL = $this->_oAuthAuthorizeURL.'?'.$utilService->httpBuildQuery($params, '', '&');
@@ -147,28 +113,8 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		return $sig == $signature;
 	}
 
-	/**
-	 * connectGetAccessToken
-	 * 获取具有Qzone访问权限的Access Token
-	 *
-	 * @param array $params Qzone引导用户跳转回callback带回的参数组成的数组
-	 *  + oauth_token => *************	用户授权过的requestToken
-	 *  + openid => *************	与QQ号码一一对应，访问OpenAPI时必需的OpenID
-	 *  + oauth_signature => *************	验证openid以及来源的可靠性的签名值
-	 *  + timestamp => *************	openid的timestamp
-	 *  + oauth_vericode => *************	用户授权requestToken回传回来的验证码
-	 * @param string $requestTokenSecret requestToken对应的requestTokenSecret
-	 *
-	 * @return array
-	 *  + oauth_signature => *************
-	 *  + oauth_token => *************	具有访问权限的access_token
-	 *  + oauth_token_secret => *************	access_token的密钥
-	 *  + openid => *************	与QQ号码一一对应，访问OpenAPI时必需的OpenID
-	 *  + timestamp => *************	openid的时间戳
-	 */
 	public function connectGetAccessToken($params, $requestTokenSecret) {
 
-		// debug 验证来源可靠
 		if(!$this->_connectIsValidOpenid($params['openid'], $params['timestamp'], $params['oauth_signature'])) {
 			throw new Exception('openId signature invalid', __LINE__);
 		}
@@ -193,21 +139,6 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		}
 	}
 
-	/**
-	 * connectGetUserInfo
-	 * 获取登录用户信息，目前可获取用户昵称及头像信息
-	 *
-	 * @param string $openId 访问OpenAPI时必需的OpenID
-	 * @param string $accessToken 具有访问权限的access_token
-	 * @param string $accessTokenSecret access_token的密钥
-	 *
-	 * @return array
-	 *  + nickname => *************		QQ昵称
-	 *  + figureurl => *************	头像信息，尺寸30
-	 *  + figureurl_1 => *************	头像信息，尺寸50
-	 *  + figureurl_2 => *************	头像信息，尺寸100
-	 *  + gender => *************	性别
-	 */
 	public function connectGetUserInfo($openId, $accessToken, $accessTokenSecret) {
 
 		$extra = array(
@@ -272,26 +203,6 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 
 	}
 
-	/**
-	 * connectAddShare
-	 * 在用户授权的情况下，可以以用户的名义发布一条动态（feeds）到QQ空间中，展现给好友
-	 *
-	 * @param string $openId 访问OpenAPI时必需的OpenID
-	 * @param string $accessToken 具有访问权限的access_token
-	 * @param string $accessTokenSecret access_token的密钥
-	 * @param array $params 私有参数组成的数组
-	 *  + title		必须，feed的标题
-	 *  + url		必须，以http:// 开头的分享所在网页资源的链接
-	 *  + comment	用户评论内容，也叫发表分享时的分享理由，最长40个中文字，超出部分会被截断。
-	 *  + summary	所分享的网页资源的摘要内容，或者是网页的概要描述，最长80个中文字，超出部分会被截断。
-	 *  + images	所分享的网页资源的代表性图片链接，请以http://开头，长度限制255字符。
-	 *  + source	分享的场景，取值说明：1.通过网页 2.通过手机 3.通过软件 4.通过IPHONE 5.通过 IPAD。
-	 *  + type		分享内容的类型。4表示网页；5表示视频（type=5时，必须传入playurl）。
-	 *  + playurl	长度限制为256字节。仅在type=5的时候有效。
-	 *  + nswb		值为1时，表示分享不默认同步到微博，其他值或者不传此参数表示默认同步到微博。
-	 *
-	 * @return array
-	 */
 	public function connectAddShare($openId, $accessToken, $accessTokenSecret, $params) {
 		if(!$params['title'] || !$params['url']) {
 			throw new Exception('Required Parameter Missing');
@@ -343,24 +254,6 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 
 	}
 
-	/**
-	 * connectAddPicT
-	 * 上传一张图片，并发布一条消息到腾讯微博平台上。
-	 *
-	 * @param string $openId 访问OpenAPI时必需的OpenID
-	 * @param string $accessToken 具有访问权限的access_token
-	 * @param string $accessTokenSecret access_token的密钥
-	 * @param array $params 私有参数组成的数组
-	 *  + content		必须，表示要发表的微博内容
-	 *  + pic			必须，图片路径
-	 *  + remote		boolean 标识图片为远程地址还是本地路径
-	 *  + clientip		用户ip
-	 *  + jing			用户所在地理位置的经度
-	 *  + wei			用户所在地理位置的纬度
-	 *  + syncflag		标识是否将发布的微博同步到QQ空间（0：同步； 1：不同步；），默认为0。
-	 *
-	 * @return array
-	 */
 	public function connectAddPicT($openId, $accessToken, $accessTokenSecret, $params) {
 		if(!$params['content'] || !$params['pic']) {
 			throw new Exception('Required Parameter Missing');
@@ -423,23 +316,6 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 
 	}
 
-	/**
-	 * connectGetRepostList
-	 * 获取一条微博的转播或评论信息列表
-	 *
-	 * @param string $openId 访问OpenAPI时必需的OpenID
-	 * @param string $accessToken 具有访问权限的access_token
-	 * @param string $accessTokenSecret access_token的密钥
-	 * @param array $params 私有参数组成的数组
-	 *  + flag		必须，标识获取的是转播列表还是点评列表。0：获取转播列表；1：获取点评列表；2：转播列表和点评列表都获取。
-	 *  + rootid		必须，转发或点评的源微博的ID。
-	 *  + pageflag		必须，分页标识。0：第一页；1：向下翻页；2：向上翻页。
-	 *  + pagetime		必须，本页起始时间。第一页：0；向下翻页：上一次请求返回的最后一条记录时间；向上翻页：上一次请求返回的第一条记录的时间。
-	 *  + reqnum		必须，每次请求记录的条数。取值为1-100条。
-	 *  + twitterid		必须，翻页时使用。第1-100条：0；继续向下翻页：上一次请求返回的最后一条记录id。
-	 *
-	 * @return array
-	 */
 	public function connectGetRepostList($openId, $accessToken, $accessTokenSecret, $params) {
 		if(!isset($params['flag']) || !$params['rootid'] || !isset($params['pageflag']) || !isset($params['pagetime']) || !$params['reqnum'] || !isset($params['twitterid'])) {
 			throw new Exception('Required Parameter Missing');

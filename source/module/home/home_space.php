@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_space.php 31649 2012-09-18 07:50:15Z liulanbo $
+ *      $Id: home_space.php 32383 2013-01-07 11:00:48Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,6 +50,8 @@ if(empty($_GET['do']) && !isset($_GET['diy'])) {
 	} else {
 		$do = $_GET['do'] = !$_G['setting']['homepagestyle'] ? 'profile' : 'index';
 	}
+} elseif(empty($_GET['do']) && isset($_GET['diy']) && !empty($_G['setting']['homepagestyle'])) {
+	$_GET['do'] = 'index';
 }
 
 if($_GET['do'] == 'follow') {

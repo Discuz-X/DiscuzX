@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 30741 2012-06-15 08:53:29Z monkey $
+ *      $Id: function_cloudaddons.php 32402 2013-01-14 02:04:22Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -136,15 +136,33 @@ function cloudaddons_uninstall($md5file, $dir) {
 function cloudaddons_savemd5($md5file, $end, $md5) {
 	global $_G;
 	parse_str($end, $r);
-	$array = array(
-	    'Title' => 'Discuz! Addon MD5',
-	    'ID' => $r['ID'],
-	    'SN' => $r['SN'],
-	    'RevisionID' => $r['RevisionID'],
-	    'RevisionDateline' => $r['RevisionDateline'],
-	    'Data' => $md5,
-	);
 	require_once libfile('class/xml');
+	$xml = implode('', @file(DISCUZ_ROOT.'./data/addonmd5/'.$md5file.'.xml'));
+	$array = xml2array($xml);
+	$ridexists = false;
+	$data = array();
+	if($array['RevisionID']) {
+		foreach(explode(',', $array['RevisionID']) as $i => $rid) {
+			$sns = explode(',', $array['SN']);
+			$datalines = explode(',', $array['RevisionDateline']);
+			$data[$rid]['SN'] = $sns[$i];
+			$data[$rid]['RevisionDateline'] = $datalines[$i];
+		}
+	}
+	$data[$r['RevisionID']]['SN'] = $r['SN'];
+	$data[$r['RevisionID']]['RevisionDateline'] = $r['RevisionDateline'];
+	$array['Title'] = 'Discuz! Addon MD5';
+	$array['ID'] = $r['ID'];
+	$array['RevisionDateline'] = $array['SN'] = $array['RevisionID'] = array();
+	foreach($data as $rid => $tmp) {
+		$array['RevisionID'][] = $rid;
+		$array['SN'][] = $tmp['SN'];
+		$array['RevisionDateline'][] = $tmp['RevisionDateline'];
+	}
+	$array['RevisionID'] = implode(',', $array['RevisionID']);
+	$array['SN'] = implode(',', $array['SN']);
+	$array['RevisionDateline'] = implode(',', $array['RevisionDateline']);
+	$array['Data'] = $array['Data'] ? array_merge($array['Data'], $md5) : $md5;
 	if(!isset($_G['siteftp'])) {
 		dmkdir(DISCUZ_ROOT.'./data/addonmd5/', 0777, false);
 		$fp = fopen(DISCUZ_ROOT.'./data/addonmd5/'.$md5file.'.xml', 'w');

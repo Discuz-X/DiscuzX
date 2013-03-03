@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 32012 2012-10-31 02:20:31Z chenmengshu $
+ *      $Id: lang_admincp.php 32500 2013-01-29 09:08:03Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -663,6 +663,8 @@ $lang = array
 	'setting_basic_adminemail_comment' => '管理员 E-mail，将作为系统发邮件的时候的发件人地址',
 	'setting_basic_index_name' => '首页文件名',
 	'setting_basic_index_name_comment' => '设置站点首页的文件名，默认为“forum.php?mod=index”，如果您更改了此设置，那么您需要使用“FTP工具”手动重命名文件名称',
+	'setting_basic_site_qq' => 'QQ在线客服号码',
+	'setting_basic_site_qq_comment' => '<a href="" onclick="this.href=\'http://wp.qq.com/set.html?from=discuz&uin=\'+$(\'settingnew[site_qq]\').value" target="_blank">设置我的QQ在线状态</a>',
 	'setting_basic_icp' => '网站备案信息代码',
 	'setting_basic_icp_comment' => '页面底部可以显示 ICP 备案信息，如果网站已备案，在此输入您的授权码，它将显示在页面底部，如果没有请留空',
 	'setting_basic_stat' => '网站第三方统计代码',
@@ -1445,7 +1447,7 @@ $lang = array
 	'setting_serveropti_lazyload' => '开启图片延时加载',
 	'setting_serveropti_lazyload_comment' => '当开启后，页面中的图片在浏览器的当前窗口时再加载，可明显降低访问量很大的站点的服务器负担，建议开启本功能',
 	'setting_serveropti_blockmaxaggregationitem' => '<span class="spectitle">参与模块聚合数据条数</span>',
-	'setting_serveropti_blockmaxaggregationitem_comment' => '此值影响模块聚合时MYSQL检索数据的条数，设置太大将严重影响MYSQL的性能，设置太小将会影响模块聚合结果数据的理想程度。0为关闭些功能',
+	'setting_serveropti_blockmaxaggregationitem_comment' => '此值影响模块聚合时MYSQL检索数据的条数，设置太大将严重影响MYSQL的性能，设置太小将会影响模块聚合结果数据的理想程度。0为关闭此功能',
 	'setting_serveropti_blockcachetimerange' => '模块更新时间区间',
 	'setting_serveropti_blockcachetimerange_comment' => '设置全部模块在指定的时间区间内更新。可以根据网站的访问情况，避开访问高峰时间段。如：3点-7点',
 	'setting_serveropti_blockcachetimerangepoint' => '点',

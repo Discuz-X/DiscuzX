@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_printable.php 28348 2012-02-28 06:16:29Z monkey $
+ *      $Id: thread_printable.php 32320 2012-12-25 02:31:56Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,6 +27,9 @@ foreach($posts as $post) {
 			$skipaids = array_merge($skipaids, $matchaids[1]);
 		}
 		$post['message'] = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/is", '', $post['message']);
+	}
+	if(strpos(strtolower($post['message']), '[hide=') !== FALSE) {
+		$post['message'] = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/is", "", $post['message']);
 	}
 	$post['message'] = discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], sprintf('%00b', $post['htmlon']), $_G['forum']['allowsmilies'], $_G['forum']['allowbbcode'], $_G['forum']['allowimgcode'], $_G['forum']['allowhtml'], ($_G['forum']['jammer'] && $post['authorid'] != $_G['uid'] ? 1 : 0));
 

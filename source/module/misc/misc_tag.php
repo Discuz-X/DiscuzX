@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_tag.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
+ *      $Id: misc_tag.php 32232 2012-12-03 08:57:08Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -106,7 +106,7 @@ if($id || $name) {
 	$navtitle = $metakeywords = $metadescription = $taglang;
 	$viewthreadtags = 100;
 	$tagarray = array();
-	$query = C::t('common_tag')->fetch_all_by_status(0, '', $viewthreadtags);
+	$query = C::t('common_tag')->fetch_all_by_status(0, '', $viewthreadtags, 0, 0, 'DESC');
 	foreach($query as $result) {
 		$tagarray[] = $result;
 	}

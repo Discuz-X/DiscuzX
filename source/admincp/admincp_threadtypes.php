@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadtypes.php 31481 2012-09-03 03:02:21Z zhengqingpeng $
+ *      $Id: admincp_threadtypes.php 32161 2012-11-20 02:37:41Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -884,8 +884,7 @@ EOT;
 				(s1 ? \'<tr><td class="bold" width="50">'.$lang['threadtype_template_tag'].'</td>\' + s1 + \'</tr>\' : \'\') +
 				\'<tr><td class="bold" width="50">'.$lang['threadtype_template_intro'].'</td>\' + s2 + \'</tr></table>\';
 			if(s3) {
-				$(tipid).innerHTML += \'<table class="tb tb2"><tr><td class="bold" width="50">'.$lang['threadtype_template_example'].'</td><td colspan="6"><textarea style="width: 95%;" rows="2" readonly onclick="this.select()" id="\' + obj.parentNode.id + \'_sample"></textarea></td></tr></table>\';
-				$(obj.parentNode.id + \'_sample\').innerHTML = s3;
+				$(tipid).innerHTML += \'<table class="tb tb2"><tr><td class="bold" width="50">'.$lang['threadtype_template_example'].'</td><td colspan="6"><textarea style="width: 95%;" rows="2" readonly onclick="this.select()" id="\' + obj.parentNode.id + \'_sample">\' + s3 + \'</textarea></td></tr></table>\';
 			}
 		}
 		</script>';

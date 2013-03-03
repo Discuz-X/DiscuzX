@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 31516 2012-09-04 09:19:42Z zhangguosheng $
+ *      $Id: portalcp_block.php 32281 2012-12-18 04:48:04Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -159,7 +159,17 @@ if($op == 'block') {
 
 		$parameter = $_POST['parameter'];
 		if(isset($block['param'])) {
-			$parameter = $parameter + $block['param'];
+			$blockobj = block_script($block['blockclass'], $block['script']);
+			if($blockobj) {
+				$_block_setting = $blockobj->getsetting();
+				foreach($block['param'] as $_key => $_val) {
+					if(!isset($parameter[$_key]) && (!isset($_block_setting[$_key]) || (isset($_block_setting[$_key]) && $_block_setting[$_key]['type'] !== 'mcheckbox'))) {
+						$parameter[$_key] = $_val;
+					}
+				}
+			} else {
+				$parameter = $parameter + $block['param'];
+			}
 		}
 		$setarr['param'] = serialize($parameter);
 

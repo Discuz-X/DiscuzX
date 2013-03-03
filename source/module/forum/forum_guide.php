@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_guide.php 31990 2012-10-30 05:32:09Z liulanbo $
+ *      $Id: forum_guide.php 32048 2012-11-02 04:05:01Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -126,7 +126,7 @@ include template('forum/guide');
 
 function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 	global $_G;
-	$_G['setting']['guide'] = unserialize($_G['setting']['guide']);
+	$setting_guide = unserialize($_G['setting']['guide']);
 	if(!in_array($view, array('hot', 'digest', 'new'))) {
 		return array();
 	}
@@ -143,8 +143,8 @@ function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 	} else {
 		$dateline = 0;
 		$maxnum = 50000;
-		if($_G['setting']['guide'][$view.'dt']) {
-			$dateline = time() - intval($_G['setting']['guide'][$view.'dt']);
+		if($setting_guide[$view.'dt']) {
+			$dateline = time() - intval($setting_guide[$view.'dt']);
 		}
 		$maxtid = C::t('forum_thread')->fetch_max_tid();
 		$limittid = max(0,($maxtid - $maxnum));

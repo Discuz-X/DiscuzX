@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_attachment.php 30933 2012-07-02 08:39:51Z zhengqingpeng $
+ *      $Id: forum_attachment.php 32178 2012-11-23 03:31:16Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,8 @@ if($_GET['uid'] != $_G['uid'] && $_GET['uid']) {
 	$member = getuserbyuid($_GET['uid']);
 	loadcache('usergroup_'.$member['groupid']);
 	$_G['group'] = $_G['cache']['usergroup_'.$member['groupid']];
+	$_G['group']['grouptitle'] = $_G['cache']['usergroup_'.$_G['groupid']]['grouptitle'];
+	$_G['group']['color'] = $_G['cache']['usergroup_'.$_G['groupid']]['color'];
 }
 
 $requestmode = !empty($_GET['request']) && empty($_GET['uid']);

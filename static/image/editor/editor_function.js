@@ -183,7 +183,7 @@ function changeEditFull(flag) {
 		editor.setAttribute('srcheight', editor.style.height);
 		editor.style.height = '100%';
 		editor.style.minWidth = '800px';
-		editor.style.zIndex = '400';
+		editor.style.zIndex = '300';
 		ifrHtmlEditor.style.height = '100%';
 		ifrHtmlEditor.style.zoom = ifrHtmlEditor.style.zoom=="1"?"100%":"1";
 	} else {

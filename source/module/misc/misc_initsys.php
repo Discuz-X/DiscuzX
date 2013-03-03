@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 27433 2012-01-31 08:16:01Z monkey $
+ *      $Id: misc_initsys.php 32174 2012-11-22 09:27:28Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,6 +27,27 @@ if($_G['config']['output']['tplrefresh']) {
 
 $plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'mobile');
 $opens = array('mobile');
+
+$cloudapps = array('qqconnect' => 'connect', 'cloudstat' => 'stats', 'soso_smilies' => 'smilies', 'cloudsearch' => 'search', 'qqgroup' => 'qqgroup', 'security' => 'security');
+
+$apps = C::t('common_setting')->fetch('cloud_apps', true);
+if (!$apps) {
+	$apps = array();
+}
+
+if (!is_array($apps)) {
+	$apps = dunserialize($apps);
+}
+
+unset($apps[0]);
+
+if($apps) {
+	foreach($cloudapps as $key => $appname) {
+		if($apps[$appname]['status'] == 'normal') {
+			$opens[] = $key;
+		}
+	}
+}
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');
@@ -59,6 +80,10 @@ foreach($plugins as $pluginid) {
 			continue;
 		}
 		C::t('common_plugin')->delete_by_identifier($pluginid);
+	}
+
+	if($plugin['available']) {
+		$opens[] = $pluginid;
 	}
 
 	$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));

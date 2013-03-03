@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 31822 2012-10-12 06:24:42Z zhangjie $
+ *      $Id: forum_forumdisplay.php 32254 2012-12-07 07:07:49Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -100,6 +100,9 @@ if($_G['forum']['status'] == 3) {
 	$navtitle = helper_seo::get_title_page($_G['forum']['name'], $_G['page']).' - '.$_G['setting']['navs'][3]['navname'];
 	$metakeywords = $_G['forum']['metakeywords'];
 	$metadescription = $_G['forum']['description'];
+	if($_G['forum']['level'] == -1) {
+		showmessage('group_verify', '', array(), array('alert' => 'info'));
+	}
 	$_G['seokeywords'] = $_G['setting']['seokeywords']['group'];
 	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
 	$action = getgpc('action') ? $_GET['action'] : 'list';

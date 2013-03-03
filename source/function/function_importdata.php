@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_importdata.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_importdata.php 32104 2012-11-12 02:22:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -94,10 +94,10 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 			}
 
 			if(C::t('common_style')->check_stylename($stylearray['name'])) {
-				$stylearray['name'] .= '_'.random(4);
 				$renamed = 1;
+			} else {
+				$styleidnew = C::t('common_style')->insert(array('name' => $stylearray['name'], 'templateid' => $templateid), true);
 			}
-			$styleidnew = C::t('common_style')->insert(array('name' => $stylearray['name'], 'templateid' => $templateid), true);
 		} else {
 			$styleidnew = $restoreid;
 			C::t('common_stylevar')->delete_by_styleid($styleidnew);

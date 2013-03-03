@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 28372 2012-02-28 08:15:06Z monkey $
+ *      $Id: admincp_misc.php 32275 2012-12-13 08:14:04Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -590,7 +590,7 @@ var rowtypedata = [
 		$multipage = '';
 		$totalcount = C::t('common_word')->count_by_type_find($ftype, $ffind);
 		if($totalcount) {
-			$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=misc&operation=censor".($censorkeyword ? "&censorkeyword=".$censorkeyword : '' ));
+			$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=misc&operation=censor".($ffind ? "&censorkeyword=".$ffind : '' ).($_GET['censor_search_type'] ? "&censor_search_type=".$_GET['censor_search_type'] : '' ));
 			foreach(C::t('common_word')->fetch_all_by_type_find($ftype, $ffind, $startlimit, $ppp) as $censor) {
 				$censor['replacement'] = $censor['replacement'];
 				$censor['replacement'] = dhtmlspecialchars($censor['replacement']);

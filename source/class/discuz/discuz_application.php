@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 31912 2012-10-24 04:10:37Z zhangguosheng $
+ *      $Id: discuz_application.php 32483 2013-01-28 06:45:32Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -722,9 +722,10 @@ class discuz_application extends discuz_base{
 			$this->var['setting']['seccodestatus'] = 0;
 		}
 
-		$this->var['setting']['seccodedata']['type'] = 99;
-		$this->var['setting']['thumbquality'] = 50;
+		$this->var['setting']['seccodedata']['animator'] = 0;
+		$this->var['setting']['seccodedata']['type'] = 0;
 
+		$this->var['setting']['thumbquality'] = 50;
 
 		$this->var['setting']['mobile']['simpletypeurl'] = array();
 		$this->var['setting']['mobile']['simpletypeurl'][0] = $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=no';

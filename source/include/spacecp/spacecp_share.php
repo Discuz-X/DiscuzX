@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_share.php 31895 2012-10-23 02:22:16Z zhengqingpeng $
+ *      $Id: spacecp_share.php 32069 2012-11-06 07:30:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -285,7 +285,7 @@ if($_GET['op'] == 'delete') {
 
 		if($type == 'link') {
 			$link = dhtmlspecialchars(trim($_POST['link']));
-			preg_match("/((https?){1}:\/\/|www\.)[^\[\"']+/i", $link, $matches);
+			preg_match("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^\[\"']+/i", $link, $matches);
 			$link = $matches[0];
 			if($link) {
 				if(!preg_match("/^(http|ftp|https|mms)\:\/\/.{4,300}$/i", $link)) $link = '';
@@ -466,7 +466,7 @@ if($_GET['op'] == 'delete') {
 				C::t('common_member_status')->increase($id, array('sharetimes' => 1));
 				break;
 			case 'blog':
-				C::t('home_blog')->increase($id, array('sharetimes' => 1));
+				C::t('home_blog')->increase($id, null, array('sharetimes' => 1));
 				break;
 			case 'album':
 				C::t('home_album')->update_num_by_albumid($id, 1, 'sharetimes');

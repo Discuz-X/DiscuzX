@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_message.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_message.php 32580 2013-02-22 03:40:28Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -118,9 +118,10 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		header("HTTP/1.1 301 Moved Permanently");
 		dheader("location: ".str_replace('&amp;', '&', $url_forward));
 	}
+	$url_forward_js = addslashes(str_replace('\\', '%27', $url_forward));
 	if($param['location'] && !empty($_G['inajax'])) {
 		include template('common/header_ajax');
-		echo '<script type="text/javascript" reload="1">window.location.href=\''.str_replace("'", "\'", $url_forward).'\';</script>';
+		echo '<script type="text/javascript" reload="1">window.location.href=\''.$url_forward_js.'\';</script>';
 		include template('common/footer_ajax');
 		dexit();
 	}
@@ -187,7 +188,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		}
 		$valuesjs = '{'.$valuesjs.'}';
 		if($url_forward) {
-			$extra .= 'if(typeof succeedhandle_'.$handlekey.'==\'function\') {succeedhandle_'.$handlekey.'(\''.$url_forward.'\', \''.$show_jsmessage.'\', '.$valuesjs.');}';
+			$extra .= 'if(typeof succeedhandle_'.$handlekey.'==\'function\') {succeedhandle_'.$handlekey.'(\''.$url_forward_js.'\', \''.$show_jsmessage.'\', '.$valuesjs.');}';
 		} else {
 			$extra .= 'if(typeof errorhandle_'.$handlekey.'==\'function\') {errorhandle_'.$handlekey.'(\''.$show_jsmessage.'\', '.$valuesjs.');}';
 		}
@@ -201,7 +202,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	if($handlekey) {
 		if($param['showdialog']) {
 			$modes = array('alert_error' => 'alert', 'alert_right' => 'right', 'alert_info' => 'notice');
-			$extra .= 'hideWindow(\''.$handlekey.'\');showDialog(\''.$show_jsmessage.'\', \''.$modes[$alerttype].'\', null, '.($param['locationtime'] !== null ? 'function () { window.location.href =\''.$url_forward.'\'; }' : 'null').', 0, null, null, null, null, '.($param['closetime'] ? $param['closetime'] : 'null').', '.($param['locationtime'] ? $param['locationtime'] : 'null').');';
+			$extra .= 'hideWindow(\''.$handlekey.'\');showDialog(\''.$show_jsmessage.'\', \''.$modes[$alerttype].'\', null, '.($param['locationtime'] !== null ? 'function () { window.location.href =\''.$url_forward_js.'\'; }' : 'null').', 0, null, null, null, null, '.($param['closetime'] ? $param['closetime'] : 'null').', '.($param['locationtime'] ? $param['locationtime'] : 'null').');';
 			$param['closetime'] = null;
 			$st = '';
 		}
@@ -209,10 +210,10 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 			$extra .= 'setTimeout("hideWindow(\''.$handlekey.'\')", '.($param['closetime'] * 1000).');';
 		}
 	} else {
-		$st = $param['locationtime'] !== null ?'setTimeout("window.location.href =\''.$url_forward.'\';", '.($param['locationtime'] * 1000).');' : '';
+		$st = $param['locationtime'] !== null ?'setTimeout("window.location.href =\''.$url_forward_js.'\';", '.($param['locationtime'] * 1000).');' : '';
 	}
 	if(!$extra && $param['timeout'] && !defined('IN_MOBILE')) {
-		$extra .= 'setTimeout("window.location.href =\''.$url_forward.'\';", '.$refreshtime.');';
+		$extra .= 'setTimeout("window.location.href =\''.$url_forward_js.'\';", '.$refreshtime.');';
 	}
 	$show_message .= $extra ? '<script type="text/javascript" reload="1">'.$extra.$st.'</script>' : '';
 	$show_message .= $param['extrajs'] ? $param['extrajs'] : '';

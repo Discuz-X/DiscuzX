@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 31986 2012-10-30 05:18:16Z chenmengshu $
+ *      $Id: admincp_members.php 32356 2013-01-06 03:24:21Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1723,7 +1723,7 @@ EOF;
 						C::t('common_moderate')->delete($ids, $key);
 					}
 				}
-				C::t('home_comment')->delete_by_uid($member['uid']);
+				C::t('home_comment')->delete_by_uid_idtype($member['uid']);
 			}
 			if(in_array('postcomment', $_GET['clear'])) {
 				$postcomment_cache_pid = array();

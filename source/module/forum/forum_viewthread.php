@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 31525 2012-09-05 07:19:35Z liulanbo $
+ *      $Id: forum_viewthread.php 32154 2012-11-16 06:20:48Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -212,12 +212,8 @@ if($rushreply) {
 	if((TIMESTAMP < $rushresult['starttimefrom'] || ($rushresult['starttimeto'] && TIMESTAMP > $rushresult['starttimeto']) || ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 >= $rushresult['stopfloor'])) && $_G['forum_thread']['closed'] == 0) {
 		C::t('forum_thread')->update($_G['tid'], array('closed'=>1));
 	} elseif(($rushresult['starttimefrom'] && TIMESTAMP > $rushresult['starttimefrom']) && $_G['forum_thread']['closed'] == 1) {
-		if(!$rushresult['starttimeto'] && !$rushresult['stopfloor']) {
+		if(($rushresult['starttimeto'] && TIMESTAMP < $rushresult['starttimeto'] || !$rushresult['starttimeto']) && ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 < $rushresult['stopfloor'] || !$rushresult['stopfloor'])) {
 			C::t('forum_thread')->update($_G['tid'], array('closed'=>0));
-		} else {
-			if(($rushresult['starttimeto'] && TIMESTAMP < $rushresult['starttimeto'] && $rushresult['stopfloor'] > $_G['forum_thread']['replies'] + 1) || ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 < $rushresult['stopfloor'])) {
-				C::t('forum_thread')->update($_G['tid'], array('closed'=>0));
-			}
 		}
 	}
 	$rushresult['starttimefrom'] = $rushresult['starttimefrom'] ? dgmdate($rushresult['starttimefrom']) : '';

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_index.php 29284 2012-03-31 09:42:04Z chenmengshu $
+ *      $Id: collection_index.php 32194 2012-11-27 09:25:12Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ if($op == 'all' || $op == 'search') {
 	$orderby = (in_array($_GET['order'], $orderbyarr)) ? $_GET['order'] : 'dateline';
 	$collectiondata = processCollectionData(C::t('forum_collection')->fetch_all('', $orderby, 'DESC', $start, $cpp, $searchtitle), array(), $orderby);
 	$htmlsearchtitle = dhtmlspecialchars($searchtitle);
-	$multipage = multi($count, $cpp, $page, 'forum.php?mod=collection&op='.$op.(($htmlsearchtitle) ? '&kw='.$htmlsearchtitle : ''));
+	$multipage = multi($count, $cpp, $page, 'forum.php?mod=collection&order='.$orderby.'&op='.$op.(($htmlsearchtitle) ? '&kw='.$htmlsearchtitle : ''));
 
 	include template('forum/collection_all');
 } elseif ($op == 'my') {

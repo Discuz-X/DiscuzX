@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 30840 2012-06-25 09:12:00Z zhangjie $
+ *      $Id: class_member.php 32498 2013-01-29 08:58:42Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,11 +50,7 @@ class logging_ctl {
 			if(!empty($_GET['auth'])) {
 				list($username, $password, $questionexist) = explode("\t", authcode($_GET['auth'], 'DECODE'));
 				$username = dhtmlspecialchars($username);
-				if($username && $password) {
-					$auth = dhtmlspecialchars($_GET['auth']);
-				} else {
-					$auth = '';
-				}
+				$auth = dhtmlspecialchars($_GET['auth']);
 			}
 
 			$cookietimecheck = !empty($_G['cookie']['cookietime']) || !empty($_GET['cookietime']) ? 'checked="checked"' : '';
@@ -90,7 +86,7 @@ class logging_ctl {
 			$result = userlogin($_GET['username'], $_GET['password'], $_GET['questionid'], $_GET['answer'], $this->setting['autoidselect'] ? 'auto' : $_GET['loginfield'], $_G['clientip']);
 			$uid = $result['ucresult']['uid'];
 
-			if(!empty($_GET['lssubmit']) && ($result['ucresult']['uid'] == -3 || $seccodecheck && $result['status'] > 0)) {
+			if(!empty($_GET['lssubmit']) && ($result['ucresult']['uid'] == -3 || $seccodecheck)) {
 				$_GET['username'] = $result['ucresult']['username'];
 				$this->logging_more($result['ucresult']['uid'] == -3);
 			}
@@ -363,16 +359,16 @@ class register_ctl {
 
 		if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
-			if(!$sendurl) {
-				if($_GET['action'] == 'activation') {
-					$auth = explode("\t", authcode($auth, 'DECODE'));
-					if(FORMHASH != $auth[1]) {
-						showmessage('register_activation_invalid', 'member.php?mod=logging&action=login');
-					}
-					$username = $auth[0];
-					$activationauth = authcode("$auth[0]\t".FORMHASH, 'ENCODE');
+			if($_GET['action'] == 'activation') {
+				$auth = explode("\t", authcode($auth, 'DECODE'));
+				if(FORMHASH != $auth[1]) {
+					showmessage('register_activation_invalid', 'member.php?mod=logging&action=login');
 				}
-
+				$username = $auth[0];
+				$activationauth = authcode("$auth[0]\t".FORMHASH, 'ENCODE');
+				$sendurl = false;
+			}
+			if(!$sendurl) {
 				if($fromuid) {
 					$member = getuserbyuid($fromuid);
 					if(!empty($member)) {
@@ -415,6 +411,14 @@ class register_ctl {
 
 		} else {
 
+			$activationauth = array();
+			if(isset($_GET['activationauth']) && $_GET['activationauth']) {
+				$activationauth = explode("\t", authcode($_GET['activationauth'], 'DECODE'));
+				if($activationauth[1] != FORMHASH) {
+					showmessage('register_activation_invalid', 'member.php?mod=logging&action=login');
+				}
+				$sendurl = false;
+			}
 			if($sendurl) {
 				checkemail($_GET['email']);
 				$hashstr = urlencode(authcode("$_GET[email]\t$_G[timestamp]", 'ENCODE', $_G['config']['security']['authkey']));
@@ -448,8 +452,7 @@ class register_ctl {
 			}
 
 			$activation = array();
-			if(isset($_GET['activationauth'])) {
-				$activationauth = explode("\t", authcode($_GET['activationauth'], 'DECODE'));
+			if(isset($_GET['activationauth']) && $activationauth && is_array($activationauth)) {
 				if($activationauth[1] == FORMHASH && !($activation = uc_get_user($activationauth[0]))) {
 					showmessage('register_activation_invalid', 'member.php?mod=logging&action=login');
 				}

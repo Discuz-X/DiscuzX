@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 30842 2012-06-25 09:23:12Z liulanbo $
+ *      $Id: post_newreply.php 32205 2012-11-29 07:37:29Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -376,7 +376,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 		if($atlist) {
 			foreach($atlist as $atuid => $atusername) {
-				$atsearch[] = "/@$atusername /i";
+				$atsearch[] = "/@".str_replace('/', '\/', preg_quote($atusername))." /i";
 				$atreplace[] = "[url=home.php?mod=space&uid=$atuid]@{$atusername}[/url] ";
 			}
 			$message = preg_replace($atsearch, $atreplace, $message.' ', 1);
@@ -516,12 +516,13 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		} else {
 			C::t('forum_threadpreview')->update_relay_by_tid($thread['tid'], 1);
 		}
-		$notemsg = cutstr($message, 140);
+
+		$notemsg = cutstr(followcode($message, $thread['tid'], $pid, 0, false), 140);
 		$followfeed = array(
 			'uid' => $_G['uid'],
 			'username' => $_G['username'],
 			'tid' => $thread['tid'],
-			'note' => followcode($notemsg, $thread['tid'], $pid, 0, false),
+			'note' => $notemsg,
 			'dateline' => TIMESTAMP
 		);
 		$feedid = C::t('home_follow_feed')->insert($followfeed, true);

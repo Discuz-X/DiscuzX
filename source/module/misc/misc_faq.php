@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_faq.php 25289 2011-11-03 10:06:19Z zhangguosheng $
+ *      $Id: misc_faq.php 32267 2012-12-12 03:26:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,6 +64,7 @@ if($_GET['action'] == 'faq') {
 		} else {
 			showmessage('faq_keywords_empty', 'misc.php?mod=faq');
 		}
+		$keyword = dhtmlspecialchars($keyword);
 	}
 
 } elseif($_GET['action'] == 'plugin' && !empty($_GET['id'])) {

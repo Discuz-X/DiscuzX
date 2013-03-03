@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_thread.php 31847 2012-10-17 04:38:16Z zhangguosheng $
+ *      $Id: block_thread.php 32365 2013-01-06 12:23:07Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -475,7 +475,7 @@ class block_thread extends discuz_block {
 				} elseif($thread['special'] == 2) {
 					$trade = C::t('forum_trade')->fetch_first_goods($tid);
 					$trade['aid'] = $trade['aid'] ? getforumimg($trade['aid']) : '';
-					$trades[] = $trade;
+					$trades[$tid][] = $trade;
 				} elseif($thread['special'] == 3) {
 					$extcredits = $_G['settings']['extcredits'];
 					$creditstransextra = $_G['settings']['creditstransextra'];
