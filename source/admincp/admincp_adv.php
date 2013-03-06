@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 29369 2012-04-09 04:13:40Z zhengqingpeng $
+ *      $Id: admincp_adv.php 30333 2012-05-23 07:16:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -53,12 +53,18 @@ if($operation == 'ad') {
 		$target = $_GET['target'];
 		$typeadd = '';
 		if($type) {
-			$advfile = libfile('adv/'.$type, 'class');
+			$etype = explode(':', $type);
+			if(count($etype) > 1) {
+				$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+				$advclass = 'adv_'.$etype[1];
+			} else {
+				$advfile = libfile('adv/'.$type, 'class');
+				$advclass = 'adv_'.$type;
+			}
 			if(file_exists($advfile)) {
 				require_once $advfile;
-				$advclass = 'adv_'.$type;
+				$advclassv = new $advclass();
 				if(class_exists($advclass)) {
-					$advclassv = new $advclass();
 					$advsetting = $advclassv->getsetting();
 					$typeadd = ' - '.lang('adv/'.$type, $advclassv->name);
 					if($type == 'custom') {
@@ -96,13 +102,19 @@ if($operation == 'ad') {
 		$typenames = array();
 		foreach(C::t('common_advertisement')->fetch_all_search($title, $starttime, $endtime, $type, $target, $orderby, $start_limit, $advppp) as $adv) {
 			if(!$type) {
-				$advfile = libfile('adv/'.$adv['type'], 'class');
+				$etype = explode(':', $adv['type']);
+				if(count($etype) > 1) {
+					$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+					$advclass = 'adv_'.$etype[1];
+				} else {
+					$advfile = libfile('adv/'.$adv['type'], 'class');
+					$advclass = 'adv_'.$adv['type'];
+				}
 				if(!file_exists($advfile)) {
 					continue;
 				}
 				if(!isset($typenames[$adv['type']])) {
 					require_once $advfile;
-					$advclass = 'adv_'.$adv['type'];
 					if(class_exists($advclass)) {
 						$advclassv = new $advclass();
 						$typenames[$adv['type']] = lang('adv/'.$adv['type'], $advclassv->name);
@@ -224,8 +236,14 @@ if($operation == 'ad') {
 			$type = $_GET['type'];
 		}
 
-		require_once libfile('adv/'.$type, 'class');
-		$advclass = 'adv_'.$type;
+		$etype = explode(':', $type);
+		if(count($etype) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+			$advclass = 'adv_'.$etype[1];
+		} else {
+			require_once libfile('adv/'.$type, 'class');
+			$advclass = 'adv_'.$type;
+		}
 		$advclass = new $advclass;
 		$advsetting = $advclass->getsetting();
 		$advtitle = lang('adv/'.$type, $advclass->name).($type != 'custom' ? '' : ' '.$advclass->customname);
@@ -264,7 +282,8 @@ if($operation == 'ad') {
 		echo '<script type="text/javascript" src="static/js/calendar.js"></script>'.
 			'<div class="colorbox"><h4>'.lang('adv/'.$type, $advclass->name).'</h4>'.
 			'<table cellspacing="0" cellpadding="3"><tr><td>'.
-			(file_exists(DISCUZ_ROOT.'./static/image/admincp/'.$type.'.gif') ? '<img src="static/image/admincp/'.$type.'.gif" />' : '').
+			(count($etype) > 1 ? (file_exists(DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.gif') ? '<img src="source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.gif" />' : '')
+			: (file_exists(DISCUZ_ROOT.'./static/image/admincp/'.$type.'.gif') ? '<img src="static/image/admincp/'.$type.'.gif" />' : '')).
 			'</td><td valign="top">'.lang('adv/'.$type, $advclass->description).'</td></tr></table>'.
 			'<div style="width:95%" align="right">'.lang('adv/'.$type, $advclass->copyright).'</div></div>';
 		if($operation == 'edit') {
@@ -396,9 +415,16 @@ if($operation == 'ad') {
 			$type = $_GET['type'];
 		}
 
-		require_once libfile('adv/'.$type, 'class');
-		$advclass = 'adv_'.$type;
+		$etype = explode(':', $type);
+		if(count($etype) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+			$advclass = 'adv_'.$etype[1];
+		} else {
+			require_once libfile('adv/'.$type, 'class');
+			$advclass = 'adv_'.$type;
+		}
 		$advclass = new $advclass;
+
 		$advnew = $_GET['advnew'];
 
 		$parameters = !empty($_GET['parameters']) ? $_GET['parameters'] : array();
@@ -542,7 +568,12 @@ if($operation == 'ad') {
 				echo '</td>';
 			} else {
 				echo '<td width="'.$rowwidth.'%" class="hover" align="center"><a href="'.ADMINSCRIPT.'?action=adv&operation=ad&type='.$adv['class'].'">';
-				echo file_exists(DISCUZ_ROOT.'./static/image/admincp/'.$adv['class'].'.gif') ? '<img src="static/image/admincp/'.$adv['class'].'.gif" /><br />' : '';
+				$eclass = explode(':', $adv['class']);
+				if(count($eclass) > 1) {
+					echo file_exists(DISCUZ_ROOT.'./source/plugin/'.$eclass[0].'/adv/adv_'.$eclass[1].'.gif') ? '<img src="source/plugin/'.$eclass[0].'/adv/adv_'.$eclass[1].'.gif" /><br />' : '';
+				} else {
+					echo file_exists(DISCUZ_ROOT.'./static/image/admincp/'.$adv['class'].'.gif') ? '<img src="static/image/admincp/'.$adv['class'].'.gif" /><br />' : '';
+				}
 				echo $adv['name'].($ads[$adv['class']] ? '('.$ads[$adv['class']].')' : '').($adv['filemtime'] > TIMESTAMP - 86400 ? ' <font color="red">New!</font>' : '');
 				echo '</a></td>';
 			}
@@ -645,23 +676,34 @@ function encodeadvcode($advnew) {
 
 function getadvs() {
 	global $_G;
-	$dir = DISCUZ_ROOT.'./source/class/adv';
-	$advdir = dir($dir);
+	$checkdirs = array_merge(array(''), $_G['setting']['plugins']['available']);
 	$advs = array();
-	while($entry = $advdir->read()) {
-		if(!in_array($entry, array('.', '..')) && preg_match("/^adv\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
-			@include_once $dir.'/'.$entry;
-			$advclass = substr($entry, 0, -4);
-			if(class_exists($advclass)) {
-				$adv = new $advclass();
-				$script = substr($advclass, 4);
-				$advs[$entry] = array(
-					'class' => $script,
-					'name' => lang('adv/'.$script, $adv->name),
-					'version' => $adv->version,
-					'copyright' => lang('adv/'.$script, $adv->copyright),
-					'filemtime' => @filemtime($dir.'/'.$entry)
-				);
+	foreach($checkdirs as $key) {
+		if($key) {
+			$dir = DISCUZ_ROOT.'./source/plugin/'.$key.'/adv';
+		} else {
+			$dir = DISCUZ_ROOT.'./source/class/adv';
+		}
+		if(!file_exists($dir)) {
+			continue;
+		}
+		$advdir = dir($dir);
+		while($entry = $advdir->read()) {
+			if(!in_array($entry, array('.', '..')) && preg_match("/^adv\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
+				@include_once $dir.'/'.$entry;
+				$advclass = substr($entry, 0, -4);
+				if(class_exists($advclass)) {
+					$adv = new $advclass();
+					$script = substr($advclass, 4);
+					$script = ($key ? $key.':' : '').$script;
+					$advs[$entry] = array(
+						'class' => $script,
+						'name' => lang('adv/'.$script, $adv->name),
+						'version' => $adv->version,
+						'copyright' => lang('adv/'.$script, $adv->copyright),
+						'filemtime' => @filemtime($dir.'/'.$entry)
+					);
+				}
 			}
 		}
 	}

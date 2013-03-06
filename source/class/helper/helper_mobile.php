@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_mobile.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: helper_mobile.php 32479 2013-01-24 10:44:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,8 +24,12 @@ class helper_mobile {
 			ob_start();
 			$content = '<?xml version="1.0" encoding="utf-8"?>'.$content;
 			if('utf-8' != CHARSET) {
-				@header('Content-Type: text/html; charset=utf-8');
 				$content = diconv($content, CHARSET, 'utf-8');
+			}
+			if(IN_MOBILE === '3') {
+				header("Content-type: text/vnd.wap.wml; charset=utf-8");
+			} else {
+				@header('Content-Type: text/html; charset=utf-8');
 			}
 			echo $content;
 			exit();
@@ -46,9 +50,9 @@ class helper_mobile {
 	function mobilereplace($file, $replace) {
 		if(strpos($replace, 'mobile=') === false) {
 			if(strpos($replace, '?') === false) {
-				$replace = 'href="'.$file.$replace.'?mobile=yes"';
+				$replace = 'href="'.$file.$replace.'?mobile='.IN_MOBILE.'"';
 			} else {
-				$replace = 'href="'.$file.$replace.'&mobile=yes"';
+				$replace = 'href="'.$file.$replace.'&amp;mobile='.IN_MOBILE.'"';
 			}
 			return $replace;
 		} else {

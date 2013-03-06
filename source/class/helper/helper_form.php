@@ -113,12 +113,19 @@ class helper_form {
 			return true;
 		}
 		if(!is_numeric($_G['setting']['seccodedata']['type'])) {
-			if(file_exists($codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class'))) {
+			$etype = explode(':', $_G['setting']['seccodedata']['type']);
+			if(count($etype) > 1) {
+				$codefile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/seccode/seccode_'.$etype[1].'.php';
+				$class = $etype[1];
+			} else {
+				$codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class');
+				$class = $_G['setting']['seccodedata']['type'];
+			}
+			if(file_exists($codefile)) {
 				@include_once $codefile;
-				$class = 'seccode_'.$_G['setting']['seccodedata']['type'];
+				$class = 'seccode_'.$class;
 				if(class_exists($class)) {
 					$code = new $class();
-					$code->setting = $_G['setting']['seccodedata']['extra'][$_G['setting']['seccodedata']['type']];
 					if(method_exists($code, 'check')) {
 						return $code->check($value, $idhash);
 					}

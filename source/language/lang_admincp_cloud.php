@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 30537 2012-06-01 07:11:25Z songlixin $
+ *	  $Id: lang_admincp_cloud.php 32637 2013-02-27 07:27:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -359,14 +359,18 @@ $extend_lang = array
 	'security_thread_status' => '主题状态',
 	'security_post_status' => '回帖状态',
 	'security_thread_member' => '用户状态',
+	'security_thread_member_group' => '用户组',
+	'security_cron_lastpost' => '更新版块最后发表(防水墙相关)',
+	'security_cron_daily' => '防水墙每日优化',
 	'setting_update_succeed' => '当前设置更新成功',
+	'security_createtime' => '违规日期',
 
 	'search_menu_setting' => '设置',
 	'search_menu_service' => '功能配置',
 	'search_setting_allow_hot_topic' => '开启热门话题',
-	'search_setting_allow_forum_recommend' => '开启板块推荐词',
+	'search_setting_allow_forum_recommend' => '开启版块推荐词',
 	'search_setting_allow_thread_related' => '开启主题相关帖',
-	'search_setting_allow_forum_related' => '开启板块相关帖',
+	'search_setting_allow_forum_related' => '开启版块相关帖',
 	'search_setting_allow_collection_related' => '开启淘帖相关帖',
 );
 

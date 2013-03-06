@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_blog.php 32069 2012-11-06 07:30:38Z zhengqingpeng $
+ *      $Id: function_blog.php 32298 2012-12-21 03:29:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -347,5 +347,4 @@ function blog_flash($swf_url, $type='') {
 	}
 	return $html;
 }
-
 ?>

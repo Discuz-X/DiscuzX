@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 32127 2012-11-14 04:21:12Z zhangguosheng $
+ *      $Id: function_forum.php 32620 2013-02-27 02:03:46Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -397,12 +397,19 @@ function showmessagenoperm($type, $fid, $formula = '') {
 	showmessage($message, NULL, array('fid' => $fid, 'permgroups' => $permgroups, 'grouptitle' => $_G['group']['grouptitle']), array('login' => 1), $custom);
 }
 
-function loadforum() {
+function loadforum($fid = null, $tid = null) {
 	global $_G;
-	$tid = intval(getgpc('tid'));
-	$fid = getgpc('fid');
-	if(!$fid && getgpc('gid')) {
-		$fid = intval(getgpc('gid'));
+	$tid = intval(isset($tid) ? $tid : getgpc('tid'));
+	if(isset($fid)) {
+		$fid = intval($fid);
+	} else {
+		$fid = getgpc('fid');
+		if(!$fid && getgpc('gid')) {
+			$fid = intval(getgpc('gid'));
+		}
+	}
+	if(isset($_G['forum']['fid']) && $_G['forum']['fid'] == $fid || isset($_G['thread']['tid']) && $_G['thread']['tid'] == $tid){
+		return null;
 	}
 	if(!empty($_GET['archiver'])) {//X1.5的Archiver兼容
 		if($fid) {
@@ -438,6 +445,7 @@ function loadforum() {
 		if(!empty ($tid)) {
 			$archiveid = !empty($_GET['archiveid']) ? intval($_GET['archiveid']) : null;
 			$_G['thread'] = get_thread_by_tid($tid, $archiveid);
+			$_G['thread']['allreplies'] = $_G['thread']['replies'] + $_G['thread']['comments'];
 			if(!$_G['forum_auditstatuson'] && !empty($_G['thread'])
 					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['uid'] && $_G['thread']['authorid'] == $_G['uid']))) {
 				$_G['thread'] = null;
@@ -598,9 +606,10 @@ function get_thread_by_tid($tid, $forcetableid = null) {
 	if(!is_array($ret)) {
 		$ret = array();
 	} elseif($_G['setting']['optimizeviews']) {
-		$row = C::t('forum_threadaddviews')->fetch($tid);
-		$ret['addviews'] = intval($row['addviews']);
-		$ret['views'] += $ret['addviews'];
+		if(($row = C::t('forum_threadaddviews')->fetch($tid))) {
+			$ret['addviews'] = intval($row['addviews']);
+			$ret['views'] += $ret['addviews'];
+		}
 	}
 
 	return $ret;
@@ -643,6 +652,20 @@ function get_post_by_pid($pid, $fields = '*', $addcondiction = '', $forcetable =
 	}
 
 	return $ret;
+}
+
+function get_post_by_tid_pid($tid, $pid) {
+	static $postlist = array();
+	if(empty($postlist[$pid])) {
+		$postlist[$pid] = C::t('forum_post')->fetch('tid:'.$tid, $pid, false);
+		if($postlist[$pid] && $postlist[$pid]['tid'] == $tid) {
+			$user = getuserbyuid($postlist[$pid]['authorid']);
+			$postlist[$pid]['adminid'] = $user['adminid'];
+		} else {
+			$postlist[$pid] = array();
+		}
+	}
+	return $postlist[$pid];
 }
 
 function set_rssauth() {
@@ -981,5 +1004,120 @@ function viewthread_is_search_referer() {
 		return true;
 	}
 	return false;
+}
+
+
+function stringtopic($value, $key = '', $force = false, $rlength = 0) {
+	if($key === '') {
+		$key = $value;
+	}
+	$basedir = !getglobal('setting/attachdir') ? './data/attachment' : getglobal('setting/attachdir');
+	$url = !getglobal('setting/attachurl') ? './data/attachment/' : getglobal('setting/attachurl');
+	$subdir1 = substr(md5($key), 0, 2);
+	$subdir2 = substr(md5($key), 2, 2);
+	$target = 'temp/'.$subdir1.'/'.$subdir2.'/';
+	$targetname = substr(md5($key), 8, 16).'.png';
+	discuz_upload::check_dir_exists('temp', $subdir1, $subdir2);
+	if(!$force && file_exists($basedir.'/'.$target.$targetname)) {
+		return $url.$target.$targetname;
+	}
+	$value = str_replace("\n", '', $value);
+	$fontfile = $fontname = '';
+	$ttfenabled = false;
+	$size = 10;
+	$w = 130;
+	$rowh = 25;
+	$value = explode("\r", $value);
+	if($rlength) {
+		$temp = array();
+		foreach($value as $str) {
+			$strlen = dstrlen($str);
+			if($strlen > $rlength) {
+				for($i = 0; $i < $strlen; $i++) {
+					$sub = cutstr($str, $rlength, '');
+					$temp[] = $sub;
+					$str = substr($str, strlen($sub));
+					$strlen = $strlen - $rlength;
+				}
+			} else {
+				$temp[] = $str;
+			}
+		}
+		$value = $temp;
+		unset($temp);
+	}
+	if(function_exists('imagettftext')) {
+		$fontroot = DISCUZ_ROOT.'./static/image/seccode/font/ch/';
+		$dirs = opendir($fontroot);
+		while($entry = readdir($dirs)) {
+			if($entry != '.' && $entry != '..' && in_array(strtolower(fileext($entry)), array('ttf', 'ttc'))) {
+				$fontname = $entry;
+				break;
+			}
+		}
+		if(!empty($fontname)) {
+			$fontfile = DISCUZ_ROOT.'./static/image/seccode/font/ch/'.$fontname;
+		}
+		if($fontfile) {
+			if(strtoupper(CHARSET) != 'UTF-8') {
+				include DISCUZ_ROOT.'./source/class/class_chinese.php';
+				$cvt = new Chinese(CHARSET, 'utf8');
+				$value = $cvt->Convert(implode("\r", $value));
+				$value = explode("\r", $value);
+			}
+			$ttfenabled = true;
+		}
+	}
+
+	foreach($value as $str) {
+		if($ttfenabled) {
+			$box = imagettfbbox($size, 0, $fontfile, $str);
+			$height = max($box[1], $box[3]) - min($box[5], $box[7]);
+			$len = (max($box[2], $box[4]) - min($box[0], $box[6]));
+			$rowh = max(array($height, $rowh));
+		} else {
+			$len = strlen($str) * 12;
+		}
+		$w = max(array($len, $w));
+	}
+	$h = $rowh * count($value) + count($value) * 2;
+	$im = @imagecreate($w, $h);
+	$background_color = imagecolorallocate($im, 255, 255, 255);
+	$text_color = imagecolorallocate($im, 60, 60, 60);
+	$h = $ttfenabled ? $rowh : 4;
+	foreach($value as $str) {
+		if($ttfenabled) {
+			imagettftext($im, $size, 0, 0, $h, $text_color, $fontfile, $str);
+			$h += 2;
+		} else {
+			imagestring($im, $size, 0, $h, $str, $text_color);
+		}
+		$h += $rowh;
+	}
+	imagepng($im, $basedir.'/'.$target.$targetname);
+	imagedestroy($im);
+	return $url.$target.$targetname;
+}
+
+function getreplybg($replybg = '') {
+	global $_G;
+	$style = '';
+	if($_G['setting']['allowreplybg']) {
+		if($replybg) {
+			$bgurl = $replybg;
+			if(file_exists($_G['setting']['attachurl'].'common/'.$replybg)) {
+				$bgurl = $_G['setting']['attachurl'].'common/'.$replybg;
+			}
+		} elseif($_G['setting']['globalreplybg']) {
+			$bgurl = $_G['setting']['globalreplybg'];
+			if(file_exists($_G['setting']['attachurl'].'common/'.$_G['setting']['globalreplybg'])) {
+				$bgurl = $_G['setting']['attachurl'].'common/'.$_G['setting']['globalreplybg'];
+			}
+		}
+		if($bgurl) {
+			$style = ' style="background-image: url('.$bgurl.');"';
+		}
+	}
+	return $style;
 }
 ?>

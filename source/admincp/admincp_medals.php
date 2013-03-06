@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_medals.php 27746 2012-02-14 01:57:42Z monkey $
+ *      $Id: admincp_medals.php 31634 2012-09-17 06:43:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -281,30 +281,8 @@ if(!$operation) {
 
 ?>
 <script type="text/JavaScript">
-
-	function isUndefined(variable) {
-		return typeof variable == 'undefined' ? true : false;
-	}
-
-	function insertunit(text, textend) {
-		$('formulapermnew').focus();
-		textend = isUndefined(textend) ? '' : textend;
-		if(!isUndefined($('formulapermnew').selectionStart)) {
-			var opn = $('formulapermnew').selectionStart + 0;
-			if(textend != '') {
-				text = text + $('formulapermnew').value.substring($('formulapermnew').selectionStart, $('formulapermnew').selectionEnd) + textend;
-			}
-			$('formulapermnew').value = $('formulapermnew').value.substr(0, $('formulapermnew').selectionStart) + text + $('formulapermnew').value.substr($('formulapermnew').selectionEnd);
-		} else if(document.selection && document.selection.createRange) {
-			var sel = document.selection.createRange();
-			if(textend != '') {
-				text = text + sel.text + textend;
-			}
-			sel.text = text.replace(/\r?\n/g, '\r\n');
-			sel.moveStart('character', -strlen(text));
-		} else {
-			$('formulapermnew').value += text;
-		}
+	function medalsinsertunit(text, textend) {
+		insertunit($('formulapermnew'), text, textend);
 		formulaexp();
 	}
 
@@ -318,7 +296,7 @@ if(!$operation) {
 		for($i = 1; $i <= 8; $i++) {
 			$extcredittitle = $_G['setting']['extcredits'][$i]['title'] ? $_G['setting']['extcredits'][$i]['title'] : $lang['setting_credits_formula_extcredits'].$i;
 			echo 'result = result.replace(/extcredits'.$i.'/g, \'<u>'.$extcredittitle.'</u>\');';
-			$extcreditsbtn .= '<a href="###" onclick="insertunit(\'extcredits'.$i.'\')">'.$extcredittitle.'</a> &nbsp;';
+			$extcreditsbtn .= '<a href="###" onclick="medalsinsertunit(\'extcredits'.$i.'\')">'.$extcredittitle.'</a> &nbsp;';
 		}
 
 		echo 'result = result.replace(/regdate/g, \'<u>'.cplang('forums_edit_perm_formula_regdate').'</u>\');';
@@ -342,30 +320,30 @@ if(!$operation) {
 </script>
 <tr><td colspan="2"><div class="extcredits">
 <?php echo $extcreditsbtn;?>
-<a href="###" onclick="insertunit(' regdate ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regdate')?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' regday ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regday')?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' regip ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regip')?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' lastip ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_lastip')?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' buyercredit ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_buyercredit')?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' sellercredit ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_sellercredit')?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' digestposts ')"><?php echo $lang['setting_credits_formula_digestposts'];?></a>&nbsp;
-<a href="###" onclick="insertunit(' posts ')"><?php echo $lang['setting_credits_formula_posts'];?></a>&nbsp;
-<a href="###" onclick="insertunit(' threads ')"><?php echo $lang['setting_credits_formula_threads'];?></a>&nbsp;
-<a href="###" onclick="insertunit(' oltime ')"><?php echo $lang['setting_credits_formula_oltime'];?></a>&nbsp;
-<a href="###" onclick="insertunit(' + ')">&nbsp;+&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' - ')">&nbsp;-&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' * ')">&nbsp;*&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' / ')">&nbsp;/&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' > ')">&nbsp;>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' >= ')">&nbsp;>=&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' < ')">&nbsp;<&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' <= ')">&nbsp;<=&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' = ')">&nbsp;=&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' (', ') ')">&nbsp;(&nbsp;)&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' and ')">&nbsp;<?php echo $lang['setting_credits_formulaperm_and'];?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' or ')">&nbsp;<?php echo $lang['setting_credits_formulaperm_or'];?>&nbsp;</a>&nbsp;<br />
+<a href="###" onclick="medalsinsertunit(' regdate ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regdate')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' regday ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regday')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' regip ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regip')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' lastip ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_lastip')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' buyercredit ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_buyercredit')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' sellercredit ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_sellercredit')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' digestposts ')"><?php echo $lang['setting_credits_formula_digestposts'];?></a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' posts ')"><?php echo $lang['setting_credits_formula_posts'];?></a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' threads ')"><?php echo $lang['setting_credits_formula_threads'];?></a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' oltime ')"><?php echo $lang['setting_credits_formula_oltime'];?></a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' + ')">&nbsp;+&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' - ')">&nbsp;-&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' * ')">&nbsp;*&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' / ')">&nbsp;/&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' > ')">&nbsp;>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' >= ')">&nbsp;>=&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' < ')">&nbsp;<&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' <= ')">&nbsp;<=&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' == ')">&nbsp;=&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' (', ') ')">&nbsp;(&nbsp;)&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' and ')">&nbsp;<?php echo $lang['setting_credits_formulaperm_and'];?>&nbsp;</a>&nbsp;
+<a href="###" onclick="medalsinsertunit(' or ')">&nbsp;<?php echo $lang['setting_credits_formulaperm_or'];?>&nbsp;</a>&nbsp;<br />
 </div><div id="formulapermexp" class="marginbot diffcolor2"><?php echo $formulapermexp;?></div>
-<textarea name="formulapermnew" id="formulapermnew" style="width: 80%" rows="3" onkeyup="formulaexp()"><?php echo dhtmlspecialchars($medal['permission']);?></textarea>
+<textarea name="formulapermnew" id="formulapermnew" style="width: 80%" rows="3" onkeyup="formulaexp()" onkeydown="textareakey(this, event)"><?php echo dhtmlspecialchars($medal['permission']);?></textarea>
 <br /><span class="smalltxt"><?php echo $lang['medals_permformula'];?></span>
 <br /><?php echo $lang['creditwizard_current_formula_notice'];?>
 <script type="text/JavaScript">formulaexp()</script>

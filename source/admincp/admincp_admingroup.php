@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_admingroup.php 26475 2011-12-13 09:55:58Z monkey $
+ *      $Id: admincp_admingroup.php 31651 2012-09-18 10:23:26Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -246,6 +246,7 @@ if(!$operation) {
 			)), $group['allowdigestthread'], 'mradio');
 			showsetting('admingroup_edit_bump_thread', 'allowbumpthreadnew', $group['allowbumpthread'], 'radio');
 			showsetting('admingroup_edit_highlight_thread', 'allowhighlightthreadnew', $group['allowhighlightthread'], 'radio');
+			showsetting('admingroup_edit_live_thread', 'allowlivethreadnew', $group['allowlivethread'], 'radio');
 			showsetting('admingroup_edit_recommend_thread', 'allowrecommendthreadnew', $group['allowrecommendthread'], 'radio');
 			showsetting('admingroup_edit_stamp_thread', 'allowstampthreadnew', $group['allowstampthread'], 'radio');
 			showsetting('admingroup_edit_stamp_list', 'allowstamplistnew', $group['allowstamplist'], 'radio');
@@ -310,6 +311,7 @@ if(!$operation) {
 			showtitle('admingroup_edit_otherperm');
 			showsetting('admingroup_edit_view_ip', 'allowviewipnew', $group['allowviewip'], 'radio');
 			showsetting('admingroup_edit_manage_collection', 'allowmanagecollectionnew', $group['allowmanagecollection'], 'radio');
+			showsetting('admingroup_edit_allow_make_html', 'allowmakehtmlnew', $group['allowmakehtml'], 'radio');
 			showtagfooter('tbody');
 			showtablefooter();
 
@@ -352,7 +354,7 @@ if(!$operation) {
 		}
 		$group = $mgroup[$k];
 
-		C::t('common_admingroup')->update($_GET[id], array(
+		$data = array(
 			'alloweditpost' => $_GET['alloweditpostnew'],
 			'alloweditpoll' => $_GET['alloweditpollnew'],
 			'allowedittrade' => $_GET['allowedittradenew'],
@@ -376,6 +378,7 @@ if(!$operation) {
 			'allowpostannounce' => $_GET['allowpostannouncenew'],
 			'allowclearrecycle' => $_GET['allowclearrecyclenew'],
 			'allowhighlightthread' => $_GET['allowhighlightthreadnew'],
+			'allowlivethread' => $_GET['allowlivethreadnew'],
 			'allowdigestthread' => $_GET['allowdigestthreadnew'],
 			'allowrecommendthread' => $_GET['allowrecommendthreadnew'],
 			'allowbumpthread' => $_GET['allowbumpthreadnew'],
@@ -410,7 +413,9 @@ if(!$operation) {
 			'managevideophoto' => $_GET['managevideophotonew'],
 			'managemagic' => $_GET['managemagicnew'],
 			'manageclick' => $_GET['manageclicknew'],
-		));
+			'allowmakehtml' => $_GET['allowmakehtmlnew'],
+		);
+		C::t('common_admingroup')->update($_GET[id], array_map('intval', $data));
 		}
 
 		updatecache(array('usergroups', 'groupreadaccess', 'admingroups'));

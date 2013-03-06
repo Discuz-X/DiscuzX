@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_friend.php 30797 2012-06-20 03:10:04Z monkey $
+ *      $Id: spacecp_friend.php 32284 2012-12-18 08:12:53Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -398,6 +398,8 @@ if($op == 'add') {
 	if($_GET['subop'] == 'delete') {
 		$_GET['uid'] = intval($_GET['uid']);
 		C::t('home_blacklist')->delete_by_uid_buid($space['uid'], $_GET['uid']);
+		$count = C::t('home_blacklist')->count_by_uid_buid($space['uid']);
+		C::t('common_member_count')->update($_G['uid'], array('blacklist' => $count));
 		showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
 	}
 
@@ -413,6 +415,9 @@ if($op == 'add') {
 		friend_delete($tospace['uid']);
 
 		C::t('home_blacklist')->insert(array('uid'=>$space['uid'], 'buid'=>$tospace['uid'], 'dateline'=>$_G['timestamp']), false, false, true);
+
+		$count = C::t('home_blacklist')->count_by_uid_buid($space['uid']);
+		C::t('common_member_count')->update($_G['uid'], array('blacklist' => $count));
 		showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
 	}
 

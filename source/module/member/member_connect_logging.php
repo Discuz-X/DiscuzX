@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_connect_logging.php 28644 2012-03-06 13:44:19Z houdelei $
+ *      $Id: member_connect_logging.php 32560 2013-02-20 09:43:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,8 @@ if(!empty($_POST)) {
 	$conopenid = $this->connect_guest['conopenid'];
 
 	$user_auth_fields = 1;
-	$conispublishfeed = $conispublisht = 1;
+	$conispublishfeed = 0;
+	$conispublisht = 1;
 
 	$is_use_qqshow = !empty($_GET['use_qqshow']) ? 1 : 0;
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_database.php 31468 2012-08-31 02:27:23Z zhangguosheng $
+ *      $Id: discuz_database.php 32295 2012-12-20 09:10:57Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -341,7 +341,7 @@ class discuz_database {
 
 class discuz_database_safecheck {
 
-	protected static $checkcmd = array('SELECT', 'UPDATE', 'INSERT', 'REPLACE', 'DELETE');
+	protected static $checkcmd = array('SEL'=>1, 'UPD'=>1, 'INS'=>1, 'REP'=>1, 'DEL'=>1);
 	protected static $config;
 
 	public static function checkquery($sql) {
@@ -349,12 +349,16 @@ class discuz_database_safecheck {
 			self::$config = getglobal('config/security/querysafe');
 		}
 		if (self::$config['status']) {
-			$cmd = trim(strtoupper(substr($sql, 0, strpos($sql, ' '))));
-			if (in_array($cmd, self::$checkcmd)) {
-				$test = self::_do_query_safe($sql);
-				if ($test < 1) {
-					throw new DbException('It is not safe to do this query', 0, $sql);
-				}
+			$check = 1;
+			$cmd = strtoupper(substr(trim($sql), 0, 3));
+			if(isset(self::$checkcmd[$cmd])) {
+				$check = self::_do_query_safe($sql);
+			} elseif(substr($cmd, 0, 2) === '/*') {
+				$check = -1;
+			}
+
+			if ($check < 1) {
+				throw new DbException('It is not safe to do this query', 0, $sql);
 			}
 		}
 		return true;

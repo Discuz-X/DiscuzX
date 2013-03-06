@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_index.php 25870 2011-11-24 07:05:44Z zhengqingpeng $
+ *      $Id: space_index.php 31354 2012-08-16 03:03:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,7 +69,7 @@ if ($_GET['op'] == 'getmusiclist') {
 		dsetcookie('viewid', 'uid_'.$space['uid']);
 	}
 
-	if(!$space['self'] && $_G['uid']) {
+	if(!$space['self'] && $_G['uid'] && $_GET['additional'] != 'removevlog') {
 		$visitor = C::t('home_visitor')->fetch_by_uid_vuid($space['uid'], $_G['uid']);
 		$is_anonymous = empty($_G['cookie']['anonymous_visit_'.$_G['uid'].'_'.$space['uid']]) ? 0 : 1;
 		if(empty($visitor['dateline'])) {
@@ -90,6 +90,9 @@ if ($_GET['op'] == 'getmusiclist') {
 			}
 		}
 		updatecreditbyaction('visit', 0, array(), $space['uid']);
+	}
+	if($_GET['additional'] == 'removevlog') {
+		C::t('home_visitor')->delete_by_uid_vuid($space['uid'], $_G['uid']);
 	}
 
 	if($do != 'profile' && !ckprivacy($do, 'view')) {

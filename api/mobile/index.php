@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 31299 2012-08-08 08:14:37Z zhangjie $
+ *      $Id: index.php 31700 2012-09-24 03:46:59Z zhangjie $
  */
 
 if(!empty($_SERVER['QUERY_STRING'])) {

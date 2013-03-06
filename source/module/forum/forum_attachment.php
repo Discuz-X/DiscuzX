@@ -20,7 +20,7 @@ if(!empty($_GET['findpost']) && ($attach = C::t('forum_attachment')->fetch($aid)
 }
 
 if($_GET['uid'] != $_G['uid'] && $_GET['uid']) {
-	$_GET['uid'] = intval($_GET['uid']);
+	$_G['uid'] = $_GET['uid'] = intval($_GET['uid']);
 	$member = getuserbyuid($_GET['uid']);
 	loadcache('usergroup_'.$member['groupid']);
 	$_G['group'] = $_G['cache']['usergroup_'.$member['groupid']];

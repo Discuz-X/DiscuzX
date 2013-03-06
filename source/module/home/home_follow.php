@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 30281 2012-05-18 03:43:42Z liulanbo $
+ *      $Id: home_follow.php 30914 2012-06-29 10:02:30Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -169,6 +169,15 @@ if($do == 'feed') {
 	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
 } elseif($do == 'follower') {
 	$count = C::t('home_follow')->count_follow_user($uid, 1);
+	if($viewself && !empty($_G['member']['newprompt_num']['follower'])) {
+		$newfollower = C::t('home_notification')->fetch_all_by_uid($uid, -1, 'follower', 0, $_G['member']['newprompt_num']['follower']);
+		$newfollower_list = array();
+		foreach($newfollower as $val) {
+			$newfollower_list[] = $val['from_id'];
+		}
+		C::t('home_notification')->delete_by_type('follower');
+		helper_notification::update_newprompt($_G['uid'], 'follower');
+	}
 	if($count) {
 		$list = C::t('home_follow')->fetch_all_follower_by_uid($uid, $start, $perpage);
 		$multi = multi($count, $perpage, $page, $theurl);

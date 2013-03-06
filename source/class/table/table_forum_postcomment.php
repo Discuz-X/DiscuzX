@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_postcomment.php 29123 2012-03-27 06:00:56Z chenmengshu $
+ *      $Id: table_forum_postcomment.php 32456 2013-01-21 05:18:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,6 +27,10 @@ class table_forum_postcomment extends discuz_table
 
 	public function count_by_pid($pid, $authorid = null, $score = null) {
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE pid=%d '.($authorid ? ' AND '.DB::field('authorid', $authorid) : null).($score ? ' AND '.DB::field('score', $score) : null), array($this->_table, $pid, $authorid, $score));
+	}
+
+	public function count_by_tid($tid, $authorid = null, $score = null) {
+		return DB::result_first('SELECT COUNT(*) FROM %t WHERE tid=%d '.($authorid ? ' AND '.DB::field('authorid', $authorid) : null).($score ? ' AND '.DB::field('score', $score) : null), array($this->_table, $tid, $authorid, $score));
 	}
 
 	public function count_by_search($tid = null, $pid = null, $authorid = null, $starttime = null, $endtime = null, $ip = null, $message = null) {
@@ -142,8 +146,7 @@ class table_forum_postcomment extends discuz_table
 		}
 		return DB::delete($this->_table, DB::field('rpid', $rpids), null, $unbuffered);
 	}
-
-	public function fetch_postcomment_by_pid($pids, &$postcache, &$commentcount, &$totalcomment, $commentnumber) {
+	public function fetch_postcomment_by_pid($pids, $postcache, $commentcount, $totalcomment, $commentnumber) {
 		$query = DB::query("SELECT * FROM ".DB::table('forum_postcomment')." WHERE pid IN (".dimplode($pids).') ORDER BY dateline DESC');
 		$commentcount = $comments = array();
 		while($comment = DB::fetch($query)) {
@@ -163,7 +166,7 @@ class table_forum_postcomment extends discuz_table
 			$postcache[$comment['pid']]['comment']['data'] = $comments[$comment['pid']];
 			$postcache[$comment['pid']]['comment']['totalcomment'] = $totalcomment[$comment['pid']];
 		}
-		return $comments;
+		return array($comments, $postcache, $commentcount, $totalcomment);
 	}
 
 }

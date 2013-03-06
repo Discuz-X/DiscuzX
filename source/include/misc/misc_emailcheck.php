@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_emailcheck.php 30384 2012-05-25 04:48:52Z liulanbo $
+ *      $Id: misc_emailcheck.php 30383 2012-05-25 04:45:49Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {

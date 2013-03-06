@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 31281 2012-08-03 02:29:27Z zhangjie $
+ *      $Id: mobile.class.php 32489 2013-01-29 03:57:16Z monkey $
  */
 
 define("MOBILE_PLUGIN_VERSION", "2");
@@ -89,7 +89,7 @@ class mobile_core {
 				}
 			}
 			$message_result = strip_tags($message_result);
-			
+
 			if($_G['messageparam'][4]) {
 				$_G['messageparam'][0] = "custom";
 			}
@@ -116,6 +116,9 @@ class base_plugin_mobile {
 			return;
 		}
 		global $_G;
+		if(!$_G['setting']['mobile']['allowmobile']) {
+			mobile_core::result(array('error' => 'mobile_is_closed'));
+		}
 		if(!empty($_GET['tpp'])) {
 			$_G['tpp'] = intval($_GET['tpp']);
 		}

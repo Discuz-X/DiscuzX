@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_blacklist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_blacklist.php 30819 2012-06-21 07:51:49Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,6 +44,10 @@ class table_home_blacklist extends discuz_table
 			$data[$value['buid']] = $value;
 		}
 		return $data;
+	}
+
+	public function fetch_all_by_uid_buid($uid, $buids) {
+		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d AND buid IN(%n)', array($this->_table, $uid, $buids), 'buid');
 	}
 
 	public function delete_by_uid_buid($uid, $buid) {

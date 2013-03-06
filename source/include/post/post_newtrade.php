@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newtrade.php 30397 2012-05-25 09:03:57Z zhengqingpeng $
+ *      $Id: post_newtrade.php 30573 2012-06-05 01:40:33Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -78,6 +78,7 @@ if(($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && is_arr
 		}
 	}
 }
+
 
 $_GET['save'] = $_G['uid'] ? $_GET['save'] : 0;
 $typeid = isset($typeid) ? $typeid : 0;
@@ -156,6 +157,7 @@ insertpost(array(
 	'tags' => $tagstr,
 ));
 
+
 $message = preg_replace('/\[attachimg\](\d+)\[\/attachimg\]/is', '[attach]\1[/attach]', $message);
 $pid = insertpost(array(
 	'fid' => $_G['fid'],
@@ -178,6 +180,7 @@ $pid = insertpost(array(
 	'tags' => $tagstr,
 	'status' => (defined('IN_MOBILE') ? 8 : 0)
 ));
+
 
 ($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && ($_GET['attachnew'] || $_GET['tradeaid']) && updateattach($displayorder == -4 || $modnewthreads, $tid, $pid, $_GET['attachnew']);
 require_once libfile('function/trade');
@@ -209,6 +212,7 @@ trade_create(array(
 if(!empty($_GET['tradeaid'])) {
 	convertunusedattach($_GET['tradeaid'], $tid, $pid);
 }
+
 
 if($_G['forum']['picstyle']) {
 	setthreadcover($pid);
@@ -266,6 +270,7 @@ if($modnewthreads) {
 		postfeed($feed);
 	}
 
+
 	if($displayorder != -4) {
 		if($digest) {
 			updatepostcredits('+',  $_G['uid'], 'digest', $_G['fid']);
@@ -288,6 +293,7 @@ if($modnewthreads) {
 		require_once libfile('function/grouplog');
 		updategroupcreditlog($_G['fid'], $_G['uid']);
 	}
+
 
 	if(!empty($_GET['continueadd'])) {
 		showmessage('post_newthread_succeed', "forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$tid&addtrade=yes", $param, array('header' => true));

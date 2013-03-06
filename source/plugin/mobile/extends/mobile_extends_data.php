@@ -25,7 +25,7 @@ class extends_data {
 	}
 
 	public function common() {
-		
+
 	}
 
 	public function insertrow() {

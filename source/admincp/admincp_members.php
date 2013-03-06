@@ -2103,112 +2103,193 @@ EOF;
 
 } elseif($operation == 'ipban') {
 
-	if(!submitcheck('ipbansubmit')) {
+	if(!$_GET['ipact']) {
+		if(!submitcheck('ipbansubmit')) {
 
-		require_once libfile('function/misc');
+			require_once libfile('function/misc');
 
-		$iptoban = explode('.', getgpc('ip'));
+			$iptoban = explode('.', getgpc('ip'));
 
-		$ipbanned = '';
-		foreach(C::t('common_banned')->fetch_all_order_dateline() as $banned) {
-			for($i = 1; $i <= 4; $i++) {
-				if($banned["ip$i"] == -1) {
-					$banned["ip$i"] = '*';
-				}
-			}
-			$disabled = $_G['adminid'] != 1 && $banned['admin'] != $_G['member']['username'] ? 'disabled' : '';
-			$banned['dateline'] = dgmdate($banned['dateline'], 'Y-m-d');
-			$banned['expiration'] = dgmdate($banned['expiration'], 'Y-m-d');
-			$theip = "$banned[ip1].$banned[ip2].$banned[ip3].$banned[ip4]";
-			$ipbanned .= showtablerow('', array('class="td25"'), array(
-				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[$banned[id]]\" value=\"$banned[id]\" $disabled />",
-				$theip,
-				convertip($theip, "./"),
-				$banned[admin],
-				$banned[dateline],
-				"<input type=\"text\" class=\"txt\" size=\"10\" name=\"expirationnew[$banned[id]]\" value=\"$banned[expiration]\" $disabled />"
-			), TRUE);
-		}
-		shownav('user', 'nav_members_ipban');
-		showsubmenu('nav_members_ipban');
-		showtips('members_ipban_tips');
-		showformheader('members&operation=ipban');
-		showtableheader();
-		showsubtitle(array('', 'ip', 'members_ipban_location', 'operator', 'start_time', 'end_time'));
-		echo $ipbanned;
-		showtablerow('', array('', 'class="td28" colspan="3"', 'class="td28" colspan="2"'), array(
-			$lang['add_new'],
-			'<input type="text" class="txt" name="ip1new" value="'.$iptoban[0].'" size="3" maxlength="3">.<input type="text" class="txt" name="ip2new" value="'.$iptoban[1].'" size="3" maxlength="3">.<input type="text" class="txt" name="ip3new" value="'.$iptoban[2].'" size="3" maxlength="3">.<input type="text" class="txt" name="ip4new" value="'.$iptoban[3].'" size="3" maxlength="3">',
-			$lang['validity'].': <input type="text" class="txt" name="validitynew" value="30" size="3"> '.$lang['days']
-		));
-		showsubmit('ipbansubmit', 'submit', 'del');
-		showtablefooter();
-		showformfooter();
-
-	} else {
-
-		if(!empty($_GET['delete'])) {
-			C::t('common_banned')->delete_by_id($_GET['delete'], $_G['adminid'], $_G['username']);
-		}
-
-		if($_GET['ip1new'] != '' && $_GET['ip2new'] != '' && $_GET['ip3new'] != '' && $_GET['ip4new'] != '') {
-			$own = 0;
-			$ip = explode('.', $_G['clientip']);
-			for($i = 1; $i <= 4; $i++) {
-				if(!is_numeric($_GET['ip'.$i.'new']) || $_GET['ip'.$i.'new'] < 0) {
-					if($_G['adminid'] != 1) {
-						cpmsg('members_ipban_nopermission', '', 'error');
-					}
-					$_GET['ip'.$i.'new'] = -1;
-					$own++;
-				} elseif($_GET['ip'.$i.'new'] == $ip[$i - 1]) {
-					$own++;
-				}
-				$_GET['ip'.$i.'new'] = intval($_GET['ip'.$i.'new']);
-			}
-
-			if($own == 4) {
-				cpmsg('members_ipban_illegal', '', 'error');
-			}
-
+			$ipbanned = '';
 			foreach(C::t('common_banned')->fetch_all_order_dateline() as $banned) {
-				$exists = 0;
 				for($i = 1; $i <= 4; $i++) {
 					if($banned["ip$i"] == -1) {
-						$exists++;
-					} elseif($banned["ip$i"] == ${"ip".$i."new"}) {
-						$exists++;
+						$banned["ip$i"] = '*';
 					}
 				}
-				if($exists == 4) {
-					cpmsg('members_ipban_invalid', '', 'error');
+				$disabled = $_G['adminid'] != 1 && $banned['admin'] != $_G['member']['username'] ? 'disabled' : '';
+				$banned['dateline'] = dgmdate($banned['dateline'], 'Y-m-d');
+				$banned['expiration'] = dgmdate($banned['expiration'], 'Y-m-d');
+				$theip = "$banned[ip1].$banned[ip2].$banned[ip3].$banned[ip4]";
+				$ipbanned .= showtablerow('', array('class="td25"'), array(
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[$banned[id]]\" value=\"$banned[id]\" $disabled />",
+					$theip,
+					convertip($theip, "./"),
+					$banned[admin],
+					$banned[dateline],
+					"<input type=\"text\" class=\"txt\" size=\"10\" name=\"expirationnew[$banned[id]]\" value=\"$banned[expiration]\" $disabled />"
+				), TRUE);
+			}
+			shownav('user', 'nav_members_ipban');
+			showsubmenu('nav_members_ipban', array(
+				array('nav_members_ipban', 'members&operation=ipban', 1),
+				array('nav_members_ipban_output', 'members&operation=ipban&ipact=input', 0)
+			));
+			showtips('members_ipban_tips');
+			showformheader('members&operation=ipban');
+			showtableheader();
+			showsubtitle(array('', 'ip', 'members_ipban_location', 'operator', 'start_time', 'end_time'));
+			echo $ipbanned;
+			showtablerow('', array('', 'class="td28" colspan="3"', 'class="td28" colspan="2"'), array(
+				$lang['add_new'],
+				'<input type="text" class="txt" name="ip1new" value="'.$iptoban[0].'" size="3" maxlength="3">.<input type="text" class="txt" name="ip2new" value="'.$iptoban[1].'" size="3" maxlength="3">.<input type="text" class="txt" name="ip3new" value="'.$iptoban[2].'" size="3" maxlength="3">.<input type="text" class="txt" name="ip4new" value="'.$iptoban[3].'" size="3" maxlength="3">',
+				$lang['validity'].': <input type="text" class="txt" name="validitynew" value="30" size="3"> '.$lang['days']
+			));
+			showsubmit('ipbansubmit', 'submit', 'del');
+			showtablefooter();
+			showformfooter();
+
+		} else {
+
+			if(!empty($_GET['delete'])) {
+				C::t('common_banned')->delete_by_id($_GET['delete'], $_G['adminid'], $_G['username']);
+			}
+
+			if($_GET['ip1new'] != '' && $_GET['ip2new'] != '' && $_GET['ip3new'] != '' && $_GET['ip4new'] != '') {
+				$own = 0;
+				$ip = explode('.', $_G['clientip']);
+				for($i = 1; $i <= 4; $i++) {
+					if(!is_numeric($_GET['ip'.$i.'new']) || $_GET['ip'.$i.'new'] < 0) {
+						if($_G['adminid'] != 1) {
+							cpmsg('members_ipban_nopermission', '', 'error');
+						}
+						$_GET['ip'.$i.'new'] = -1;
+						$own++;
+					} elseif($_GET['ip'.$i.'new'] == $ip[$i - 1]) {
+						$own++;
+					}
+					$_GET['ip'.$i.'new'] = intval($_GET['ip'.$i.'new']);
+				}
+
+				if($own == 4) {
+					cpmsg('members_ipban_illegal', '', 'error');
+				}
+
+				foreach(C::t('common_banned')->fetch_all_order_dateline() as $banned) {
+					$exists = 0;
+					for($i = 1; $i <= 4; $i++) {
+						if($banned["ip$i"] == -1) {
+							$exists++;
+						} elseif($banned["ip$i"] == ${"ip".$i."new"}) {
+							$exists++;
+						}
+					}
+					if($exists == 4) {
+						cpmsg('members_ipban_invalid', '', 'error');
+					}
+				}
+
+				$expiration = TIMESTAMP + $_GET['validitynew'] * 86400;
+
+				C::app()->session->update_by_ipban($_GET['ip1new'], $_GET['ip2new'], $_GET['ip3new'], $_GET['ip4new']);
+				$data = array(
+					'ip1' => $_GET['ip1new'],
+					'ip2' => $_GET['ip2new'],
+					'ip3' => $_GET['ip3new'],
+					'ip4' => $_GET['ip4new'],
+					'admin' => $_G['username'],
+					'dateline' => $_G['timestamp'],
+					'expiration' => $expiration,
+				);
+				C::t('common_banned')->insert($data);
+			}
+
+			if(is_array($_GET['expirationnew'])) {
+				foreach($_GET['expirationnew'] as $id => $expiration) {
+					C::t('common_banned')->update_expiration_by_id($id, strtotime($expiration), $_G['adminid'], $_G['username']);
 				}
 			}
 
-			$expiration = TIMESTAMP + $_GET['validitynew'] * 86400;
+			updatecache('ipbanned');
+			cpmsg('members_ipban_succeed', 'action=members&operation=ipban', 'succeed');
 
-			C::app()->session->update_by_ipban($_GET['ip1new'], $_GET['ip2new'], $_GET['ip3new'], $_GET['ip4new']);
-			$data = array(
-				'ip1' => $_GET['ip1new'],
-				'ip2' => $_GET['ip2new'],
-				'ip3' => $_GET['ip3new'],
-				'ip4' => $_GET['ip4new'],
-				'admin' => $_G['username'],
-				'dateline' => $_G['timestamp'],
-				'expiration' => $expiration,
-			);
-			C::t('common_banned')->insert($data);
 		}
+	} elseif($_GET['ipact'] == 'input') {
+		if($_G['adminid'] != 1) {
+			cpmsg('members_ipban_nopermission', '', 'error');
+		}
+		if(!submitcheck('ipbansubmit')) {
+			shownav('user', 'nav_members_ipban');
+			showsubmenu('nav_members_ipban', array(
+				array('nav_members_ipban', 'members&operation=ipban', 0),
+				array('nav_members_ipban_output', 'members&operation=ipban&ipact=input', 1)
+			));
+			showtips('members_ipban_input_tips');
+			showformheader('members&operation=ipban&ipact=input');
+			showtableheader();
+			showsetting('members_ipban_input', 'inputipbanlist', '', 'textarea');
+			showsubmit('ipbansubmit', 'submit');
+			showtablefooter();
+			showformfooter();
+		} else {
+			$iplist = explode("\n", $_GET['inputipbanlist']);
+			foreach($iplist as $banip) {
+				if(strpos($banip, ',') !== false) {
+					list($banipaddr, $expiration) = explode(',', $banip);
+					$expiration = strtotime($expiration);
+				} else {
+					list($banipaddr, $expiration) = explode(';', $banip);
+					$expiration = TIMESTAMP + ($expiration ? $expiration : 30) * 86400;
+				}
+				if(!trim($banipaddr)) {
+					continue;
+				}
 
-		if(is_array($_GET['expirationnew'])) {
-			foreach($_GET['expirationnew'] as $id => $expiration) {
-				C::t('common_banned')->update_expiration_by_id($id, strtotime($expiration), $_G['adminid'], $_G['username']);
+				$ipnew = explode('.', $banipaddr);
+				for($i = 0; $i < 4; $i++) {
+					if(strpos($ipnew[$i], '*') !== false) {
+						$ipnew[$i] = -1;
+					} else {
+						$ipnew[$i] = intval($ipnew[$i]);
+					}
+				}
+				$checkexists = C::t('common_banned')->fetch_by_ip($ipnew[0], $ipnew[1], $ipnew[2], $ipnew[3]);
+				if($checkexists) {
+					continue;
+				}
+
+				C::app()->session->update_by_ipban($ipnew[0], $ipnew[1], $ipnew[2], $ipnew[3]);
+				$data = array(
+					'ip1' => $ipnew[0],
+					'ip2' => $ipnew[1],
+					'ip3' => $ipnew[2],
+					'ip4' => $ipnew[3],
+					'admin' => $_G['username'],
+					'dateline' => $_G['timestamp'],
+					'expiration' => $expiration,
+				);
+				C::t('common_banned')->insert($data, false, true);
 			}
+
+			updatecache('ipbanned');
+			cpmsg('members_ipban_succeed', 'action=members&operation=ipban&ipact=input', 'succeed');
 		}
-
-		updatecache('ipbanned');
-		cpmsg('members_ipban_succeed', 'action=members&operation=ipban', 'succeed');
-
+	} elseif($_GET['ipact'] == 'output') {
+		ob_end_clean();
+		dheader('Cache-control: max-age=0');
+		dheader('Expires: '.gmdate('D, d M Y H:i:s', TIMESTAMP - 31536000).' GMT');
+		dheader('Content-Encoding: none');
+		dheader('Content-Disposition: attachment; filename=IPBan.csv');
+		dheader('Content-Type: text/plain');
+		foreach(C::t('common_banned')->fetch_all_order_dateline() as $banned) {
+			for($i = 1; $i <= 4; $i++) {
+				$banned['ip'.$i] = $banned['ip'.$i] < 0 ? '*' : $banned['ip'.$i];
+			}
+			$banned['expiration'] = dgmdate($banned['expiration']);
+			echo "$banned[ip1].$banned[ip2].$banned[ip3].$banned[ip4],$banned[expiration]\n";
+		}
+		define('FOOTERDISABLED' , 1);
+		exit();
 	}
 
 } elseif($operation == 'profile') {
@@ -2429,7 +2510,7 @@ EOF;
 			$current = array($_GET['anchor'] => 1);
 			$profilenav = array(
 					array('members_profile_list', 'members&operation=profile', $current['members']),
-					array('members_profile_group', 'setting&operation=profile', $current['setting'])
+					array('members_profile_group', 'setting&operation=profile', $current['setting']),
 				);
 			showsubmenu($lang['members_profile'], $profilenav);
 			showtips('members_profile_tips');

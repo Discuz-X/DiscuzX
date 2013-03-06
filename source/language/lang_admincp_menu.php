@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_menu.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
+ *      $Id: lang_admincp_menu.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,12 +62,14 @@ $lang = array
 	'menu_setting_ranklist' => '排行榜设置',
 	'menu_setting_mobile' => '手机版访问设置',
 	'menu_setting_tag' => '标签管理',
+	'menu_setting_antitheft' => '防采集设置',
 
 	'menu_forums' => '版块管理',
 	'menu_forums_merge' => '版块合并',
 	'menu_forums_threadtypes' => '主题分类',
 	'menu_forums_infotypes' => '分类信息',
 	'menu_forums_infooption' => '分类信息选项',
+	'menu_grid' => '首页四格',
 
 	'menu_members_add' => '添加用户',
 	'menu_members_edit' => '用户管理',
@@ -111,6 +113,7 @@ $lang = array
 	'menu_postcomment' => '帖子点评管理',
 	'menu_maint_doing' => '记录管理',
 	'menu_maint_blog' => '日志管理',
+	'menu_maint_blog_recycle_bin' => '日志回收站',
 	'menu_maint_feed' => '动态管理',
 	'menu_maint_album' => '相册管理',
 	'menu_maint_pic' => '图片管理',
@@ -129,6 +132,7 @@ $lang = array
 
 	'menu_patch' => '安全中心',
 	'menu_upgrade' => '在线升级',
+	'menu_optimizer' => '优化大师',
 
 	'menu_addons' => '应用中心',
 	'menu_plugins' => '插件',
@@ -161,7 +165,6 @@ $lang = array
 	'menu_tools_javascript' => '数据调用',
 	'menu_tools_relatedtag' => ' 标签聚合',
 	'menu_tools_creditwizard' => '积分策略向导',
-	'menu_tools_jsdecode' => 'JS整理',
 	'menu_tools_fileperms' => '文件权限检查',
 	'menu_tools_hookcheck' => '嵌入点校验',
 	'menu_tools_filecheck' => '文件校验',
@@ -183,6 +186,7 @@ $lang = array
 	'menu_portalpermission' => '权限列表',
 	'menu_blockxml' => '第三方模块',
 	'menu_topic' => '专题管理',
+	'menu_html' => 'HTML管理',
 	'menu_diytemplate' => '页面管理',
 
 	'menu_group_setting' => '群组设置',

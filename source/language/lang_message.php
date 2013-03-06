@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 31615 2012-09-14 03:23:25Z zhangjie $
+ *      $Id: lang_message.php 32670 2013-02-28 07:35:00Z zhangguosheng $
  *
  *      This file is automatically generate
  */
@@ -88,6 +88,7 @@ $lang = array (
   'search_id_invalid' => '抱歉，您指定的搜索不存在或已过期',
   'search_ctrl' => '抱歉，您在 {searchctrl} 秒内只能进行一次搜索',
   'search_toomany' => '抱歉，站点设置每分钟系统最多响应搜索请求 {maxspm} 次，请稍候再试',
+  'search_closed' => '搜索功能已关闭',
   'no_privilege_myop' => '抱歉，您目前没有权限使用此应用，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'collection_permission_deny' => '抱歉，该淘专辑不存在或没有相应的权限',
   'collection_edit_checkentire' => '请将内容填写完整',
@@ -145,7 +146,6 @@ $lang = array (
   'search_forum_invalid' => '抱歉，您尚未指定搜索论坛的范围',
   'search_invalid' => '抱歉，您尚未指定要搜索的关键字或用户名',
   'search_redirect' => '搜索成功，现在将转入结果页面',
-  'search_closed' => '搜索功能已关闭',
   'to_view_the_photo_does_not_exist' => '抱歉，您要查看的相册不存在或正在审核',
   'ban_view_other_thead' => '抱歉，禁止查看其他用户的主题和帖子',
   'album_does_not_exist' => '抱歉，指定的相册不存在',
@@ -219,6 +219,7 @@ $lang = array (
   'login_succeed' => '欢迎您回来，{usergroup} {username}，现在将转入登录前页面',
   'login_strike' => '密码错误次数过多，请 15 分钟后重新登录',
   'logout_succeed' => '您已退出站点，现在将以游客身份转入退出前页面，请稍候…… <br /><a href="member.php?mod=clearcookies&formhash={formhash}">[ 清除痕迹 ]</a> {ucsynlogout} ',
+  'location_logout_succeed_mobile' => '您已退出站点，现在将以游客身份转入退出前页面，请稍候…… <br /><a href="member.php?mod=clearcookies&formhash={formhash}">[ 清除痕迹 ]</a>',
   'register_activation_invalid' => '抱歉，激活失败，请重新登录验证需要激活的用户',
   'profile_username_tooshort' => '抱歉，您输入的用户名小于 3 个字符，请输入一个较长的用户名',
   'profile_username_toolong' => '抱歉，您的用户名超过 15 个字符，请输入一个较短的用户名',
@@ -260,7 +261,9 @@ $lang = array (
   'attachement_payto_attach' => '附件需要付费，请您付费后下载',
 
   'forum_passwd_incorrect' => '抱歉，您输入的密码不正确，不能访问这个版块',
-  'forum_passwd_correct' => '密码验证成功 ',
+  'forum_passwd_correct' => '密码验证成功，请继续可以访问此版块',
+  'forum_pay_incorrect' => '抱歉，此版块需要支付 {paycredits} {credits}才能进入此版块，您的{title}不足',
+  'forum_pay_correct' => '支付成功，请继续可以访问此版块',
 
   'group_rediret_now' => '现在转入{_G/setting/navs/3/navname}首页',
   'group_verify' => '{_G/setting/navs/3/navname}正在审核中',
@@ -271,6 +274,7 @@ $lang = array (
   'group_exit_founder' => '抱歉，{_G/setting/navs/3/navname}创始人不能退出{_G/setting/navs/3/navname}',
   'group_exit_succeed' => '已经成功退出{_G/setting/navs/3/navname}',
   'group_create_usergroup_failed' => '抱歉，您所在的用户组不能建立{_G/setting/navs/3/navname}',
+  'group_create_usergroup_credits_failed' => '抱歉，您的积分不足，创建{_G/setting/navs/3/navname}需要消耗 {buildgroupcredits}',
   'group_create_max_failed' => '抱歉，您的建立{_G/setting/navs/3/navname}数量已到达设置上限，不能建立新的{_G/setting/navs/3/navname}',
   'group_category_error' => '抱歉，选择{_G/setting/navs/3/navname}分类错误',
   'group_create_mod_succeed' => '创建{_G/setting/navs/3/navname}的申请已经提交，我们会尽快进行审核',
@@ -465,6 +469,9 @@ $lang = array (
   'faq_content_empty' => '抱歉，指定的帮助项目不存在',
   'faq_keywords_empty' => '抱歉，您尚未指定要搜索的关键字',
 
+  'login_reward_succeed' => '签到成功!',
+  'login_reward_error' => '抱歉，您今天已经签过到了哦！',
+
   'imagepreview_errorcode_0' => '图片不符合处理条件，无法处理',
   'imagepreview_errorcode_-1' => '无效的图片，无法处理',
   'imagepreview_errorcode_-2' => '文件读写权限不足，无法处理图片',
@@ -572,6 +579,7 @@ $lang = array (
   'recommend_expiration_invalid' => '时间期限格式无效，正确格式为“yyyy-mm-dd hh:mm”',
 
   'members_edit_succeed' => '用户信息成功更新，请继续操作',
+  'modcp_member_ban_illegal' => '您不能直接禁止该用户',
   'modcp_member_ban_succeed' => '用户资料成功更新',
 
   'modcp_noaction' => '您没有选择执行任何操作',
@@ -650,7 +658,7 @@ $lang = array (
   'post_reply_succeed' => '非常感谢，回复发布成功，现在将转入主题页，请稍候……<br /><a href="forum.php?mod=forumdisplay&fid={fid}">[ 点击这里转入主题列表 ]</a>',
   'trade_add_succeed' => '非常感谢，您的商品已经发布，现在将转入主题页，请稍候……<br /><a href="forum.php?mod=post&action=reply&fid={fid}&tid={tid}&addtrade=yes">[ 继续添加商品请点击这里 ]</a><br /><a href="forum.php?mod=forumdisplay&fid={fid}">[ 点击这里转入主题列表 ]</a>',
 
-  'postperm_login_nopermission_mobile' => '您尚未<a href="member.php?mod=logging&action=login&referer={referer}&mobile=yes">登录</a>，没有权限在该版块发帖',
+  'postperm_login_nopermission_mobile' => '您尚未<a href="member.php?mod=logging&action=login&referer={referer}">登录</a>，没有权限在该版块发帖',
   'post_sort_isnull' => '抱歉，您尚未选择主题的分类信息',
   'post_poll_inputmore' => '抱歉，您至少应当填写 2 个投票选项',
   'poll_maxchoices_expiration_invalid' => '抱歉，最多可选项数与有效记票天数只接受数字',
@@ -704,6 +712,7 @@ $lang = array (
   'memcp_credits_card_msg_cleardateline_early' => '抱歉，此卡密已过期',
   'memcp_credits_card_msg_succeed' => '<span class="xi1">{extcreditsval}{extcreditstitle}</span>，充值成功 ',
   'memcp_credits_addfunds_msg_incorrect' => '抱歉，您尚未输入需要充值的数量',
+  'memcp_credits_addfunds_msg_notype' => '抱歉，您尚未选择支付方式',
   'credits_addfunds_amount_invalid' => '您单次购买的积分数量超出最大值 {ec_maxcredits} 或最小值 {ec_mincredits} 的限制',
   'memcp_credits_transfer_msg_self_incorrect' => '您无需给自己转账',
   'credits_transfer_balance_insufficient' => '抱歉，转账后 {title}不足 {minbalance}',
@@ -1050,6 +1059,9 @@ $lang = array (
 
   'magics_thunder_message' => '{magicname} 发布成功 ',
 
+  'topicadmin_live_noset_error' => '该主题并没有设置为直播帖',
+  'no_privilege_livethread' => '抱歉，您没有权限设置直播帖',
+  'portal_category_has_no_folder_name' => '抱歉，文章所属的频道没有设置目录名称',
 );
 
 ?>

@@ -245,22 +245,24 @@ if($_GET['op'] == 'delete') {
 				showmessage('moderate_article_not_share');
 			}
 
+			require_once libfile('function/portal');
+			$article_url = fetch_article_url($article);
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $article['uid'];
 			$arr['title_template'] = lang('spacecp', 'share_article');
 			$arr['body_template'] = '<b>{title}</b><br>{username}<br>{summary}';
 			$arr['body_data'] = array(
-			'title' => "<a href=\"portal.php?mod=view&aid=$article[aid]\">$article[title]</a>",
+			'title' => "<a href=\"$article_url\">$article[title]</a>",
 			'username' => "<a href=\"home.php?mod=space&uid=$article[uid]\">".$article['username']."</a>",
 			'summary' => getstr($article['summary'], 150, 0, 0, 0, -1)
 			);
 			if($article['pic']) {
 				$arr['image'] = pic_get($article['pic'], 'portal', $article['thumb'], $article['remote'], 1, 1);
-				$arr['image_link'] = "portal.php?mod=view&aid=$article[aid]";
+				$arr['image_link'] = $article_url;
 			}
 			$note_uid = $article['uid'];
 			$note_message = 'share_article';
-			$note_values = array('url'=>"portal.php?mod=view&aid=$article[aid]", 'subject'=>$article['title'], 'from_id' => $id, 'from_idtype' => 'aid');
+			$note_values = array('url'=>$article_url, 'subject'=>$article['title'], 'from_id' => $id, 'from_idtype' => 'aid');
 
 			break;
 		default:
@@ -298,7 +300,6 @@ if($_GET['op'] == 'delete') {
 			$arr['fromuid'] = '0';
 			$arr['title_template'] = lang('spacecp', 'share_link');
 			$arr['body_template'] = '{link}';
-
 			$link_text = sub_url($link, 45);
 
 			$arr['body_data'] = array('link'=>"<a href=\"$link\" target=\"_blank\">".$link_text."</a>", 'data'=>$link);
@@ -336,6 +337,8 @@ if($_GET['op'] == 'delete') {
 
 		if($_GET['iscomment'] && $_POST['general'] && $commentcable[$type] && $id) {
 
+			$_POST['general'] = censor($_POST['general']);
+
 			$currenttype = $commentcable[$type];
 			$currentid = $id;
 
@@ -358,25 +361,30 @@ if($_GET['op'] == 'delete') {
 			}
 
 			if($currenttype == 'thread') {
-				$_G['setting']['seccodestatus'] = 0;
-				$_G['setting']['secqaa']['status'] = 0;
-
-				$_POST['replysubmit'] = true;
-				$_GET['tid'] = $currentid;
-				$_GET['action'] = 'reply';
-				$_GET['message'] = $_POST['general'];
 				if($commentcable[$type] == 'article') {
-					$_POST['portal_referer'] = 'portal.php?mod=view&aid='.$id;
+					$_POST['portal_referer'] = $article_url ? $article_url : 'portal.php?mod=view&aid='.$id;
 				}
 
-				include_once libfile('function/forum');
-				require_once libfile('function/post');
-				loadforum();
 
-				$inspacecpshare = 1;
+				$modpost = C::m('forum_post', $currentid);
 
-				include_once libfile('forum/post', 'module');
-				$redirecturl = $url ? $url : '';
+
+				$params = array(
+					'subject' => '',
+					'message' => $_POST['general'],
+				);
+
+				$modpost->newreply($params);
+
+				if($_POST['portal_referer']) {
+					$redirecturl = $_POST['portal_referer'];
+				} else {
+					if($modnewreplies) {
+						$redirecturl = "forum.php?mod=viewthread&tid=".$currentid;
+					} else {
+						$redirecturl = "forum.php?mod=viewthread&tid=".$currentid."&pid=".$modpost->pid."&page=".$modpost->param('page')."&extra=".$extra."#pid".$modpost->pid;
+					}
+				}
 				$showmessagecontent = ($modnewreplies && $commentcable[$type] != 'article') ? 'do_success_thread_share_mod' : '';
 
 			} elseif($currenttype == 'article') {

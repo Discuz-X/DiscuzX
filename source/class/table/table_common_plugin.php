@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_plugin.php 27738 2012-02-13 10:02:53Z monkey $
+ *      $Id: table_common_plugin.php 32122 2012-11-14 01:55:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,6 +23,10 @@ class table_common_plugin extends discuz_table
 
 	public function fetch_by_identifier($identifier) {
 		return DB::fetch_first('SELECT * FROM %t WHERE identifier=%s', array($this->_table, $identifier));
+	}
+
+	public function fetch_all_identifier($identifier) {
+		return DB::fetch_all('SELECT * FROM %t WHERE identifier IN (%n)', array($this->_table, $identifier), 'identifier');
 	}
 
 	public function fetch_all_data($available = false) {

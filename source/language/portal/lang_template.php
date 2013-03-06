@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: lang_template.php 31958 2012-10-26 05:11:05Z zhangguosheng $
  *
  *      This file is automatically generate
  */
@@ -310,6 +310,9 @@ $lang = array (
   'view_publisher' => '发布者',
   'view_related' => '相关阅读',
   'view_views' => '查看',
+  'pre_article' => '上一篇：',
+  'next_article' => '下一篇：',
+  'display_order' => '显示位置',
 );
 
 ?>

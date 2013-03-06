@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_exif.php 30346 2012-05-24 03:16:28Z zhengqingpeng $
+ *      $Id: function_exif.php 30348 2012-05-24 03:27:54Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {

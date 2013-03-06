@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_count.php 29977 2012-05-04 07:14:48Z liulanbo $
+ *      $Id: table_common_member_count.php 31022 2012-07-10 03:16:07Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ class table_common_member_count extends discuz_table_archive
 		$sql = array();
 		$allowkey = array('extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8',
 						'friends', 'posts',	'threads', 'oltime', 'digestposts', 'doings', 'blogs', 'albums', 'sharings', 'attachsize', 'views',
-						'todayattachs', 'todayattachsize', 'follower', 'following', 'newfollower', 'feeds');
+						'todayattachs', 'todayattachsize', 'follower', 'following', 'newfollower', 'feeds', 'blacklist');
 		foreach($creditarr as $key => $value) {
 			if(($value = intval($value)) && $value && in_array($key, $allowkey)) {
 				$sql[] = "`$key`=`$key`+'$value'";
@@ -63,7 +63,7 @@ class table_common_member_count extends discuz_table_archive
 		$orderby = in_array($orderby, array(
 			'extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8',
 			'friends', 'posts',	'threads', 'oltime', 'digestposts', 'doings', 'blogs', 'albums', 'sharings', 'attachsize', 'views',
-			'todayattachs', 'todayattachsize', 'follower', 'following', 'newfollower', 'feeds'), true) ? $orderby : '';
+			'todayattachs', 'todayattachsize', 'follower', 'following', 'newfollower', 'feeds', 'blacklist'), true) ? $orderby : '';
 		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).($orderby ? ' ORDER BY '.DB::order($orderby, $sort) : '').DB::limit($start, $limit), null, $this->_pk);
 	}
 

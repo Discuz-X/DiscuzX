@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_styles.php 24428 2011-09-19 09:45:41Z monkey $
+ *      $Id: cache_styles.php 32532 2013-02-07 04:09:34Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,12 +16,12 @@ function build_cache_styles() {
 
 	$stylevars = $styledata = array();
 	$defaultstyleid = $_G['setting']['styleid'];
-	foreach(C::t('common_stylevar')->fetch_all_by_styleid($defaultstyleid, 1) as $var) {
+	foreach(C::t('common_stylevar')->range() as $var) {
 		$stylevars[$var['styleid']][$var['variable']] = $var['substitute'];
 	}
 	foreach(C::t('common_style')->fetch_all_data(true) as $data) {
 		$data['tpldir'] = $data['directory'];
-		$data = array_merge($data, $stylevars[$data['styleid']]);
+		$data = array_merge($data, (array)$stylevars[$data['styleid']]);
 		$datanew = array();
 		$data['imgdir'] = $data['imgdir'] ? $data['imgdir'] : STATICURL.'image/common';
 		$data['styleimgdir'] = $data['styleimgdir'] ? $data['styleimgdir'] : $data['imgdir'];
@@ -36,18 +36,7 @@ function build_cache_styles() {
 			$flash = explode(",", $data['boardimg']);
 			$flash[0] = trim($flash[0]);
 			$flash[0] = preg_match('/^http:\/\//i', $flash[0]) ? $flash[0] : $data['styleimgdir'].'/'.$flash[0];
-			$data['boardlogo'] = "<object title=\"".$_G['setting']['bbname']."\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\""
-			.trim($flash[1])."\" height=\"".trim($flash[2])."\"".(!empty($flash[3])?" name=\"".trim($flash[3])."\"":"").">".
-			'<param name="movie" value="'.$flash[0].'" />'.
-			'<param name="quality" value="high" />'.
-			'<param name="menu" value="false" />'.
-			'<param name="wmode" value="transparent" />'.
-			"<embed title=\"".$_G['setting']['bbname']."\" src=\"".$flash[0]."\" width=\"".
-			trim($flash[1]).
-			"\" height=\"".
-			trim($flash[2]).
-			"\"".(!empty($flash[3])?" id=\"".trim($flash[3])."\"":"").
-			" type=\"application/x-shockwave-flash\" menu=\"false\" wmode=\"transparent\"></embed></object>";
+			$data['boardlogo'] = "<embed src=\"".$flash[0]."\" width=\"".trim($flash[1])."\" height=\"".trim($flash[2])."\" type=\"application/x-shockwave-flash\" wmode=\"transparent\"></embed>";
 		} else {
 			$data['boardimg'] = preg_match('/^http:\/\//i', $data['boardimg']) ? $data['boardimg'] : $data['styleimgdir'].'/'.$data['boardimg'];
 			$data['boardlogo'] = "<img src=\"$data[boardimg]\" alt=\"".$_G['setting']['bbname']."\" border=\"0\" />";

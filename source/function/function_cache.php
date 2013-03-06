@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cache.php 27617 2012-02-07 08:24:14Z monkey $
+ *      $Id: function_cache.php 31691 2012-09-21 05:35:18Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,10 +26,29 @@ function updatecache($cachename = '') {
 				call_user_func('build_cache_'.$entryr[1]);
 			}
 		}
+		foreach(C::t('common_plugin')->fetch_all_data(1) as $plugin) {
+			$dir = substr($plugin['directory'], 0, -1);
+			$cachedir = DISCUZ_ROOT.'./source/plugin/'.$dir.'/cache';
+			if(file_exists($cachedir)) {
+				$cachedirhandle = dir($cachedir);
+				while($entry = $cachedirhandle->read()) {
+					if(!in_array($entry, array('.', '..')) && preg_match("/^cache\_([\_\w]+)\.php$/", $entry, $entryr) && substr($entry, -4) == '.php' && is_file($cachedir.'/'.$entry)) {
+						@include_once libfile('cache/'.$entryr[1], 'plugin/'.$dir);
+						call_user_func('build_cache_plugin_'.$entryr[1]);
+					}
+				}
+			}
+		}
 	} else {
 		foreach($updatelist as $entry) {
-			@include_once libfile('cache/'.$entry, 'function');
-			call_user_func('build_cache_'.$entry);
+			$entrys = explode(':', $entry);
+			if(count($entrys) == 1) {
+				@include_once libfile('cache/'.$entry, 'function');
+				call_user_func('build_cache_'.$entry);
+			} else {
+				@include_once libfile('cache/'.$entrys[1], 'plugin/'.$entrys[0]);
+				call_user_func('build_cache_'.$entrys[1]);
+			}
 		}
 	}
 

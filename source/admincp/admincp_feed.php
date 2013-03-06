@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_feed.php 27696 2012-02-10 03:39:50Z svn_project_zhangjie $
+ *      $Id: admincp_feed.php 31634 2012-09-17 06:43:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -54,7 +54,7 @@ if($operation == 'global') {
 			<tr><td>{$lang['message']}</td><td></td></tr>
 			<tr>
 				<td colspan="2">
-					<textarea class="userData" name="feednew[body_template]" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px">$feed[body_template]</textarea>
+					<textarea class="userData" name="feednew[body_template]" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px" onkeydown="textareakey(this, event)">$feed[body_template]</textarea>
 					<iframe src="$src" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;border: 1px solid #C5C5C5;" height="400"></iframe>
 				<td>
 			</tr>

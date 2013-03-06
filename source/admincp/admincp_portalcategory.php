@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 29386 2012-04-10 01:57:50Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 31224 2012-07-27 03:54:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -382,6 +382,8 @@ SCRIPT;
 	}
 } elseif($operation == 'edit' || $operation == 'add') {
 	$_GET['catid'] = intval($_GET['catid']);
+	$anchor = in_array($_GET['anchor'], array('basic', 'html')) ? $_GET['anchor'] : 'basic';
+
 	if($_GET['catid'] && !$portalcategory[$_GET['catid']]) {
 		cpmsg('portalcategory_catgory_not_found', '', 'error');
 	}
@@ -405,11 +407,11 @@ SCRIPT;
 	if(!submitcheck('detailsubmit')) {
 		shownav('portal', 'portalcategory');
 		$url = 'portalcategory&operation='.$operation.($operation == 'add' ? '&upid='.$_GET['upid'] : '&catid='.$_GET['catid']);
-		showsubmenu(cplang('portalcategory_detail').($cate['catname'] ? ' - '.$cate['catname'] : ''), array(
-			array('list', 'portalcategory', 0),
-			array('edit', $url, 1)
+		showsubmenuanchors(cplang('portalcategory_detail').($cate['catname'] ? ' - '.$cate['catname'] : ''), array(
+			array('edit', 'basic', $anchor == 'basic'),
 		));
 
+		showtagheader('div', 'basic', $anchor == 'basic');
 		showformheader($url);
 		showtableheader();
 		$catemsg = '';
@@ -445,12 +447,14 @@ SCRIPT;
 				showsetting('forums_edit_extend_domain', 'domain', '', 'text', 'disabled');
 			}
 		}
+		showsetting('portalcategory_noantitheft', 'noantitheft', $cate['noantitheft'], 'radio');
 		showtablefooter();
 		showtips('setting_seo_portal_tips', 'tips', true, 'setseotips');
 		showtableheader();
 		showsetting('portalcategory_seotitle', 'seotitle', $cate['seotitle'], 'text');
 		showsetting('portalcategory_keyword', 'keyword', $cate['keyword'], 'text');
 		showsetting('portalcategory_summary', 'description', $cate['description'], 'textarea');
+		showtablefooter();
 
 		showsubmit('detailsubmit');
 		if($operation == 'add') showsetting('', '', '', '<input type="hidden" name="level" value="'.$cate['level'].'" />');
@@ -480,6 +484,7 @@ SCRIPT;
 
 		$updatecategoryfile = array();
 
+
 		$editcat = array(
 			'catname' => $_GET['catname'],
 			'allowcomment'=>$_GET['allowcomment'],
@@ -495,6 +500,7 @@ SCRIPT;
 			'notshowarticlesummay' => $_GET['notshowarticlesummay'] ? '0' : '1',
 			'perpage' => $perpage,
 			'maxpages' => $maxpages,
+			'noantitheft' => intval($_GET['noantitheft']),
 		);
 
 		$dir = '';
@@ -724,7 +730,8 @@ SCRIPT;
 
 		updatecache(array_unique($cachearr));
 
-		cpmsg('portalcategory_edit_succeed', 'action=portalcategory#cat'.$_GET['catid'], 'succeed');
+		$url = $operation == 'add' ? 'action=portalcategory#cat'.$_GET['catid'] : 'action=portalcategory&operation=edit&catid='.$_GET['catid'];
+		cpmsg('portalcategory_edit_succeed', $url, 'succeed');
 	}
 }
 
@@ -1013,6 +1020,10 @@ function remakediytemplate($primaltplname, $targettplname, $diytplname, $olddire
 		list($tpldirectory, $primaltplname) = explode(':', $primaltplname);
 	}
 	$tpldirectory = ($tpldirectory ? $tpldirectory : $_G['cache']['style_default']['tpldir']);
+	$newdiydata = C::t('common_diy_data')->fetch($targettplname, $tpldirectory);
+	if($newdiydata) {
+		return false;
+	}
 	$diydata = C::t('common_diy_data')->fetch($targettplname, $olddirectory);
 	$diycontent = empty($diydata['diycontent']) ? '' : $diydata['diycontent'];
 	if($diydata) {

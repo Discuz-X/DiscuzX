@@ -6,7 +6,6 @@
  *
  *      $Id: seccode.php 27959 2012-02-17 09:52:22Z monkey $
  */
-//note secure(验证安全) @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');
@@ -16,7 +15,6 @@ include_once 'misc.php';
 
 class mobile_api {
 
-	//note 程序模块执行前需要运行的代码
 	function common() {
 		global $_G;
 
@@ -36,8 +34,8 @@ class mobile_api {
 		$code = new seccode();
 		$code->code = $seccode;
 		$code->type = $type;
-		$code->width = $_G['setting']['seccodedata']['width'];
-		$code->height = $_G['setting']['seccodedata']['height'];
+		$code->width = isset($_GET['width']) && $_GET['width'] >= 100 && $_GET['width'] <= 600 ? $_GET['width'] : $_G['setting']['seccodedata']['width'];
+		$code->height = isset($_GET['height']) && $_GET['height'] >= 30 && $_GET['height'] <= 240 ? $_GET['height'] :$_G['setting']['seccodedata']['height'];
 		$code->background = $_G['setting']['seccodedata']['background'];
 		$code->adulterate = $_G['setting']['seccodedata']['adulterate'];
 		$code->ttf = $_G['setting']['seccodedata']['ttf'];
@@ -56,7 +54,6 @@ class mobile_api {
 
 	}
 
-	//note 程序模板输出前运行的代码
 	function output() {}
 
 }

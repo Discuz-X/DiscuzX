@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
 *      This is NOT a freeware, use is subject to license terms
 *
-*      $Id: forumimage.php 32061 2012-11-06 02:41:00Z zhangjie $
+*      $Id: forumimage.php 32489 2013-01-29 03:57:16Z monkey $
 */
 
 if(!defined('IN_MOBILE_API')) {

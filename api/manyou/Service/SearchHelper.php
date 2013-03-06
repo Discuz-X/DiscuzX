@@ -762,6 +762,7 @@ class Cloud_Service_SearchHelper {
 					} else {
 						save_syscache($kname, array('ts' => TIMESTAMP, 'result' => $data));
 					}
+
 				}
 			}
 		}

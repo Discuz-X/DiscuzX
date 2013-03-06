@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 29410 2012-04-11 03:01:27Z zhengqingpeng $
+ *      $Id: spacecp_album.php 31832 2012-10-15 08:06:12Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -302,6 +302,40 @@ if($_GET['op'] == 'edit') {
 			C::t('home_feed')->update($picid, array('hot'=>$_POST['hot']), 'picid');
 		}
 		showmessage('do_success', dreferer());
+	}
+} elseif($_GET['op'] == 'saveforumphoto') {
+	if(submitcheck('savephotosubmit')) {
+		$aid = intval($_GET['aid']);
+		$albumid = intval($_POST['albumid']);
+		if(!$aid || !$albumid) {
+			showmessage('parameters_error');
+		}
+		$attach = C::t('forum_attachment_n')->fetch('aid:'.$aid, $aid);
+		if(empty($attach)) {
+			showmessage('parameters_error');
+		}
+		$album = C::t('home_album')->fetch($albumid, $_G['uid']);
+		if(empty($album)) {
+			showmessage('album_does_not_exist');
+		}
+		$picdata = array(
+				'albumid' => $album['albumid'],
+				'uid' => $_G['uid'],
+				'username' => $_G['username'],
+				'dateline' => $attach['dateline'],
+				'postip' => $_G['clientip'],
+				'filename' => censor($attach['filename']),
+				'title' => censor(cutstr(dhtmlspecialchars($attach['description']), 100)),
+				'type' => fileext($attach['attachment']),
+				'size' => $attach['filesize'],
+				'filepath' => $attach['attachment'],
+				'thumb' => $attach['thumb'],
+				'remote' => $attach['remote'] + 2
+			);
+		$picid = C::t('home_pic')->insert($picdata, 1);
+		showmessage('do_success', dreferer(), array('picid' => $picid), array('showdialog'=>true, 'showmsg' => true, 'closetime' => true));
+	} else {
+		$albumlist = C::t('home_album')->fetch_all_by_uid($_G['uid'], 'updatetime');
 	}
 }
 

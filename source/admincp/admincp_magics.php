@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_magics.php 28143 2012-02-23 04:26:52Z monkey $
+ *      $Id: admincp_magics.php 30333 2012-05-23 07:16:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -44,12 +44,15 @@ if($operation == 'admin') {
 			}
 			$credits .= '</select>';
 			$magictype = $lang['magics_type_'.$magic['type']];
+			$eidentifier = explode(':', $magic['identifier']);
+
 			showtablerow('', array('class="td25"', 'class="td25"', 'class="td25"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', '', ''), array(
 				"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$magic[magicid]\">",
 				"<input type=\"text\" class=\"txt\" name=\"displayorder[$magic[magicid]]\" value=\"$magic[displayorder]\">",
 				"<input type=\"checkbox\" class=\"checkbox\" name=\"available[$magic[magicid]]\" value=\"1\" ".($magic['available'] ? 'checked' : '').">",
 				"<input type=\"text\" class=\"txt\" style=\"width:80px\" name=\"name[$magic[magicid]]\" value=\"$magic[name]\">".
-					(file_exists(DISCUZ_ROOT.'./static/image/magic/'.$magic['identifier'].'.gif') ? '<img class="vmiddle" src="static/image/magic/'.$magic['identifier'].'.gif" />' : ''),
+				(count($eidentifier) > 1 ? (file_exists(DISCUZ_ROOT.'./source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.small.gif') ? '<img class="vmiddle" src="source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.small.gif" />' : '')
+					: (file_exists(DISCUZ_ROOT.'./static/image/magic/'.$magic['identifier'].'.small.gif') ? '<img class="vmiddle" src="static/image/magic/'.$magic['identifier'].'.small.gif" />' : '')),
 				"<input type=\"text\" class=\"txt\" name=\"price[$magic[magicid]]\" value=\"$magic[price]\">".$credits,
 				"<input type=\"text\" class=\"txt\" name=\"num[$magic[magicid]]\" value=\"$magic[num]\">".
 					($magic['supplytype'] ? '/ '.$magic['supplynum'].' / '.$lang['magic_suppytype_'.$magic['supplytype']] : ''),
@@ -64,12 +67,14 @@ if($operation == 'admin') {
 				$credits .= '<option value="'.$i.'">'.$extcredit['title'].'</option>';
 			}
 			$credits .= '</select>';
+			$eclass = explode(':', $newmagic['class']);
 			showtablerow('', array('class="td25"', 'class="td25"', 'class="td25"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', '', ''), array(
 				'',
 				"<input type=\"text\" class=\"txt\" name=\"newdisplayorder[$newmagic[class]]\" value=\"0\">",
 				"<input type=\"checkbox\" class=\"checkbox\" name=\"newavailable[$newmagic[class]]\" value=\"1\">",
 				"<input type=\"text\" class=\"txt\" style=\"width:80px\" name=\"newname[$newmagic[class]]\" value=\"$newmagic[name]\">".
-					(file_exists(DISCUZ_ROOT.'./static/image/magic/'.$newmagic['class'].'.gif') ? '<img class="vmiddle" src="static/image/magic/'.$newmagic['class'].'.small.gif" />' : '').
+					(count($eclass) > 1 ? (file_exists(DISCUZ_ROOT.'./source/plugin/'.$eclass[0].'/magic/magic_'.$eclass[1].'.small.gif') ? '<img class="vmiddle" src="source/plugin/'.$eclass[0].'/magic/magic_'.$eclass[1].'.small.gif" />' : '')
+						: (file_exists(DISCUZ_ROOT.'./static/image/magic/'.$newmagic['class'].'.small.gif') ? '<img class="vmiddle" src="static/image/magic/'.$newmagic['class'].'.small.gif" />' : '')).
 					"<input type=\"hidden\" name=\"newdesc[$newmagic[class]]\" value=\"$newmagic[desc]\" />".
 					"<input type=\"hidden\" name=\"newuseevent[$newmagic[class]]\" value=\"$newmagic[useevent]\" />",
 				"<input type=\"text\" class=\"txt\" name=\"newprice[$newmagic[class]]\" value=\"$newmagic[price]\">".$credits,
@@ -99,7 +104,7 @@ if($operation == 'admin') {
 				if(!is_array($_GET['identifier']) ||
 					!is_array($_GET['displayorder']) || !is_array($_GET['credit']) ||
 					!is_array($_GET['price']) || !is_array($_GET['num']) ||
-					!is_array($_GET['weight']) || !preg_match('/^\w+$/', $_GET['identifier'][$id])) {
+					!is_array($_GET['weight']) || !preg_match('/^[\w:]+$/', $_GET['identifier'][$id])) {
 					continue;
 				}
 				C::t('common_magic')->update($id, array(
@@ -162,13 +167,21 @@ if($operation == 'admin') {
 		));
 		echo '<br />';
 
-		require_once libfile('magic/'.$magic['identifier'], 'class');
-		$magicclass = 'magic_'.$magic['identifier'];
+		$eidentifier = explode(':', $magic['identifier']);
+		if(count($eidentifier) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.php';
+			$magicclass = 'magic_'.$eidentifier[1];
+		} else {
+			require_once libfile('magic/'.$magic['identifier'], 'class');
+			$magicclass = 'magic_'.$magic['identifier'];
+		}
+
 		$magicclass = new $magicclass;
 		$magicsetting = $magicclass->getsetting($magicperm);
 		echo '<div class="colorbox"><h4>'.lang('magic/'.$magic['identifier'], $magicclass->name).'</h4>'.
 			'<table cellspacing="0" cellpadding="3"><tr><td>'.
-			(file_exists(DISCUZ_ROOT.'./static/image/magic/'.$magic['identifier'].'.gif') ? '<img src="static/image/magic/'.$magic['identifier'].'.gif" />' : '').
+			(count($eidentifier) > 1 ? (file_exists(DISCUZ_ROOT.'./source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.gif') ? '<img src="source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.gif" />' : '')
+			: (file_exists(DISCUZ_ROOT.'./static/image/magic/'.$magic['identifier'].'.gif') ? '<img src="static/image/magic/'.$magic['identifier'].'.gif" />' : '')).
 			'</td><td valign="top">'.lang('magic/'.$magic['identifier'], $magicclass->description).'</td></tr></table>'.
 			'<div style="width:95%" align="right">'.lang('magic/'.$magic['identifier'], $magicclass->copyright).'</div></div>';
 		$credits = array();
@@ -239,8 +252,16 @@ if($operation == 'admin') {
 
 		$magicperm['usergroups'] = is_array($_GET['usergroupsperm']) && !empty($_GET['usergroupsperm']) ? "\t".implode("\t",$_GET['usergroupsperm'])."\t" : '';
 		$magicperm['targetgroups'] = is_array($_GET['targetgroupsperm']) && !empty($_GET['targetgroupsperm']) ? "\t".implode("\t",$_GET['targetgroupsperm'])."\t" : '';
-		require_once libfile('magic/'.$magic['identifier'], 'class');
-		$magicclass = 'magic_'.$magic['identifier'];
+
+		$eidentifier = explode(':', $magic['identifier']);
+		if(count($eidentifier) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.php';
+			$magicclass = 'magic_'.$eidentifier[1];
+		} else {
+			require_once libfile('magic/'.$magic['identifier'], 'class');
+			$magicclass = 'magic_'.$magic['identifier'];
+		}
+
 		$magicclass = new $magicclass;
 		$magicclass->setsetting($magicperm, $_GET['perm']);
 		$magicpermnew = addslashes(serialize($magicperm));
@@ -282,27 +303,38 @@ if($operation == 'admin') {
 
 function getmagics() {
 	global $_G;
-	$dir = DISCUZ_ROOT.'./source/class/magic';
-	$magicdir = dir($dir);
+	$checkdirs = array_merge(array(''), $_G['setting']['plugins']['available']);
 	$magics = array();
-	while($entry = $magicdir->read()) {
-		if(!in_array($entry, array('.', '..')) && preg_match("/^magic\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
-			@include_once $dir.'/'.$entry;
-			$magicclass = substr($entry, 0, -4);
-			if(class_exists($magicclass)) {
-				$magic = new $magicclass();
-				$script = substr($magicclass, 6);
-				$magics[$script] = array(
-					'class' => $script,
-					'name' => lang('magic/'.$script, $magic->name),
-					'desc' => lang('magic/'.$script, $magic->description),
-					'price' => $magic->price,
-					'weight' => $magic->weight,
-					'useevent' => !empty($magic->useevent) ? $magic->useevent : 0,
-					'version' => $magic->version,
-					'copyright' => lang('magic/'.$script, $magic->copyright),
-					'filemtime' => @filemtime($dir.'/'.$entry)
-				);
+	foreach($checkdirs as $key) {
+		if($key) {
+			$dir = DISCUZ_ROOT.'./source/plugin/'.$key.'/magic';
+		} else {
+			$dir = DISCUZ_ROOT.'./source/class/magic';
+		}
+		if(!file_exists($dir)) {
+			continue;
+		}
+		$magicdir = dir($dir);
+		while($entry = $magicdir->read()) {
+			if(!in_array($entry, array('.', '..')) && preg_match("/^magic\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
+				@include_once $dir.'/'.$entry;
+				$magicclass = substr($entry, 0, -4);
+				if(class_exists($magicclass)) {
+					$magic = new $magicclass();
+					$script = substr($magicclass, 6);
+					$script = ($key ? $key.':' : '').$script;
+					$magics[$script] = array(
+						'class' => $script,
+						'name' => lang('magic/'.$script, $magic->name),
+						'desc' => lang('magic/'.$script, $magic->description),
+						'price' => $magic->price,
+						'weight' => $magic->weight,
+						'useevent' => !empty($magic->useevent) ? $magic->useevent : 0,
+						'version' => $magic->version,
+						'copyright' => lang('magic/'.$script, $magic->copyright),
+						'filemtime' => @filemtime($dir.'/'.$entry)
+					);
+				}
 			}
 		}
 	}

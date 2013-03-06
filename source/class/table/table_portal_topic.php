@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_topic.php 31469 2012-08-31 03:04:40Z zhangguosheng $
+ *      $Id: table_portal_topic.php 32654 2013-02-28 03:55:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,6 +67,27 @@ class table_portal_topic extends discuz_table
 			$or = 'OR';
 		}
 		return DB::fetch_all("SELECT $idtype FROM %t WHERE $wheresql", $parameter);
+	}
+
+	public function repair_htmlmade($ids) {
+		if(($ids = dintval($ids, true))) {
+			return DB::update($this->_table, array('htmlmade' => 0), DB::field($this->_pk, $ids));
+		}
+		return false;
+	}
+
+	public function fetch_all_topicid_by_dateline($dateline) {
+		$data = array();
+		$where = array();
+
+		if($dateline) {
+			$where[] = DB::field('dateline', intval($dateline), '>=');
+		}
+		$where[] = "closed='0'";
+		if($where) {
+			$data = DB::fetch_all('SELECT topicid FROM '.DB::table($this->_table).' WHERE '. implode(' AND ', $where).' LIMIT 20000', NULL, $this->_pk);
+		}
+		return $data;
 	}
 }
 

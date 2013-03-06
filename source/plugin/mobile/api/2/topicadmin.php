@@ -3,9 +3,8 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
 *      This is NOT a freeware, use is subject to license terms
 *
-*      $Id: topicadmin.php 31964 2012-10-26 07:27:36Z zhangjie $
+*      $Id: topicadmin.php 32489 2013-01-29 03:57:16Z monkey $
 */
-//note topicadmin入口管理 @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

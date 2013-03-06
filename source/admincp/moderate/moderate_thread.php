@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 31278 2012-08-02 08:32:31Z liulanbo $
+ *      $Id: moderate_thread.php 32501 2013-01-29 09:51:00Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -69,6 +69,9 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 	$moderates = C::t('common_moderate')->fetch_all_by_idtype('tid', $moderatestatus, $srcdate);
 	if(!empty($moderates)) {
 		$modcount = C::t('forum_thread')->count_by_tid_fid(array_keys($moderates), $fids, $isgroup, $_GET['username'], $title);
+	}
+	if($modcount != count($moderates) && !$srcdate && !$fids && !$_GET['username'] && !$title) {
+		moderateswipe('tid', array_keys($moderates));
 	}
 
 	$start_limit = ($page - 1) * $tpp;
@@ -242,6 +245,9 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 		$tids = $authoridarray = $moderatedthread = array();
 		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
 		foreach(C::t('forum_thread')->fetch_all_by_tid_fid($moderation['validate'], $fidadd['fids']) as $thread) {
+			if($thread['displayorder'] != -2 && $thread['displayorder']!= -3) {
+				continue;
+			}
 			$poststatus = C::t('forum_post')->fetch_threadpost_by_tid_invisible($thread['tid']);
 			$poststatus = $poststatus['status'];
 			$tids[] = $thread['tid'];

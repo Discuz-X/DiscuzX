@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collection.php 29284 2012-03-31 09:42:04Z chenmengshu $
+ *      $Id: table_forum_collection.php 31438 2012-08-28 06:03:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,12 +27,17 @@ class table_forum_collection extends discuz_table
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE uid=%d', array($this->_table, $uid), $this->_pk);
 	}
 
-	public function fetch_all_by_uid($uid, $start = 0, $limit = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d '.DB::limit($start, $limit), array($this->_table, $uid), $this->_pk);
+	public function fetch_all_by_uid($uid, $start = 0, $limit = 0, $exceptctid = null) {
+		if($exceptctid) {
+			$sql = ' AND ctid!='.intval($exceptctid);
+		} else {
+			$sql = '';
+		}
+		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d %i'.DB::limit($start, $limit), array($this->_table, $uid, $sql), $this->_pk);
 	}
 
-	public function range($start = 0, $limit = 0, $reqthread = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE threadnum>=%d ORDER BY lastupdate DESC '.DB::limit($start, $limit), array($this->_table, $reqthread));
+	public function range($start = 0, $limit = 0, $reqthread = 0, $pK = true) {
+		return DB::fetch_all('SELECT * FROM %t WHERE threadnum>=%d ORDER BY lastupdate DESC '.DB::limit($start, $limit), array($this->_table, $reqthread), $pK ? $this->_pk : '');
 	}
 
 	public function fetch_all($ctid = '', $orderby = '', $ordersc = '', $start = 0, $limit = 0, $title = '', $cachetid = '') {

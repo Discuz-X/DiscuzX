@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_statlog.php 30045 2012-05-08 03:35:12Z zhengqingpeng $
+ *      $Id: table_forum_statlog.php 31920 2012-10-24 09:18:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,6 +23,10 @@ class table_forum_statlog extends discuz_table
 
 	public function fetch_all_by_logdate($start, $end, $fid) {
 		return DB::fetch_all('SELECT * FROM %t WHERE logdate>=%s AND logdate<=%s AND type=1 AND fid=%d ORDER BY logdate ASC', array($this->_table, $start, $end, $fid));
+	}
+
+	public function fetch_all_rank_by_logdate($date) {
+		return DB::fetch_all('SELECT * FROM %t WHERE logdate=%s AND type=1 ORDER BY value DESC', array($this->_table, $date));
 	}
 
 	public function fetch_all_by_fid_type($fid, $type=1) {

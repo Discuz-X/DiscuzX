@@ -112,7 +112,7 @@ if(!submitcheck('modsubmit')) {
 	$modpostsnum ++;
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=forumdisplay&fid=$_G[fid]",
-	'reasonpm'	=> ($sendreasonpm ? array('data' => array($thread), 'var' => 'thread', 'item' => 'reason_merge') : array()),
+	'reasonpm'	=> ($sendreasonpm ? array('data' => array($thread), 'var' => 'thread', 'item' => 'reason_merge', 'notictype' => 'post') : array()),
 	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason),
 	'modtids'	=> $thread['tid'],
 	'modlog'	=> array($thread, $other)

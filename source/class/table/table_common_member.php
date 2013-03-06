@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member.php 31536 2012-09-06 06:32:03Z zhangguosheng $
+ *      $Id: table_common_member.php 31849 2012-10-17 04:39:16Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -125,7 +125,7 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function count_by_groupid($groupid) {
-		return $groupid ? DB::result_first('SELECT COUNT(*) FROM %t WHERE groupid=%d', array($this->_table, $groupid)) : 0;
+		return $groupid ? DB::result_first('SELECT COUNT(*) FROM %t WHERE '.DB::field('groupid', $groupid), array($this->_table)) : 0;
 	}
 
 	public function fetch_all_by_groupid($groupid, $start = 0, $limit = 0) {
@@ -511,6 +511,10 @@ class table_common_member extends discuz_table_archive
 
 	public function range_by_uid($from, $limit) {
 		return DB::fetch_all('SELECT * FROM %t WHERE uid >= %d ORDER BY uid LIMIT %d', array($this->_table, $from, $limit), $this->_pk);
+	}
+
+	public function update_groupid_by_groupid($source, $target) {
+		return DB::query('UPDATE %t SET groupid=%d WHERE adminid <= 0 AND groupid=%d', array($this->_table, $target, $source));
 	}
 }
 

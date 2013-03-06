@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_collection.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_collection.php 31438 2012-08-28 06:03:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,17 @@ function getmycollection($uid) {
 	$collections = C::t('forum_collection')->fetch_all_by_uid($uid);
 	$collectionteamworker = C::t('forum_collectionteamworker')->fetch_all_by_uid($uid);
 	return $collections + $collectionteamworker;
+}
+
+function getHotCollection($number = 500, $pK = true) {
+	$collection = array();
+	if($number > 0) {
+		$collection = C::t('forum_collection')->range(0, $number, 10, $pK);
+		if(!$collection || count($collection) < $number) {
+			$collection += C::t('forum_collection')->range(0, $number, null, $pK);
+		}
+	}
+	return $collection;
 }
 
 function checkcollectionperm($collection, $uid, $allowteamworker = false) {

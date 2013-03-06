@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_modaction.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_modaction.php 31651 2012-09-18 10:23:26Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -86,6 +86,9 @@ $lang = array
 	'MAG' => '道具',
 
 	'REB' => '推送',
+
+	'LIV' => '直播',
+	'LIC' => '取消直播',
 
 );
 

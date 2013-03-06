@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_upload.js 23838 2011-08-11 06:51:58Z monkey $
+	$Id: portal_upload.js 32590 2013-02-22 09:42:48Z monkey $
 */
 
 var nowid = 0;
@@ -16,7 +16,7 @@ function addAttach() {
 
 	newnode.id = 'upload_' + id;
 	tags = newnode.getElementsByTagName('input');
-	for(i in tags) {
+	for(i = 0;i < tags.length;i++) {
 		if(tags[i].name == 'attach') {
 			tags[i].id = 'attach_' + id;
 			tags[i].name = 'attach';
@@ -25,7 +25,7 @@ function addAttach() {
 		}
 	}
 	tags = newnode.getElementsByTagName('span');
-	for(i in tags) {
+	for(i = 0;i < tags.length;i++) {
 		if(tags[i].id == 'localfile') {
 			tags[i].id = 'localfile_' + id;
 		}
@@ -44,11 +44,11 @@ function insertAttach(id) {
 	var ext = path.lastIndexOf('.') == -1 ? '' : path.substr(path.lastIndexOf('.') + 1, path.length).toLowerCase();
 	var re = new RegExp("(^|\\s|,)" + ext + "($|\\s|,)", "ig");
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
-		alert('å¯¹ä¸èµ·ï¼Œä¸æ”¯æŒä¸Šä¼ æ­¤ç±»æ–‡ä»¶');
+		alert('¶Ô²»Æð£¬²»Ö§³ÖÉÏ´«´ËÀàÎÄ¼þ');
 		return;
 	}
 	var localfile = $('attach_' + id).value.substr($('attach_' + id).value.replace(/\\/g, '/').lastIndexOf('/') + 1);
-	$('localfile_' + id).innerHTML = localfile + ' ä¸Šä¼ ä¸­...';
+	$('localfile_' + id).innerHTML = localfile + ' ÉÏ´«ÖÐ...';
 	$('attach_' + id).style.display = 'none';
 	$('upload_' + id).action += '&attach_target_id=' + id;
 	$('upload_' + id).submit();

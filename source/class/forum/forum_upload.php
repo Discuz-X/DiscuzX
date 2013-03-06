@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_upload.php 32057 2012-11-05 08:16:03Z monkey $
+ *      $Id: forum_upload.php 32612 2013-02-26 09:09:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,13 +19,15 @@ class forum_upload {
 	var $statusid;
 	var $attach;
 	var $error_sizelimit;
+	var $getaid;
 
-	function forum_upload() {
+	function forum_upload($getaid = 0) {
 		global $_G;
 
 		$_G['uid'] = $this->uid = intval($_GET['uid']);
 		$swfhash = md5(substr(md5($_G['config']['security']['authkey']), 8).$this->uid);
 		$this->aid = 0;
+		$this->getaid = $getaid;
 		$this->simple = !empty($_GET['simple']) ? $_GET['simple'] : 0;
 
 		if($_GET['hash'] != $swfhash) {
@@ -125,7 +127,7 @@ class forum_upload {
 		$insert = array(
 			'aid' => $aid,
 			'dateline' => $_G['timestamp'],
-			'filename' => censor($upload->attach['name']),
+			'filename' => dhtmlspecialchars(censor($upload->attach['name'])),
 			'filesize' => $upload->attach['size'],
 			'attachment' => $upload->attach['attachment'],
 			'isimage' => $upload->attach['isimage'],
@@ -144,6 +146,10 @@ class forum_upload {
 	function uploadmsg($statusid) {
 		global $_G;
 		$this->error_sizelimit = !empty($this->error_sizelimit) ? $this->error_sizelimit : 0;
+		if($this->getaid) {
+			$this->getaid = $statusid ? -$statusid : $this->aid;
+			return;
+		}
 		if($this->simple == 1) {
 			echo 'DISCUZUPLOAD|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'].'|'.$this->error_sizelimit;
 		} elseif($this->simple == 2) {

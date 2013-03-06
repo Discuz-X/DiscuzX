@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_thread.php 32229 2012-12-03 03:12:13Z zhangguosheng $
+ *      $Id: table_forum_thread.php 32406 2013-01-14 05:57:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -272,8 +272,10 @@ class table_forum_thread extends discuz_table
 		$parameter = array($this->get_table_name());
 		$wherearr = array();
 		$fids = dintval($fids, true);
-		$parameter[] = $fids;
-		$wherearr[] = is_array($fids) && $fids ? 'fid IN(%n)' : 'fid=%d';
+		if(!empty($fids)) {
+			$parameter[] = $fids;
+			$wherearr[] = is_array($fids) && $fids ? 'fid IN(%n)' : 'fid=%d';
+		}
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
 			$dglue = helper_util::check_glue($dglue);
@@ -1049,9 +1051,13 @@ class table_forum_thread extends discuz_table
 		$tids = dintval($tids, true);
 		if($tids) {
 			$this->clear_cache($tids);
+			C::t('forum_newthread')->delete_by_tids($tids);
 			return DB::delete($this->get_table_name($tableid), DB::field('tid', $tids), $limit, $unbuffered);
 		}
 		return !$unbuffered ? 0 : false;
+	}
+	public function delete($tids, $unbuffered = false, $tableid = 0, $limit = 0) {
+		return $this->delete_by_tid($tids, $unbuffered, $tableid, $limit);
 	}
 	public function delete_by_fid($fid, $unbuffered = false, $tableid = 0, $limit = 0) {
 		$fid = dintval($fid, true);
@@ -1059,6 +1065,7 @@ class table_forum_thread extends discuz_table
 			foreach((array)$fid as $delfid) {
 				$this->clear_cache($delfid, 'forumdisplay_');
 			}
+			C::t('forum_newthread')->delete_by_tids($fid);
 			return DB::delete($this->get_table_name($tableid), DB::field('fid', $fid), $limit, $unbuffered);
 		}
 		return 0;
@@ -1067,7 +1074,7 @@ class table_forum_thread extends discuz_table
 		$tableid = intval($tableid);
 		return $tableid ? "forum_thread_$tableid" : 'forum_thread';
 	}
-	public function fetch_all_for_guide($type, $limittid, $tids = array(), $heatslimit = 3, $dateline = 0) {
+	public function fetch_all_for_guide($type, $limittid, $tids = array(), $heatslimit = 3, $dateline = 0, $start = 0, $limit = 600, $fids = 0) {
 		switch ($type) {
 			case 'hot' :
 				$addsql = ' AND heats>'.intval($heatslimit);
@@ -1086,11 +1093,22 @@ class table_forum_thread extends discuz_table
 			$tids = dintval($tids, true);
 			$tidsql = DB::field('tid', $tids);
 		} else {
-			$tidsql = 'tid>'.intval($limittid);
+			$limittid = intval($limittid);
+			$tidsql = 'tid>'.$limittid;
+			$fids = dintval($fids, true);
+			if($fids) {
+				$tidsql .= is_array($fids) && $fids ? ' AND fid IN('.dimplode($fids).')' : ' AND fid='.$fids;
+			}
 			if($dateline) {
 				$addsql .= ' AND dateline > '.intval($dateline);
 			}
-			$addsql .= ' AND displayorder>=0 ORDER BY lastpost DESC LIMIT 600';
+			if($type == 'newthread') {
+				$orderby = 'lastpost';
+			} else {
+				$orderby = 'tid';
+			}
+			$addsql .= ' AND displayorder>=0 ORDER BY '.$orderby.' DESC '.DB::limit($start, $limit);
+
 		}
 		return DB::fetch_all("SELECT * FROM ".DB::table('forum_thread')." WHERE ".$tidsql.$addsql);
 	}

@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: spacecp.inc.php 32450 2013-01-17 09:12:39Z liulanbo $
+ *	  $Id: spacecp.inc.php 32630 2013-02-27 05:46:25Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,8 +75,32 @@ if ($pluginop == 'config') {
 			unset($attach_images);
 		}
 	}
-	$share_message = lang('plugin/qqconnect', 'connect_spacecp_share_a_post', array('bbname' => cutstr($_G['setting']['bbname'], 20,''), 'subject' => cutstr($thread['subject'], 120), 'message' => cutstr(strip_tags(str_replace('&nbsp;', ' ', $html_content)), 80)));
-	$share_message = str_replace(array('\'', "\r\n", "\r", "\n"), array('"', '', '', ''), $share_message);
+
+	if($_GET['sh_type'] == 4){
+		if($_G['setting']['rewritestatus'] && in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			$url = rewriteoutput('forum_viewthread', 1, $_G['siteurl'], $tid);
+		} else {
+			$url = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$tid;
+		}
+		$shareqq_params = array(
+			'url' => $url,
+			'title' => diconv($thread['subject'], CHARSET, 'UTF-8'),
+			'summary' => diconv(cutstr(strip_tags(str_replace('&nbsp;', ' ', $html_content)), 80), CHARSET, 'UTF-8'),
+			'desc' => diconv(lang('plugin/qqconnect', 'connect_spacecp_share_qq_default'), CHARSET, 'UTF-8'),
+			'site' => 'discuz|',
+			'style' => '103',
+			'width' => 50,
+			'height' => 16
+		);
+		$s = '';
+		foreach($shareqq_params as $key => $val) {
+			$s .= ($s ? '&' : '').$key.'='.urlencode($val);
+		}
+		header('Location: http://connect.qq.com/widget/shareqq/index.html?'.$s);
+	} else {
+		$share_message = lang('plugin/qqconnect', 'connect_spacecp_share_a_post', array('bbname' => cutstr($_G['setting']['bbname'], 20,''), 'subject' => cutstr($thread['subject'], 120), 'message' => cutstr(strip_tags(str_replace('&nbsp;', ' ', $html_content)), 80)));
+		$share_message = str_replace(array('\'', "\r\n", "\r", "\n"), array('"', '', '', ''), $share_message);
+	}
 } elseif ($pluginop == 'new') {
 	if (trim($_GET['formhash']) != formhash()) {
 		showmessage('submit_invalid');

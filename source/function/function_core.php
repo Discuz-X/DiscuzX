@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 32277 2012-12-13 08:25:50Z zhangjie $
+ *      $Id: function_core.php 32577 2013-02-22 01:50:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,7 +87,7 @@ function getuserprofile($field) {
 		return $_G['member'][$field];
 	}
 	static $tablefields = array(
-		'count'		=> array('extcredits1','extcredits2','extcredits3','extcredits4','extcredits5','extcredits6','extcredits7','extcredits8','friends','posts','threads','digestposts','doings','blogs','albums','sharings','attachsize','views','oltime','todayattachs','todayattachsize', 'follower', 'following', 'newfollower'),
+		'count'		=> array('extcredits1','extcredits2','extcredits3','extcredits4','extcredits5','extcredits6','extcredits7','extcredits8','friends','posts','threads','digestposts','doings','blogs','albums','sharings','attachsize','views','oltime','todayattachs','todayattachsize', 'follower', 'following', 'newfollower', 'blacklist'),
 		'status'	=> array('regip','lastip','lastvisit','lastactivity','lastpost','lastsendmail','invisible','buyercredit','sellercredit','favtimes','sharetimes','profileprogress'),
 		'field_forum'	=> array('publishfeed','customshow','customstatus','medals','sightml','groupterms','authstr','groups','attentiongroup'),
 		'field_home'	=> array('videophoto','spacename','spacedescription','domain','addsize','addfriend','menunum','theme','spacecss','blockposition','recentnote','spacenote','privacy','feedfriend','acceptemail','magicgift','stickblogs'),
@@ -232,13 +232,13 @@ function dheader($string, $replace = true, $http_response_code = 0) {
 	$islocation = substr(strtolower(trim($string)), 0, 8) == 'location';
 	if(defined('IN_MOBILE') && strpos($string, 'mobile') === false && $islocation) {
 		if (strpos($string, '?') === false) {
-			$string = $string.'?mobile=yes';
+			$string = $string.'?mobile='.IN_MOBILE;
 		} else {
 			if(strpos($string, '#') === false) {
-				$string = $string.'&mobile=yes';
+				$string = $string.'&mobile='.IN_MOBILE;
 			} else {
 				$str_arr = explode('#', $string);
-				$str_arr[0] = $str_arr[0].'&mobile=yes';
+				$str_arr[0] = $str_arr[0].'&mobile='.IN_MOBILE;
 				$string = implode('#', $str_arr);
 			}
 		}
@@ -318,6 +318,10 @@ function checkmobile() {
 				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
 				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
 				'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
+	static $wmlbrowser_list = array('cect', 'compal', 'ctl', 'lg', 'nec', 'tcl', 'alcatel', 'ericsson', 'bird', 'daxian', 'dbtel', 'eastcom',
+			'pantech', 'dopod', 'philips', 'haier', 'konka', 'kejian', 'lenovo', 'benq', 'mot', 'soutec', 'nokia', 'sagem', 'sgh',
+			'sed', 'capitel', 'panasonic', 'sonyericsson', 'sharp', 'amoi', 'panda', 'zte');
+
 	$pad_list = array('pad', 'gt-p1000');
 
 	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
@@ -325,22 +329,26 @@ function checkmobile() {
 	if(dstrpos($useragent, $pad_list)) {
 		return false;
 	}
-	if(($v = dstrpos($useragent, $mobilebrowser_list, true))) {
+	if(($v = dstrpos($useragent, $mobilebrowser_list, true))){
 		$_G['mobile'] = $v;
-		return true;
+		return '2';
+	}
+	if(($v = dstrpos($useragent, $wmlbrowser_list))) {
+		$_G['mobile'] = $v;
+		return '3'; //wml版
 	}
 	$brower = array('mozilla', 'chrome', 'safari', 'opera', 'm3gate', 'winwap', 'openwave', 'myop');
 	if(dstrpos($useragent, $brower)) return false;
 
 	$_G['mobile'] = 'unknown';
-	if($_GET['mobile'] === 'yes') {
+	if(isset($_G['mobiletpl'][$_GET['mobile']])) {
 		return true;
 	} else {
 		return false;
 	}
 }
 
-function dstrpos($string, &$arr, $returnvalue = false) {
+function dstrpos($string, $arr, $returnvalue = false) {
 	if(empty($string)) return false;
 	foreach((array)$arr as $v) {
 		if(strpos($string, $v) !== false) {
@@ -411,10 +419,15 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 
 function lang($file, $langvar = null, $vars = array(), $default = null) {
 	global $_G;
+	$fileinput = $file;
 	list($path, $file) = explode('/', $file);
 	if(!$file) {
 		$file = $path;
 		$path = '';
+	}
+	if(strpos($file, ':') !== false) {
+		$path = 'plugin';
+		list($file) = explode(':', $file);
 	}
 
 	if($path != 'plugin') {
@@ -426,6 +439,15 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
 			include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
+		}
+		if($file != 'error' && !isset($_G['cache']['pluginlanguage_system'])) {
+			loadcache('pluginlanguage_system');
+		}
+		if(!isset($_G['hooklang'][$fileinput])) {
+			if(isset($_G['cache']['pluginlanguage_system'][$fileinput])) {
+				$_G['lang'][$key] = array_merge($_G['lang'][$key], $_G['cache']['pluginlanguage_system'][$fileinput]);
+			}
+			$_G['hooklang'][$fileinput] = true;
 		}
 		$returnvalue = &$_G['lang'];
 	} else {
@@ -560,8 +582,9 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	$templateid = $templateid ? $templateid : (defined('TEMPLATEID') ? TEMPLATEID : '');
 	$filebak = $file;
 
-	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT') && strpos($file, 'mobile/') === false || (isset($_G['forcemobilemessage']) && $_G['forcemobilemessage'])) {
-		$file = 'mobile/'.$oldfile;
+	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT') && strpos($file, $_G['mobiletpl'][IN_MOBILE].'/') === false || (isset($_G['forcemobilemessage']) && $_G['forcemobilemessage'])) {
+		$oldfile .= !empty($_G['inajax']) && ($oldfile == 'common/header' || $oldfile == 'common/footer') ? '_ajax' : '';
+		$file = $_G['mobiletpl'][IN_MOBILE].'/'.$oldfile;
 	}
 
 	if(!$tpldir) {
@@ -585,8 +608,8 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 		} elseif(!file_exists(DISCUZ_ROOT.TPLDIR.'/'.$mobiletplfile) && !file_exists(substr(DISCUZ_ROOT.TPLDIR.'/'.$mobiletplfile, 0, -4).'.php')) {
 			$mobiletplfile = './template/default/'.$mobiletplfile;
 			if(!file_exists(DISCUZ_ROOT.$mobiletplfile) && !$_G['forcemobilemessage']) {
-				$tplfile = str_replace('mobile/', '', $tplfile);
-				$file = str_replace('mobile/', '', $file);
+				$tplfile = str_replace($_G['mobiletpl'][IN_MOBILE].'/', '', $tplfile);
+				$file = str_replace($_G['mobiletpl'][IN_MOBILE].'/', '', $file);
 				define('TPL_DEFAULT', true);
 			} else {
 				$tplfile = $mobiletplfile;
@@ -638,7 +661,7 @@ function getcurrentnav() {
 	}
 	if(!$mnid && isset($_G['setting']['navdms'])) {
 		foreach($_G['setting']['navdms'] as $navdm => $navid) {
-			if(strpos(strtolower($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']), $navdm) !== false) {
+			if(strpos(strtolower($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']), $navdm) !== false && strpos(strtolower($_SERVER['HTTP_HOST']), $navdm) === false) {
 				$mnid = $navid;
 				break;
 			}
@@ -1000,6 +1023,11 @@ function output() {
 
 		echo $content;
 	}
+
+	if(isset($_G['makehtml'])) {
+		helper_makehtml::make_html();
+	}
+
 	if($_G['setting']['ftp']['connid']) {
 		@ftp_close($_G['setting']['ftp']['connid']);
 	}
@@ -1030,7 +1058,7 @@ function output_replace($content) {
 		}
 		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 	}
-	if(!empty($_G['setting']['output']['preg']['search'])) {
+	if(!empty($_G['setting']['output']['preg']['search']) && (empty($_G['setting']['rewriteguest']) || empty($_G['uid']))) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
 			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
 			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
@@ -1057,7 +1085,6 @@ function output_ajax() {
 	}
 	return $s;
 }
-
 
 function runhooks($scriptextra = '') {
 	if(!defined('HOOKTYPE')) {
@@ -1091,6 +1118,9 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 		loadcache('plugin');
 	}
 	foreach((array)$_G['setting'][HOOKTYPE][$hscript][$script]['module'] as $identifier => $include) {
+		if($_G['pluginrunlist'] && !in_array($identifier, $_G['pluginrunlist'])) {
+			continue;
+		}
 		$hooksadminid[$identifier] = !$_G['setting'][HOOKTYPE][$hscript][$script]['adminid'][$identifier] || ($_G['setting'][HOOKTYPE][$hscript][$script]['adminid'][$identifier] && $_G['adminid'] > 0 && $_G['setting']['hookscript'][$hscript][$script]['adminid'][$identifier] >= $_G['adminid']);
 		if($hooksadminid[$identifier]) {
 			@include_once DISCUZ_ROOT.'./source/plugin/'.$include.'.class.php';
@@ -1114,10 +1144,18 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 					}
 					$return = $pluginclasses[$classkey]->$hookfunc[1]($param);
 
+					if(substr($hookkey, -7) == '_extend' && !empty($_G['setting']['pluginhooks'][$hookkey])) {
+						continue;
+					}
+
 					if(is_array($return)) {
 						if(!isset($_G['setting']['pluginhooks'][$hookkey]) || is_array($_G['setting']['pluginhooks'][$hookkey])) {
 							foreach($return as $k => $v) {
 								$_G['setting']['pluginhooks'][$hookkey][$k] .= $v;
+							}
+						} else {
+							foreach($return as $k => $v) {
+								$_G['setting']['pluginhooks'][$hookkey][$k] = $v;
 							}
 						}
 					} else {
@@ -1194,10 +1232,10 @@ function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $
 }
 
 
-function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
+function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '', $customtitle = '', $custommemo = '') {
 	if(!empty($uids) && (is_array($dataarr) && $dataarr)) {
 		require_once libfile('function/credit');
-		return _updatemembercount($uids, $dataarr, $checkgroup, $operation, $relatedid, $ruletxt);
+		return _updatemembercount($uids, $dataarr, $checkgroup, $operation, $relatedid, $ruletxt, $customtitle, $custommemo);
 	}
 	return true;
 }
@@ -1286,7 +1324,7 @@ function check_secqaa($value, $idhash) {
 
 function adshow($parameter) {
 	global $_G;
-	if($_G['inajax']) {
+	if($_G['inajax'] || $_G['group']['closead']) {
 		return;
 	}
 	if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {

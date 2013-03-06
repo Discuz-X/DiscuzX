@@ -7,9 +7,6 @@
  *      $Id: dz_newpic.php 32016 2012-10-31 05:53:25Z zhangjie $
  */
 class dz_newpic extends extends_data {
-//	private $variable;
-//	private $page;
-//	private $perpage = 50;
 	function __construct() {
 		parent::__construct();
 	}

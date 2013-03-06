@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 28265 2012-02-27 02:46:37Z monkey $
+ *      $Id: admincp_checktools.php 31554 2012-09-07 08:49:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -71,6 +71,13 @@ if($operation == 'filecheck') {
 		checkfiles('uc_server/js/', '\.js|\.htm');
 		checkfiles('uc_server/release/', '\.php');
 		checkfiles('uc_server/view/', '\.php|\.htm');
+
+
+		C::t('common_cache')->insert(array(
+			'cachekey' => 'checktools_filecheck',
+			'cachevalue' => serialize(array('dateline' => $_G['timestamp'])),
+			'dateline' => $_G['timestamp'],
+		), false, true);
 
 		foreach($discuzfiles as $line) {
 			$file = trim(substr($line, 34));
@@ -362,8 +369,8 @@ if($operation == 'filecheck') {
 		$_G['setting']['thumbquality'] = $settingnew['thumbquality'];
 
 		require_once libfile('class/image');
-		@unlink(DISCUZ_ROOT.'./data/attachment/temp/watermark_temp1.jpg');
-		@unlink(DISCUZ_ROOT.'./data/attachment/temp/watermark_temp2.jpg');
+		@unlink(DISCUZ_ROOT.$_G['setting']['attachdir'].'./temp/watermark_temp1.jpg');
+		@unlink(DISCUZ_ROOT.$_G['setting']['attachdir'].'./temp/watermark_temp2.jpg');
 		$image = new image;
 		$r = 0;
 		if(!($r = $image->Thumb(DISCUZ_ROOT.'./static/image/admincp/watermarkpreview.jpg', 'temp/watermark_temp1.jpg', $_G['setting']['thumbwidth'], $_G['setting']['thumbheight'], 1))) {

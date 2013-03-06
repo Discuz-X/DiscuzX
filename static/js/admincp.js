@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp.js 31416 2012-08-27 07:50:15Z zhangguosheng $
+	$Id: admincp.js 31631 2012-09-17 06:36:25Z monkey $
 */
 
 function redirect(url) {
@@ -136,7 +136,38 @@ function dropmenu(obj){
 	}
 }
 
+function insertunit(obj, text, textend) {
+	obj.focus();
+	textend = isUndefined(textend) ? '' : textend;
+	if(!isUndefined(obj.selectionStart)) {
+		var opn = obj.selectionStart + 0;
+		if(textend != '') {
+			text = text + obj.substring(obj.selectionStart, obj.selectionEnd) + textend;
+		}
+		obj.value = obj.value.substr(0, obj.selectionStart) + text + obj.value.substr(obj.selectionEnd);
+		obj.selectionStart = opn + strlen(text);
+		obj.selectionEnd = opn + strlen(text);
+	} else if(document.selection && document.selection.createRange) {
+		var sel = document.selection.createRange();
+		if(textend != '') {
+			text = text + sel.text + textend;
+		}
+		sel.text = text.replace(/\r?\n/g, '\r\n');
+		sel.moveStart('character', -strlen(text));
+	} else {
+	       obj.value += text;
+	}
+	obj.focus();
+}
+
 var heightag = BROWSER.chrome ? 4 : 0;
+function textareakey(obj, event) {
+	if(event.keyCode == 9) {
+		insertunit(obj, '\t');
+		doane(event);
+	}
+}
+
 function textareasize(obj, op) {
 	if(!op) {
 		if(obj.scrollHeight > 70) {
@@ -188,7 +219,7 @@ function entersubmit(e, name) {
 	if(loadUserdata('is_blindman')) {
 		return false;
 	}
-	var e = e ? e : event;
+	e = e ? e : event;
 	if(e.keyCode != 13) {
 		return;
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_credits.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: admincp_credits.php 32527 2013-02-05 09:56:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -50,6 +50,9 @@ if($operation == 'list') {
 			showtablerow('', array_fill(0, count($_G['setting']['extcredits']) + 4, 'class="td25"'), $tdarr);
 		}
 		showtablerow('', 'class="lineheight" colspan="9"', $lang['setting_credits_policy_comment']);
+		showtablefooter();
+		showtableheader('', 'nobottom', '');
+		showsetting('setting_credits_policy_mobile', 'settingnew[creditspolicymobile]', $_G['setting']['creditspolicymobile'], 'text');
 		showsubmit('rulesubmit');
 		showtablefooter();
 		showformfooter();
@@ -63,6 +66,10 @@ if($operation == 'list') {
 			}
 			C::t('common_credit_rule')->update($rid, $rule);
 		}
+		$settings = array(
+			'creditspolicymobile' => $_GET['settingnew']['creditspolicymobile'],
+		);
+		C::t('common_setting')->update_batch($settings);
 		updatecache(array('setting', 'creditrule'));
 		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
 	}

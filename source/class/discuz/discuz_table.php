@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_table.php 28628 2012-03-06 09:33:10Z zhangguosheng $
+ *      $Id: discuz_table.php 30321 2012-05-22 09:09:35Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,10 @@ if(!defined('IN_DISCUZ')) {
 
 class discuz_table extends discuz_base
 {
+
+	public $data = array();
+
+	public $methods = array();
 
 	protected $_table;
 	protected $_pk;
@@ -30,6 +34,7 @@ class discuz_table extends discuz_base
 			$this->_cache_ttl = $ttl;
 			$this->_allowmem = true;
 		}
+		$this->_init_extend();
 		parent::__construct();
 	}
 
@@ -227,6 +232,16 @@ class discuz_table extends discuz_base
 		return $this->_table;
 	}
 
+	protected function _init_extend() {
+	}
+
+	public function attach_before_method($name, $fn) {
+		$this->methods[$name][0][] = $fn;
+	}
+
+	public function attach_after_method($name, $fn) {
+		$this->methods[$name][1][] = $fn;
+	}
 }
 
 ?>

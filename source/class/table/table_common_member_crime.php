@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_crime.php 28893 2012-03-19 02:14:36Z svn_project_zhangjie $
+ *      $Id: table_common_member_crime.php 31482 2012-09-03 03:07:50Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,6 +35,10 @@ class table_common_member_crime extends discuz_table
 
 	public function fetch_all_by_where($where, $start = 0, $limit = 0) {
 		return DB::fetch_all('SELECT * FROM %t %i ORDER BY dateline DESC '.DB::limit($start, $limit), array($this->_table, $where));
+	}
+
+	public function fetch_all_by_uid_action($uid, $action) {
+		return DB::fetch_all('SELECT * FROM %t WHERE '.DB::field('uid', $uid).' AND '.DB::field('action', $action).' ORDER BY dateline', array($this->_table));
 	}
 }
 

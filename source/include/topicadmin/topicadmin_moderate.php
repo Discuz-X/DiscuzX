@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderate.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: topicadmin_moderate.php 31971 2012-10-29 02:54:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -196,6 +196,7 @@ if(!submitcheck('modsubmit')) {
 				}
 				$highlight_style = $_GET['highlight_style'];
 				$highlight_color = $_GET['highlight_color'];
+				$highlight_bgcolor = $_GET['highlight_bgcolor'];
 				$expiration = checkexpiration($_GET['expirationhighlight'], $operation);
 				$stylebin = '';
 				for($i = 1; $i <= 3; $i++) {
@@ -206,8 +207,9 @@ if(!submitcheck('modsubmit')) {
 				if($highlight_style < 0 || $highlight_style > 7 || $highlight_color < 0 || $highlight_color > 8) {
 					showmessage('parameters_error ');
 				}
+				$bgcolor = dhtmlspecialchars(preg_replace("/[^\[A-Za-z0-9#]/", '', $_GET['highlight_bgcolor']));
 
-				C::t('forum_thread')->update($tidsarr, array('highlight'=>$highlight_style.$highlight_color, 'moderated'=>1), true);
+				C::t('forum_thread')->update($tidsarr, array('highlight'=>$highlight_style.$highlight_color, 'moderated'=>1, 'bgcolor' => $bgcolor), true);
 				C::t('forum_forumrecommend')->update($tidsarr, array('highlight' => $highlight_style.$highlight_color));
 
 				$modaction = ($highlight_style + $highlight_color) ? ($expiration ? 'EHL' : 'HLT') : 'UHL';
@@ -334,8 +336,14 @@ if(!submitcheck('modsubmit')) {
 				$thread = $threadlist;
 				$thread = array_pop($thread);
 
-				C::t('forum_thread')->update($tidsarr, array('lastpost'=>$_G['timestamp'], 'moderated'=>1), true);
-				C::t('forum_forum')->update($_G['fid'], array('lastpost' => "$thread[tid]\t$thread[subject]\t$_G[timestamp]\t$thread[lastposter]"));
+				$expiration = checkexpiration($_GET['expirationbump'], $operation);
+				if(!$expiration) {
+					$expiration = $_G['timestamp'];
+				}
+
+
+				C::t('forum_thread')->update($tidsarr, array('lastpost'=>$expiration, 'moderated'=>1), true);
+				C::t('forum_forum')->update($_G['fid'], array('lastpost' => "$thread[tid]\t$thread[subject]\t$expiration\t$thread[lastposter]"));
 
 				$_G['forum']['threadcaches'] && deletethreadcaches($thread['tid']);
 			} elseif($operation == 'down') {
@@ -424,7 +432,7 @@ if(!submitcheck('modsubmit')) {
 				if(!$_G['group']['allowclosethread']) {
 					showmessage('no_privilege_openthread');
 				}
-				$expiration = checkexpiration($_GET['expirationopen'], $operation);
+				$expiration = checkexpiration($_GET['expirationclose'], $operation);
 				$modaction = $expiration ? 'EOP' : 'OPN';
 
 				C::t('forum_thread')->update($tidsarr, array('closed'=>0, 'moderated'=>1), true);
@@ -537,6 +545,11 @@ if(!submitcheck('modsubmit')) {
 				$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
 				foreach($posttableids as $id) {
 					C::t('forum_post')->update_by_tid($id, $tidsarr, array('fid' => $moveto));
+				}
+				$typeoptionvars = C::t('forum_typeoptionvar')->fetch_all_by_tid_optionid($tidsarr);
+				foreach($typeoptionvars as $typeoptionvar) {
+					C::t('forum_typeoptionvar')->update_by_tid($typeoptionvar['tid'], array('fid' => $moveto));
+					C::t('forum_optionvalue')->update($typeoptionvar['sortid'], $typeoptionvar['tid'], $_G['fid'], "fid='$moveto'");
 				}
 
 				if($_G['setting']['globalstick'] && $stickmodify) {
@@ -651,9 +664,9 @@ if(!submitcheck('modsubmit')) {
 				$modaction = $modactioncode[$modaction];
 				foreach($threadlist as $thread) {
 					if($operation == 'move') {
-						sendreasonpm($thread, 'reason_move', array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason, 'tofid' => $toforum['fid'], 'toname' => $toforum['name'], 'from_id' => 0, 'from_idtype' => 'movethread'));
+						sendreasonpm($thread, 'reason_move', array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason, 'tofid' => $toforum['fid'], 'toname' => $toforum['name'], 'from_id' => 0, 'from_idtype' => 'movethread'), 'post');
 					} else {
-						sendreasonpm($thread, 'reason_moderate', array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason, 'from_id' => 0, 'from_idtype' => 'moderate_'.$modtype));
+						sendreasonpm($thread, 'reason_moderate', array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason, 'from_id' => 0, 'from_idtype' => 'moderate_'.$modtype), 'post');
 					}
 				}
 			}
@@ -670,7 +683,7 @@ if(!submitcheck('modsubmit')) {
 
 function checkexpiration($expiration, $operation) {
 	global $_G;
-	if(!empty($expiration) && in_array($operation, array('recommend', 'stick', 'digest', 'highlight', 'close'))) {
+	if(!empty($expiration) && in_array($operation, array('recommend', 'stick', 'digest', 'highlight', 'close', 'open', 'bump'))) {
 		$expiration = strtotime($expiration) - $_G['setting']['timeoffset'] * 3600 + date('Z');
 		if(dgmdate($expiration, 'Ymd') <= dgmdate(TIMESTAMP, 'Ymd') || ($expiration > TIMESTAMP + 86400 * 180)) {
 			showmessage('admin_expiration_invalid', '', array('min'=>dgmdate(TIMESTAMP, 'Y-m-d'), 'max'=>dgmdate(TIMESTAMP + 86400 * 180, 'Y-m-d')));

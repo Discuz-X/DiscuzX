@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_sysmessage.php 27823 2012-02-15 06:40:26Z zhangguosheng $
+ *      $Id: helper_sysmessage.php 32459 2013-01-22 02:01:02Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ class helper_sysmessage {
 <meta name="description" content="System Message - Discuz! Board" />
 <meta name="generator" content="Discuz! " />
 <meta name="author" content="Discuz! Team and Comsenz UI Team" />
-<meta name="copyright" content="2001-2012 Comsenz Inc." />
+<meta name="copyright" content="2001-2013 Comsenz Inc." />
 <meta name="MSSmartTagsPreventParsing" content="True" />
 <meta http-equiv="MSThemeCompatible" content="Yes" />
 </head>

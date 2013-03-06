@@ -16,11 +16,13 @@ function tpl_global_usernav_extra1() {
 global $_G;
 }
 <!--{block return}-->
+<!--{if CURMODULE != 'connect'}-->
 	<!--{if $_G['connectguest']}-->
 	<span class="pipe">|</span><a href="member.php?mod=connect" target="_blank" title="{lang qqconnect:connect_member_register_button_tip}">{lang qqconnect:connect_register_profile}</a><span class="pipe">|</span><a href="member.php?mod=connect&ac=bind" target="_blank" title="{lang qqconnect:connect_member_loginbind_button_tip}">{lang qqconnect:connect_register_bind}</a>
 	<!--{else}-->
 	<span class="pipe">|</span><a href="connect.php?mod=config" target="_blank"><img src="{IMGDIR}/qq_bind_small.gif" class="qq_bind" align="absmiddle" alt="{lang qqconnect:connect_config}" /></a>
 	<!--{/if}-->
+<!--{/if}-->
 <!--{/block}-->
 <!--{eval return $return;}-->
 {eval
@@ -342,6 +344,7 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 }
 <!--{block return}-->
 	<!--{if $_G['member']['conisbind'] && $_G['member']['conuinsecret']}-->
+		<a href="{$_G[connect][qq_share_url]}" id="k_share_to_qq" title="{lang qqconnect:connect_viewthread_share_to_qq}" target="_blank"><i><img src="{IMGDIR}/qq_share.png" alt="{lang qqconnect:connect_viewthread_share_to_qq}" />{lang qqconnect:connect_viewthread_share_to_qq}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][qzone_share_url]}" id="k_qqshare" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][weibo_share_url]}" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][pengyou_share_url]}" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
@@ -395,6 +398,7 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 		});
 		</script>
 	<!--{else}-->
+		<a href="{$_G[connect][qq_share_url]}" id="k_share_to_qq" title="{lang qqconnect:connect_viewthread_share_to_qq}" target="_blank"><i><img src="{IMGDIR}/qq_share.png" alt="{lang qqconnect:connect_viewthread_share_to_qq}" />{lang qqconnect:connect_viewthread_share_to_qq}</i></a>
 		<a href="javascript:void(0);" id="k_qqshare" onclick="postToQzone();" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
 		<a href="javascript:void(0)" onclick="postToWb();" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
 		<a href="javascript:void(0);" onclick="postToPengyou();" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
@@ -498,14 +502,9 @@ $connect_openid = $_G['qc']['connect_openid'];
 	<div class="rfm">
 		<table>
 			<tr>
-				<th>{lang qqconnect:connect_register_avatar}:</th>
+				<th></th>
 				<td>
-					<img src="{$_G[connect][avatar_url]}/$connect_app_id/$connect_openid" width="48" height="48" />
-					<p>
-						<label for="use_qzone_avatar"><input type="checkbox" name="use_qzone_avatar" id="use_qzone_avatar" class="pc" value="1" checked="checked" tabindex="1" /> {lang qqconnect:connect_register_use_qzone_avatar}</label>
-						&nbsp;
-						<label for="use_qqshow"><input type="checkbox" name="use_qqshow" id="use_qqshow" class="pc" value="1" checked="checked" tabindex="1" /> {lang qqconnect:connect_register_use_qqshow}</label>
-					</p>
+					<label  for="use_qzone_avatar_qqshow"><input type="checkbox" name="use_qzone_avatar_qqshow" id="use_qzone_avatar_qqshow" class="pc" value="1" checked="checked" tabindex="1" />‰ΩøÁî®QQÂ§¥ÂÉèÂíåQQÁßÄ</label>
 				</td>
 			</tr>
 		</table>
@@ -525,33 +524,36 @@ global $_G;
 $loginhash = 'L'.random(4);
 $change_qq_url = $_G['connect']['discuz_change_qq_url'];
 $qq_nick = $_G['qc']['qq_nick'];
+$connect_app_id = $_G['qc']['connect_app_id'];
+$connect_openid = $_G['qc']['connect_openid'];
+$connect_tab_1 = $_GET['ac'] != 'bind' && $_G['setting']['regconnect'] ? ' class="a"' : '';
+$connect_tab_2 = $_GET['ac'] == 'bind' ? ' class="a"' : '';
 }
 <!--{block js2}-->
-	<!--{if $_GET['ac'] == 'bind'}-->
-	<div class="bm_h bbs">
-		<h3 class="xs2">{lang qqconnect:connect_register_bind}</h3>
-	</div>
-	<div class="rfm" id="connect_member_loginbind_tip">
-		<table>
-			<tr>
-				<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
-				<td>{lang qqconnect:connect_member_loginbind_tip}</td>
-			</tr>
-		</table>
-	</div>
-	<!--{elseif $_G['setting']['regconnect']}-->
-	<div class="bm_h bbs" id="main_hnav">
-		<h3 id="layer_reginfo_t" class="xs2">
-			{lang qqconnect:connect_register_profile}
-		</h3>
-	</div>
-	<div class="rfm" id="connect_member_register_tip" style="display:block;">
-		<table>
-			<tr>
-				<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
-				<td>{lang qqconnect:connect_member_register_tip}</td>
-			</tr>
-		</table>
+	<style>
+		.loggingbox { width: 760px; margin: 40px auto 0; }
+		.loging_tit { border-bottom: 1px solid #CCC; _overflow:hidden; }
+		.ie_all .loging_tit { height:66px;}
+		.loggingbox .fm_box { border-bottom:0; padding: 20px 0; }
+		.loggingbox .welcome { font-size:14px; width:100%; line-height:30px;}
+		.loggingbox .welcome span { font-size:12px; }
+		.loggingbox .avt img { margin: 0 5px 5px 0; padding:0; border:0; width:60px; height:60px; }
+		.loggingbox .tb{ border-bottom: 0; margin-top: 0; padding-left: 0px; }
+		.loggingbox .tb a { background:#F6F6F6; padding:0 20px; }
+		.loggingbox .tb .a a { background:#FFF; }
+	</style>
+	<!--{if $_GET['ac'] == 'bind' || $_G['setting']['regconnect']}-->
+	<div id="loggingbox" class="loggingbox">
+		<div class="loging_tit cl">
+			<div class="z avt" style="display:block;"><img src="{$_G[connect][avatar_url]}/$connect_app_id/$connect_openid" width="48" height="48" /></div>
+			<div class="z">
+				<p class="welcome mbn cl" style="clear:both; width:100%; "><strong>Hi</strong>,<strong>$_G['member']['username']</strong>Ôºå<span class="xg2">{lang connect_member_login_tip}</span></p>
+				<ul class="tb cl z">
+					<li id="connect_tab_1"$connect_tab_1><a id="loginlist" href="javascript:;" onclick="connect_switch(1);this.blur();" tabindex="900">{lang connect_register_profile}</a></li>
+					<li id="connect_tab_2"$connect_tab_2><a id="loginlist2" href="javascript:;" onclick="connect_switch(2);this.blur();" tabindex="900">{lang connect_register_bind}</a></li>
+				</ul>
+			</div>
+		</div>
 	</div>
 	<!--{/if}-->
 <!--{/block}-->
@@ -672,17 +674,23 @@ $js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
 				$('returnmessage4').innerHTML='';
 				if(op == 1) {
 					$('loginform_$loginhash').style.display='none';$('registerform').style.display='block';
+					$('connect_tab_1').className = 'a';
+					$('connect_tab_2').className = '';
+					//$('connect_login_register_tip').style.display = '';
+					//$('connect_login_bind_tip').style.display = 'none';
+					
 				} else {
 					$('loginform_$loginhash').style.display='block';$('registerform').style.display='none';
+					$('connect_tab_2').className = 'a';
+					$('connect_tab_1').className = '';
+					//$('connect_login_register_tip').style.display = 'none';
+					//$('connect_login_bind_tip').style.display = '';
 				}
 			}
 			function connect_use_available(value) {
 				$('{$_G['setting']['reginput']['username']}').value = value;
 				checkusername(value);
 			}
-			<!--{if !$_G['setting']['regconnect'] || $_GET['ac'] == 'bind'}-->
-				connect_switch(2);
-			<!--{/if}-->
 			<!--{if $_G['qc']['uinlimit']}-->
 				$('registerformsubmit').disabled = true;
 			<!--{/if}-->
@@ -722,7 +730,7 @@ function tpl_spacecp_profile_bottom() {
 <!--{block return}-->
 	<script type="text/javascript">
 	function connect_handle_get_weibosign(response, ajax) {
-		// ∑µªÿ÷µ–Œ»Á: errCode=XX&result=XX
+		// ËøîÂõûÂÄºÂΩ¢Â¶Ç: errCode=XX&result=XX
 		if (typeof(response) == "string" && response.indexOf("&") > 0) {
 
 			var errCode = response.substring(0, response.indexOf("&"));
@@ -739,7 +747,7 @@ function tpl_spacecp_profile_bottom() {
 		if (response.errCode == '0') {
 			seditor_insertunit('sightml', response.result);
 		} else {
-			// «Î«Û ß∞‹
+			// ËØ∑Ê±ÇÂ§±Ë¥•
 			showDialog('{lang qqconnect:connect_wbsign_no_account}');
 		}
 	}

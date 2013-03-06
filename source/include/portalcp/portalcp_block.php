@@ -361,6 +361,13 @@ if($op == 'block') {
 		if(!empty($_POST['ids'])) {
 			C::t('common_block_item_data')->delete_by_dataid_bid($_POST['ids'], $bid);
 		}
+
+		$displayorder = array_map('intval', $_POST['displayorder']);
+		foreach($displayorder  as $dataid => $displayorder) {
+			if($displayorder !== intval($_POST['olddisplayorder'][$dataid])) {
+				C::t('common_block_item_data')->update($dataid, array('displayorder' => $displayorder));
+			}
+		}
 		showmessage('do_success', "portal.php?mod=portalcp&ac=block&op=itemdata&bid=$bid&page=$page");
 	}
 

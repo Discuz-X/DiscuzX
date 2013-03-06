@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_topic.php 27332 2012-01-16 09:24:24Z zhangguosheng $
+ *      $Id: portal_topic.php 32718 2013-03-04 09:21:06Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,6 +37,10 @@ if($_GET['diy'] == 'yes' && $topic['uid'] != $_G['uid'] && !$_G['group']['allowm
 	showmessage('topic_edit_nopermission');
 }
 
+if($topic['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy'])) {
+	dheader('location:'.fetch_topic_url($topic));
+}
+
 $topicid = intval($topic['topicid']);
 
 C::t('portal_topic')->increase($topicid, array('viewnum' => 1));
@@ -50,12 +54,18 @@ $attachtags = $aimgs = array();
 $seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
 $secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
 
+
+if(isset($_G['makehtml'])) {
+	helper_makehtml::portal_topic($topic);
+}
+
 $file = 'portal/portal_topic_content:'.$topicid;
 $tpldirectory = '';
 $primaltplname = $topic['primaltplname'];
 if(strpos($primaltplname, ':') !== false) {
 	list($tpldirectory, $primaltplname) = explode(':', $primaltplname);
 }
+$topicurl = fetch_topic_url($topic);
 include template('diy:'.$file, NULL, $tpldirectory, NULL, $primaltplname);
 
 function portaltopicgetcomment($topcid, $limit = 20, $start = 0) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_image.php 31961 2012-10-26 06:32:42Z monkey $
+ *      $Id: forum_image.php 32531 2013-02-06 10:15:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || empty($_GET['aid']) || empty($_GET['size']) || empty($_GET['key'])) {
@@ -18,9 +18,7 @@ $type = !empty($_GET['type']) ? $_GET['type'] : 'fixwr';
 list($w, $h) = explode('x', $_GET['size']);
 $dw = intval($w);
 $dh = intval($h);
-$thumbfile = 'image/'.$daid.'_'.$dw.'_'.$dh.'.jpg';
-$parse = parse_url($_G['setting']['attachurl']);
-$attachurl = !isset($parse['host']) ? $_G['siteurl'].$_G['setting']['attachurl'] : $_G['setting']['attachurl'];
+$thumbfile = 'image/'.helper_attach::makethumbpath($daid, $dw, $dh);$attachurl = helper_attach::attachpreurl();
 if(!$nocache) {
 	if(file_exists($_G['setting']['attachdir'].$thumbfile)) {
 		dheader('location: '.$attachurl.$thumbfile);

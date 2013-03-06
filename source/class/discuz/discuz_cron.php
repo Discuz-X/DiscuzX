@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_cron.php 25833 2011-11-24 01:12:09Z monkey $
+ *      $Id: discuz_cron.php 30314 2012-05-22 03:12:44Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,17 +31,25 @@ class discuz_cron
 		if($cron) {
 
 			$cron['filename'] = str_replace(array('..', '/', '\\'), '', $cron['filename']);
-			$cronfile = DISCUZ_ROOT.'./source/include/cron/'.$cron['filename'];
-
-			$cron['minute'] = explode("\t", $cron['minute']);
-			self::setnextime($cron);
-
-			@set_time_limit(1000);
-			@ignore_user_abort(TRUE);
-
-			if(!@include $cronfile) {
-				return false;
+			$efile = explode(':', $cron['filename']);
+			if(count($efile) > 1) {
+				$cronfile = in_array($efile[0], $_G['setting']['plugins']['available']) ? DISCUZ_ROOT.'./source/plugin/'.$efile[0].'/cron/'.$efile[1] : '';
+			} else {
+				$cronfile = DISCUZ_ROOT.'./source/include/cron/'.$cron['filename'];
 			}
+
+			if($cronfile) {
+				$cron['minute'] = explode("\t", $cron['minute']);
+				self::setnextime($cron);
+
+				@set_time_limit(1000);
+				@ignore_user_abort(TRUE);
+
+				if(!@include $cronfile) {
+					return false;
+				}
+			}
+
 		}
 
 		self::nextcron();

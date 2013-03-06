@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Notification.php 31447 2012-08-28 09:03:49Z songlixin $
+ *      $Id: Notification.php 31448 2012-08-28 09:04:57Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -45,10 +45,10 @@ class Cloud_Service_Client_Notification extends Cloud_Service_Client_Restful {
 				'dateline' => $dateline,
 				'deviceToken' => $this->getUserDeviceToken($siteUid),
 				'extra' => array(
-						'isAdminGroup' => getglobal('adminid'),
-						'groupId' => getglobal('groupid'),
-						'groupName' => getglobal('group/grouptitle')
-					)
+							'isAdminGroup' => getglobal('adminid'),
+							'groupId' => getglobal('groupid'),
+							'groupName' => getglobal('group/grouptitle')
+						)
 			);
 		if($extra) {
 			foreach($extra as $key => $value) {

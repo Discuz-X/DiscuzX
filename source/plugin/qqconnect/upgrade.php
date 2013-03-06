@@ -50,20 +50,20 @@ CREATE TABLE IF NOT EXISTS pre_common_connect_guest (
 ) TYPE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `pre_connect_disktask` (
- `taskid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ÈÎÎñID',
- `aid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '¸½¼þID',
- `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ÓÃ»§ID',
+ `taskid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä»»åŠ¡ID',
+ `aid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'é™„ä»¶ID',
+ `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ç”¨æˆ·ID',
  `openid` char(32) NOT NULL DEFAULT '' COMMENT 'openId',
- `filename` varchar(255) NOT NULL DEFAULT '' COMMENT '¸½¼þÃû³Æ',
- `verifycode` char(32) NOT NULL DEFAULT '' COMMENT 'ÏÂÔØÑéÖ¤Âë',
- `status` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT 'ÏÂÔØ×´Ì¬',
- `dateline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Ìí¼ÓÈÎÎñµÄÊ±¼ä',
- `downloadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ÏÂÔØÍê³ÉÊ±¼ä',
- `extra` text COMMENT '±£Áô×Ö¶Î',
+ `filename` varchar(255) NOT NULL DEFAULT '' COMMENT 'é™„ä»¶åç§°',
+ `verifycode` char(32) NOT NULL DEFAULT '' COMMENT 'ä¸‹è½½éªŒè¯ç ',
+ `status` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT 'ä¸‹è½½çŠ¶æ€',
+ `dateline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'æ·»åŠ ä»»åŠ¡çš„æ—¶é—´',
+ `downloadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ä¸‹è½½å®Œæˆæ—¶é—´',
+ `extra` text COMMENT 'ä¿ç•™å­—æ®µ',
  PRIMARY KEY (`taskid`),
  KEY `openid` (`openid`),
  KEY `status` (`status`)
-) TYPE=MyISAM COMMENT='ÍøÅÌÏÂÔØÈÎÎñ±í';
+) TYPE=MyISAM COMMENT='ç½‘ç›˜ä¸‹è½½ä»»åŠ¡è¡¨';
 
 EOF;
 
@@ -71,7 +71,6 @@ runquery($sql);
 
 $sql = '';
 
-// QQÐã×Ö¶Î
 $columnexisted = false;
 
 $query = DB::query("SHOW COLUMNS FROM ".DB::table('common_member_connect'));
@@ -83,7 +82,6 @@ while($temp = DB::fetch($query)) {
 }
 $sql .= !$columnexisted ? "ALTER TABLE ".DB::table('common_member_connect')." ADD COLUMN conisqqshow tinyint(1) unsigned NOT NULL default '0';\n" : '';
 
-// QQêÇ³Æ×Ö¶Î
 $query = DB::query("SHOW COLUMNS FROM ".DB::table('common_connect_guest'));
 while($row = DB::fetch($query)) {
 	if($row['Field'] == 'conqqnick') {
@@ -97,10 +95,8 @@ if($sql) {
 	runquery($sql);
 }
 
-// ´´½¨QQ»¥Áª¿ìËÙµÇÂ¼ÓÃ»§×é
 $connect = C::t('common_setting')->fetch('connect', true);
 
-// Î¢²©»ØÁ÷×Ö¶Î
 if (!array_key_exists('reply', $connect['t'])) {
 	$connect['t']['reply'] = 1;
 }
@@ -109,7 +105,6 @@ if (!array_key_exists('reply_showauthor', $connect['t'])) {
 }
 
 $needCreateGroup = false;
-// ¼ì²âÓÃ»§×éÊÇ·ñ´æÔÚ
 if ($connect['guest_groupid']) {
 	$group = C::t('common_usergroup')->fetch($connect['guest_groupid']);
 	if (!$group) {
@@ -122,7 +117,6 @@ if ($connect['guest_groupid']) {
 $newConnect = array();
 include DISCUZ_ROOT . 'source/language/lang_admincp_cloud.php';
 $name = $extend_lang['connect_guest_group_name'];
-// ´´½¨ÓÃ»§×é
 if ($needCreateGroup) {
 	$userGroupData = array(
 		'type' => 'special',
@@ -133,22 +127,19 @@ if ($needCreateGroup) {
 	);
 	$newGroupId = C::t('common_usergroup')->insert($userGroupData, true);
 
-	// ÓÃ»§×éÈ¨ÏÞ
 	$dataField = array(
 		'groupid' => $newGroupId,
-		'allowsearch' => 2, // ÔÊÐíËÑË÷ÂÛÌ³
-		'readaccess' => 1, // ÔÄ¶ÁÈ¨ÏÞ
-		'allowgetattach' => 1, // ÏÂÔØ¸½¼þ
-		'allowgetimage' => 1, // ÏÂÔØÍ¼Æ¬
+		'allowsearch' => 2,
+		'readaccess' => 1,
+		'allowgetattach' => 1,
+		'allowgetimage' => 1,
 	);
 	C::t('common_usergroup_field')->insert($dataField);
 
-	// ±£´æÓÃ»§×é
 	$newConnect = array('guest_groupid' => $newGroupId);
 	updatecache('usergroups');
 }
 
-// ºÏ²¢¸üÐÂ×Ö¶Î
 $updateData = array_merge($connect, $newConnect);
 C::t('common_setting')->update('connect', serialize($updateData));
 updatecache('setting');

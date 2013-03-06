@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 32446 2013-01-17 08:10:12Z zhengqingpeng $
+ *      $Id: forum_ajax.php 32554 2013-02-19 10:33:44Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -276,6 +276,7 @@ if($_GET['action'] == 'checkusername') {
 		include template('common/footer_ajax');
 		exit;
 	} else {
+		$_G['forum_colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
 		$query = C::t('forum_forumfield')->fetch($fid);
 		$forum_field['threadtypes'] = dunserialize($query['threadtypes']);
 		$forum_field['threadsorts'] = dunserialize($query['threadsorts']);
@@ -296,10 +297,32 @@ if($_GET['action'] == 'checkusername') {
 			if($forum_field['threadsorts']['prefix']) {
 				$thread['threadsort'] = $forum_field['threadsorts']['types'][$thread['sortid']] ? '<em>[<a href="forum.php?mod=forumdisplay&fid='.$fid.'&filter=sortid&typeid='.$thread['sortid'].'">'.$forum_field['threadsorts']['types'][$thread['sortid']].'</a>]</em>' : '' ;
 			}
-			if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
-				$thread['threadurl'] = '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '').'" class="xst" onclick="atarget(this)">'.$thread['subject'].'</a>';
+			if($thread['highlight']) {
+				$string = sprintf('%02d', $thread['highlight']);
+				$stylestr = sprintf('%03b', $string[0]);
+
+				$thread['highlight'] = ' style="';
+				$thread['highlight'] .= $stylestr[0] ? 'font-weight: bold;' : '';
+				$thread['highlight'] .= $stylestr[1] ? 'font-style: italic;' : '';
+				$thread['highlight'] .= $stylestr[2] ? 'text-decoration: underline;' : '';
+				$thread['highlight'] .= $string[1] ? 'color: '.$_G['forum_colorarray'][$string[1]].';' : '';
+				if($thread['bgcolor']) {
+					$thread['highlight'] .= "background-color: $thread[bgcolor];";
+				}
+				$thread['highlight'] .= '"';
 			} else {
-				$thread['threadurl'] = '<a href="forum.php?mod=viewthread&amp;tid='.$thread['tid'].'" class="xst" onclick="atarget(this)">'.$thread['subject'].'</a>';
+				$thread['highlight'] = '';
+			}
+			$target = $thread['isgroup'] == 1 || $thread['forumstick'] ? ' target="_blank"' : ' onclick="atarget(this)"';
+			if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+				$thread['threadurl'] = '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '').'"'.$thread['highlight'].$target.'class="s xst z">'.$thread['subject'].'</a>';
+			} else {
+				$thread['threadurl'] = '<a href="forum.php?mod=viewthread&amp;tid='.$thread['tid'].'"'.$thread['highlight'].$target.'class="s xst z">'.$thread['subject'].'</a>';
+			}
+			if(in_array($thread['displayorder'], array(1, 2, 3, 4))) {
+				$thread['id'] = 'stickthread_'.$thread['tid'];
+			} else {
+				$thread['id'] = 'normalthread_'.$thread['tid'];
 			}
 			$thread['threadurl'] = $thread['threadtype'].$thread['threadsort'].$thread['threadurl'];
 			if(in_array('home_space', $_G['setting']['rewritestatus'])) {
@@ -512,7 +535,6 @@ EOF;
 	}
 	$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
 	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
-
 	include template('forum/ajax_quickreply');
 } elseif($_GET['action'] == 'getpost') {
 	$tid = intval($_GET['tid']);

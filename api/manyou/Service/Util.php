@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Util.php 29766 2012-04-27 02:43:58Z yexinhao $
+ *      $Id: Util.php 31728 2012-09-25 09:03:42Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,7 +28,7 @@ class Cloud_Service_Util {
 
 	}
 
-	public function generateSiteSignUrl($params = array(), $isEncode = true, $isCamelCase = false) {
+	public function generateSiteSignUrl($params = array(), $isCamelCase = false, $isReturnArray = false) {
 		global $_G;
 
 		$ts = TIMESTAMP;
@@ -58,8 +58,11 @@ class Cloud_Service_Util {
 		$params['ts'] = $ts;
 		$params['sig'] = $sig;
 
-		$url = $this->httpBuildQuery($params, '', '&');
-		return $url;
+		if(!$isReturnArray) {
+			$params = $this->httpBuildQuery($params, '', '&');
+		}
+
+		return $params;
 	}
 
 	public function redirect($url, $code = 302) {

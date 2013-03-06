@@ -109,7 +109,7 @@ $lang = array (
   'forums_threadtypes_duplicate' => '新增主题分类与现有重复',
   'threadtype_import_succeed' => '导入成功',
   'usergroups_nonexistence' => '指定的用户组不存在',
-  'usergroups_copy_source_invalid' => '您没有选择要复制的源用户组',
+  'usergroups_copy_source_invalid' => '您没有选择源用户组',
   'members_verify_succeed' => '资料审核成功 ',
   'members_verify_update_succeed' => '认证设置更新成功 ',
   'action_noaccess' => '抱歉，您无权使用此功能',
@@ -267,6 +267,9 @@ $lang = array (
   'founder_perm_member_duplicate' => '用户 {name} 已经存在更改',
   'founder_perm_gperm_update_succeed' => '管理团队权限资料更新成功 ',
   'founder_perm_notifyusers_succeed' => '管理通知接收者设置成功 ',
+
+  'founder_optimizer_setting_succeed' => '设置项优化成功 ',
+  'founder_optimizer_setting_error' => '优化中出现问题 ',
 
   'group_status_off' => '请先开启群组功能，现在转到群组设置页',
   'group_update_succeed' => '群组分类设置更新成功 ',
@@ -580,9 +583,10 @@ $lang = array (
   'trade_fee_error' => '交易设置有误',
   'reward_credits_error' => '悬赏交易积分设置有误',
   'usergroups_edit_succeed' => '用户组权限设置更新成功 ',
-  'usergroups_copy_target_invalid' => '您没有选择要复制的目标用户组',
+  'usergroups_copy_target_invalid' => '您没有选择目标用户组',
   'usergroups_copy_options_invalid' => '您没有选择要复制的项目',
   'usergroups_copy_succeed' => '用户组设置复制成功 ',
+  'usergroups_merge_succeed' => '用户组合并成功 ',
 
   'usertag_delete_succeed' => '删除标签成功',
   'usertag_merge_succeed' => '标签合并成功',

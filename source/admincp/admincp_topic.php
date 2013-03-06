@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_topic.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp_topic.php 32657 2013-02-28 06:11:29Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -129,35 +129,59 @@ if(submitcheck('opsubmit')) {
 			</table>
 		</div>
 	</form>
+	<script src="static/js/makehtml.js?1" type="text/javascript"></script>
 SEARCH;
 
 	$start = ($page-1)*$perpage;
 
 	$mpurl .= '&perpage='.$perpage;
 	$perpages = array($perpage => ' selected');
+	$maketopichtml = !empty($_G['setting']['makehtml']['flag']) && !empty($_G['setting']['makehtml']['topichtmldir']);
+
+	$subtitle = array('', 'topic_title', 'topic_domain', 'topic_name', 'topic_creator', 'topic_dateline');
+	if($maketopichtml) {
+		 $subtitle[] = 'HTML';
+	}
+	$subtitle[] = 'operation';
 
 	showformheader('topic');
 	showtableheader('topic_list');
-	showsubtitle(array('', 'topic_title', 'topic_domain', 'topic_name', 'topic_creator', 'topic_dateline', 'operation'));
+	showsubtitle($subtitle);
 
 	$multipage = '';
 	$count = C::t('portal_topic')->count_by_search_where($wherearr);
 	if($count) {
+		require_once libfile('function/portal');
+		$repairs = array();
 		foreach(C::t('portal_topic')->fetch_all_by_search_where($wherearr, $ordersql, $start, $perpage) as $topicid => $value) {
-			showtablerow('', array('class="td25"', 'class=""', 'class="td28"'), array(
+			if($maketopichtml && $value['htmlmade'] && ($htmlname = fetch_topic_url($value)) && !file_exists(DISCUZ_ROOT.'./'.$htmlname)) {
+				$value['htmlmade'] = 0;
+				$repairs[$topicid] = $topicid;
+			}
+			$tablerow = array(
 					"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$topicid\">",
-					"<a href=\"portal.php?mod=topic&topicid=$topicid\" target=\"_blank\">".$value[title]."</a>"
+					($value['htmlmade'] ? "[<a href='$htmlname' target='_blank'>HTML</a>]" : '')
+					."<a href=\"portal.php?mod=topic&topicid=$topicid\" target=\"_blank\">".$value[title]."</a>"
 					.($value['closed'] ? ' ['.cplang('topic_closed_yes').']' : ''),
 					$value['domain'] && !empty($_G['setting']['domain']['root']['topic']) ? 'http://'.$value['domain'].'.'.$_G['setting']['domain']['root']['topic'] : '',
 					$value['name'],
 					"<a href=\"home.php?mod=space&uid=$value[uid]&do=profile\" target=\"_blank\">$value[username]</a>",
 					dgmdate($value[dateline]),
-					"<a href=\"portal.php?mod=portalcp&ac=topic&topicid=$topicid\" target=\"_blank\">".cplang('topic_edit')."</a>&nbsp;&nbsp;".
+				);
+			if($maketopichtml) {
+					$tablerow[] = "<span id='mkhtml_$value[topicid]' style='color:".($value['htmlmade'] ? "blue;'>".cplang('setting_functions_makehtml_made') : "red;'>".cplang('setting_functions_makehtml_dismake'))."</span>";
+			}
+			$tablerow[] = ($maketopichtml ? ($maketopichtml && !$value['closed'] ? "<a href='javascript:void(0);' onclick=\"make_html('portal.php?mod=topic&topicid=$value[topicid]', $('mkhtml_$value[topicid]'))\">".cplang('setting_functions_makehtml_make')."</a>" : cplang('setting_functions_makehtml_make_has_closed')) : '')
+					." <a href=\"portal.php?mod=portalcp&ac=topic&topicid=$topicid\" target=\"_blank\">".cplang('topic_edit')."</a>&nbsp;".
 					"<a href=\"portal.php?mod=topic&topicid=$topicid&diy=yes\" target=\"_blank\">DIY</a>".
-					'&nbsp;&nbsp;<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/portal_topic_content_'.$value['topicid'].'&tpldirectory='.getdiydirectory($value['primaltplname']).'">'.cplang('topic_perm').'</a>',
-				));
+					'&nbsp;<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/portal_topic_content_'.$value['topicid'].'&tpldirectory='.getdiydirectory($value['primaltplname']).'">'.cplang('topic_perm').'</a>';
+			showtablerow('', array('class="td25"', 'class=""', 'class="td28"'), $tablerow);
+
 		}
 		$multipage = multi($count, $perpage, $page, $mpurl);
+		if($repairs) {
+			C::t('portal_topic')->repair_htmlmade($repairs);
+		}
 	}
 
 	$ops = cplang('operation').': '

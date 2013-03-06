@@ -4,9 +4,8 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: sub_checkpost.php 28400 2012-02-29 03:07:57Z monkey $
+ *      $Id: sub_checkpost.php 32489 2013-01-29 03:57:16Z monkey $
  */
-//note checkpost.sub @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_forum.php 29580 2012-04-20 02:53:59Z svn_project_zhangjie $
+ *      $Id: table_forum_forum.php 31920 2012-10-24 09:18:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -154,7 +154,7 @@ class table_forum_forum extends discuz_table
 		DB::query("UPDATE ".DB::table($this->_table)." SET threads='0', posts='0' WHERE type='group'");
 	}
 	public function update_forum_counter($fid, $threads = 0, $posts = 0, $todayposts = 0, $modwork = 0, $favtimes = 0) {
-		if(!intval($fid)) {
+		if(!dintval($fid)) {
 			return false;
 		}
 		$addsql = array();
@@ -182,6 +182,10 @@ class table_forum_forum extends discuz_table
 			return false;
 		}
 		DB::query("UPDATE ".DB::table($this->_table)." SET commoncredits=commoncredits+1 WHERE ".DB::field('fid', $fid));
+	}
+
+	public function update_oldrank_and_yesterdayposts() {
+		DB::query("UPDATE ".DB::table($this->_table).' SET oldrank=rank,yesterdayposts=todayposts');
 	}
 	public function update_group_level($levelid, $fid) {
 		if(!intval($levelid) || !intval($fid)) {

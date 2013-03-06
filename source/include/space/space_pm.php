@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 30277 2012-05-18 02:57:25Z monkey $
+ *      $Id: space_pm.php 32547 2013-02-19 07:28:44Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,12 +67,13 @@ if($_GET['subop'] == 'view') {
 				$perpage = 50;
 			}
 			$perpage = mob_perpage($perpage);
+			$count = uc_pm_view_num($_G['uid'], $plid, 1);
 			if(!$daterange) {
-				$count = uc_pm_view_num($_G['uid'], $plid, 1);
 				if(!$page) {
 					$page = ceil($count/$perpage);
 				}
 				$list = uc_pm_view($_G['uid'], 0, $plid, 5, ceil($count/$perpage)-$page+1, $perpage, $type, 1);
+				$multi = pmmulti($count, $perpage, $page, "home.php?mod=space&do=pm&subop=view&plid=$plid&type=$type");
 			} else {
 				$list = uc_pm_view($_G['uid'], 0, $plid, 5, ceil($count/$perpage)-$page+1, $perpage, $type, 1);
 				$chatpmmember = uc_pm_chatpmmemberlist($_G['uid'], $plid);
@@ -91,7 +92,6 @@ if($_GET['subop'] == 'view') {
 				$membernum = count($chatpmmemberlist);
 				$subject = $list[0]['subject'];
 				$refreshtime = $_G['setting']['chatpmrefreshtime'];
-				$multi = pmmulti($count, $perpage, $page, "home.php?mod=space&do=pm&subop=view&plid=$plid&type=$type");
 
 			}
 		}
@@ -196,7 +196,6 @@ if(!empty($list)) {
 		$list[$key] = $value;
 	}
 }
-
 include_once template("diy:home/space_pm");
 
 function pmmulti($count, $perpage, $curpage, $mpurl) {

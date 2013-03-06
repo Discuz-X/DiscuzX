@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_seccode.php 28864 2012-03-15 09:04:45Z monkey $
+ *      $Id: misc_seccode.php 30388 2012-05-25 06:45:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,12 +36,19 @@ if($_GET['action'] == 'update') {
 			$message = 'seccode_player';
 		} else {
 			if(!is_numeric($_G['setting']['seccodedata']['type'])) {
-				if(file_exists($codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class'))) {
+				$etype = explode(':', $_G['setting']['seccodedata']['type']);
+				if(count($etype) > 1) {
+					$codefile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/seccode/seccode_'.$etype[1].'.php';
+					$class = $etype[1];
+				} else {
+					$codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class');
+					$class = $_G['setting']['seccodedata']['type'];
+				}
+				if(file_exists($codefile)) {
 					@include_once $codefile;
-					$class = 'seccode_'.$_G['setting']['seccodedata']['type'];
+					$class = 'seccode_'.$class;
 					if(class_exists($class)) {
 						$code = new $class();
-						$code->setting = $_G['setting']['seccodedata']['extra'][$_G['setting']['seccodedata']['type']];
 						if(method_exists($code, 'make')) {
 							include template('common/header_ajax');
 							$code->make($_GET['idhash']);

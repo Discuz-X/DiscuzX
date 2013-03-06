@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 27939 2012-02-17 03:03:07Z liulanbo $
+ *      $Id: admincp_blog.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -223,7 +223,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 			$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
 			$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
 			do{
-				$query = C::t('home_blog')->fetch_all_by_search(1, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, $orderby, $ordersc, (($pagetmp - 1) * $perpage), $perpage);
+				$query = C::t('home_blog')->fetch_all_by_search(1, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, $orderby, $ordersc, (($pagetmp - 1) * $perpage), $perpage, null, null, null, null, false, array(0, 1));
 				$pagetmp--;
 			} while(!count($query) && $pagetmp);
 			$blogs = '';
@@ -262,11 +262,11 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$blog['friend']
 				), TRUE);
 			}
-			$blogcount = C::t('home_blog')->count_all_by_search($blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit);
+			$blogcount = C::t('home_blog')->count_all_by_search($blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, null, null, null, false, array(0, 1));
 			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog".($perpage ? '&perpage='.$perpage : '').$muticondition);
 		} else {
 			$blogcount = 0;
-			$query = C::t('home_blog')->fetch_all_by_search(2, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit);
+			$query = C::t('home_blog')->fetch_all_by_search(2, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, null, null, 0, 0, null, null, null, null, false, array(0, 1));
 			foreach($query as $blog) {
 				$blogids .= ','.$blog['blogid'];
 				$blogcount++;

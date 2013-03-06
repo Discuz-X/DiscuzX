@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: OAuth.php 32189 2012-11-26 08:08:25Z liudongdong $
+ *      $Id: OAuth.php 32188 2012-11-26 08:08:12Z liudongdong $
  */
 
 if(!defined('IN_DISCUZ')) {

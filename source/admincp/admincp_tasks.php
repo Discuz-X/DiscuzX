@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tasks.php 28704 2012-03-08 07:16:32Z chenmengshu $
+ *      $Id: admincp_tasks.php 30363 2012-05-24 07:16:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -129,8 +129,14 @@ if(!($operation)) {
 
 	$task_name = $task_description = $task_icon = $task_period = $task_periodtype = $task_conditions = '';
 	if(in_array($_GET['script'], $custom_scripts)) {
-		require_once libfile('task/'.$_GET['script'], 'class');
-		$taskclass = 'task_'.$_GET['script'];
+		$escript = explode(':', $_GET['script']);
+		if(count($escript) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+			$taskclass = 'task_'.$escript[1];
+		} else {
+			require_once libfile('task/'.$_GET['script'], 'class');
+			$taskclass = 'task_'.$_GET['script'];
+		}
 		$task = new $taskclass;
 		$task_name = lang('task/'.$_GET['script'], $task->name);
 		$task_description = lang('task/'.$_GET['script'], $task->description);
@@ -156,7 +162,12 @@ if(!($operation)) {
 		showtableheader('tasks_add_basic', 'fixpadding');
 		showsetting('tasks_add_name', 'name', $task_name, 'text');
 		showsetting('tasks_add_desc', 'description', $task_description, 'textarea');
-		showsetting('tasks_add_icon', 'iconnew', $task_icon, 'text');
+		if(count($escript) > 1 && file_exists(DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif')) {
+			$defaulticon = 'source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif';
+		} else {
+			$defaulticon = 'static/image/task/task.gif';
+		}
+		showsetting('tasks_add_icon', 'iconnew', $task_icon, 'text', '', 0, cplang('tasks_add_icon_comment', array('defaulticon' => $defaulticon)));
 		showsetting('tasks_add_starttime', 'starttime', '', 'calendar', '', 0, '', 1);
 		showsetting('tasks_add_endtime', 'endtime', '', 'calendar', '', 0, '', 1);
 		showsetting('tasks_add_periodtype', array('periodtype', array(
@@ -339,12 +350,18 @@ if(!($operation)) {
 			array(array('menu' => 'add', 'submenu' => $submenus)),
 			array('nav_task_type', 'tasks&operation=type', 0)
 		));
+		$escript = explode(':', $task['scriptname']);
 
 		showformheader('tasks&operation=edit&id='.$id);
 		showtableheader(cplang('tasks_edit').' - '.$task['name'], 'fixpadding');
 		showsetting('tasks_add_name', 'name', $task['name'], 'text');
 		showsetting('tasks_add_desc', 'description', $task['description'], 'textarea');
-		showsetting('tasks_add_icon', 'iconnew', $task['icon'], 'text');
+		if(count($escript) > 1 && file_exists(DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif')) {
+			$defaulticon = 'source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif';
+		} else {
+			$defaulticon = 'static/image/task/task.gif';
+		}
+		showsetting('tasks_add_icon', 'iconnew', $task['icon'], 'text', '', 0, cplang('tasks_add_icon_comment', array('defaulticon' => $defaulticon)));
 		showsetting('tasks_add_starttime', 'starttime', $task['starttime'] ? dgmdate($task['starttime'], 'Y-m-d H:i') : '', 'calendar', '', 0, '', 1);
 		showsetting('tasks_add_endtime', 'endtime', $task['endtime'] ? dgmdate($task['endtime'], 'Y-m-d H:i') : '', 'calendar', '', 0, '', 1);
 		showsetting('tasks_add_periodtype', array('periodtype', array(
@@ -435,8 +452,13 @@ if(!($operation)) {
 
 		showtitle('tasks_add_conditions');
 
-		require_once libfile('task/'.$task['scriptname'], 'class');
-		$taskclass = 'task_'.$task['scriptname'];
+		if(count($escript) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+			$taskclass = 'task_'.$escript[1];
+		} else {
+			require_once libfile('task/'.$task['scriptname'], 'class');
+			$taskclass = 'task_'.$task['scriptname'];
+		}
 		$taskcv = new $taskclass;
 
 		if($taskvars['complete']) {
@@ -569,8 +591,14 @@ if(!($operation)) {
 		cpmsg('tasks_install_duplicate', '', 'error');
 	}
 
-	require_once libfile('task/'.$_GET['script'], 'class');
-	$taskclass = 'task_'.$_GET['script'];
+	$escript = explode(':', $_GET['script']);
+	if(count($escript) > 1) {
+		include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+		$taskclass = 'task_'.$escript[1];
+	} else {
+		require_once libfile('task/'.$_GET['script'], 'class');
+		$taskclass = 'task_'.$_GET['script'];
+	}
 	$task = new $taskclass;
 	if(method_exists($task, 'install')) {
 		$task->install();
@@ -597,8 +625,14 @@ if(!($operation)) {
 		C::t('common_mytask')->delete(0, $ids);
 	}
 
-	require_once libfile('task/'.$_GET['script'], 'class');
-	$taskclass = 'task_'.$_GET['script'];
+	$escript = explode(':', $_GET['script']);
+	if(count($escript) > 1) {
+		include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+		$taskclass = 'task_'.$escript[1];
+	} else {
+		require_once libfile('task/'.$_GET['script'], 'class');
+		$taskclass = 'task_'.$_GET['script'];
+	}
 	$task = new $taskclass;
 	if(method_exists($task, 'uninstall')) {
 		$task->uninstall();
@@ -610,8 +644,14 @@ if(!($operation)) {
 
 } elseif($operation == 'upgrade' && $_GET['script']) {
 
-	require_once libfile('task/'.$_GET['script'], 'class');
-	$taskclass = 'task_'.$_GET['script'];
+	$escript = explode(':', $_GET['script']);
+	if(count($escript) > 1) {
+		include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+		$taskclass = 'task_'.$escript[1];
+	} else {
+		require_once libfile('task/'.$_GET['script'], 'class');
+		$taskclass = 'task_'.$_GET['script'];
+	}
 	$task = new $taskclass;
 
 	if($custom_types[$_GET['script']]['version'] >= $task->version) {
@@ -635,23 +675,34 @@ if(!($operation)) {
 
 function gettasks() {
 	global $_G;
-	$dir = DISCUZ_ROOT.'./source/class/task';
-	$taskdir = dir($dir);
+	$checkdirs = array_merge(array(''), $_G['setting']['plugins']['available']);
 	$tasks = array();
-	while($entry = $taskdir->read()) {
-		if(!in_array($entry, array('.', '..')) && preg_match("/^task\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
-			@include_once $dir.'/'.$entry;
-			$taskclass = substr($entry, 0, -4);
-			if(class_exists($taskclass)) {
-				$task = new $taskclass();
-				$_GET['script'] = substr($taskclass, 5);
-				$tasks[$entry] = array(
-					'class' => $_GET['script'],
-					'name' => lang('task/'.$_GET['script'], $task->name),
-					'version' => $task->version,
-					'copyright' => lang('task/'.$_GET['script'], $task->copyright),
-					'filemtime' => @filemtime($dir.'/'.$entry)
-				);
+	foreach($checkdirs as $key) {
+		if($key) {
+			$dir = DISCUZ_ROOT.'./source/plugin/'.$key.'/task';
+		} else {
+			$dir = DISCUZ_ROOT.'./source/class/task';
+		}
+		if(!file_exists($dir)) {
+			continue;
+		}
+		$taskdir = dir($dir);
+		while($entry = $taskdir->read()) {
+			if(!in_array($entry, array('.', '..')) && preg_match("/^task\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
+				@include_once $dir.'/'.$entry;
+				$taskclass = substr($entry, 0, -4);
+				if(class_exists($taskclass)) {
+					$task = new $taskclass();
+					$script = substr($taskclass, 5);
+					$script = ($key ? $key.':' : '').$script;
+					$tasks[$entry] = array(
+						'class' => $script,
+						'name' => lang('task/'.$script, $task->name),
+						'version' => $task->version,
+						'copyright' => lang('task/'.$script, $task->copyright),
+						'filemtime' => @filemtime($dir.'/'.$entry)
+					);
+				}
 			}
 		}
 	}

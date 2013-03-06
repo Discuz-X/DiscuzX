@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_moderate.php 31857 2012-10-17 07:23:56Z monkey $
+ *      $Id: admincp_moderate.php 32501 2013-01-29 09:51:00Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -285,6 +285,20 @@ function callback_js($id) {
 </script>
 EOT;
 	return $js;
+}
+
+function moderateswipe($type, $ids) {
+	if($type == 'pid') {
+		$exist_ids = array_keys(C::t('forum_post')->fetch_all(0, $ids));
+	} elseif($type == 'tid') {
+		$exist_ids = array_keys(C::t('forum_thread')->fetch_all($ids));
+	}
+	$remove_ids = array_diff($ids, $exist_ids);
+	if($remove_ids) {
+		return C::t('common_moderate')->delete($remove_ids, $type);
+	} else {
+		return 0;
+	}
 }
 
 ?>

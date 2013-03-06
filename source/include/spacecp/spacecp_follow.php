@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_follow.php 32002 2012-10-30 07:53:32Z zhangjie $
+ *      $Id: spacecp_follow.php 32667 2013-02-28 07:07:30Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -119,13 +119,14 @@ if($op == 'add') {
 			$fid = intval($_GET['fid']);
 		}
 		loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'domainwhitelist', 'albumcategory'));
+
+		if(empty($_GET['syncbbs'])) {
+			$_GET['subject'] = cutstr($_GET['message'], 75, '');
+		}
 		$_POST['replysubmit'] = true;
 		$_GET['fid'] = $fid;
 		$_GET['action'] = 'newthread';
 		$_GET['allownoticeauthor'] = '1';
-		if(empty($_GET['syncbbs'])) {
-			$_GET['subject'] = cutstr($_GET['message'], 75, '');
-		}
 		include_once libfile('function/forum');
 		require_once libfile('function/post');
 		loadforum();
@@ -162,7 +163,6 @@ if($op == 'add') {
 		if($count && empty($_GET['addnewreply'])) {
 			showmessage('follow_only_allow_the_relay_time');
 		}
-
 		if($_GET['addnewreply']) {
 
 			$_G['setting']['seccodestatus'] = 0;

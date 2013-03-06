@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_domain.php 29304 2012-04-01 03:31:07Z zhengqingpeng $
+ *      $Id: admincp_domain.php 32699 2013-03-01 02:54:05Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -27,7 +27,7 @@ if($operation == 'app') {
 			'portal' => $navs[1]['navname'],
 			'forum' => $navs[2]['navname'],
 			'group' => $navs[3]['navname'],
-			'home' => $navs[4]['navname'],
+			'home' => $lang['nav_home'],
 			'mobile' => $lang['mobile'],
 			'default' => $lang['default']
 		);

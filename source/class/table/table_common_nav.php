@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_nav.php 27972 2012-02-20 01:49:49Z zhengqingpeng $
+ *      $Id: table_common_nav.php 31560 2012-09-10 03:47:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,6 +41,9 @@ class table_common_nav extends discuz_table
 
 	public function fetch_all_by_navtype_parentid($navtype, $parentid) {
 		return DB::fetch_all('SELECT * FROM %t WHERE navtype=%d AND parentid=%d ORDER BY displayorder', array($this->_table, $navtype, $parentid), $this->_pk);
+	}
+	public function fetch_all_by_navtype_type($navtype, $type) {
+		return DB::fetch_all('SELECT * FROM %t WHERE navtype=%d AND type=%d', array($this->_table, $navtype, $type), $this->_pk);
 	}
 	public function fetch_all_mainnav() {
 		return DB::fetch_all('SELECT * FROM %t WHERE navtype=0 AND (available=1 OR type=0) AND parentid=0 ORDER BY displayorder', array($this->_table), $this->_pk);

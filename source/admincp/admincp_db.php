@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 28648 2012-03-07 02:24:19Z monkey $
+ *      $Id: admincp_db.php 31634 2012-09-17 06:43:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -258,12 +258,22 @@ if($operation == 'export') {
 							@unlink($link);
 						}
 					} else {
+						C::t('common_cache')->insert(array(
+							'cachekey' => 'db_export',
+							'cachevalue' => serialize(array('dateline' => $_G['timestamp'])),
+							'dateline' => $_G['timestamp'],
+						), false, true);
 						cpmsg('database_export_multivol_succeed', '', 'succeed', array('volume' => $volume, 'filelist' => $filelist));
 					}
 					unset($sqldump, $zip, $content);
 					fclose($fp);
 					@touch('./data/'.$backupdir.'/index.htm');
 					$filename = $zipfilename;
+					C::t('common_cache')->insert(array(
+						'cachekey' => 'db_export',
+						'cachevalue' => serialize(array('dateline' => $_G['timestamp'])),
+						'dateline' => $_G['timestamp'],
+					), false, true);
 					cpmsg('database_export_zip_succeed', '', 'succeed', array('filename' => $filename));
 				} else {
 					@touch('./data/'.$backupdir.'/index.htm');
@@ -271,6 +281,11 @@ if($operation == 'export') {
 						$filename = sprintf($_GET['usezip'] == 2 ? $backupfilename."-%s".'.zip' : $dumpfile, $i);
 						$filelist .= "<li><a href=\"$filename\">$filename</a></li>\n";
 					}
+					C::t('common_cache')->insert(array(
+						'cachekey' => 'db_export',
+						'cachevalue' => serialize(array('dateline' => $_G['timestamp'])),
+						'dateline' => $_G['timestamp'],
+					), false, true);
 					cpmsg('database_export_multivol_succeed', '', 'succeed', array('volume' => $volume, 'filelist' => $filelist));
 				}
 			}
@@ -311,6 +326,11 @@ if($operation == 'export') {
 					@touch('./data/'.$backupdir.'/index.htm');
 					$filename = $backupfilename.'.zip';
 					unset($sqldump, $zip, $content);
+					C::t('common_cache')->insert(array(
+						'cachekey' => 'db_export',
+						'cachevalue' => serialize(array('dateline' => $_G['timestamp'])),
+						'dateline' => $_G['timestamp'],
+					), false, true);
 					cpmsg('database_export_zip_succeed', '', 'succeed', array('filename' => $filename));
 				} else {
 					if(@is_writeable($dumpfile)) {
@@ -320,6 +340,11 @@ if($operation == 'export') {
 					}
 					@touch('./data/'.$backupdir.'/index.htm');
 					$filename = $backupfilename.'.sql';
+					C::t('common_cache')->insert(array(
+						'cachekey' => 'db_export',
+						'cachevalue' => serialize(array('dateline' => $_G['timestamp'])),
+						'dateline' => $_G['timestamp'],
+					), false, true);
 					cpmsg('database_export_succeed', '', 'succeed', array('filename' => $filename));
 				}
 
@@ -525,7 +550,7 @@ if($operation == 'export') {
 
 		if($checkperm) {
 			showformheader('db&operation=runquery&option=');
-			showsetting('db_runquery_sql', '', '', '<textarea cols="85" rows="10" name="queries" style="width:500px;">'.$queries.'</textarea>');
+			showsetting('db_runquery_sql', '', '', '<textarea cols="85" rows="10" name="queries" style="width:500px;" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.$queries.'</textarea>');
 			showsetting('', '', '', '<input type="checkbox" class="checkbox" name="createcompatible" value="1" checked="checked" />'.cplang('db_runquery_createcompatible'));
 			showsubmit('sqlsubmit', 'submit', '', cplang('db_runquery_comment'));
 			showformfooter();

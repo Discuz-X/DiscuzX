@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_failedlogin.php 30409 2012-05-28 02:53:10Z liulanbo $
+ *      $Id: table_common_failedlogin.php 30407 2012-05-28 02:50:52Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {

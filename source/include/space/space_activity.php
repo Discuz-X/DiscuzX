@@ -79,6 +79,7 @@ if($_GET['view'] == 'me') {
 $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
+
 	if(!empty($_GET['searchkey'])) {
 		$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
 	}

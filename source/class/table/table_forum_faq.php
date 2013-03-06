@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_faq.php 27745 2012-02-14 01:43:38Z monkey $
+ *      $Id: table_forum_faq.php 30560 2012-06-04 03:03:56Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ class table_forum_faq extends discuz_table
 		if($sql) {
 			$sql = 'WHERE '.$sql;
 		}
-		return DB::fetch_all("SELECT * FROM %t %i ORDER BY displayorder", array($this->_table, $sql));
+		return DB::fetch_all("SELECT *  FROM %t  %i ORDER BY displayorder", array($this->_table, $sql));
 	}
 
 	public function check_identifier($identifier, $id) {

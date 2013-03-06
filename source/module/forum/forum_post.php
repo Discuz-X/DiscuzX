@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 32368 2013-01-07 02:31:01Z liulanbo $
+ *      $Id: forum_post.php 32367 2013-01-07 02:30:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -207,16 +207,6 @@ if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && pr
 	showmessage('post_hide_nopermission');
 }
 
-$modnewthreads = $modnewreplies = 0;
-if(($subject || $message) && empty($_GET['save'])) {
-	$extramessage = ($special == 5 ? "\t".$_GET['affirmpoint']."\t".$_GET['negapoint'] : '').
-					($special == 4 ? "\t".$_GET['activityplace']."\t".$_GET['activitycity']."\t".$_GET['activityclass'] : '').
-					($special == 2 ? "\t".$_GET['item_name']."\t".$_GET['item_locus'] : '').
-					($_GET['typeoption'] ? "\t".implode("\t", $_GET['typeoption']) : '').
-					($_GET['polloptions'] || $_GET['polloption'] ? ("\t".implode("\t", $_GET['tpolloption'] == 2 ? explode("\n", $_GET['polloptions']) : $_GET['polloption'])) : '');
-	list($modnewthreads, $modnewreplies) = threadmodstatus($subject."\t".$message.$extramessage);
-	unset($extramessage);
-}
 
 $urloffcheck = $usesigcheck = $smileyoffcheck = $codeoffcheck = $htmloncheck = $emailcheck = '';
 
@@ -230,6 +220,7 @@ $_G['group']['allowpostactivity'] = $_G['group']['allowpost'] && $_G['group']['a
 $_G['group']['allowpostdebate'] = $_G['group']['allowpost'] && $_G['group']['allowpostdebate'] && ($_G['forum']['allowpostspecial'] & 16);
 $usesigcheck = $_G['uid'] && $_G['group']['maxsigsize'] ? 'checked="checked"' : '';
 $ordertypecheck = !empty($thread['tid']) && getstatus($thread['status'], 4) ? 'checked="checked"' : '';
+$imgcontentcheck = !empty($thread['tid']) && getstatus($thread['status'], 15) ? 'checked="checked"' : '';
 $specialextra = !empty($_GET['specialextra']) ? $_GET['specialextra'] : '';
 $_G['forum']['threadplugin'] = dunserialize($_G['forum']['threadplugin']);
 
@@ -342,7 +333,7 @@ if(helper_access::check_module('album') && $_G['group']['allowupload'] && $_G['s
 }
 $navtitle = lang('core', 'title_'.$_GET['action'].'_post');
 
-if($_GET['action'] == 'newthread') {
+if($_GET['action'] == 'newthread' || $_GET['action'] == 'newtrade') {
 	loadcache('groupreadaccess');
 	$navtitle .= ' - '.$_G['forum']['name'];
 	require_once libfile('post/newthread', 'include');
@@ -353,9 +344,6 @@ if($_GET['action'] == 'newthread') {
 	loadcache('groupreadaccess');
 	$navtitle .= ' - '.$thread['subject'].' - '.$_G['forum']['name'];
 	require_once libfile('post/editpost', 'include');
-} elseif($_GET['action'] == 'newtrade') {
-	$navtitle .= ' - '.$_G['forum']['name'];
-	require_once libfile('post/newtrade', 'include');
 }
 
 function check_allow_action($action = 'allowpost') {

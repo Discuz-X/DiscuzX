@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_my.php 26446 2011-12-13 07:12:28Z yangli $
+ *      $Id: search_my.php 31728 2012-09-25 09:03:42Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -79,7 +79,7 @@ if ($mySearchData['domain']) {
 }
 
 $utilService = Cloud::loadClass('Cloud_Service_Util');
-$url = 'http://' . $domain . '/f/discuz?' . $utilService->generateSiteSignUrl($params, true, true);
+$url = 'http://' . $domain . '/f/discuz?' . $utilService->generateSiteSignUrl($params, true);
 
 dheader('Location: ' . $url);
 

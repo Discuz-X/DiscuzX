@@ -315,7 +315,7 @@ function checkreasonpm() {
 	return $reason;
 }
 
-function sendreasonpm($var, $item, $notevar) {
+function sendreasonpm($var, $item, $notevar, $notictype = '') {
 	global $_G;
 	if(!empty($var['authorid']) && $var['authorid'] != $_G['uid']) {
 		if(!empty($notevar['modaction'])) {
@@ -323,7 +323,8 @@ function sendreasonpm($var, $item, $notevar) {
 			$notevar['from_idtype'] = 'moderate_'.$notevar['modaction'];
 			$notevar['modaction'] = lang('forum/modaction', $notevar['modaction']);
 		}
-		notification_add($var['authorid'], 'system', $item, $notevar, 1);
+		empty($notictype) && $notictype = 'system';
+		notification_add($var['authorid'], $notictype, $item, $notevar, 1);
 	}
 }
 

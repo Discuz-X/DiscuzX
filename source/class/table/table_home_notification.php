@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_notification.php 28262 2012-02-27 02:29:28Z liulanbo $
+ *      $Id: table_home_notification.php 31068 2012-07-12 08:34:53Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -52,7 +52,7 @@ class table_home_notification extends discuz_table
 		return DB::fetch_all("SELECT * FROM %t WHERE authorid=%d AND from_id=%d AND type=%s", array($this->_table, $authorid, $fromid, $type));
 	}
 
-	public function ignore($uid, $new = true, $from_num = true) {
+	public function ignore($uid, $type = '', $category = '', $new = true, $from_num = true) {
 		$uid = intval($uid);
 		$update = array();
 		if($new) {
@@ -61,23 +61,57 @@ class table_home_notification extends discuz_table
 		if($from_num) {
 			$update['from_num'] = 0;
 		}
+		$where = array('uid' => $uid, 'new' => 1);
+		if($type) {
+			$where['type'] = $type;
+		}
+		if($category !== '') {
+			switch ($category) {
+						case 'mypost' : $category = 1; break;
+						case 'interactive' : $category = 2; break;
+						case 'system' : $category = 3; break;
+						case 'manage' : $category = 4; break;
+						default :  $category = 0;
+					}
+			$where['category'] = $category;
+		}
 		if($update) {
-			DB::update($this->_table, $update, array('uid' => $uid, 'new' => 1));
+			DB::update($this->_table, $update, $where);
 		}
 	}
 
-	public function count_by_uid($uid, $new, $type = '') {
+	public function count_by_uid($uid, $new, $type = '', $category = '') {
 		$new = intval($new);
 		$type = $type ? ' AND '.DB::field('type', $type) : '';
-		$new = ' AND '.DB::field('new', $new);
-		return DB::result_first("SELECT COUNT(*) FROM %t WHERE uid=%d %i %i", array($this->_table, $uid, $type, $new));
+		if($category !== '') {
+			switch ($category) {
+						case 'mypost' : $category = 1; break;
+						case 'interactive' : $category = 2; break;
+						case 'system' : $category = 3; break;
+						case 'manage' : $category = 4; break;
+						default :  $category = 0;
+					}
+			$category  = ' AND '.DB::field('category', $category);
+		}
+		$new = $new != '-1' ? ' AND '.DB::field('new', $new) : '';
+		return DB::result_first("SELECT COUNT(*) FROM %t WHERE uid=%d %i %i %i", array($this->_table, $uid, $new, $category, $type));
 	}
 
-	public function fetch_all_by_uid($uid, $new, $type, $start, $perpage) {
+	public function fetch_all_by_uid($uid, $new, $type, $start, $perpage, $category = '') {
 		$new = intval($new);
 		$type = $type ? ' AND '.DB::field('type', $type) : '';
-		$new = ' AND '.DB::field('new', $new);
-		return DB::fetch_all("SELECT * FROM %t WHERE uid=%d %i %i ORDER BY new DESC, dateline DESC %i", array($this->_table, $uid, $type, $new, DB::limit($start, $perpage)));
+		if($category !== '') {
+			switch ($category) {
+						case 'mypost' : $category = 1; break;
+						case 'interactive' : $category = 2; break;
+						case 'system' : $category = 3; break;
+						case 'manage' : $category = 4; break;
+						default :  $category = 0;
+					}
+			$category  = ' AND '.DB::field('category', $category);
+		}
+		$new = $new != '-1' ? ' AND '.DB::field('new', $new) : '';
+		return DB::fetch_all("SELECT * FROM %t WHERE uid=%d %i %i %i ORDER BY dateline DESC %i", array($this->_table, $uid, $new, $category, $type, DB::limit($start, $perpage)));
 	}
 }
 

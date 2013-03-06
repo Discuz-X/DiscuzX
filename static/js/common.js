@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 32580 2013-02-22 03:40:28Z monkey $
+	$Id: common.js 32718 2013-03-04 09:21:06Z zhangguosheng $
 */
 
 var BROWSER = {};
@@ -44,6 +44,7 @@ var USERABOUT_BOX = true;
 var USERCARDST = null;
 var CLIPBOARDSWFDATA = '';
 var NOTICETITLE = [];
+var NOTICECURTITLE = document.title;
 
 if(BROWSER.firefox && window.HTMLElement) {
 	HTMLElement.prototype.__defineGetter__( "innerText", function(){
@@ -260,12 +261,14 @@ function checkall(form, prefix, checkall) {
 }
 
 function setcookie(cookieName, cookieValue, seconds, path, domain, secure) {
-	var expires = new Date();
 	if(cookieValue == '' || seconds < 0) {
 		cookieValue = '';
 		seconds = -2592000;
 	}
-	expires.setTime(expires.getTime() + seconds * 1000);
+	if(seconds) {
+		var expires = new Date();
+		expires.setTime(expires.getTime() + seconds * 1000);
+	}
 	domain = !domain ? cookiedomain : domain;
 	path = !path ? cookiepath : path;
 	document.cookie = escape(cookiepre + cookieName) + '=' + escape(cookieValue)
@@ -291,7 +294,7 @@ function Ajax(recvType, waitId) {
 
 	var aj = new Object();
 
-	aj.loading = 'ËØ∑Á®çÂÄô...';
+	aj.loading = '«Î…‘∫Ú...';
 	aj.recvType = recvType ? recvType : 'XML';
 	aj.waitId = waitId ? $(waitId) : null;
 
@@ -349,10 +352,18 @@ function Ajax(recvType, waitId) {
 				aj.resultHandle(aj.XMLHttpRequest.responseText, aj);
 			} else if(aj.recvType == 'XML') {
 				if(!aj.XMLHttpRequest.responseXML || !aj.XMLHttpRequest.responseXML.lastChild || aj.XMLHttpRequest.responseXML.lastChild.localName == 'parsererror') {
-					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">ÂÜÖÈÉ®ÈîôËØØÔºåÊó†Ê≥ïÊòæÁ§∫Ê≠§ÂÜÖÂÆπ</a>' , aj);
+					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">ƒ⁄≤ø¥ÌŒÛ£¨Œﬁ∑®œ‘ æ¥Àƒ⁄»›</a>' , aj);
 				} else {
 					aj.resultHandle(aj.XMLHttpRequest.responseXML.lastChild.firstChild.nodeValue, aj);
 				}
+			} else if(aj.recvType == 'JSON') {
+				var s = null;
+				try {
+					s = (new Function("return ("+aj.XMLHttpRequest.responseText+")"))();
+				} catch (e) {
+					s = null;
+				}
+				aj.resultHandle(s, aj);
 			}
 		}
 	};
@@ -385,6 +396,14 @@ function Ajax(recvType, waitId) {
 		aj.XMLHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		aj.XMLHttpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 		aj.XMLHttpRequest.send(aj.sendString);
+	};
+	aj.getJSON = function(targetUrl, resultHandle) {
+		aj.setRecvType('JSON');
+		aj.get(targetUrl+'&ajaxdata=json', resultHandle);
+	};
+	aj.getHTML = function(targetUrl, resultHandle) {
+		aj.setRecvType('HTML');
+		aj.get(targetUrl+'&ajaxdata=html', resultHandle);
 	};
 	return aj;
 }
@@ -501,14 +520,14 @@ function $F(func, args, script) {
 		if(check) {
 			eval(func + '(' + s.substr(1) + ')');
 		} else {
-			setTimeout(function () { checkrun(); }, 50);
+			setTimeout(function () {checkrun();}, 50);
 		}
 	};
 	var checkrun = function () {
 		if(JSLOADED[src]) {
 			run();
 		} else {
-			setTimeout(function () { checkrun(); }, 50);
+			setTimeout(function () {checkrun();}, 50);
 		}
 	};
 	script = script || 'common_extra';
@@ -641,7 +660,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 				try {
 					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
 				} catch(e) {
-					s = 'ÂÜÖÈÉ®ÈîôËØØÔºåÊó†Ê≥ïÊòæÁ§∫Ê≠§ÂÜÖÂÆπ';
+					s = 'ƒ⁄≤ø¥ÌŒÛ£¨Œﬁ∑®œ‘ æ¥Àƒ⁄»›';
 				}
 			}
 		}
@@ -664,7 +683,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 			ajaxinnerhtml($(showid), s);
 		}
 		ajaxerror = null;
-		if($(formid)) $(formid).target = formtarget;
+		if(curform) curform.target = formtarget;
 		if(typeof recall == 'function') {
 			recall();
 		} else {
@@ -793,7 +812,7 @@ function showPreview(val, id) {
 
 function showloading(display, waiting) {
 	var display = display ? display : 'block';
-	var waiting = waiting ? waiting : 'ËØ∑Á®çÂÄô...';
+	var waiting = waiting ? waiting : '«Î…‘∫Ú...';
 	$('ajaxwaitid').innerHTML = waiting;
 	$('ajaxwaitid').style.display = display;
 }
@@ -980,7 +999,7 @@ function showMenu(v) {
 			coverObj.style.backgroundColor = '#000';
 			coverObj.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=50)';
 			coverObj.style.opacity = 0.5;
-			coverObj.onclick = function () { hideMenu(); };
+			coverObj.onclick = function () {hideMenu();};
 			$('append_parent').appendChild(coverObj);
 			_attachEvent(window, 'load', function () {
 				coverObj.style.height = Math.max(document.documentElement.clientHeight, document.body.offsetHeight) + 'px';
@@ -1083,7 +1102,7 @@ var delayShowST = null;
 function delayShow(ctrlObj, call, time) {
 	if(typeof ctrlObj == 'object') {
 		var ctrlid = ctrlObj.id;
-		call = call || function () { showMenu(ctrlid); };
+		call = call || function () {showMenu(ctrlid);};
 	}
 	var time = isUndefined(time) ? 500 : time;
 	delayShowST = setTimeout(function () {
@@ -1363,7 +1382,7 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 	var menuid = 'fwin_dialog';
 	var menuObj = $(menuid);
 	var showconfirm = 1;
-	confirmtxtdefault = 'Á°ÆÂÆö';
+	confirmtxtdefault = '»∑∂®';
 	closetime = isUndefined(closetime) ? '' : closetime;
 	closefunc = function () {
 		if(typeof func == 'function') func();
@@ -1371,18 +1390,17 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hideMenu(menuid, 'dialog');
 	};
 	if(closetime) {
-		leftmsg = closetime + ' ÁßíÂêéÁ™óÂè£ÂÖ≥Èó≠';
-		showDialogST = setTimeout(closefunc, closetime * 1000);
-		showconfirm = 0;
+		showPrompt(null, null, '<i>' + msg + '</i>', closetime * 1000);
+		return;
 	}
 	locationtime = isUndefined(locationtime) ? '' : locationtime;
 	if(locationtime) {
-		leftmsg = locationtime + ' ÁßíÂêéÈ°µÈù¢Ë∑≥ËΩ¨';
+		leftmsg = locationtime + ' √Î∫Û“≥√ÊÃ¯◊™';
 		showDialogST = setTimeout(closefunc, locationtime * 1000);
 		showconfirm = 0;
 	}
 	confirmtxt = confirmtxt ? confirmtxt : confirmtxtdefault;
-	canceltxt = canceltxt ? canceltxt : 'ÂèñÊ∂à';
+	canceltxt = canceltxt ? canceltxt : '»°œ˚';
 
 	if(menuObj) hideMenu('fwin_dialog', 'dialog');
 	menuObj = document.createElement('div');
@@ -1395,8 +1413,8 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hidedom = '<style type="text/css">object{visibility:hidden;}</style>';
 	}
 	var s = hidedom + '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c"><h3 class="flb"><em>';
-	s += t ? t : 'ÊèêÁ§∫‰ø°ÊÅØ';
-	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="ÂÖ≥Èó≠">ÂÖ≥Èó≠</a></span></h3>';
+	s += t ? t : 'Ã· æ–≈œ¢';
+	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="πÿ±’">πÿ±’</a></span></h3>';
 	if(mode == 'info') {
 		s += msg ? msg : '';
 	} else {
@@ -1456,7 +1474,7 @@ function showWindow(k, url, mode, cache, menuv) {
 			ajaxpost(url, 'fwin_content_' + k, '', '', '', function() {initMenu();show();});
 		}
 		if(parseInt(BROWSER.ie) != 6) {
-			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> ËØ∑Á®çÂÄô...')}, 500);
+			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> «Î…‘∫Ú...')}, 500);
 		}
 	};
 	var initMenu = function() {
@@ -1514,7 +1532,7 @@ function showError(msg) {
 	var p = /<script[^\>]*?>([^\x00]*?)<\/script>/ig;
 	msg = msg.replace(p, '');
 	if(msg !== '') {
-		showDialog(msg, 'alert', 'ÈîôËØØ‰ø°ÊÅØ', null, true, null, '', '', '', 3);
+		showDialog(msg, 'alert', '¥ÌŒÛ–≈œ¢', null, true, null, '', '', '', 3);
 	}
 }
 
@@ -1765,7 +1783,9 @@ function ctrlEnter(event, btnId, onlyEnter) {
 
 function parseurl(str, mode, parsecode) {
 	if(isUndefined(parsecode)) parsecode = true;
-	if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
+	if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2, -1);});
+	str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(swf|flv))/ig, '$1[flash]$2[/flash]');
+	str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(mp3|wma))/ig, '$1[audio]$2[/audio]');
 	str = str.replace(/([^>=\]"'\/@]|^)((((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|qqdl|synacast):\/\/))([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&;~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
 	str = str.replace(/([^\w>=\]"'\/@]|^)((www\.)([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&;~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
 	str = str.replace(/([^\w->=\]:"'\.\/]|^)(([\-\.\w]+@[\.\-\w]+(\.\w+)+))/ig, mode == 'html' ? '$1<a href="mailto:$2">$2</a>' : '$1[email]$2[/email]');
@@ -1777,9 +1797,10 @@ function parseurl(str, mode, parsecode) {
 	return str;
 }
 
-function codetag(text) {
+function codetag(text, br) {
+	var br = !br ? 1 : br;
 	DISCUZCODE['num']++;
-	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n');
+	if(br > 0 && typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n');
 	text = text.replace(/\$/ig, '$$$$');
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
@@ -1823,7 +1844,11 @@ function initTab(frameId, type) {
 }
 
 function openDiy(){
-	window.location.href = ((window.location.href + '').replace(/[\?\&]diy=yes/g, '').split('#')[0] + ( window.location.search && window.location.search.indexOf('?diy=yes') < 0 ? '&diy=yes' : '?diy=yes'));
+	if(DYNAMICURL) {
+		window.location.href = SITEURL+DYNAMICURL + (DYNAMICURL.indexOf('?') < 0 ? '?' : '&') + ('diy=yes');
+	} else {
+		window.location.href = ((window.location.href + '').replace(/[\?\&]diy=yes/g, '').split('#')[0] + ( window.location.search && window.location.search.indexOf('?diy=yes') < 0 ? '&diy=yes' : '?diy=yes'));
+	}
 }
 
 function hasClass(elem, className) {
@@ -1877,20 +1902,20 @@ function initSearchmenu(searchform, cloudSearchUrl) {
 	var tclass = searchtxt.className;
 	searchtxt.className = tclass + ' xg1';
 	if (!!("placeholder" in document.createElement("input"))) {
-		if(searchtxt.value == 'ËØ∑ËæìÂÖ•ÊêúÁ¥¢ÂÜÖÂÆπ') {
+		if(searchtxt.value == '«Î ‰»ÎÀ—À˜ƒ⁄»›') {
 			searchtxt.value = '';
 		}
-		searchtxt.placeholder = 'ËØ∑ËæìÂÖ•ÊêúÁ¥¢ÂÜÖÂÆπ';
+		searchtxt.placeholder = '«Î ‰»ÎÀ—À˜ƒ⁄»›';
 	} else {
 		searchtxt.onfocus = function () {
-			if(searchtxt.value == 'ËØ∑ËæìÂÖ•ÊêúÁ¥¢ÂÜÖÂÆπ') {
+			if(searchtxt.value == '«Î ‰»ÎÀ—À˜ƒ⁄»›') {
 				searchtxt.value = '';
 				searchtxt.className = tclass;
 			}
 		};
 		searchtxt.onblur = function () {
 			if(searchtxt.value == '' ) {
-				searchtxt.value = 'ËØ∑ËæìÂÖ•ÊêúÁ¥¢ÂÜÖÂÆπ';
+				searchtxt.value = '«Î ‰»ÎÀ—À˜ƒ⁄»›';
 				searchtxt.className = tclass + ' xg1';
 			}
 		};
@@ -1932,7 +1957,7 @@ function initSearchmenu(searchform, cloudSearchUrl) {
 }
 
 function searchFocus(obj) {
-	if(obj.value == 'ËØ∑ËæìÂÖ•ÊêúÁ¥¢ÂÜÖÂÆπ') {
+	if(obj.value == '«Î ‰»ÎÀ—À˜ƒ⁄»›') {
 		obj.value = '';
 	}
 	if($('cloudsearchquery') != null) {
@@ -2037,8 +2062,14 @@ function pluginNotice() {
 	}
 }
 
+function ipNotice() {
+	if($('ip_notice')) {
+		ajaxget('misc.php?mod=patch&action=ipnotice', 'ip_notice', '');
+	}
+}
+
 function noticeTitle() {
-	NOTICETITLE = {'State':0, 'oldTitle':document.title, flashNumber:0, sleep:15};
+	NOTICETITLE = {'State':0, 'oldTitle':NOTICECURTITLE, flashNumber:0, sleep:15};
 	if(!getcookie('noticeTitle')) {
 		window.setInterval('noticeTitleFlash();', 500);
 	} else {
@@ -2049,7 +2080,7 @@ function noticeTitle() {
 
 function noticeTitleFlash() {
 	if(NOTICETITLE.flashNumber < 5 || NOTICETITLE.flashNumber > 4 && !NOTICETITLE['State']) {
-		document.title = (NOTICETITLE['State'] ? '„Äê„ÄÄ„ÄÄ„ÄÄ„Äë' : '„ÄêÊñ∞ÊèêÈÜí„Äë') + NOTICETITLE['oldTitle'];
+		document.title = (NOTICETITLE['State'] ? '°æ°°°°°°°ø' : '°æ–¬Ã·–—°ø') + NOTICETITLE['oldTitle'];
 		NOTICETITLE['State'] = !NOTICETITLE['State'];
 	}
 	NOTICETITLE.flashNumber = NOTICETITLE.flashNumber < NOTICETITLE.sleep ? ++NOTICETITLE.flashNumber : 0;
@@ -2096,7 +2127,7 @@ function showCreditmenu() {
 }
 
 function showUpgradeinfo() {
-	showMenu({'ctrlid':'g_upmine', 'pos':'21'});
+	$F('_showUpgradeinfo', []);
 }
 
 function addFavorite(url, title) {
@@ -2106,7 +2137,7 @@ function addFavorite(url, title) {
 		try {
 			window.sidebar.addPanel(title, url, '');
         	} catch (e) {
-			showDialog("ËØ∑Êåâ Ctrl+D ÈîÆÊ∑ªÂä†Âà∞Êî∂ËóèÂ§π", 'notice');
+			showDialog("«Î∞¥ Ctrl+D º¸ÃÌº”µΩ ’≤ÿº–", 'notice');
 		}
 	}
 }
@@ -2116,8 +2147,15 @@ function setHomepage(sURL) {
 		document.body.style.behavior = 'url(#default#homepage)';
 		document.body.setHomePage(sURL);
 	} else {
-		showDialog("Èùû IE ÊµèËßàÂô®ËØ∑ÊâãÂä®Â∞ÜÊú¨Á´ôËÆæ‰∏∫È¶ñÈ°µ", 'notice');
+		showDialog("∑« IE ‰Ø¿¿∆˜«Î ÷∂ØΩ´±æ’æ…ËŒ™ ◊“≥", 'notice');
 		doane();
+	}
+}
+
+function setShortcut() {
+	var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+	if(!loadUserdata('setshortcut') && !scrollTop) {
+		$F('_setShortcut', []);
 	}
 }
 
@@ -2165,10 +2203,10 @@ function toggleBlind(dom) {
 	if(dom) {
 		if(loadUserdata('is_blindman')) {
 			saveUserdata('is_blindman', '');
-			dom.title = 'ÂºÄÂêØËæÖÂä©ËÆøÈóÆ';
+			dom.title = 'ø™∆Ù∏®÷˙∑√Œ ';
 		} else {
 			saveUserdata('is_blindman', '1');
-			dom.title = 'ÂÖ≥Èó≠ËæÖÂä©ËÆøÈóÆ';
+			dom.title = 'πÿ±’∏®÷˙∑√Œ ';
 		}
 	}
 }
@@ -2177,11 +2215,23 @@ function checkBlind() {
 	var dom = $('switchblind');
 	if(dom) {
 		if(loadUserdata('is_blindman')) {
-			dom.title = 'ÂÖ≥Èó≠ËæÖÂä©ËÆøÈóÆ';
+			dom.title = 'πÿ±’∏®÷˙∑√Œ ';
 		} else {
-			dom.title = 'ÂºÄÂêØËæÖÂä©ËÆøÈóÆ';
+			dom.title = 'ø™∆Ù∏®÷˙∑√Œ ';
 		}
 	}
+}
+function getElementOffset(element)
+{
+	var left = element.offsetLeft, top = element.offsetTop;
+	while(element = element.offsetParent) {
+		left += element.offsetLeft;
+		top += element.offsetTop;
+	}
+	if($('nv').style.position == 'fixed') {
+		top -= parseInt($('nv').style.height);
+	}
+	return {'left' : left, 'top' : top};
 }
 
 if(typeof IN_ADMINCP == 'undefined') {

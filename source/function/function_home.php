@@ -252,6 +252,7 @@ function ckfollow($followuid) {
 	}
 	return $_G[$var];
 }
+
 function sub_url($url, $length) {
 	if(strlen($url) > $length) {
 		$url = str_replace(array('%3A', '%2F'), array(':', '/'), rawurlencode($url));

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: class_credit.php 32527 2013-02-05 09:56:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -224,6 +224,9 @@ class credit {
 		for($i = 1; $i <= 8; $i++) {
 			if(isset($_G['setting']['extcredits'][$i])) {
 				$creditarr['extcredits'.$i] = intval($rule['extcredits'.$i]) * $this->coef;
+				if(defined('IN_MOBILE') && $creditarr['extcredits'.$i] > 0) {
+					$creditarr['extcredits'.$i] += $_G['setting']['creditspolicymobile'];
+				}
 				$updatecredit = true;
 			}
 		}
@@ -426,6 +429,10 @@ class credit {
 						$rule = $policy[$action];
 						$rule['rulenameuni'] = $rulenameuni;
 					}
+				}
+			} elseif($rule['action'] == 'daylogin' && $_G['group']['loginreward']) {
+				foreach($_G['group']['loginreward'] as $key => $reward) {
+					$rule['extcredits'.$key] = $reward;
 				}
 			}
 

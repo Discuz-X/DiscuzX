@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_blog.php 28045 2012-02-21 08:13:46Z chenmengshu $
+ *      $Id: table_home_blog.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -180,11 +180,11 @@ class table_home_blog extends discuz_table
 		return DB::fetch_all('SELECT uid, COUNT(blogid) AS count FROM %t WHERE blogid IN (%n) GROUP BY uid', array($this->_table, $blogid));
 	}
 
-	public function count_all_by_search($blogid = null, $uids = null, $starttime = null, $endtime = null, $hot1 = null, $hot2 = null, $viewnum1 = null, $viewnum2 = null, $replynum1 = null, $replynum2 = null, $friend = null, $ip = null, $keywords = null, $lengthlimit = null, $classid = null, $catid = null, $subject = null, $countwithoutjoin = false) {
-		return $this->fetch_all_by_search(3, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, null, null, 0, 0, $classid, $catid, $subject, null, $countwithoutjoin);
+	public function count_all_by_search($blogid = null, $uids = null, $starttime = null, $endtime = null, $hot1 = null, $hot2 = null, $viewnum1 = null, $viewnum2 = null, $replynum1 = null, $replynum2 = null, $friend = null, $ip = null, $keywords = null, $lengthlimit = null, $classid = null, $catid = null, $subject = null, $countwithoutjoin = false, $status = null) {
+		return $this->fetch_all_by_search(3, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, null, null, 0, 0, $classid, $catid, $subject, null, $countwithoutjoin, $status);
 	}
 
-	public function fetch_all_by_search($fetchtype = 1, $blogid = null, $uids = null, $starttime = null, $endtime = null, $hot1 = null, $hot2 = null, $viewnum1 = null, $viewnum2 = null, $replynum1 = null, $replynum2 = null, $friend = null, $ip = null, $keywords = null, $lengthlimit = null, $orderby = null, $ordersc = null, $start = 0, $limit = 0, $classid = null, $catid = null, $subject = null, $findex = null, $countwithoutjoin = false) {
+	public function fetch_all_by_search($fetchtype = 1, $blogid = null, $uids = null, $starttime = null, $endtime = null, $hot1 = null, $hot2 = null, $viewnum1 = null, $viewnum2 = null, $replynum1 = null, $replynum2 = null, $friend = null, $ip = null, $keywords = null, $lengthlimit = null, $orderby = null, $ordersc = null, $start = 0, $limit = 0, $classid = null, $catid = null, $subject = null, $findex = null, $countwithoutjoin = false, $status = null) {
 		$sql = '';
 		$sql .= $blogid ? ' AND b.'.DB::field('blogid', $blogid) : '';
 		$sql .= is_array($uids) && count($uids) > 0 ? ' AND b.'.DB::field('uid', $uids) : '';
@@ -199,6 +199,7 @@ class table_home_blog extends discuz_table
 		$sql .= $replynum2 ? ' AND b.'.DB::field('replynum', $replynum2, '<=') : '';
 		$sql .= $classid ? ' AND b.'.DB::field('classid', $classid) : '';
 		$sql .= $friend ? ' AND b.'.DB::field('friend', $friend) : '';
+		$sql .= !is_null($status) ? ' AND b.'.DB::field('status', $status) : '';
 
 		$ip = str_replace('*', '', $ip);
 		if($fetchtype == 1) {

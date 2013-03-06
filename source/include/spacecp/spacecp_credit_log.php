@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit_log.php 26805 2011-12-23 07:21:04Z zhengqingpeng $
+ *      $Id: spacecp_credit_log.php 31381 2012-08-21 07:56:35Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,7 +32,7 @@ $multi = '';
 
 $_GET['income'] = intval($_GET['income']);
 $incomeactives = array($_GET['income'] => ' selected="selected"');
-$optypes = array('TRC','RTC','RAC','MRC','BGC','RGC','AGC','TFR','RCV','CEC','ECU','SAC','BAC','PRC','RSC','STC','BTC','AFD','UGP','RPC','ACC','RCT','RCA','RCB','BMC','BME','CDC','RKC');
+$optypes = lang('spacecp', 'logs_credit_update_INDEX');
 $endunixstr = $beginunixstr = 0;
 if($_GET['starttime']) {
 	$beginunixstr = strtotime($_GET['starttime']);

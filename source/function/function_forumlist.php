@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 31961 2012-10-26 06:32:42Z monkey $
+ *      $Id: function_forumlist.php 31960 2012-10-26 06:27:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -334,20 +334,22 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 
 function showstars($num) {
 	global $_G;
+	$return = '';
 	$alt = 'alt="Rank: '.$num.'"';
 	if(empty($_G['setting']['starthreshold'])) {
 		for($i = 0; $i < $num; $i++) {
-			echo '<img src="'.$_G['style']['imgdir'].'/star_level1.gif" '.$alt.' />';
+			$return .= '<img src="'.$_G['style']['imgdir'].'/star_level1.gif" '.$alt.' />';
 		}
 	} else {
 		for($i = 3; $i > 0; $i--) {
 			$numlevel = intval($num / pow($_G['setting']['starthreshold'], ($i - 1)));
 			$num = ($num % pow($_G['setting']['starthreshold'], ($i - 1)));
 			for($j = 0; $j < $numlevel; $j++) {
-				echo '<img src="'.$_G['style']['imgdir'].'/star_level'.$i.'.gif" '.$alt.' />';
+				$return .= '<img src="'.$_G['style']['imgdir'].'/star_level'.$i.'.gif" '.$alt.' />';
 			}
 		}
 	}
+	return $return;
 }
 
 function get_forumimg($imgname) {
@@ -381,6 +383,34 @@ function forumleftside() {
 	}
 	$_G['leftsidewidth_mwidth'] = $_G['setting']['leftsidewidth'] + 15;
 	return $leftside;
+}
+
+function threadclasscount($fid, $id = 0, $idtype = '', $count = 0) {
+	if(!$fid) {
+		return false;
+	}
+	$typeflag = ($id && $idtype && in_array($idtype, array('typeid', 'sortid')));
+	$threadclasscount = C::t('common_cache')->fetch('threadclasscount_'.$fid);
+	$threadclasscount = dunserialize($threadclasscount['cachevalue']);
+	if($count) {
+		if($typeflag) {
+			$threadclasscount[$idtype][$id] = $count;
+			C::t('common_cache')->insert(array(
+				'cachekey' => 'threadclasscount_'.$fid,
+				'cachevalue' => serialize($threadclasscount),
+			), false, true);
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		if($typeflag) {
+			return $threadclasscount[$idtype][$id];
+		} else {
+			return $threadclasscount;
+		}
+	}
+
 }
 
 ?>

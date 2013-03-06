@@ -32,6 +32,7 @@ if($operation == 'check') {
 
 	showsubtitle(array('','','membersplit_count', 'membersplit_lasttime_check'));
 
+
 	if($membercount < 20000) {
 		$color = 'green';
 		$msg = $lang['membersplit_without_optimization'];

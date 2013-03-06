@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_magiclog.php 27911 2012-02-16 08:54:10Z zhengqingpeng $
+ *      $Id: table_common_magiclog.php 31034 2012-07-11 04:03:30Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class table_common_magiclog extends discuz_table
+class table_common_magiclog extends discuz_table_archive
 {
 	public function __construct() {
 

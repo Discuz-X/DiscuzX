@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_buyinvitecode.php 31567 2012-09-10 08:07:55Z liulanbo $
+ *      $Id: misc_buyinvitecode.php 31572 2012-09-10 08:59:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,7 +46,7 @@ if(submitcheck('buysubmit')) {
 			'ip' => $_G['clientip'],
 		));
 		include template('common/header_ajax');
-		echo '<form id="payform" action="'.$requesturl.'" method="post"></form><script type="text/javascript" reload="1">document.getElementById(\'payform\').submit();</script>';
+		echo '<form id="payform" action="'.$requesturl.'" method="post"></form><script type="text/javascript" reload="1">$(\'payform\').submit();</script>';
 		include template('common/footer_ajax');
 		dexit();
 	} else {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_article.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp_article.php 32680 2013-02-28 09:32:07Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -303,17 +303,33 @@ if($operation == 'tag') {
 				</table>
 			</div>
 		</form>
+		<script src="static/js/makehtml.js?1" type="text/javascript"></script>
+
 SEARCH;
 
+		$makehtmlflag = !empty($_G['setting']['makehtml']['flag']);
 		showformheader('article&operation=list');
 		showtableheader('article_list');
-		showsubtitle(array('', 'article_title', 'article_category', 'article_username', 'article_dateline', 'operation'));
+		$subtitle = array('', 'article_title', 'article_category', 'article_username', 'article_dateline');
+		if($makehtmlflag) {
+			$subtitle[] = 'HTML';
+		}
+		$subtitle[] = 'operation';
+		showsubtitle($subtitle);
 
 		$multipage = '';
 		$count = C::t('portal_article_title')->fetch_all_by_sql($wheresql, '', 0, 0, 1);
 		if($count) {
+			$repairs = array();
 			$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, $ordersql, $start, $perpage);
 			foreach($query as $value) {
+
+				$htmlname = $value['htmldir'].$value['htmlname'].'.'.$_G['setting']['makehtml']['extendname'];
+				if($makehtmlflag && $value['htmlmade'] && !file_exists(DISCUZ_ROOT.'./'.$htmlname)) {
+					$value['htmlmade'] = 0;
+					$repairs[$value['aid']] = $value['aid'];
+				}
+
 				$tags = article_parse_tags($value['tag']);
 				$taghtml = '';
 				foreach($tags as $k=>$v) {
@@ -321,16 +337,25 @@ SEARCH;
 						$taghtml .= ' [<a href="'.ADMINSCRIPT.'?action=article&operation=list&tag['.$k.']=1" style="color: #666">'.$article_tags[$k].'</a>] ';
 					}
 				}
-				showtablerow('', array('class="td25"', 'width="480"', 'class="td28"'), array(
+				$tablerow = array(
 						"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[aid]\">",
-						"<a href=\"portal.php?mod=view&aid=$value[aid]\" target=\"_blank\">$value[title]</a>".($taghtml ? $taghtml : ''),
+						($makehtmlflag && $value['htmlmade'] ? "[<a href='$htmlname' target='_blank'>HTML</a>]" : '')
+						."<a href=\"portal.php?mod=view&aid=$value[aid]\" target=\"_blank\">$value[title]</a>".($taghtml ? $taghtml : ''),
 						'<a href="'.ADMINSCRIPT.'?action=article&operation=list&catid='.$value['catid'].'">'.$category[$value['catid']]['catname'].'</a>',
 						"<a href=\"".ADMINSCRIPT."?action=article&uid=$value[uid]\">$value[username]</a>",
 						dgmdate($value[dateline]),
-						"<a href=\"portal.php?mod=portalcp&ac=article&aid=$value[aid]\" target=\"_blank\">".cplang('edit')."</a>"
-					));
+					);
+				if($makehtmlflag) {
+					$tablerow[] = "<span id='mkhtml_$value[aid]' style='color:".($value['htmlmade'] ? "blue;'>".cplang('setting_functions_makehtml_made') : "red;'>".cplang('setting_functions_makehtml_dismake'))."</span>";
+				}
+				$tablerow[] = ($makehtmlflag ? ($category[$value['catid']]['fullfoldername'] ? "<a href='javascript:void(0);' onclick=\"make_html('portal.php?mod=view&aid=$value[aid]', $('mkhtml_$value[aid]'))\">".cplang('setting_functions_makehtml_make')."</a>" : cplang('setting_functions_makehtml_make_has_no_foldername')) : '')
+						." <a href=\"portal.php?mod=portalcp&ac=article&aid=$value[aid]\" target=\"_blank\">".cplang('edit')."</a>";
+				showtablerow('', array('class="td25"', 'width="480"', 'class="td28"'), $tablerow);
 			}
 			$multipage = multi($count, $perpage, $page, $mpurl);
+			if($repairs) {
+				C::t('portal_article_title')->repair_htmlmade($repairs);
+			}
 		}
 
 		$optypehtml = ''

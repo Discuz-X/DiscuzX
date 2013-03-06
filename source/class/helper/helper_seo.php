@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_seo.php 31054 2012-07-12 04:24:01Z liulanbo $
+ *      $Id: helper_seo.php 31055 2012-07-12 04:24:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {

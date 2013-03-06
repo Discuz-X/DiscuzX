@@ -119,7 +119,6 @@ class CJSON {
 						   . '}';
 				}
 
-				// treat it like a regular array
 				return '[' . join(',', array_map(array('CJSON', 'encode'), $var)) . ']';
 			case 'object':
 				if ($var instanceof Traversable)
@@ -148,18 +147,14 @@ class CJSON {
 	static function reduceString($str) {
 		$str = preg_replace(array(
 
-				// eliminate single line comments in '// ...' form
 				'#^\s*//(.+)$#m',
 
-				// eliminate multi-line comments in '/** ... */' form, at start of string
 				'#^\s*/\*(.+)\*/#Us',
 
-				// eliminate multi-line comments in '/** ... */' form, at end of string
 				'#/\*(.+)\*/\s*$#Us'
 
 			), '', $str);
 
-		// eliminate extraneous space
 		return trim($str);
 	}
 
@@ -231,7 +226,6 @@ class CJSON {
 								break;
 
 							case preg_match('/\\\u[0-9A-F]{4}/i', substr($chrs, $c, 6)):
-								// single, escaped unicode character
 								$utf16 = chr(hexdec(substr($chrs, ($c+2), 2)))
 									   . chr(hexdec(substr($chrs, ($c+4), 2)));
 								$utf8 .= self::utf16beToUTF8($utf16);

@@ -39,11 +39,14 @@ include loadarchiver('common/header');
 <?php include loadarchiver('common/footer');
 
 function archivermessage($message) {
+	if(strpos($message, '[/password]') !== FALSE) {
+		return '';
+	}
 	return nl2br(preg_replace(
-			array('/&amp;(#\d{3,5};)/', "/\[hide=?\d*\](.*?)\[\/hide\]/is", "/\[\/?\w+=?.*?\]/"),
+			array('/&amp;(#\d{3,5};)/', "/\[hide=?\d*\](.*?)\[\/hide\]/is", "/\[postbg\]\s*([^\[\<\r\n;'\"\?\(\)]+?)\s*\[\/postbg\]/is", "/\[\/?\w+=?.*?\]/"),
 			array('&\\1','<b>**** Hidden Message *****</b>',''),
 		str_replace(
-			array('&', '"', '<', '>', "\t", '   ', '  '),
+			array('&', '"', '<', '>', "\t", '   ', '', '  '),
 			array('&amp;', '&quot;', '&lt;', '&gt;', '&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'),
 		$message)));
 }

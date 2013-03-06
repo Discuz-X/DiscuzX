@@ -160,7 +160,7 @@ class Cloud_Service_Server_Cloud extends Cloud_Service_Server_Restful {
 
 		$info['avgPosts'] = intval($avg_posts);
 		$info['statsCode'] = $_G['setting']['statcode'];
-		$info['analytics'] = $_G['setting']['analytics'];
+
 		return $info;
 	}
 

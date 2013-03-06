@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_portalblock.php 31094 2012-07-16 06:16:03Z zhangguosheng $
+ *      $Id: portalcp_portalblock.php 31958 2012-10-26 05:11:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -98,6 +98,13 @@ if(submitcheck('getblocklistsubmit') || submitcheck('verifieddatasubmit') || sub
 		}
 		if($ids) {
 			C::t('common_block_item_data')->delete($ids);
+		}
+
+		$displayorder = array_map('intval', $_POST['displayorder']);
+		foreach($displayorder  as $dataid => $displayorder) {
+			if($displayorder !== intval($_POST['olddisplayorder'][$dataid])) {
+				C::t('common_block_item_data')->update($dataid, array('displayorder' => $displayorder));
+			}
 		}
 		showmessage('do_success', dreferer());
 	}

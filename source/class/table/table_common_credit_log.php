@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_credit_log.php 27910 2012-02-16 08:42:28Z zhengqingpeng $
+ *      $Id: table_common_credit_log.php 31381 2012-08-21 07:56:35Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ class table_common_credit_log extends discuz_table
 	public function __construct() {
 
 		$this->_table = 'common_credit_log';
-		$this->_pk    = '';
+		$this->_pk    = 'logid';
 
 		parent::__construct();
 	}
@@ -47,11 +47,43 @@ class table_common_credit_log extends discuz_table
 		return DB::fetch_all('SELECT * FROM %t WHERE '.implode(' AND ', $wherearr).' ORDER BY dateline', $parameter);
 	}
 	public function fetch_all_by_uid($uid, $start = 0, $limit = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d ORDER BY dateline DESC '.DB::limit($start, $limit), array($this->_table, $uid));
+		$array = DB::fetch_all('SELECT * FROM %t WHERE uid=%d ORDER BY dateline DESC '.DB::limit($start, $limit), array($this->_table, $uid), 'logid');
+		if(!$array) {
+			return array();
+		}
+		$fieldids = array();
+		foreach($array as $key => $value) {
+			if(!in_array($value['operation'], lang('spacecp', 'logs_credit_update_INDEX'))) {
+				$fieldids[] = $key;
+			}
+		}
+		if($fieldids) {
+			$arrayfield = DB::fetch_all('SELECT * FROM %t WHERE logid IN(%n)', array('common_credit_log_field', $fieldids), 'logid');
+			foreach($arrayfield as $key => $value) {
+				$array[$key] += $value;
+			}
+		}
+		return $array;
 	}
 	public function fetch_all_by_search($uid, $optype, $begintime = 0, $endtime = 0, $exttype = 0, $income = 0, $extcredits = array(), $start = 0, $limit = 0, $relatedid = 0) {
 		$condition = $this->make_query_condition($uid, $optype, $begintime, $endtime, $exttype, $income, $extcredits, $relatedid);
-		return DB::fetch_all('SELECT * FROM %t '.$condition[0].' ORDER BY dateline DESC '.DB::limit($start, $limit), $condition[1]);
+		$array = DB::fetch_all('SELECT * FROM %t '.$condition[0].' ORDER BY dateline DESC '.DB::limit($start, $limit), $condition[1], 'logid');
+		if(!$array) {
+			return array();
+		}
+		$fieldids = array();
+		foreach($array as $key => $value) {
+			if(!in_array($value['operation'], lang('spacecp', 'logs_credit_update_INDEX'))) {
+				$fieldids[] = $key;
+			}
+		}
+		if($fieldids) {
+			$arrayfield = DB::fetch_all('SELECT * FROM %t WHERE logid IN(%n)', array('common_credit_log_field', $fieldids), 'logid');
+			foreach($arrayfield as $key => $value) {
+				$array[$key] += $value;
+			}
+		}
+		return $array;
 	}
 	public function delete_by_operation_relatedid($operation, $relatedid) {
 		$relatedid = dintval($relatedid, true);
@@ -129,7 +161,7 @@ class table_common_credit_log extends discuz_table
 		}
 		if($optype) {
 			$wherearr[] = is_array($optype) && $optype ? 'operation IN(%n)' : 'operation=%s';
-			$parameter[] = $optype;
+			$parameter[] = $optype != -1 ? $optype : '';
 		}
 		if($relatedid) {
 			$relatedid = dintval($relatedid, true);

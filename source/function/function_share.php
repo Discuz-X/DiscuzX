@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_share.php 31895 2012-10-23 02:22:16Z zhengqingpeng $
+ *      $Id: function_share.php 31894 2012-10-23 02:13:29Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {

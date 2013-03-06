@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 32189 2012-11-26 08:08:25Z liudongdong $
+ *      $Id: connect_login.php 32560 2013-02-20 09:43:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -98,7 +98,8 @@ if($op == 'init') {
 
 	$is_notify = true;
 
-	$conispublishfeed = $conispublisht = 1;
+	$conispublishfeed = 0;
+	$conispublisht = 1;
 
 	$is_user_info = 1;
 	$is_feed = 1;
@@ -170,8 +171,8 @@ if($op == 'init') {
 						'conuin' => $conuin,
 						'conuinsecret' => $conuinsecret,
 						'conopenid' => $conopenid,
-						'conispublishfeed' => 1,
-						'conispublisht' => 1,
+						'conispublishfeed' => $conispublishfeed,
+						'conispublisht' => $conispublisht,
 						'conisregister' => 0,
 						'conisfeed' => 1,
 						'conisqqshow' => $isqqshow,
@@ -183,8 +184,8 @@ if($op == 'init') {
 						'conuin' => $conuin,
 						'conuinsecret' => $conuinsecret,
 						'conopenid' => $conopenid,
-						'conispublishfeed' => 1,
-						'conispublisht' => 1,
+						'conispublishfeed' => $conispublishfeed,
+						'conispublisht' => $conispublisht,
 						'conisregister' => 0,
 						'conisfeed' => 1,
 						'conisqqshow' => $isqqshow,
@@ -290,6 +291,7 @@ if($op == 'init') {
 			if (substr($mobileId, 0, 7) == 'Mobile_') {
 				showmessage('login_succeed', $referer);
 			} else {
+				$referer = 'member.php?mod=connect&referer='.urlencode($referer);
 				$utilService->redirect($referer);
 			}
 

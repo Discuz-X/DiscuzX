@@ -3,9 +3,8 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
 *      This is NOT a freeware, use is subject to license terms
 *
-*      $Id: uploadavatar.php 31281 2012-08-03 02:29:27Z zhangjie $
+*      $Id: uploadavatar.php 32489 2013-01-29 03:57:16Z monkey $
 */
-//note 上传头像接口处理 @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');
@@ -22,7 +21,6 @@ class mobile_api {
 	var $tmpavatarmiddle;
 	var $tmpavatarsmall;
 
-	//note 程序模块执行前需要运行的代码
 	function common() {
 		global $_G;
 		if(empty($_G['uid'])) {
@@ -55,15 +53,12 @@ class mobile_api {
 		$tmpavatarsmall = './temp/upload'.$_G['uid'].'small'.$filetype;
 		$image = new image;
 		if($image->Thumb($tmpavatar, $tmpavatarbig, 200, 250, 1) <= 0) {
-			//$image->error();
 			self::error('api_uploadavatar_unusable_image');
 		}
 		if($image->Thumb($tmpavatar, $tmpavatarmiddle, 120, 120, 1) <= 0) {
-			//$image->error();
 			self::error('api_uploadavatar_unusable_image');
 		}
 		if($image->Thumb($tmpavatar, $tmpavatarsmall, 48, 48, 2) <= 0) {
-			//$image->error();
 			self::error('api_uploadavatar_unusable_image');
 		}
 
@@ -73,7 +68,6 @@ class mobile_api {
 		$this->tmpavatarsmall = $avatarpath.$tmpavatarsmall;
 	}
 
-	//note 程序模板输出前运行的代码
 	function output() {
 		global $_G;
 		if(!empty($_G['uid'])) {
@@ -112,7 +106,7 @@ class mobile_api {
 		foreach($value as $k => $v) {
 			$b .= strtoupper($v);
 		}
-		
+
 		return $b;
 	}
 

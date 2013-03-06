@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_credit.php 25885 2011-11-24 09:30:09Z monkey $
+ *      $Id: function_credit.php 31380 2012-08-21 07:25:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -52,10 +52,10 @@ function _checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 
 }
 
 
-function _updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
+function _updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '', $customtitle = '', $custommemo = '') {
 	if(empty($uids)) return;
 	if(!is_array($dataarr) || empty($dataarr)) return;
-	if($operation && $relatedid) {
+	if($operation && $relatedid || $customtitle) {
 		$writelog = true;
 	} else {
 		$writelog = false;
@@ -76,7 +76,7 @@ function _updatemembercount($uids, $dataarr = array(), $checkgroup = true, $oper
 		}
 	}
 	if($writelog) {
-		credit_log($uids, $operation, $relatedid, $log);
+		credit_log($uids, $operation, $relatedid, $log, $customtitle, $custommemo);
 	}
 	if($data) {
 		include_once libfile('class/credit');
@@ -85,8 +85,8 @@ function _updatemembercount($uids, $dataarr = array(), $checkgroup = true, $oper
 	}
 }
 
-function credit_log($uids, $operation, $relatedid, $data) {
-	if(!$operation || empty($relatedid) || empty($uids) || empty($data)) {
+function credit_log($uids, $operation, $relatedid, $data, $customtitle, $custommemo) {
+	if((!$operation || empty($relatedid)) && !strlen($customtitle) || empty($uids) || empty($data)) {
 		return;
 	}
 	$log = array(
@@ -102,10 +102,12 @@ function credit_log($uids, $operation, $relatedid, $data) {
 		foreach($uids as $k => $uid) {
 			$log['uid'] = $uid;
 			$log['relatedid'] = is_array($relatedid) ? $relatedid[$k] : $relatedid;
-			C::t('common_credit_log')->insert($log);
+			$insertid = C::t('common_credit_log')->insert($log, true);
+			C::t('common_credit_log_field')->insert(array('logid' => $insertid, 'title' => $customtitle, 'text' => $custommemo));
 		}
 	} else {
-		C::t('common_credit_log')->insert($log);
+		$insertid = C::t('common_credit_log')->insert($log, true);
+		C::t('common_credit_log_field')->insert(array('logid' => $insertid, 'title' => $customtitle, 'text' => $custommemo));
 	}
 }
 ?>

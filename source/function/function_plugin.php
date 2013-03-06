@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_plugin.php 29270 2012-03-31 07:03:43Z monkey $
+ *      $Id: function_plugin.php 32204 2012-11-29 06:07:00Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -74,7 +74,7 @@ function plugininstall($pluginarray, $installtype = '', $available = 0) {
 	}
 
 	cloudaddons_installlog($pluginarray['plugin']['identifier'].'.plugin');
-
+	cron_create($pluginarray['plugin']['identifier']);
 	updatecache(array('plugin', 'setting', 'styles'));
 	cleartemplatecache();
 	dsetcookie('addoncheck_plugin', '', -1);
@@ -141,7 +141,7 @@ function pluginupgrade($pluginarray, $installtype) {
 	C::t('common_plugin')->update($plugin['pluginid'], array('version' => $pluginarray['plugin']['version'], 'modules' => $pluginarray['plugin']['modules']));
 
 	cloudaddons_installlog($pluginarray['plugin']['identifier'].'.plugin');
-
+	cron_create($pluginarray['plugin']['identifier']);
 	updatecache(array('plugin', 'setting', 'styles'));
 	cleartemplatecache();
 	dsetcookie('addoncheck_plugin', '', -1);
@@ -157,10 +157,23 @@ function updatepluginlanguage($pluginarray) {
 	if(!$pluginarray['language']) {
 		return false;
 	}
-	foreach(array('script', 'template', 'install') as $type) {
+	foreach(array('script', 'template', 'install', 'system') as $type) {
 		loadcache('pluginlanguage_'.$type, 1);
-		if(!empty($pluginarray['language'][$type.'lang'])) {
-			$_G['cache']['pluginlanguage_'.$type][$pluginarray['plugin']['identifier']] = $pluginarray['language'][$type.'lang'];
+		if($type != 'system') {
+			if(!empty($pluginarray['language'][$type.'lang'])) {
+				$_G['cache']['pluginlanguage_'.$type][$pluginarray['plugin']['identifier']] = $pluginarray['language'][$type.'lang'];
+			}
+		} else {
+			if(!empty($_G['config']['plugindeveloper']) && @include(DISCUZ_ROOT.'./data/plugindata/'.$pluginarray['plugin']['identifier'].'.lang.php')) {
+				if(!empty($systemlang[$pluginarray['plugin']['identifier']])) {
+					$pluginarray['language']['systemlang'] = $systemlang[$pluginarray['plugin']['identifier']];
+				}
+			}
+			foreach($pluginarray['language']['systemlang'] as $file => $vars) {
+				foreach($vars as $key => $var) {
+					$_G['cache']['pluginlanguage_system'][$file][$key] = $var;
+				}
+			}
 		}
 		savecache('pluginlanguage_'.$type, $_G['cache']['pluginlanguage_'.$type]);
 	}
@@ -207,6 +220,80 @@ function createtable($sql, $dbcharset) {
 	$type = in_array($type, array('MYISAM', 'HEAP')) ? $type : 'MYISAM';
 	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
 	(mysql_get_server_info() > '4.1' ? " ENGINE=$type DEFAULT CHARSET=$dbcharset" : " TYPE=$type");
+}
+
+function cron_create($pluginid, $filename, $name, $weekday, $day, $hour, $minute) {
+	if(!ispluginkey($pluginid)) {
+		return false;
+	}
+	$dir = DISCUZ_ROOT.'./source/plugin/'.$pluginid.'/cron';
+	if(!file_exists($dir)) {
+		return false;
+	}
+	$crondir = dir($dir);
+	while($filename = $crondir->read()) {
+		if(!in_array($filename, array('.', '..')) && preg_match("/^cron\_[\w\.]+$/", $filename)) {
+			$content = file_get_contents($dir.'/'.$filename);
+			preg_match("/cronname\:(.+?)\n/", $content, $r);$name = lang('plugin/'.$pluginid, trim($r[1]));
+			preg_match("/week\:(.+?)\n/", $content, $r);$weekday = $r[1] ? intval($r[1]) : -1;
+			preg_match("/day\:(.+?)\n/", $content, $r);$day = $r[1] ? intval($r[1]) : -1;
+			preg_match("/hour\:(.+?)\n/", $content, $r);$hour = $r[1] ? intval($r[1]) : -1;
+			preg_match("/minute\:(.+?)\n/", $content, $r);$minute = $r[1] ? $r[1] : 0;
+			$minutenew = explode(',', $minute);
+			foreach($minutenew as $key => $val) {
+				$minutenew[$key] = $val = intval($val);
+				if($val < 0 || $var > 59) {
+					unset($minutenew[$key]);
+				}
+			}
+			$minutenew = array_slice(array_unique($minutenew), 0, 12);
+			$minutenew = implode("\t", $minutenew);
+			$filename = $pluginid.':'.$filename;
+			$cronid = C::t('common_cron')->get_cronid_by_filename($filename);
+			if(!$cronid) {
+				return C::t('common_cron')->insert(array(
+					'available' => 1,
+					'type' => 'plugin',
+					'name' => $name,
+					'filename' => $filename,
+					'weekday' => $weekday,
+					'day' => $day,
+					'hour' => $hour,
+					'minute' => $minutenew,
+				), true);
+			} else {
+				C::t('common_cron')->update($cronid, array(
+					'name' => $name,
+					'weekday' => $weekday,
+					'day' => $day,
+					'hour' => $hour,
+					'minute' => $minutenew,
+				));
+				return $cronid;
+			}
+		}
+	}
+}
+
+function cron_delete($pluginid) {
+	if(!ispluginkey($pluginid)) {
+		return false;
+	}
+	$dir = DISCUZ_ROOT.'./source/plugin/'.$pluginid.'/cron';
+	if(!file_exists($dir)) {
+		return false;
+	}
+	$crondir = dir($dir);
+	$count = 0;
+	while($filename = $crondir->read()) {
+		if(!in_array($filename, array('.', '..')) && preg_match("/^cron\_[\w\.]+$/", $filename)) {
+			$filename = $pluginid.':'.$filename;
+			$cronid = C::t('common_cron')->get_cronid_by_filename($filename);
+			C::t('common_cron')->delete($cronid);
+			$count++;
+		}
+	}
+	return $count;
 }
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 31912 2012-10-24 04:10:37Z zhangguosheng $
+ *      $Id: config_global_default.php 31879 2012-10-18 09:27:24Z zhangguosheng $
  */
 
 $_config = array();
@@ -30,28 +30,31 @@ $_config = array();
 $_config['db'][1]['dbhost']  		= 'localhost';
 $_config['db'][1]['dbuser']  		= 'root';
 $_config['db'][1]['dbpw'] 	 	= 'root';
-$_config['db'][1]['dbcharset'] 		= 'utf8';
+$_config['db'][1]['dbcharset'] 		= 'gbk';
 $_config['db'][1]['pconnect'] 		= 0;
 $_config['db'][1]['dbname']  		= 'ultrax';
 $_config['db'][1]['tablepre'] 		= 'pre_';
 
 /**
- * 数据库从服务器设置( slave, 只读 ), 支持多组服务器设置, 当设置多组服务器时, 系统每次随机使用
+ * 数据库从服务器设置( slave, 只读 ), 支持多组服务器设置, 当设置多组服务器时, 系统根据每次随机使用
  * @example
- * $_config['db']['slave']['1']['dbhost'] = 'localhost';
- * $_config['db']['slave']['1']['dbuser'] = 'root';
- * $_config['db']['slave']['1']['dbpw'] = 'root';
- * $_config['db']['slave']['1']['dbcharset'] = 'gbk';
- * $_config['db']['slave']['1']['pconnect'] = '0';
- * $_config['db']['slave']['1']['dbname'] = 'x1';
- * $_config['db']['slave']['1']['tablepre'] = 'pre_';
+ * $_config['db']['1']['slave']['1']['dbhost'] = 'localhost';
+ * $_config['db']['1']['slave']['1']['dbuser'] = 'root';
+ * $_config['db']['1']['slave']['1']['dbpw'] = 'root';
+ * $_config['db']['1']['slave']['1']['dbcharset'] = 'gbk';
+ * $_config['db']['1']['slave']['1']['pconnect'] = '0';
+ * $_config['db']['1']['slave']['1']['dbname'] = 'x1';
+ * $_config['db']['1']['slave']['1']['tablepre'] = 'pre_';
+ * $_config['db']['1']['slave']['1']['weight'] = '0'; //权重：数据越大权重越高
  *
- * $_config['db']['slave']['2']['dbhost'] = 'localhost';
+ * $_config['db']['1']['slave']['2']['dbhost'] = 'localhost';
  * ...
  *
  */
-$_config['db']['slave'] = array();
+$_config['db']['1']['slave'] = array();
 
+//启用从服务器的开关
+$_config['db']['slave'] = false;
 /**
  * 数据库 分布部署策略设置
  *
@@ -130,7 +133,7 @@ $_config['download']['xsendfile']['dir'] = '/down/';
 $_config['cache']['type'] 			= 'sql';	// 缓存类型 file=文件缓存, sql=数据库缓存
 
 // 页面输出设置
-$_config['output']['charset'] 			= 'utf-8';	// 页面字符集
+$_config['output']['charset'] 			= 'gbk';	// 页面字符集
 $_config['output']['forceheader']		= 1;		// 强制输出页面字符集，用于避免某些环境乱码
 $_config['output']['gzip'] 			= 0;		// 是否采用 Gzip 压缩输出
 $_config['output']['tplrefresh'] 		= 1;		// 模板自动刷新开关 0=关闭, 1=打开

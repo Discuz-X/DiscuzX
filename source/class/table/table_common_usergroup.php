@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_usergroup.php 28041 2012-02-21 07:33:55Z chenmengshu $
+ *      $Id: table_common_usergroup.php 31679 2012-09-21 02:09:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -129,6 +129,10 @@ class table_common_usergroup extends discuz_table
 			$datas[$data['Field']] = $result == 'FIELD' ? $data['Field'] : $data;
 		}
 		return $datas;
+	}
+
+	public function buyusergroup_exists() {
+		return DB::result_first("SELECT COUNT(*) FROM %t WHERE type='special' and system>0", array($this->_table));
 	}
 }
 

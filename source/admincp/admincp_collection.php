@@ -3,20 +3,21 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_collection.php 27779 2012-02-14 07:33:17Z chenmengshu $
+ *      $Id: admincp_collection.php 32581 2013-02-22 04:03:45Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 cpheader();
-$operation = in_array($operation, array('admin', 'comment')) ? $operation : 'admin';
+$operation = in_array($operation, array('admin', 'comment', 'recommend')) ? $operation : 'admin';
 $current = array($operation => 1);
 $fromumanage = $_GET['fromumanage'] ? 1 : 0;
 shownav('global', 'collection');
 showsubmenu('collection', array(
 	array('collection_admin', 'collection&operation=admin', $current['admin']),
 	array('collection_comment', 'collection&operation=comment', $current['comment']),
+	array('collection_recommend', 'collection&operation=recommend', $current['recommend'])
 ));
 echo '<script src="static/js/calendar.js"></script>';
 
@@ -152,13 +153,14 @@ if($operation == 'comment') {
 		showformheader('collection&operation=admin');
 		showtableheader(cplang('collection_result').' '.$totalcount.' <a href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=collection&operation=admin\';" class="act lightlink normal">'.cplang('research').'</a>', 'nobottom');
 		showhiddenfields(array('page' => $_GET['page'], 'collection_name' => $collection_name, 'collection_ctid' => $collection_ctid, 'perpage' => $ppp));
-		showsubtitle(array('', 'collection_name', 'collection_username', 'collection_date'));
+		showsubtitle(array('', 'collection_name', 'collection_username', 'collection_date', 'collection_recommend'));
 		foreach($collection as $uniquecollection) {
 			showtablerow('', array('class="td25"', 'width=400', ''), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"ctidarray[]\" value=\"$uniquecollection[ctid]\" />",
 				"<a href='forum.php?mod=collection&action=view&ctid={$uniquecollection['ctid']}' target='_blank'>{$uniquecollection['name']}</a>",
 				"<a href='home.php?mod=space&uid={$uniquecollection['uid']}' target='_blank'>{$uniquecollection['username']}</a>",
 				dgmdate($uniquecollection['dateline']),
+				"<a href='".ADMINSCRIPT."?action=collection&operation=recommend&recommentctid={$uniquecollection['ctid']}'>".cplang('collection_recommend')."</a>",
 			));
 		}
 		showtablerow('', array('class="td25" colspan="3"'), array('<input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'ctidarray\', \'chkall\')" /><label for="chkall">'.cplang('select_all').'</label>'));
@@ -170,5 +172,89 @@ if($operation == 'comment') {
 		showtablefooter();
 		showformfooter();
 	}
+} elseif($operation == 'recommend') {
+	if(is_numeric($_GET['recommentctid'])) {
+		$collectiondata = C::t('forum_collection')->fetch($_GET['recommentctid']);
+		if($collectiondata['ctid']) {
+			$collectionrecommend = $_G['setting']['collectionrecommend'] ? dunserialize($_G['setting']['collectionrecommend']) : array();
+			$collectionrecommend['ctids'][$collectiondata['ctid']] = 0;
+			$collectionrecommend['ctids'] = removeNonExistsCollection($collectionrecommend['ctids']);
+			$collectionrecommend['adminrecommend'] = count($collectionrecommend['ctids']);
+			asort($collectionrecommend['ctids']);
+			$data = array('collectionrecommendnum' => $collectionrecommend['autorecommend']+$collectionrecommend['adminrecommend'], 'collectionrecommend' => $collectionrecommend);
+			C::t('common_setting')->update_batch($data);
+			updatecache('setting');
+			savecache('collection_index', array());
+		}
+		cpmsg('collection_admin_updated', 'action=collection&operation=recommend', 'succeed');
+	}
+	if(!submitcheck('submit', 1)) {
+		$ctidarray = array();
+		$collectionrecommend = dunserialize($_G['setting']['collectionrecommend']);
+
+
+		showformheader('collection&operation=recommend');
+		showtableheader(cplang('collection_recommend_settings'), 'nobottom');
+		showsetting('collection_recommend_index_autonumber', 'settingnew[autorecommend]', $collectionrecommend['autorecommend'] ? $collectionrecommend['autorecommend'] : 0, 'text');
+		showtableheader(cplang('collection_recommend_existed'), 'nobottom');
+		showhiddenfields(array('page' => $_GET['page'], 'tagname' => $tagname, 'status' => $status, 'perpage' => $ppp));
+		showsubtitle(array('', 'collection_name', 'collection_username', 'collection_threadnum', 'collection_commentnum', 'collection_date', 'display_order'));
+
+		if($collectionrecommend['ctids']) {
+			$collectiondata = C::t('forum_collection')->fetch_all(array_keys($collectionrecommend['ctids']));
+			foreach($collectiondata as $collection) {
+				showtablerow('', array('class="td25"', 'width=400', ''), array(
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"ctidarray[]\" value=\"$collection[ctid]\" />",
+					"<a href='forum.php?mod=collection&action=view&ctid={$collection['ctid']}' target='_blank'>{$collection['name']}</a>",
+					"<a href='home.php?mod=space&uid={$collection['uid']}' target='_blank'>{$collection['username']}</a>",
+					$collection['threadnum'],
+					$collection['commentnum'],
+					dgmdate($collection['dateline']),
+					"<input class=\"txt\" type=\"text\" name=\"ctidorder[{$collection[ctid]}]\" value=\"{$collectionrecommend['ctids'][$collection[ctid]]}\" />",
+				));
+			}
+		} else {
+			showtablerow('', array('class="td25" colspan="7" align="center"', ''), array(
+				cplang('collection_recommend_tips'),
+			));
+		}
+		showtablerow('', array('class="td25" colspan="7"'), array('<input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'ctidarray\', \'chkall\')" /><label for="chkall"> '.cplang('select_all').'</label>'));
+		showtablerow('', array('class="td25"', 'colspan="2"'), array(
+				cplang('operation'),
+				'<input class="checkbox" type="checkbox" name="operate_type" id="operate_type" value="delete"><label for="operate_type"> '.cplang('delete').'</label> '
+			));
+		showsubmit('submit', 'submit', '', '');
+		showtablefooter();
+		showformfooter();
+	} else {
+		$collectionrecommend = $_G['setting']['collectionrecommend'] ? dunserialize($_G['setting']['collectionrecommend']) : array();
+		foreach($collectionrecommend['ctids'] as $rCtid=>&$rCollection) {
+			if($_GET['operate_type'] == 'delete' && in_array($rCtid, $_GET['ctidarray'])) {
+				unset($collectionrecommend['ctids'][$rCtid]);
+				continue;
+			}
+			$rCollection = $_GET['ctidorder'][$rCtid];
+		}
+		$collectionrecommend['ctids'] = removeNonExistsCollection($collectionrecommend['ctids']);
+		$collectionrecommend['autorecommend'] = intval($_GET['settingnew']['autorecommend']);
+		$collectionrecommend['adminrecommend'] = count($collectionrecommend['ctids']);
+		asort($collectionrecommend['ctids']);
+
+		$data = array('collectionrecommendnum' => $collectionrecommend['autorecommend']+$collectionrecommend['adminrecommend'], 'collectionrecommend' => $collectionrecommend);
+		C::t('common_setting')->update_batch($data);
+		updatecache('setting');
+		savecache('collection_index', array());
+		cpmsg('collection_admin_updated', 'action=collection&operation=recommend', 'succeed');
+	}
+}
+
+function removeNonExistsCollection($collectionrecommend) {
+	$tmpcollection = C::t('forum_collection')->fetch_all(array_keys($collectionrecommend));
+	foreach($collectionrecommend as $ctid=>$setcollection) {
+		if(!$tmpcollection[$ctid]) {
+			unset($collectionrecommend[$ctid]);
+		}
+	}
+	return $collectionrecommend;
 }
 ?>

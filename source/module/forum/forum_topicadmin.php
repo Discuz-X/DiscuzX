@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_topicadmin.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: forum_topicadmin.php 30872 2012-06-27 10:11:44Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -91,7 +91,7 @@ if($resultarray) {
 		$modactioncode = lang('forum/modaction');
 		$modaction = $modactioncode[$modaction];
 		foreach($resultarray['reasonpm']['data'] as $var) {
-			sendreasonpm($var, $resultarray['reasonpm']['item'], $resultarray['reasonvar']);
+			sendreasonpm($var, $resultarray['reasonpm']['item'], $resultarray['reasonvar'], $resultarray['reasonpm']['notictype']);
 		}
 	}
 

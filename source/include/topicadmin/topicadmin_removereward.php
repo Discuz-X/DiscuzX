@@ -37,7 +37,7 @@ if(!submitcheck('modsubmit')) {
 	C::t('common_credit_log')->delete_by_operation_relatedid(array('RTC', 'RAC'), $thread['tid']);
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=viewthread&tid=$thread[tid]",
-	'reasonpm'	=> ($sendreasonpm ? array('data' => array($thread), 'var' => 'thread', 'item' => 'reason_remove_reward') : array()),
+	'reasonpm'	=> ($sendreasonpm ? array('data' => array($thread), 'var' => 'thread', 'item' => 'reason_remove_reward', 'notictype' => 'post') : array()),
 	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason, 'threadid' => $thread[tid]),
 	'modtids'	=> $thread['tid']
 	);

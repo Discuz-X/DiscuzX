@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_qqgroup.php 31973 2012-10-29 06:00:55Z songlixin $
+ *      $Id: cloud_qqgroup.php 31974 2012-10-29 06:02:39Z songlixin $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');

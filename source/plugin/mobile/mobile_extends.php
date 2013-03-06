@@ -4,12 +4,9 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile_extends.php 31281 2012-08-03 02:29:27Z zhangjie $
+ *      $Id: mobile_extends.php 31700 2012-09-24 03:46:59Z zhangjie $
  */
 
-//note 本类用于对手机接口进行开放数据源扩展.
-//note 在接口中使用: api/mobile/index.php?module=extends&ac=list获取扩展数据源列表
-//note 查看数据源中的列表: api/mobile/index.php?module=extends&identifier=dz_newthread
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

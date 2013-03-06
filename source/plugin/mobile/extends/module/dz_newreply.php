@@ -4,12 +4,9 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dz_newreply.php 31964 2012-10-26 07:27:36Z zhangjie $
+ *      $Id: dz_newreply.php 31963 2012-10-26 07:27:05Z zhangjie $
  */
 class dz_newreply extends extends_data {
-//	private $variable;
-//	private $page;
-//	private $perpage = 50;
 	function __construct() {
 		parent::__construct();
 	}

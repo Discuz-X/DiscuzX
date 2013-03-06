@@ -144,17 +144,19 @@ if($_GET['action'] == 'group') {
 	if(!submitcheck('invitesubmit')) {
 		$inviteduids = '';
 	} else {
+		require_once libfile('function/portal');
+		$article_url = fetch_article_url($article);
 		$uids = $_GET['uids'];
 		if($uids) {
 			if(count($uids) > 20) {
 				showmessage('group_choose_friends_max');
 			}
 			foreach(C::t('common_member')->fetch_all($uids, false, 0) as $uid => $user) {
-				notification_add($uid, 'article', 'article_invite', array('subject' => $article['title'], 'aid' => $id, 'from_id' => $id, 'from_idtype' => 'invite_article'));
+				notification_add($uid, 'article', 'article_invite', array('subject' => $article['title'], 'url' => $article_url, 'from_id' => $id, 'from_idtype' => 'invite_article'));
 			}
-			showmessage('group_invite_succeed', "portal.php?mod=view&aid=$id");
+			showmessage('group_invite_succeed', $article_url);
 		} else {
-			showmessage('group_invite_choose_member', "portal.php?mod=view&aid=$id");
+			showmessage('group_invite_choose_member', $article_url);
 		}
 	}
 }

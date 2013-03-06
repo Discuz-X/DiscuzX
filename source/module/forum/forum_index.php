@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_index.php 29580 2012-04-20 02:53:59Z svn_project_zhangjie $
+ *      $Id: forum_index.php 32672 2013-02-28 07:41:31Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,12 +61,67 @@ if($_G['uid'] && empty($_G['cookie']['nofavfid'])) {
 	}
 	if($favfids) {
 		$favforumlist = C::t('forum_forum')->fetch_all($favfids);
+		$favforumlist_fields = C::t('forum_forumfield')->fetch_all($favfids);
 		foreach($favforumlist as $id => $forum) {
+			if($favforumlist_fields[$forum['fid']]['fid']) {
+				$favforumlist[$id] = array_merge($forum, $favforumlist_fields[$forum['fid']]);
+			}
 			forum($favforumlist[$id]);
 		}
+
 	}
 }
 
+
+if(!$gid && ($_G['setting']['collectionrecommendnum'] || !$_G['setting']['hidefollowcollection'])) {
+	require_once libfile('function/cache');
+	loadcache('collection_index');
+	$collectionrecommend = dunserialize($_G['setting']['collectionrecommend']);
+	if(TIMESTAMP - $_G['cache']['collection_index']['dateline'] > 300) {
+		$collectiondata = $followdata = array();
+		if($_G['setting']['collectionrecommendnum']) {
+			if($collectionrecommend['ctids']) {
+				$collectionrecommend['ctidsKey'] = array_keys($collectionrecommend['ctids']);
+				$tmpcollection = C::t('forum_collection')->fetch_all($collectionrecommend['ctidsKey']);
+				foreach($collectionrecommend['ctids'] as $ctid=>$setcollection) {
+					if($tmpcollection[$ctid]) {
+						$collectiondata[$ctid] = $tmpcollection[$ctid];
+					}
+				}
+				unset($tmpcollection, $ctid, $setcollection);
+			}
+			if($collectionrecommend['autorecommend']) {
+				require_once libfile('function/collection');
+				$autorecommenddata = getHotCollection(500);
+			}
+		}
+
+		savecache('collection_index', array('dateline' => TIMESTAMP, 'data' => $collectiondata, 'auto' => $autorecommenddata));
+		$collectiondata = array('data' => $collectiondata, 'auto' => $autorecommenddata);
+	} else {
+		$collectiondata = &$_G['cache']['collection_index'];
+	}
+	if($_G['setting']['showfollowcollection']) {
+		$followcollections = $_G['uid'] ? C::t('forum_collectionfollow')->fetch_all_by_uid($_G['uid']) : array();;
+		if($followcollections) {
+			$collectiondata['follows'] = C::t('forum_collection')->fetch_all(array_keys($followcollections), 'dateline', 'DESC', 0, $_G['setting']['showfollowcollection']);
+		}
+	}
+	if($collectionrecommend['autorecommend'] && $collectiondata['auto']) {
+		$randrecommend = array_rand($collectiondata['auto'], min($collectionrecommend['autorecommend'], count($collectiondata['auto'])));
+		if($randrecommend && !is_array($randrecommend)) {
+			$collectiondata['data'][$randrecommend] = $collectiondata['auto'][$randrecommend];
+		} else {
+			foreach($randrecommend as $ctid) {
+				$collectiondata['data'][$ctid] = $collectiondata['auto'][$ctid];
+			}
+		}
+	}
+	if($collectiondata['data']) {
+		$collectiondata['data'] = array_slice($collectiondata['data'], 0, $collectionrecommend['autorecommend'], true);
+	}
+
+}
 
 if(empty($gid) && empty($_G['member']['accessmasks']) && empty($showoldetails)) {
 	extract(get_index_memory_by_groupid($_G['member']['groupid']));
@@ -78,6 +133,80 @@ if(empty($gid) && empty($_G['member']['accessmasks']) && empty($showoldetails)) 
 			include loadarchiver('forum/discuz');
 		}
 		dexit();
+	}
+}
+
+$grids = array();
+if($_G['setting']['grid']['showgrid']) {
+	loadcache('grids');
+	$cachelife = $_G['setting']['grid']['cachelife'] ? $_G['setting']['grid']['cachelife'] : 600;
+	$now = dgmdate(TIMESTAMP, 'Y年m月d日').' '.lang('forum/misc', 'week_'.dgmdate(TIMESTAMP, 'w'));
+	if(TIMESTAMP - $_G['cache']['grids']['cachetime'] < $cachelife) {
+		$grids = $_G['cache']['grids'];
+	} else {
+		$images = array();
+		$_G['setting']['grid']['fids'] = in_array(0, $_G['setting']['grid']['fids']) ? 0 : $_G['setting']['grid']['fids'];
+
+		if($_G['setting']['grid']['gridtype']) {
+			$digestdl = TIMESTAMP-1209600;
+			$grids['digest'] = C::t('forum_thread')->fetch_all_for_guide('digest', 0, array(), 3, $digestdl, 0, 10, $_G['setting']['grid']['fids']);
+		} else {
+			$images = C::t('forum_threadimage')->fetch_all_order_by_tid(10);
+			foreach($images as $key => $value) {
+				$tids[$value['tid']] = $value['tid'];
+			}
+			$grids['image'] = C::t('forum_thread')->fetch_all_by_tid($tids);
+		}
+		$grids['newthread'] = C::t('forum_thread')->fetch_all_for_guide('thread', 0, array(), 0, 0, 0, 10, $_G['setting']['grid']['fids']);
+
+		$grids['newreply'] = C::t('forum_thread')->fetch_all_for_guide('newthread', 0, array(), 0, 0, 0, 10, $_G['setting']['grid']['fids']);
+		$hotdl = TIMESTAMP-604800;
+		$grids['hot'] = C::t('forum_thread')->fetch_all_for_guide('hot', 0, array(), 3, $hotdl, 0, 10, $_G['setting']['grid']['fids']);
+
+		$_G['forum_colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
+		foreach($grids as $type => $gridthreads) {
+			foreach($gridthreads as $key => $gridthread) {
+				$gridthread['dateline'] = str_replace('"', '\'', dgmdate($gridthread['dateline'], 'u', '9999', getglobal('setting/dateformat')));
+				$gridthread['lastpost'] = str_replace('"', '\'', dgmdate($gridthread['lastpost'], 'u', '9999', getglobal('setting/dateformat')));
+				if($gridthread['highlight'] && $_G['setting']['grid']['highlight']) {
+					$string = sprintf('%02d', $gridthread['highlight']);
+					$stylestr = sprintf('%03b', $string[0]);
+
+					$gridthread['highlight'] = ' style="';
+					$gridthread['highlight'] .= $stylestr[0] ? 'font-weight: bold;' : '';
+					$gridthread['highlight'] .= $stylestr[1] ? 'font-style: italic;' : '';
+					$gridthread['highlight'] .= $stylestr[2] ? 'text-decoration: underline;' : '';
+					$gridthread['highlight'] .= $string[1] ? 'color: '.$_G['forum_colorarray'][$string[1]] : '';
+					$gridthread['highlight'] .= '"';
+				} else {
+					$gridthread['highlight'] = '';
+				}
+				if($_G['setting']['grid']['textleng']) {
+					$gridthread['oldsubject'] = $gridthread['subject'];
+					$gridthread['subject'] = cutstr($gridthread['subject'], $_G['setting']['grid']['textleng']);
+				}
+				$grids[$type][$key] = $gridthread;
+			}
+		}
+		if(!$_G['setting']['grid']['gridtype']) {
+
+			$focuspic = $focusurl = $focustext = array();
+			$grids['focus'] = 'config=5|0xffffff|0x0099ff|50|0xffffff|0x0099ff|0x000000';
+			foreach($grids['image'] as $ithread) {
+				if($images[$ithread['tid']]['remote']) {
+					$imageurl = $_G['setting']['ftp']['attachurl'].'forum/'.$images[$ithread['tid']]['attachment'];
+				} else {
+					$imageurl = $_G['setting']['attachurl'].'forum/'.$images[$ithread['tid']]['attachment'];
+				}
+				$grids['slide'][$ithread['tid']] = array(
+						'image' => $imageurl,
+						'url' => 'forum.php?mod=viewthread&tid='.$ithread['tid'],
+						'subject' => $ithread['subject']
+					);
+			}
+		}
+		$grids['cachetime'] = TIMESTAMP;
+		savecache('grids', $grids);
 	}
 }
 
@@ -260,6 +389,7 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 			'onlinenum' => $onlinenum,
 			'membercount' => $membercount,
 			'guestcount' => $guestcount,
+			'grids' => $grids,
 			'announcements' => $announcements,
 			'threads' => $threads,
 			'posts' => $posts,
@@ -386,12 +516,15 @@ function categorycollapse() {
 			$collapse['category_'.$fid] = 'display: none';
 		}
 	}
-	if(!isset($_G['cookie']['collapse']) || strpos($_G['cookie']['collapse'], '_category_0_') === FALSE) {
-		$collapse['collapseimg_0'] = 'collapsed_no.gif';
-		$collapse['category_0'] = '';
-	} else {
-		$collapse['collapseimg_0'] = 'collapsed_yes.gif';
-		$collapse['category_0'] = 'display: none';
+
+	for($i = -2; $i <= 0; $i++) {
+		if(!isset($_G['cookie']['collapse']) || strpos($_G['cookie']['collapse'], '_category_'.$i.'_') === FALSE) {
+			$collapse['collapseimg_'.$i] = 'collapsed_no.gif';
+			$collapse['category_'.$i] = '';
+		} else {
+			$collapse['collapseimg_'.$i] = 'collapsed_yes.gif';
+			$collapse['category_'.$i] = 'display: none';
+		}
 	}
 }
 ?>

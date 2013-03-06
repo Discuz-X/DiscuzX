@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: spacecp_credit.php 32023 2012-10-31 08:20:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -131,6 +131,13 @@ function makecreditlog($log, $otherinfo=array()) {
 			break;
 		case 'RPZ':
 			$log['opinfo'] = lang('spacecp', 'admincp_op_credit');
+			break;
+		case 'FCP':
+			$log['opinfo'] = '<a href="forum.php?mod=forumdisplay&fid='.$log['relatedid'].'" target="_blank">'.lang('spacecp', 'buy_forum').'</a>';
+			break;
+		case 'BGR':
+			$log['opinfo'] = '<a href="forum.php?mod=forumdisplay&fid='.$log['relatedid'].'" target="_blank">'.lang('spacecp', 'buildgroup').'</a>';
+			break;
 
 	}
 	return $log;

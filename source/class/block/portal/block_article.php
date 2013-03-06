@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_article.php 29655 2012-04-24 05:51:56Z zhangguosheng $
+ *      $Id: block_article.php 31313 2012-08-10 03:51:03Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -198,6 +198,7 @@ class block_article extends discuz_block {
 
 	function getdata($style, $parameter) {
 		global $_G;
+		require_once libfile('function/portal');
 
 		$parameter = $this->cookparameter($parameter);
 		$aids		= !empty($parameter['aids']) ? explode(',', $parameter['aids']) : array();
@@ -305,7 +306,7 @@ class block_article extends discuz_block {
 				'id' => $data['aid'],
 				'idtype' => 'aid',
 				'title' => cutstr($data['title'], $titlelength, ''),
-				'url' => 'portal.php?mod=view&aid='.$data['aid'],
+				'url' => fetch_article_url($data),
 				'pic' => $data['pic'],
 				'picflag' => $data['picflag'],
 				'summary' => cutstr(strip_tags($data['summary']), $summarylength, ''),

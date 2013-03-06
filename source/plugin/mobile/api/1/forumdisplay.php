@@ -6,18 +6,18 @@
  *
  *      $Id: forumdisplay.php 29296 2012-04-01 01:56:37Z congyushuai $
  */
-//note 版块forum >> forumdisplay(查看版块) @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');
 }
+
+define('MOBILE_HIDE_STICKY', !isset($_GET['hidesticky']) ? 1 : $_GET['hidesticky']);
 
 $_GET['mod'] = 'forumdisplay';
 include_once 'forum.php';
 
 class mobile_api {
 
-	//note 程序模块执行前需要运行的代码
 	function common() {
 		global $_G;
 		if(!empty($_GET['pw'])) {
@@ -26,7 +26,6 @@ class mobile_api {
 		$_G['forum']['allowglobalstick'] = false;
 	}
 
-	//note 程序模板输出前运行的代码
 	function output() {
 		global $_G;
 		$variable = array(

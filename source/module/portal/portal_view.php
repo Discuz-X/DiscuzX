@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 32362 2013-01-06 09:17:06Z zhangguosheng $
+ *      $Id: portal_view.php 32718 2013-03-04 09:21:06Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,6 +23,13 @@ if(empty($article) || ($article['status'] > 0 && $article['uid'] != $_G['uid'] &
 	showmessage('view_article_no_exist');
 }
 
+if(!empty($_G['setting']['antitheft']['allow']) && empty($_G['setting']['antitheft']['disable']['article']) && empty($_G['cache']['portalcategory'][$article['catid']]['noantitheft'])) {
+	helper_antitheft::check($aid, 'aid');
+}
+
+if($article['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy']) && empty($article['url'])) {
+	dheader('location:'. fetch_article_url($article));
+}
 $article_count = C::t('portal_article_count')->fetch($aid);
 if($article_count) $article = array_merge($article_count, $article);
 
@@ -37,7 +44,9 @@ if($article_count) {
 }
 
 if($article['url']) {
-	dheader("location:{$article['url']}");
+	if(!isset($_G['makehtml'])) {
+		dheader("location:{$article['url']}");
+	}
 	exit();
 }
 
@@ -66,7 +75,8 @@ if($article['contents'] && $article['showinnernav']) {
 require_once libfile('function/blog');
 $content['content'] = blog_bbcode($content['content']);
 
-$multi = multi($article['contents'], 1, $page, "portal.php?mod=view&aid=$aid");
+$viewurl = $article['htmlmade'] ? $article['htmldir'].$article['htmlname'].'{page}.'.$_G['setting']['makehtml']['extendname'] : "portal.php?mod=view&aid=$aid";
+$multi = multi($article['contents'], 1, $page, $viewurl);
 $org = array();
 if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 	$thread = $firstpost = array();
@@ -111,7 +121,7 @@ if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 	$org = C::t('home_blog')->fetch($article['id']);
 	if(empty($org)) {
 		C::t('portal_article_title')->update($aid, array('id' => 0, 'idtype' => ''));
-		dheader('location: portal.php?mod=view&aid='.$aid);
+		dheader('location: '.  fetch_article_url($article));
 		exit();
 	}
 }
@@ -219,6 +229,7 @@ foreach(C::t('home_clickuser')->fetch_all_by_id_idtype($id, $idtype, 0, 24) as $
 	$clickuserlist[] = $value;
 }
 
+$article['timestamp'] = $article['dateline'];
 $article['dateline'] = dgmdate($article['dateline']);
 
 foreach($cat['ups'] as $val) {
@@ -248,7 +259,10 @@ if(!$_G['setting']['relatedlinkstatus']) {
 } else {
 	$content['content'] = parse_related_link($content['content'], 'article');
 }
-
+if(isset($_G['makehtml'])) {
+	helper_makehtml::portal_article($cat, $article, $page);
+}
+portal_get_per_next_article($article);
 $tpldirectory = '';
 $articleprimaltplname = $cat['articleprimaltplname'];
 if(strpos($articleprimaltplname, ':') !== false) {
@@ -297,4 +311,26 @@ function parseforumattach(&$post, $aids) {
 	}
 }
 
+function portal_get_per_next_article(&$article) {
+	$data = array();
+	$aids = array();
+	if($article['preaid']) {
+		$aids[$article['preaid']] = $article['preaid'];
+	}
+	if($article['nextaid']) {
+		$aids[$article['nextaid']] = $article['nextaid'];
+	}
+	if($aids) {
+		$data = C::t('portal_article_title')->fetch_all($aids);
+		foreach ($data as $aid => &$value) {
+			$value['url'] = fetch_article_url($value);
+		}
+	}
+	if($data[$article['preaid']]) {
+		$article['prearticle'] = $data[$article['preaid']];
+	}
+	if($data[$article['nextaid']]) {
+		$article['nextarticle'] = $data[$article['nextaid']];
+	}
+}
 ?>

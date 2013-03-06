@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_card_log.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_card_log.php 31076 2012-07-13 03:30:58Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class table_common_card_log extends discuz_table
+class table_common_card_log extends discuz_table_archive
 {
 	public function __construct() {
 

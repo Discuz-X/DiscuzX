@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 30627 2012-06-07 07:03:04Z zhengqingpeng $
+ *      $Id: function_post.php 32415 2013-01-15 03:53:22Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -160,6 +160,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 			if($attach['uid'] != $uid && !$_G['forum']['ismoderator']) {
 				continue;
 			}
+			$attach['uid'] = $uid;
 			$newattach[$attach['aid']] = daddslashes($attach);
 			if($attach['isimage']) {
 				$newattachfile[$attach['aid']] = $attach['attachment'];
@@ -199,6 +200,19 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 					if(!empty($albumattach[$aid])) {
 						$albumattach[$aid]['thumb'] = 0;
 					}
+				} elseif(!$_G['setting']['thumbdisabledmobile']) {
+					$_daid = sprintf("%09d", $aid);
+					$dir1 = substr($_daid, 0, 3);
+					$dir2 = substr($_daid, 3, 2);
+					$dir3 = substr($_daid, 5, 2);
+					$dw = 320;
+					$dh = 320;
+					$thumbfile = 'image/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($_daid, -2).'_'.$dw.'_'.$dh.'.jpg';
+					$image->Thumb($_G['setting']['attachdir'].'/forum/'.$newattachfile[$aid], $thumbfile, $dw, $dh, 'fixwr');
+					$dw = 720;
+					$dh = 720;
+					$thumbfile = 'image/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($_daid, -2).'_'.$dw.'_'.$dh.'.jpg';
+					$image->Thumb($_G['setting']['attachdir'].'/forum/'.$newattachfile[$aid], $thumbfile, $dw, $dh, 'fixwr');
 				}
 				if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
 					$image->Watermark($_G['setting']['attachdir'].'/forum/'.$newattachfile[$aid], '', 'forum');
@@ -214,7 +228,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 				}
 				$picdata = array(
 					'albumid' => $_GET['uploadalbum'],
-					'uid' => $_G['uid'],
+					'uid' => $uid,
 					'username' => $_G['username'],
 					'dateline' => $albumattach[$aid]['dateline'],
 					'postip' => $_G['clientip'],
@@ -239,6 +253,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 			C::t('forum_attachment')->update($aid, array('tid' => $tid, 'pid' => $pid, 'tableid' => getattachtableid($tid)));
 			C::t('forum_attachment_unused')->delete($aid);
 		}
+
 		if(!empty($_GET['albumaid'])) {
 			$albumdata = array(
 				'picnum' => C::t('home_pic')->check_albumpic($_GET['uploadalbum']),
@@ -349,8 +364,11 @@ function checkpost($subject, $message, $special = 0) {
 	if(!$_G['group']['disablepostctrl'] && !$special) {
 		if($_G['setting']['maxpostsize'] && strlen($message) > $_G['setting']['maxpostsize']) {
 			return 'post_message_toolong';
-		} elseif($_G['setting']['minpostsize'] && strlen(preg_replace("/\[quote\].+?\[\/quote\]/is", '', $message)) < $_G['setting']['minpostsize']) {
-			return 'post_message_tooshort';
+		} elseif($_G['setting']['minpostsize']) {
+			$minpostsize = !IN_MOBILE || !$_G['setting']['minpostsize_mobile'] ? $_G['setting']['minpostsize'] : $_G['setting']['minpostsize_mobile'];
+			if(strlen(preg_replace("/\[quote\].+?\[\/quote\]/is", '', $message)) < $minpostsize) {
+				return 'post_message_tooshort';
+			}
 		}
 	}
 	return FALSE;
@@ -526,7 +544,7 @@ function messagecutstr($str, $length = 0, $dot = ' ...') {
 	$language = lang('forum/misc');
 	loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'domainwhitelist'));
 	$bbcodes = 'b|i|u|p|color|size|font|align|list|indent|float';
-	$bbcodesclear = 'email|code|free|table|tr|td|img|swf|flash|attach|media|audio|payto'.($_G['cache']['bbcodes_display'][$_G['groupid']] ? '|'.implode('|', array_keys($_G['cache']['bbcodes_display'][$_G['groupid']])) : '');
+	$bbcodesclear = 'email|code|free|table|tr|td|img|swf|flash|attach|media|audio|groupid|payto'.($_G['cache']['bbcodes_display'][$_G['groupid']] ? '|'.implode('|', array_keys($_G['cache']['bbcodes_display'][$_G['groupid']])) : '');
 	$str = strip_tags(preg_replace(array(
 			"/\[hide=?\d*\](.*?)\[\/hide\]/is",
 			"/\[quote](.*?)\[\/quote]/si",

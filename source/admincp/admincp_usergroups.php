@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 31192 2012-07-25 03:26:29Z chenmengshu $
+ *      $Id: admincp_usergroups.php 32082 2012-11-07 08:00:31Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -34,7 +34,8 @@ if(!$operation) {
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"groupnew[$group[groupid]][stars]\" value=\"$group[stars]\">",
 					"<input type=\"text\" id=\"group_color_$group[groupid]_v\" class=\"left txt\" size=\"6\" name=\"groupnew[$group[groupid]][color]\" value=\"$group[color]\" onchange=\"updatecolorpreview('group_color_$group[groupid]')\"><input type=\"button\" id=\"group_color_$group[groupid]\"  class=\"colorwd\" onclick=\"group_color_$group[groupid]_frame.location='static/image/admincp/getcolor.htm?group_color_$group[groupid]|group_color_$group[groupid]_v';showMenu({'ctrlid':'group_color_$group[groupid]'})\" /><span id=\"group_color_$group[groupid]_menu\" style=\"display: none\"><iframe name=\"group_color_$group[groupid]_frame\" src=\"\" frameborder=\"0\" width=\"210\" height=\"148\" scrolling=\"no\"></iframe></span>",
 					"<input class=\"checkbox\" type=\"checkbox\" chkvalue=\"gmember\" value=\"$group[groupid]\" onclick=\"multiupdate(this)\" /><a href=\"".ADMINSCRIPT."?action=usergroups&operation=edit&id=$group[groupid]\" class=\"act\">$lang[edit]</a>".
-						"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=copy&source=$group[groupid]\" title=\"$lang[usergroups_copy_comment]\" class=\"act\">$lang[usergroups_copy]</a>"
+						"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=copy&source=$group[groupid]\" title=\"$lang[usergroups_copy_comment]\" class=\"act\">$lang[usergroups_copy]</a>".
+						"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=merge&source=$group[groupid]\" title=\"$lang[usergroups_merge_comment]\" class=\"act\">$lang[usergroups_merge_link]</a>"
 				), TRUE);
 			} elseif($group['type'] == 'system') {
 				$sysgroup .= showtablerow('', array('', 'class="td23 lightfont"', '', 'class="td28"'), array(
@@ -74,6 +75,7 @@ if(!$operation) {
 				"<input type=\"text\" id=\"group_color_$group[groupid]_v\" class=\"left txt\" size=\"6\"name=\"group_color[$group[groupid]]\" value=\"$group[color]\" onchange=\"updatecolorpreview('group_color_$group[groupid]')\"><input type=\"button\" id=\"group_color_$group[groupid]\"  class=\"colorwd\" onclick=\"group_color_$group[groupid]_frame.location='static/image/admincp/getcolor.htm?group_color_$group[groupid]|group_color_$group[groupid]_v';showMenu({'ctrlid':'group_color_$group[groupid]'})\" /><span id=\"group_color_$group[groupid]_menu\" style=\"display: none\"><iframe name=\"group_color_$group[groupid]_frame\" src=\"\" frameborder=\"0\" width=\"210\" height=\"148\" scrolling=\"no\"></iframe></span>",
 				"<input class=\"checkbox\" type=\"checkbox\" chkvalue=\"gspecial\" value=\"$group[groupid]\" onclick=\"multiupdate(this)\" /><a href=\"".ADMINSCRIPT."?action=usergroups&operation=edit&id=$group[groupid]\" class=\"act\">$lang[edit]</a>".
 					"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=copy&source=$group[groupid]\" title=\"$lang[usergroups_copy_comment]\" class=\"act\">$lang[usergroups_copy]</a>".
+					"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=merge&source=$group[groupid]\" title=\"$lang[usergroups_merge_comment]\" class=\"act\">$lang[usergroups_merge_link]</a>".
 					"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=viewsgroup&sgroupid=$group[groupid]\" onclick=\"ajaxget(this.href, 'sgroup_$group[groupid]', 'sgroup_$group[groupid]');doane(event);\" class=\"act\">$lang[view]</a> &nbsp;"
 			), TRUE);
 			$sg .= showtablerow('', array('colspan="5" id="sgroup_'.$group['groupid'].'" style="display: none"'), array(''), TRUE);
@@ -606,10 +608,12 @@ EOT;
 		showsetting('usergroups_edit_basic_hour_threads', 'maxthreadsperhournew', intval($group['maxthreadsperhour']), 'text');
 		showsetting('usergroups_edit_basic_hour_posts', 'maxpostsperhournew', intval($group['maxpostsperhour']), 'text');
 		showsetting('usergroups_edit_basic_seccode', 'seccodenew', $group['seccode'], 'radio', $group['groupid'] == 7);
+		showsetting('usergroups_edit_basic_forcesecques', 'forcesecquesnew', $group['forcesecques'], 'radio');
 		showsetting('usergroups_edit_basic_disable_postctrl', 'disablepostctrlnew', $group['disablepostctrl'], 'radio');
 		showsetting('usergroups_edit_basic_ignore_censor', 'ignorecensornew', $group['ignorecensor'], 'radio');
 		showsetting('usergroups_edit_basic_allowcreatecollection', 'allowcreatecollectionnew', intval($group['allowcreatecollection']), 'text');
 		showsetting('usergroups_edit_basic_allowfollowcollection', 'allowfollowcollectionnew', intval($group['allowfollowcollection']), 'text');
+		showsetting('usergroups_edit_basic_close_ad', 'closeadnew', $group['closead'], 'radio');
 		showtablefooter();
 		showtagfooter('div');
 
@@ -655,6 +659,7 @@ EOT;
 		showsetting('usergroups_edit_post_maxprice', 'maxpricenew', $group['maxprice'], 'text');
 		showsetting('usergroups_edit_post_hide_code', 'allowhidecodenew', $group['allowhidecode'], 'radio');
 		showsetting('usergroups_edit_post_mediacode', 'allowmediacodenew', $group['allowmediacode'], 'radio');
+		showsetting('usergroups_edit_post_begincode', 'allowbegincodenew', $group['allowbegincode'], 'radio');
 		showsetting('usergroups_edit_post_sig_bbcode', 'allowsigbbcodenew', $group['allowsigbbcode'], 'radio');
 		showsetting('usergroups_edit_post_sig_img_code', 'allowsigimgcodenew', $group['allowsigimgcode'], 'radio');
 		showsetting('usergroups_edit_post_max_sig_size', 'maxsigsizenew', $group['maxsigsize'], 'text');
@@ -673,6 +678,7 @@ EOT;
 		showsetting('usergroups_edit_post_allowat', 'allowatnew', $group['allowat'], 'text');
 		showsetting('usergroups_edit_post_allowsetpublishdate', 'allowsetpublishdatenew', $group['allowsetpublishdate'], 'radio');
 		showsetting('usergroups_edit_post_allowcommentcollection', 'allowcommentcollectionnew', $group['allowcommentcollection'], 'radio');
+		showsetting('usergroups_edit_post_allowimgcontent', 'allowimgcontentnew', $group['allowimgcontent'], 'radio');
 		showtablefooter();
 		showtagfooter('div');
 
@@ -723,6 +729,12 @@ EOT;
 		foreach(explode("\n", $group['raterange']) as $range) {
 			$range = explode("\t", $range);
 			$raterangearray[$range[0]] = array('isself' => $range[1], 'min' => $range[2], 'max' => $range[3], 'mrpd' => $range[4]);
+		}
+
+		$loginrewardarray = array();
+		foreach(explode("\n", $group['loginreward']) as $rewardinfo) {
+			$reward = explode("\t", $rewardinfo);
+			$loginrewardarray[$reward[0]] = $reward[1];
 		}
 
 		if($multiset) {
@@ -777,7 +789,6 @@ EOT;
 
 			echo '<tr><td colspan="2">'.$lang['usergroups_edit_credit_exempt_comment'].'</td></tr>';
 
-			echo '<tr><td colspan="2">';
 			showtablefooter();
 			showtableheader('usergroups_edit_credit_allowrate', '');
 
@@ -808,6 +819,24 @@ EOT;
 				echo '</tr>';
 			}
 			echo '<tr><td class="lineheight" colspan="9">'.$lang['usergroups_edit_credit_rate_tips'].'</td></tr>';
+			showtablefooter();
+
+			showtableheader('usergroups_edit_credit_everyday_login', '');
+
+			for($i = 1; $i <= 8; $i++) {
+				if(isset($_G['setting']['extcredits'][$i])) {
+					$everyday[$i] = $_G['setting']['extcredits'][$i]['title'];
+				}
+			}
+
+			showsubtitle($everyday);
+			echo '<tr>';
+			for($i = 1; $i <= 8; $i++) {
+				if(isset($_G['setting']['extcredits'][$i])) {
+					echo '<td class="td28"><input type="text" class="txt" name="loginrewardnew['.$i.']" size="3" value="'.$loginrewardarray[$i].'"></td>';
+				}
+			}
+			echo '</tr>';
 			showtablefooter();
 			showtagfooter('div');
 		}
@@ -846,6 +875,7 @@ EOT;
 		showtableheader();
 		showtitle('usergroups_edit_group');
 		showsetting('usergroups_edit_group_build', 'allowbuildgroupnew', $group['allowbuildgroup'], 'text');
+		showsetting('usergroups_edit_group_buildcredits', 'buildgroupcreditsnew', $group['buildgroupcredits'], 'text');
 		showsetting('usergroups_edit_post_direct_group', array('allowgroupdirectpostnew', array(
 			array(0, $lang['usergroups_edit_post_direct_none']),
 			array(1, $lang['usergroups_edit_post_direct_reply']),
@@ -954,11 +984,24 @@ EOT;
 			}
 		}
 
+		if(is_array($_GET['loginrewardnew'])) {
+			foreach($_GET['loginrewardnew'] as $key => $reward) {
+				if($key >= 1 && $key <= 8 && $reward) {
+					$reward = intval($reward);
+					$key = intval($key);
+					$_GET['loginrewardnew'][$key] = $key."\t".$reward;
+				} else {
+					unset($_GET['loginrewardnew'][$key]);
+				}
+			}
+		}
+
 		if(in_array($group['groupid'], array(1))) {
 			$_GET['allowvisitnew'] = 2;
 		}
 
 		$raterangenew = $_GET['raterangenew'] ? implode("\n", $_GET['raterangenew']) : '';
+		$loginrewardnew = $_GET['loginrewardnew'] ? implode("\n", $_GET['loginrewardnew']) : '';
 		$maxpricenew = $_GET['maxpricenew'] < 0 ? 0 : intval($_GET['maxpricenew']);
 		$maxpostsperhournew = $_GET['maxpostsperhournew'] > 255 ? 255 : intval($_GET['maxpostsperhournew']);
 		$maxthreadsperhournew = $_GET['maxthreadsperhournew'] > 255 ? 255 : intval($_GET['maxthreadsperhournew']);
@@ -1053,6 +1096,7 @@ EOT;
 			'allowposttag' => $_GET['allowposttagnew'],
 			'allowhidecode' => $_GET['allowhidecodenew'],
 			'allowmediacode' => $_GET['allowmediacodenew'],
+			'allowbegincode' => $_GET['allowbegincodenew'],
 			'allowhtml' => $_GET['allowhtmlnew'],
 			'allowanonymous' => $_GET['allowanonymousnew'],
 			'allowsigbbcode' => $_GET['allowsigbbcodenew'],
@@ -1083,6 +1127,7 @@ EOT;
 			'allowpostrushreply' => $_GET['allowpostrushreplynew'],
 			'maxfriendnum' => $_GET['maxfriendnumnew'],
 			'seccode' => $_GET['seccodenew'],
+			'forcesecques' => $_GET['forcesecquesnew'],
 			'domainlength' => $_GET['domainlengthnew'],
 			'disablepostctrl' => $_GET['disablepostctrlnew'],
 			'allowblog' => $_GET['allowblognew'],
@@ -1109,6 +1154,7 @@ EOT;
 			'allowpostarticle' => $_GET['allowpostarticlenew'],
 			'allowpostarticlemod' => $_GET['allowpostarticlemodnew'],
 			'allowbuildgroup' => $_GET['allowbuildgroupnew'],
+			'buildgroupcredits' => $_GET['buildgroupcreditsnew'],
 			'allowgroupdirectpost' => intval($_GET['allowgroupdirectpostnew']),
 			'allowgroupposturl' => intval($_GET['allowgroupposturlnew']),
 			'edittimelimit' => intval($_GET['edittimelimitnew']),
@@ -1120,13 +1166,16 @@ EOT;
 			'allowreplycredit' => intval($_GET['allowreplycreditnew']),
 			'allowsetpublishdate' => intval($_GET['allowsetpublishdatenew']),
 			'allowcommentcollection' => intval($_GET['allowcommentcollectionnew']),
+			'allowimgcontent' => intval($_GET['allowimgcontentnew']),
 			'allowcreatecollection' => intval($_GET['allowcreatecollectionnew']),
 			'allowfollowcollection' => intval($_GET['allowfollowcollectionnew']),
 			'exempt' => $exemptnew,
 			'raterange' => $raterangenew,
+			'loginreward' => $loginrewardnew,
 			'ignorecensor' => intval($_GET['ignorecensornew']),
 			'allowsendallpm' => intval($_GET['allowsendallpmnew']),
 			'allowsendpmmaxnum' => intval($_GET['allowsendpmmaxnumnew']),
+			'closead' => intval($_GET['closeadnew']),
 		);
 		C::t('common_usergroup_field')->update($_GET['id'], $dataarr);
 
@@ -1146,7 +1195,7 @@ EOT;
 			set_pluginsetting($pluginvars);
 		}
 
-		updatecache(array('usergroups', 'onlinelist', 'groupreadaccess'));
+		updatecache(array('setting', 'usergroups', 'onlinelist', 'groupreadaccess'));
 
 		cpmsg('usergroups_edit_succeed', 'action=usergroups&operation=edit&'.($multiset ? 'multi='.implode(',', $_GET['multi']) : 'id='.$_GET['id']).'&anchor='.$_GET['anchor'], 'succeed');
 	}
@@ -1190,7 +1239,7 @@ EOT;
 			$optselect .= '<option value="'.$field.'">'.($lang['project_option_group_'.$field] ? $lang['project_option_group_'.$field] : $field).'</option>';
 		}
 		$optselect .= '</select>';
-		shownav('group', 'usergroups_copy');
+		shownav('user', 'usergroups_copy');
 		showsubmenu('usergroups_copy');
 		showtips('usergroups_copy_tips');
 		showformheader('usergroups&operation=copy');
@@ -1255,7 +1304,70 @@ EOT;
 
 	}
 
+} elseif($operation == 'merge') {
+
+	loadcache('usergroups');
+
+	$source = intval($_GET['source']);
+	$sourceusergroup = $_G['cache']['usergroups'][$source];
+
+	if(empty($sourceusergroup) || $sourceusergroup['type'] == 'system' || ($sourceusergroup['type'] == 'special' && $sourceusergroup['radminid'])) {
+		cpmsg('usergroups_copy_source_invalid', '', 'error');
+	}
+
+	if(!submitcheck('copysubmit')) {
+
+		$groupselect = array();
+		foreach(C::t('common_usergroup')->fetch_all_not(array(6, 7), true) as $group) {
+			$group['type'] = $group['type'] == 'special' && $group['radminid'] ? 'specialadmin' : $group['type'];
+			$groupselect[$group['type']] .= "<option value=\"$group[groupid]\">$group[grouptitle]</option>\n";
+		}
+		$groupselect = '<optgroup label="'.$lang['usergroups_member'].'">'.$groupselect['member'].'</optgroup>'.
+			($groupselect['special'] ? '<optgroup label="'.$lang['usergroups_special'].'">'.$groupselect['special'].'</optgroup>' : '');
+
+		$usergroupselect = '<select name="target" size="10">'.$groupselect.'</select>';
+
+		shownav('user', 'usergroups_merge');
+		showsubmenu('usergroups_merge');
+		showtips('usergroups_merge_tips');
+		showformheader('usergroups&operation=merge');
+		showhiddenfields(array('source' => $source));
+		showtableheader();
+		showtitle('usergroups_copy');
+		showsetting(cplang('usergroups_copy_source').':','','', $sourceusergroup['grouptitle']);
+		showsetting('usergroups_merge_target', '', '', $usergroupselect);
+		showsetting('usergroups_merge_delete_source', 'delete_source', 0, 'radio');
+		showsubmit('copysubmit');
+		showtablefooter();
+		showformfooter();
+
+	} else {
+
+		$target = intval($_GET['target']);
+		$targetusergroup = $_G['cache']['usergroups'][$target];
+
+		if(empty($targetusergroup) || $targetusergroup['type'] == 'system' || ($targetusergroup['type'] == 'special' && $targetusergroup['radminid'])) {
+			cpmsg('usergroups_copy_target_invalid', '', 'error');
+		}
+
+		C::t('common_member')->update_groupid_by_groupid($source, $target);
+		if(helper_dbtool::isexisttable('common_member_archive')) {
+			C::t('common_member_archive')->update_groupid_by_groupid($source, $target);
+		}
+
+		if($_GET['delete_source']) {
+			C::t('common_usergroup')->delete($source, $sourceusergroup['type']);
+			C::t('common_usergroup_field')->delete($source);
+			C::t('forum_onlinelist')->delete_by_groupid($source);
+		}
+
+		updatecache('usergroups');
+		cpmsg('usergroups_merge_succeed', 'action=usergroups', 'succeed');
+
+	}
+
 }
+
 
 function array_flip_keys($arr) {
 	$arr2 = array();

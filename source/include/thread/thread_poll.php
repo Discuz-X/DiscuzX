@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_poll.php 24621 2011-09-28 06:29:43Z liulanbo $
+ *      $Id: thread_poll.php 31107 2012-07-17 07:48:13Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,6 +16,11 @@ $votersuid = '';
 if($count = C::t('forum_polloption')->fetch_count_by_tid($_G['tid'])) {
 
 	$options = C::t('forum_poll')->fetch($_G['tid']);
+	if($options['isimage']) {
+		$pollimages = C::t('forum_polloption_image')->fetch_all_by_tid($_G['tid']);
+		require_once libfile('function/home');
+	}
+	$isimagepoll = $options['isimage'] ? true : false;
 	$multiple = $options['multiple'];
 	$visible = $options['visible'];
 	$maxchoices = $options['maxchoices'];
@@ -32,6 +37,12 @@ if($count = C::t('forum_polloption')->fetch_count_by_tid($_G['tid'])) {
 		$viewvoteruid[] = $options['voterids'];
 		$voterids .= "\t".$options['voterids'];
 		$option = preg_replace("/\[url=(https?){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i", "<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $options['polloption']);
+		$attach = array();
+		if($isimagepoll && $pollimages[$options['polloptionid']]) {
+			$attach = $pollimages[$options['polloptionid']];
+			$attach['small'] = pic_get($attach['attachment'], 'forum', $attach['thumb'], $attach['remote']);
+			$attach['big'] = pic_get($attach['attachment'], 'forum', 0, $attach['remote']);
+		}
 		$polloptions[$opts++] = array
 		(
 			'polloptionid'	=> $options['polloptionid'],
@@ -39,7 +50,8 @@ if($count = C::t('forum_polloption')->fetch_count_by_tid($_G['tid'])) {
 			'votes'		=> $options['votes'],
 			'width'		=> $options['votes'] > 0 ? (@round($options['votes'] * 100 / $count['total'])).'%' : '8px',
 			'percent'	=> @sprintf("%01.2f", $options['votes'] * 100 / $count['total']),
-			'color'		=> $colors[$ci]
+			'color'		=> $colors[$ci],
+			'imginfo'	=> $attach
 		);
 		if($ci < 2) {
 			$polloptionpreview .= $option."\t";

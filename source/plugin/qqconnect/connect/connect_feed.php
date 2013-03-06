@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: connect_feed.php 32450 2013-01-17 09:12:39Z liulanbo $
+ *	  $Id: connect_feed.php 32449 2013-01-17 09:11:53Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {

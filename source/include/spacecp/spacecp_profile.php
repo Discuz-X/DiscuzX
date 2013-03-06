@@ -105,7 +105,7 @@ if(submitcheck('profilesubmit')) {
 			if($key == 'sightml') {
 				loadcache(array('smilies', 'smileytypes'));
 				$value = cutstr($value, $_G['group']['maxsigsize'], '');
-				foreach($_G['cache']['smilies']['replacearray'] as $skey => $smiley) {
+				foreach($_G['cache']['smilies']['replacearray'] AS $skey => $smiley) {
 					$_G['cache']['smilies']['replacearray'][$skey] = '[img]'.$_G['siteurl'].'static/image/smiley/'.$_G['cache']['smileytypes'][$_G['cache']['smilies']['typearray'][$skey]]['directory'].'/'.$smiley.'[/img]';
 				}
 				$value = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], trim($value));

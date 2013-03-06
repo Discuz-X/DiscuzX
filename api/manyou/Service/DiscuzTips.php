@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: DiscuzTips.php 29283 2012-03-31 09:35:36Z liudongdong $
+ *		$Id: DiscuzTips.php 32725 2013-03-05 02:10:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,19 +66,7 @@ class Cloud_Service_DiscuzTips {
 		$jsCode = <<<EOF
 			<div id="discuz_tips" style="display:none;"></div>
 			<script type="text/javascript">
-				var discuzSId = '$sId';
-				var discuzVersion = '$version';
-				var discuzRelease = '$release';
-				var discuzApi = '$cloudApi';
-				var discuzIsFounder = '$isfounder';
-				var discuzFixbug = '$fix';
-				var discuzAdminId = '$adminId';
-				var discuzOpenId = '$openId';
-				var discuzUid = '$uid';
-				var discuzGroupId = '$groupId';
-				var ts = '$ts';
-				var sig = '$sig';
-				var discuzTipsCVersion = '$clientVersion';
+				var tipsinfo = '$sId|$version|$cloudApi|$isfounder|$adminId|$openId|$uid|$groupId|$ts|$sig|$clientVersion';
 			</script>
 			<script src="http://discuz.gtimg.cn/cloud/scripts/discuz_tips.js?v=1" type="text/javascript" charset="UTF-8"></script>
 EOF;

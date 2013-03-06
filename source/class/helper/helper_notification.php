@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_notification.php 30479 2012-05-30 07:28:46Z zhengqingpeng $
+ *      $Id: helper_notification.php 31068 2012-07-12 08:34:53Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 class helper_notification {
 
 
-	public static function notification_add($touid, $type, $note, $notevars = array(), $system = 0) {
+	public static function notification_add($touid, $type, $note, $notevars = array(), $system = 0, $category = -1) {
 		global $_G;
 
 		if(!($tospace = getuserbyuid($touid))) {
@@ -26,7 +26,36 @@ class helper_notification {
 		if($filter && (in_array($type.'|0', $filter) || in_array($type.'|'.$_G['uid'], $filter))) {
 			return false;
 		}
-
+		if($category == -1) {
+			$category = 0;
+			$categoryname = '';
+			foreach($_G['notice_structure'] as $key => $val) {
+				if(in_array($type, $val)) {
+					switch ($key) {
+						case 'mypost' : $category = 1; break;
+						case 'interactive' : $category = 2; break;
+						case 'system' : $category = 3; break;
+						case 'manage' : $category = 4; break;
+						default :  $category = 0;
+					}
+					$categoryname = $key;
+					break;
+				}
+			}
+		} else {
+			switch ($category) {
+				case 1 : $categoryname = 'mypost'; break;
+				case 2 : $categoryname = 'interactive'; break;
+				case 3 : $categoryname = 'system'; break;
+				case 4 : $categoryname = 'manage'; break;
+				default :  $categoryname = 'app';
+			}
+		}
+		if($category == 0) {
+			$categoryname = 'app';
+		} elseif($category == 1 || $category == 2) {
+			$categoryname = $type;
+		}
 		$notevars['actor'] = "<a href=\"home.php?mod=space&uid=$_G[uid]\">".$_G['member']['username']."</a>";
 		if(!is_numeric($type)) {
 			$vars = explode(':', $note);
@@ -57,7 +86,8 @@ class helper_notification {
 			'dateline' => $_G['timestamp'],
 			'from_id' => $notevars['from_id'],
 			'from_idtype' => $notevars['from_idtype'],
-			'from_num' => ($oldnote['from_num']+$notevars['from_num'])
+			'from_num' => ($oldnote['from_num']+$notevars['from_num']),
+			'category' => $category
 		);
 		if($system) {
 			$setarr['authorid'] = 0;
@@ -84,7 +114,18 @@ class helper_notification {
 
 		if(empty($oldnote['new'])) {
 			C::t('common_member')->increase($touid, array('newprompt' => 1));
-
+			$newprompt = C::t('common_member_newprompt')->fetch($touid);
+			if($newprompt) {
+				$newprompt['data'] = unserialize($newprompt['data']);
+				if(!empty($newprompt['data'][$categoryname])) {
+					$newprompt['data'][$categoryname] = intval($newprompt['data'][$categoryname]) + 1;
+				} else {
+					$newprompt['data'][$categoryname] = 1;
+				}
+				C::t('common_member_newprompt')->update($touid, array('data' => serialize($newprompt['data'])));
+			} else {
+				C::t('common_member_newprompt')->insert($touid, array($categoryname => 1));
+			}
 			require_once libfile('function/mail');
 			$mail_subject = lang('notification', 'mail_to_user');
 			sendmail_touser($touid, $mail_subject, $notestring, $frommyapp ? 'myapp' : $type);
@@ -109,7 +150,60 @@ class helper_notification {
 		}
 		foreach($notifyusers as $uid => $user) {
 			if($user['types'][$notifytypes[$type]]) {
-				helper_notification::notification_add($uid, $type, $langkey, $notearr, 1);
+				helper_notification::notification_add($uid, $type, $langkey, $notearr, 1, 4);
+			}
+		}
+	}
+
+	public function get_categorynum($newprompt_data) {
+		global $_G;
+		$categorynum = array();
+		if(empty($newprompt_data) || !is_array($newprompt_data)) {
+			return array();
+		}
+		foreach($newprompt_data as $key => $val) {
+			if(in_array($key, array('follow', 'follower'))) {
+				continue;
+			}
+			if(in_array($key, $_G['notice_structure']['mypost'])) {
+				$categorynum['mypost'] += $val;
+			} elseif(in_array($key, $_G['notice_structure']['interactive'])) {
+				$categorynum['interactive'] += $val;
+			}else{
+				$categorynum[$key] = $val;
+			}
+		}
+		return $categorynum;
+	}
+
+	public function update_newprompt($uid, $type) {
+		global $_G;
+		if($_G['member']['newprompt_num']) {
+			$tmpprompt = $_G['member']['newprompt_num'];
+			$num = 0;
+			$updateprompt = 0;
+			foreach($tmpprompt as $key => $val) {
+				$num += $val;
+			}
+			if(!empty($tmpprompt[$type])) {
+				unset($tmpprompt[$type]);
+				$updateprompt = true;
+			} elseif(empty($type) && !empty($tmpprompt[$view])) {
+				unset($tmpprompt[$view]);
+				$updateprompt = true;
+			}
+			$num = 0;
+			foreach($tmpprompt as $key => $val) {
+				$num += $val;
+			}
+			if($num) {
+				if($updateprompt) {
+					C::t('common_member_newprompt')->update($uid, array('data' => serialize($tmpprompt)));
+					C::t('common_member')->update($uid, array('newprompt'=>$num));
+				}
+			} else {
+				C::t('common_member_newprompt')->delete($_G['uid']);
+				C::t('common_member')->update($_G['uid'], array('newprompt'=>0));
 			}
 		}
 	}

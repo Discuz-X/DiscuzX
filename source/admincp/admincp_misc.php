@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 32275 2012-12-13 08:14:04Z liulanbo $
+ *      $Id: admincp_misc.php 32647 2013-02-27 09:13:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -662,7 +662,7 @@ EOT;
 		showformheader("misc&operation=censor&page=$page", 'fixpadding');
 		showtableheader('', 'fixpadding', 'importform');
 		showtablerow('', 'class="vtop rowform"', "<select name=\"wordtype_select\"><option value='0'>".cplang('misc_censor_word_default_typename')."</option>$word_type_option</select>");
-		showtablerow('', 'class="vtop rowform"', '<br /><textarea name="addcensors" class="tarea" rows="10" cols="80"></textarea><br /><br />'.mradio('overwrite', array(
+		showtablerow('', 'class="vtop rowform"', '<br /><textarea name="addcensors" class="tarea" rows="10" cols="80" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)"></textarea><br /><br />'.mradio('overwrite', array(
 				0 => cplang('misc_censor_batch_add_no_overwrite'),
 				1 => cplang('misc_censor_batch_add_overwrite'),
 				2 => cplang('misc_censor_batch_add_clear')
@@ -1059,17 +1059,22 @@ var rowtypedata = [
 				$cron['lastrun'] = $cron['lastrun'] ? dgmdate($cron['lastrun'], $_G['setting']['dateformat']."<\b\\r />".$_G['setting']['timeformat']) : '<b>N/A</b>';
 				$cron['nextcolor'] = $cron['nextrun'] && $cron['nextrun'] + $_G['setting']['timeoffset'] * 3600 < TIMESTAMP ? 'style="color: #ff0000"' : '';
 				$cron['nextrun'] = $cron['nextrun'] ? dgmdate($cron['nextrun'], $_G['setting']['dateformat']."<\b\\r />".$_G['setting']['timeformat']) : '<b>N/A</b>';
+				$cron['run'] = $cron['available'];
+				$efile = explode(':', $cron['filename']);
+				if(count($efile) > 1 && !in_array($efile[0], $_G['setting']['plugins']['available'])) {
+					$cron['run'] = 0;
+				}
 
 				showtablerow('', array('class="td25"', 'class="crons"', 'class="td25"', 'class="td25"', 'class="td23"', 'class="td23"', 'class="td23"', 'class="td25"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$cron[cronid]\" ".($cron['type'] == 'system' ? 'disabled' : '').">",
 					"<input type=\"text\" class=\"txt\" name=\"namenew[$cron[cronid]]\" size=\"20\" value=\"$cron[name]\"><br /><b>$cron[filename]</b>",
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$cron[cronid]]\" value=\"1\" ".($cron['available'] ? 'checked' : '')." $disabled>",
-					cplang($cron['type'] == 'system' ? 'inbuilt' : 'custom'),
+					cplang($cron['type'] == 'system' ? 'inbuilt' : ($cron['type'] == 'plugin' ? 'plugin' : 'custom')),
 					$cron[time],
 					$cron[lastrun],
 					$cron[nextrun],
 					"<a href=\"".ADMINSCRIPT."?action=misc&operation=cron&edit=$cron[cronid]\" class=\"act\">$lang[edit]</a><br />".
-					($cron['available'] ? " <a href=\"".ADMINSCRIPT."?action=misc&operation=cron&run=$cron[cronid]\" class=\"act\">$lang[misc_cron_run]</a>" : " <a href=\"###\" class=\"act\" disabled>$lang[misc_cron_run]</a>")
+					($cron['run'] ? " <a href=\"".ADMINSCRIPT."?action=misc&operation=cron&run=$cron[cronid]\" class=\"act\">$lang[misc_cron_run]</a>" : " <a href=\"###\" class=\"act\" disabled>$lang[misc_cron_run]</a>")
 				));
 			}
 
@@ -1115,11 +1120,23 @@ var rowtypedata = [
 
 			$query = DB::query("SELECT cronid, filename FROM ".DB::table('common_cron'));
 			while($cron = DB::fetch($query)) {
-				if(!file_exists(DISCUZ_ROOT.'./source/include/cron/'.$cron['filename'])) {
-					DB::update('common_cron', array(
-						'available' => '0',
-						'nextrun' => '0',
-					), "cronid='$cron[cronid]'");
+				$efile = explode(':', $cron['filename']);
+				$pluginid = '';
+				if(count($efile) > 1 && ispluginkey($efile[0])) {
+					$pluginid = $efile[0];
+					$cron['filename'] = $efile[1];
+				}
+				if(!$pluginid) {
+					if(!file_exists(DISCUZ_ROOT.'./source/include/cron/'.$cron['filename'])) {
+						DB::update('common_cron', array(
+							'available' => '0',
+							'nextrun' => '0',
+						), "cronid='$cron[cronid]'");
+					}
+				} else {
+					if(!file_exists(DISCUZ_ROOT.'./source/plugin/'.$pluginid.'/cron/'.$cron['filename'])) {
+						DB::delete('common_cron', "cronid='$cron[cronid]'");
+					}
 				}
 			}
 
@@ -1191,12 +1208,30 @@ var rowtypedata = [
 					$minutenew = $minutenew >= 0 && $minutenew < 60 ? $minutenew : '';
 				}
 
-				if(preg_match("/[\\\\\/\:\*\?\"\<\>\|]+/", $_GET['filenamenew'])) {
-					cpmsg('crons_filename_illegal', '', 'error');
-				} elseif(!is_readable(DISCUZ_ROOT.($cronfile = "./source/include/cron/{$_GET['filenamenew']}"))) {
-					cpmsg('crons_filename_invalid', '', 'error', array('cronfile' => $cronfile));
-				} elseif($_GET['weekdaynew'] == -1 && $daynew == -1 && $_GET['hournew'] == -1 && $minutenew === '') {
-					cpmsg('crons_time_invalid', '', 'error');
+				$efile = explode(':', $_GET['filenamenew']);
+				$pluginid = '';
+				if(count($efile) > 1 && ispluginkey($efile[0])) {
+					$pluginid = $efile[0];
+					$_GET['filenamenew'] = $efile[1];
+				}
+
+				if(!$pluginid) {
+					if(preg_match("/[\\\\\/\:\*\?\"\<\>\|]+/", $_GET['filenamenew'])) {
+						cpmsg('crons_filename_illegal', '', 'error');
+					} elseif(!is_readable(DISCUZ_ROOT.($cronfile = "./source/include/cron/{$_GET['filenamenew']}"))) {
+						cpmsg('crons_filename_invalid', '', 'error', array('cronfile' => $cronfile));
+					} elseif($_GET['weekdaynew'] == -1 && $daynew == -1 && $_GET['hournew'] == -1 && $minutenew === '') {
+						cpmsg('crons_time_invalid', '', 'error');
+					}
+				} else {
+					if(preg_match("/[\\\\\/\:\*\?\"\<\>\|]+/", $_GET['filenamenew'])) {
+						cpmsg('crons_filename_illegal', '', 'error');
+					} elseif(!is_readable(DISCUZ_ROOT.($cronfile = "./source/plugin/$pluginid/cron/{$_GET['filenamenew']}"))) {
+						cpmsg('crons_filename_invalid', '', 'error', array('cronfile' => $cronfile));
+					} elseif($_GET['weekdaynew'] == -1 && $daynew == -1 && $_GET['hournew'] == -1 && $minutenew === '') {
+						cpmsg('crons_time_invalid', '', 'error');
+					}
+					$_GET['filenamenew'] = $pluginid.':'.$_GET['filenamenew'];
 				}
 
 				DB::update('common_cron', array(
@@ -1215,7 +1250,13 @@ var rowtypedata = [
 
 		} else {
 
-			if(!file_exists(DISCUZ_ROOT.($cronfile = "./source/include/cron/$cron[filename]"))) {
+			$efile = explode(':', $cron['filename']);
+			if(count($efile) > 1 && ispluginkey($efile[0])) {
+				$cronfile = DISCUZ_ROOT.'./source/plugin/'.$efile[0].'/cron/'.$efile[1];
+			} else {
+				$cronfile = DISCUZ_ROOT."./source/include/cron/$cron[filename]";
+			}
+			if(!file_exists($cronfile)) {
 				cpmsg('crons_run_invalid', '', 'error', array('cronfile' => $cronfile));
 			} else {
 				discuz_cron::run($cron['cronid']);

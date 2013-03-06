@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_threadsort.php 31822 2012-10-12 06:24:42Z zhangjie $
+ *      $Id: function_threadsort.php 32060 2012-11-05 09:59:32Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -415,7 +415,7 @@ function threadsortshow($sortid, $tid) {
 						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'];
 					} else {
 						if($option['protect']['status'] && $optiondata[$optionid]['value']) {
-							$optiondata[$optionid]['value'] = $option['protect']['mode'] == 1 ? '<image src="'.makevaluepic($optiondata[$optionid]['value']).'">' : (!defined('IN_MOBILE') ? '<span id="sortmessage_'.$option['identifier'].'"><a href="###" onclick="ajaxget(\'forum.php?mod=misc&action=protectsort&tid='.$tid.'&optionid='.$optionid.'\', \'sortmessage_'.$option['identifier'].'\');return false;">'.lang('forum/misc', 'click_view').'</a></span>' : $optiondata[$optionid]['value']);
+							$optiondata[$optionid]['value'] = $option['protect']['mode'] == 1 ? '<image src="'.stringtopic($optiondata[$optionid]['value']).'">' : (!defined('IN_MOBILE') ? '<span id="sortmessage_'.$option['identifier'].'"><a href="###" onclick="ajaxget(\'forum.php?mod=misc&action=protectsort&tid='.$tid.'&optionid='.$optionid.'\', \'sortmessage_'.$option['identifier'].'\');return false;">'.lang('forum/misc', 'click_view').'</a></span>' : $optiondata[$optionid]['value']);
 							$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? $optiondata[$optionid]['value'] : $option['defaultvalue'];
 						} elseif($option['type'] == 'textarea') {
 							$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? nl2br($optiondata[$optionid]['value']) : '';
@@ -731,77 +731,6 @@ function optionlistxml($input, $pre = '') {
 		}
 	}
 	return $str;
-}
-
-
-function makevaluepic($value) {
-	$basedir = !getglobal('setting/attachdir') ? './data/attachment' : getglobal('setting/attachdir');
-	$url = !getglobal('setting/attachurl') ? './data/attachment/' : getglobal('setting/attachurl');
-	$subdir1 = substr(md5($value), 0, 2);
-	$subdir2 = substr(md5($value), 2, 2);
-	$target = 'temp/'.$subdir1.'/'.$subdir2.'/';
-	$targetname = substr(md5($value), 8, 16).'.png';
-	discuz_upload::check_dir_exists('temp', $subdir1, $subdir2);
-	if(file_exists($basedir.'/'.$target.$targetname)) {
-		return $url.$target.$targetname;
-	}
-	$value = str_replace("\n", '', $value);
-	$fontfile = $fontname = '';
-	$ttfenabled = false;
-	$size = 4;
-	$w = 130;
-	$rowh = 25;
-	if(function_exists('imagettftext')) {
-		$fontroot = DISCUZ_ROOT.'./static/image/seccode/font/ch/';
-		$dirs = opendir($fontroot);
-		while($entry = readdir($dirs)) {
-			if($entry != '.' && $entry != '..' && in_array(strtolower(fileext($entry)), array('ttf', 'ttc'))) {
-				$fontname = $entry;
-				break;
-			}
-		}
-		if(!empty($fontname)) {
-			$fontfile = DISCUZ_ROOT.'./static/image/seccode/font/ch/'.$fontname;
-		}
-		if($fontfile) {
-			if(strtoupper(CHARSET) != 'UTF-8') {
-				include DISCUZ_ROOT.'./source/class/class_chinese.php';
-				$cvt = new Chinese(CHARSET, 'utf8');
-				$value = $cvt->Convert($value);
-			}
-			$size = 9;
-			$ttfenabled = true;
-		}
-	}
-	$value = explode("\r", $value);
-	foreach($value as $str) {
-		if($ttfenabled) {
-			$box = imagettfbbox($size, 0, $fontfile, $str);
-			$height = max($box[1], $box[3]) - min($box[5], $box[7]);
-			$len = (max($box[2], $box[4]) - min($box[0], $box[6]));
-			$rowh = max(array($height, $strh));
-		} else {
-			$len = strlen($str) * 9;
-		}
-		$w = max(array($len, $w));
-	}
-	$h = $rowh * count($value) + count($value) * 2;
-	$im = @imagecreate($w, $h);
-	$background_color = imagecolorallocate($im, 255, 255, 255);
-	$text_color = imagecolorallocate($im, 23, 14, 91);
-	$h = $ttfenabled ? $rowh : 4;
-	foreach($value as $str) {
-		if($ttfenabled) {
-			imagettftext($im, $size, 0, 0, $h, $text_color, $fontfile, $str);
-			$h += 2;
-		} else {
-			imagestring($im, $size, 0, $h, $str, $text_color);
-		}
-		$h += $rowh;
-	}
-	imagepng($im, $basedir.'/'.$target.$targetname);
-	imagedestroy($im);
-	return $url.$target.$targetname;
 }
 
 ?>

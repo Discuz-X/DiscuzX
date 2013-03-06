@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_discuzcode.php 30926 2012-07-02 05:48:08Z chenmengshu $
+ *      $Id: function_discuzcode.php 32697 2013-03-01 02:36:42Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,7 @@ $_G['forum_discuzcode'] = array(
 	'pcodecount' => -1,
 	'codecount' => 0,
 	'codehtml' => '',
+	'passwordlock' => array(),
 	'smiliesreplaced' => 0,
 	'seoarray' => array(
 		0 => '',
@@ -27,7 +28,6 @@ $_G['forum_discuzcode'] = array(
 		5 => $_G['setting']['seodescription']
 	)
 );
-$authorreplyexist = '';
 
 if(!isset($_G['cache']['bbcodes']) || !is_array($_G['cache']['bbcodes']) || !is_array($_G['cache']['smilies'])) {
 	loadcache(array('bbcodes', 'smilies', 'smileytypes'));
@@ -71,10 +71,22 @@ function karmaimg($rate, $ratetimes) {
 	return $karmaimg;
 }
 
-function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies = 1, $allowbbcode = 1, $allowimgcode = 1, $allowhtml = 0, $jammer = 0, $parsetype = '0', $authorid = '0', $allowmediacode = '0', $pid = 0, $lazyload = 0, $pdateline = 0) {
+function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies = 1, $allowbbcode = 1, $allowimgcode = 1, $allowhtml = 0, $jammer = 0, $parsetype = '0', $authorid = '0', $allowmediacode = '0', $pid = 0, $lazyload = 0, $pdateline = 0, $first = 0) {
 	global $_G;
 
 	static $authorreplyexist;
+
+	if($pid && strpos($message, '[/password]') !== FALSE) {
+		if($authorid != $_G['uid'] && !$_G['forum']['ismoderator']) {
+			$message = preg_replace("/\s?\[password\](.+?)\[\/password\]\s?/ie", "parsepassword('\\1', \$pid)", $message);
+			if($_G['forum_discuzcode']['passwordlock'][$pid]) {
+				return '';
+			}
+		} else {
+			$message = preg_replace("/\s?\[password\](.+?)\[\/password\]\s?/ie", "", $message);
+			$_G['forum_discuzcode']['passwordauthor'][$pid] = 1;
+		}
+	}
 
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
@@ -159,6 +171,10 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 			"<span style=\"float:right;margin-left:5px\">"
 			), $message));
 
+		if($pid && !defined('IN_MOBILE')) {
+			$message = preg_replace("/\s?\[postbg\]\s*([^\[\<\r\n;'\"\?\(\)]+?)\s*\[\/postbg\]\s?/ies", "parsepostbg('\\1', '$pid')", $message);
+		}
+
 		if($parsetype != 1) {
 			if(strpos($msglower, '[/quote]') !== FALSE) {
 				$message = preg_replace("/\s?\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s?/is", tpl_quote(), $message);
@@ -167,15 +183,28 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 				$message = preg_replace("/\s*\[free\][\n\r]*(.+?)[\n\r]*\[\/free\]\s*/is", tpl_free(), $message);
 			}
 		}
-		if(strpos($msglower, '[/media]') !== FALSE) {
-			$message = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", $allowmediacode ? "parsemedia('\\1', '\\2')" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
+		if(!defined('IN_MOBILE')) {
+			if(strpos($msglower, '[/media]') !== FALSE) {
+				$message = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", $allowmediacode ? "parsemedia('\\1', '\\2')" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
+			}
+			if(strpos($msglower, '[/audio]') !== FALSE) {
+				$message = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/ies", $allowmediacode ? "parseaudio('\\2', 400)" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
+			}
+			if(strpos($msglower, '[/flash]') !== FALSE) {
+				$message = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", $allowmediacode ? "parseflash('\\2', '\\3', '\\4');" : "bbcodeurl('\\4', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
+			}
+		} else {
+			if(strpos($msglower, '[/media]') !== FALSE) {
+				$message = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/is", "[media]\\2[/media]", $message);
+			}
+			if(strpos($msglower, '[/audio]') !== FALSE) {
+				$message = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/is", "[media]\\2[/media]", $message);
+			}
+			if(strpos($msglower, '[/flash]') !== FALSE) {
+				$message = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/is", "[media]\\4[/media]", $message);
+			}
 		}
-		if(strpos($msglower, '[/audio]') !== FALSE) {
-			$message = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/ies", $allowmediacode ? "parseaudio('\\2', 400)" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
-		}
-		if(strpos($msglower, '[/flash]') !== FALSE) {
-			$message = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", $allowmediacode ? "parseflash('\\2', '\\3', '\\4');" : "bbcodeurl('\\4', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
-		}
+
 		if($parsetype != 1 && $allowbbcode < 0 && isset($_G['cache']['bbcodes'][-$allowbbcode])) {
 			$message = preg_replace($_G['cache']['bbcodes'][-$allowbbcode]['searcharray'], $_G['cache']['bbcodes'][-$allowbbcode]['replacearray'], $message);
 		}
@@ -228,10 +257,10 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 			), $allowimgcode ? array(
 				"parseimg(0, 0, '\\1', ".intval($lazyload).", ".intval($pid).", 'onmouseover=\"img_onmouseoverfunc(this)\" onload=\"thumbImg(this)\"')",
 				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).", ".intval($pid).")"
-			) : array(
+			) : ($allowbbcode ? array(
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
-			), $message);
+			) : array("bbcodeurl('\\1', '{url}')", "bbcodeurl('\\3', '{url}')")), $message);
 		}
 	}
 
@@ -244,7 +273,14 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 	if($jammer) {
 		$message = preg_replace("/\r\n|\n|\r/e", "jammer()", $message);
 	}
+	if($first) {
+		if(helper_access::check_module('group')) {
+			$message = preg_replace("/\[groupid=(\d+)\](.*)\[\/groupid\]/i", lang('forum/template', 'fromgroup').': <a href="forum.php?mod=forumdisplay&fid=\\1" target="_blank">\\2</a>', $message);
+		} else {
+			$message = preg_replace("/(\[groupid=\d+\].*\[\/groupid\])/i", '', $message);
+		}
 
+	}
 	return $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
 }
 
@@ -616,6 +652,7 @@ function parseflv($url, $width = 0, $height = 0) {
 
 function parseimg($width, $height, $src, $lazyload, $pid, $extra = '') {
 	global $_G;
+	static $styleoutput = null;
 	if(strstr($src, 'file:') || substr($src, 1, 1) == ':') {
 		return $src;
 	}
@@ -631,7 +668,24 @@ function parseimg($width, $height, $src, $lazyload, $pid, $extra = '') {
 	$attrsrc = !IS_ROBOT && $lazyload ? 'file' : 'src';
 	$rimg_id = random(5);
 	$GLOBALS['aimgs'][$pid][] = $rimg_id;
-	return bbcodeurl($src, '<img id="aimg_'.$rimg_id.'" onclick="zoom(this, this.src, 0, 0, '.($_G['setting']['showexif'] ? 1 : 0).')" class="zoom"'.($width > 0 ? ' width="'.$width.'"' : '').($height > 0 ? ' height="'.$height.'"' : '').' '.$attrsrc.'="'.$src.'" '.($extra ? $extra.' ' : '').'border="0" alt="" />');
+	$guestviewthumb = !empty($_G['setting']['guestviewthumb']['flag']) && empty($_G['uid']);
+	$img = '';
+	if($guestviewthumb) {
+		if(!isset($styleoutput)) {
+			$img .= guestviewthumbstyle();
+			$styleoutput = true;
+		}
+		$img .= '<div class="guestviewthumb"><img id="aimg_'.$rimg_id.'" class="guestviewthumb_cur" onclick="showWindow(\'login\', \'{loginurl}\'+\'&referer=\'+encodeURIComponent(location))" '.$attrsrc.'="'.$src.'" border="0" alt="" />
+				<br><a href="{loginurl}" onclick="showWindow(\'login\', this.href+\'&referer=\'+encodeURIComponent(location));">'.lang('forum/template', 'guestviewthumb').'</a></div>';
+
+	} else {
+		$img = '<img id="aimg_'.$rimg_id.'" onclick="zoom(this, this.src, 0, 0, '.($_G['setting']['showexif'] ? 1 : 0).')" class="zoom"'.($width > 0 ? ' width="'.$width.'"' : '').($height > 0 ? ' height="'.$height.'"' : '').' '.$attrsrc.'="'.$src.'" '.($extra ? $extra.' ' : '').'border="0" alt="" />';
+	}
+	$code = bbcodeurl($src, $img);
+	if($guestviewthumb) {
+		$code = str_replace('{loginurl}', 'member.php?mod=logging&action=login', $code);
+	}
+	return $code;
 }
 
 function parsesmiles(&$message) {
@@ -650,4 +704,46 @@ function parsesmiles(&$message) {
 	return $message;
 }
 
+function parsepostbg($bgimg, $pid) {
+	global $_G;
+	static $postbg;
+	if($postbg[$pid]) {
+		return '';
+	}
+	loadcache('postimg');
+	foreach($_G['cache']['postimg']['postbg'] as $postbg) {
+		if($postbg['url'] != $bgimg) {
+			continue;
+		}
+		$bgimg = dhtmlspecialchars(basename($bgimg), ENT_QUOTES);
+		$postbg[$pid] = true;
+		$_G['forum_posthtml']['header'][$pid] .= '<style type="text/css">#pid'.$pid.'{background-image:url("'.STATICURL.'image/postbg/'.$bgimg.'");}</style>';
+		break;
+	}
+	return '';
+}
+
+function parsepassword($password, $pid) {
+	global $_G;
+	static $postpw;
+	if($postpw[$pid]) {
+		return '';
+	}
+	$postpw[$pid] = true;
+	if(empty($_G['cookie']['postpw_'.$pid]) || $_G['cookie']['postpw_'.$pid] != md5($password)) {
+		$_G['forum_discuzcode']['passwordlock'][$pid] = 1;
+	}
+	return '';
+}
+
+function guestviewthumbstyle() {
+	static $styleoutput = null;
+	$return = '';
+	if ($styleoutput === null) {
+		global $_G;
+		$return = '<style>.guestviewthumb {margin:10px auto; text-align:center;}.guestviewthumb a {font-size:12px;}.guestviewthumb_cur {cursor:url('.IMGDIR.'/scf.cur), default; max-width:'.$_G['setting']['guestviewthumb']['width'].'px;}.ie6 .guestviewthumb_cur { width:'.$_G['setting']['guestviewthumb']['width'].'px !important;}</style>';
+		$styleoutput = true;
+	}
+	return $return;
+}
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 32075 2012-11-07 04:02:28Z liulanbo $
+ *      $Id: moderate_reply.php 32501 2013-01-29 09:51:00Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -88,6 +88,10 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 		}
 		$_forums = C::t('forum_forum')->fetch_all($_fids);
 		$_threads = C::t('forum_thread')->fetch_all($_tids);
+	}
+	$checklength = C::t('common_moderate')->fetch_all_by_idtype('pid', $moderatestatus, null);
+	if($modcount != $checklength && !$srcdate && !$modfid && !$_GET['username'] && !$_GET['title'] && !$posttable) {
+		moderateswipe('pid', array_keys($checklength));
 	}
 	$multipage = multi($modcount, $ppp, $page, ADMINSCRIPT."?action=moderate&operation=replies&filter=$filter&modfid=$modfid&dateline={$_GET['dateline']}&username={$_GET['username']}&title={$_GET['title']}&ppp=$ppp&showcensor=$showcensor&posttableid=$posttable");
 
@@ -246,7 +250,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 	}
 
 	if($validatepids = dimplode($moderation['validate'])) {
-		$forums = $threads = $lastpost = $attachments = $pidarray = $authoridarray = array();
+		$forums = $threads = $attachments = $pidarray = $authoridarray = array();
 		$tids = $postlist = array();
 		foreach(C::t('forum_post')->fetch_all($posttable, $moderation['validate']) as $post) {
 			if($post['first'] != 0) {
@@ -273,7 +277,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 
 
 			$threads[$post['tid']]['replies']++;
-			if($post['dateline'] > $post['lastpost'] && $post['dateline'] > $lastpost[$post['tid']]) {
+			if($post['dateline'] > $post['lastpost']) {
 				$threads[$post['tid']]['lastpost'] = array($post['dateline']);
 				$threads[$post['tid']]['lastposter'] = array($post['anonymous'] && $post['dateline'] != $post['lastpost'] ? '' : $post['author']);
 			}

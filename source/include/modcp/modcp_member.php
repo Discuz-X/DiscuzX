@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_member.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: modcp_member.php 32270 2012-12-13 03:00:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -70,6 +70,10 @@ if($op == 'edit') {
 
 	include_once libfile('function/member');
 	$clist = crime('getactionlist', $member['uid']);
+
+	if(($member['type'] == 'system' && in_array($member['groupid'], array(1, 2, 3, 6, 7, 8))) || $member['type'] == 'special') {
+		acpmsg('modcp_member_ban_illegal');
+	}
 
 	if($member && submitcheck('bansubmit') && !$error) {
 		$setarr = array();

@@ -20,7 +20,7 @@ $referer = dreferer();
 
 if(submitcheck('connectsubmit')) {
 
-	if($op == 'config') { // debug 修改QQ绑定设置
+	if($op == 'config') { // debug 淇敼QQ缁戝畾璁剧疆
 
 		$ispublishfeed = !empty($_GET['ispublishfeed']) ? 1 : 0;
 		$ispublisht = !empty($_GET['ispublisht']) ? 1 : 0;
@@ -30,7 +30,6 @@ if(submitcheck('connectsubmit')) {
 				'conispublisht' => $ispublisht,
 			)
 		);
-		// DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='$ispublishfeed', conispublisht='$ispublisht' WHERE uid='$_G[uid]'");
 		if (!$ispublishfeed || !$ispublisht) {
 			dsetcookie('connect_synpost_tip');
 		}
@@ -39,10 +38,8 @@ if(submitcheck('connectsubmit')) {
 	} elseif($op == 'unbind') {
 
 		$connect_member = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
-		// $connect_member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
 		$_G['member'] = array_merge($_G['member'], $connect_member);
 
-		// 新绑定用户解绑需要通知Connect
 		if ($connect_member['conuinsecret']) {
 
 			if($_G['member']['conisregister']) {
@@ -74,7 +71,7 @@ if(submitcheck('connectsubmit')) {
 
 			$connectService->connectUserUnbind();
 
-		} else { // debug 因为老用户access token等信息，所以没法通知connect，所以直接在本地解绑就行了，不fopen connect
+		} else { // debug 鍥犱负鑰佺敤鎴穉ccess token绛変俊鎭紝鎵�浠ユ病娉曢�氱煡connect锛屾墍浠ョ洿鎺ュ湪鏈湴瑙ｇ粦灏辫浜嗭紝涓峟open connect
 
 			if($_G['member']['conisregister']) {
 				if($_GET['newpassword1'] !== $_GET['newpassword2']) {
@@ -86,8 +83,6 @@ if(submitcheck('connectsubmit')) {
 			}
 		}
 
-		// 解绑直接删除 common_member_connect 记录
-		//DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='', conuinsecret='', conopenid='', conispublishfeed='0', conispublisht='0', conisregister='0', conisqzoneavatar='0', conisfeed='0' WHERE uid='$_G[uid]'");
 		C::t('#qqconnect#common_member_connect')->delete($_G['uid']);
 
 		C::t('common_member')->update($_G['uid'], array('conisbind' => 0));
@@ -99,9 +94,7 @@ if(submitcheck('connectsubmit')) {
 				'dateline' => $_G['timestamp'],
 			)
 		);
-		// DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '{$_G[member][conopenid]}', '2', '$_G[timestamp]')");
 
-		// debug 修改用户密码需要由ucenter来处理
 		if($_G['member']['conisregister']) {
 			loaducenter();
 			uc_user_edit(addslashes($_G['member']['username']), null, $_GET['newpassword1'], null, 1);
@@ -119,7 +112,6 @@ if(submitcheck('connectsubmit')) {
 
 } else {
 
-	// 修改主题同步设置
 	if($_G[inajax] && $op == 'synconfig') {
 		C::t('#qqconnect#common_member_connect')->update($_G['uid'],
 			array(
@@ -127,10 +119,8 @@ if(submitcheck('connectsubmit')) {
 				'conispublisht' => 0,
 			)
 		);
-		// DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='0', conispublisht='0' WHERE uid='$_G[uid]'");
 		dsetcookie('connect_synpost_tip');
 
-	// 微博签名档
 	} elseif($op == 'weibosign') {
 		if($_GET['hash'] != formhash()) {
 			showmessage('submit_invalid');
@@ -150,7 +140,6 @@ if(submitcheck('connectsubmit')) {
 			ksort($arr);
 			$arr['oauth_signature'] = $connectService->connectGetOauthSignature('http://api.discuz.qq.com/connect/getSignature', $arr, 'GET', $_G['member']['conuinsecret']);
 
-			// 标识token的版本
 			$arr['version'] = 'qzone1.0';
 
 			$utilService = Cloud::loadClass('Service_Util');
@@ -164,7 +153,6 @@ if(submitcheck('connectsubmit')) {
 			$connectService->connectAjaxOuputMessage('connect_wbsign_no_bind', -1);
 		}
 
-	// QC设置页
 	} else {
 		dheader('location: home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp');
 	}

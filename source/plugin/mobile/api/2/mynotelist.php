@@ -3,9 +3,8 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
 *      This is NOT a freeware, use is subject to license terms
 *
-*      $Id: mynotelist.php 31698 2012-09-24 03:37:17Z zhangjie $
+*      $Id: mynotelist.php 32489 2013-01-29 03:57:16Z monkey $
 */
-//note 提醒列表接口 @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

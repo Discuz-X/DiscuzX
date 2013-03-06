@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_seccode.php 26635 2011-12-19 01:59:13Z zhangguosheng $
+ *      $Id: function_seccode.php 30388 2012-05-25 06:45:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,9 +46,17 @@ function make_secqaa($idhash) {
 	loadcache('secqaa');
 	$secqaakey = max(1, random(1, 1));
 	if($_G['cache']['secqaa'][$secqaakey]['type']) {
-		if(file_exists($qaafile = libfile('secqaa/'.$_G['cache']['secqaa'][$secqaakey]['question'], 'class'))) {
+		$etype = explode(':', $_G['cache']['secqaa'][$secqaakey]['question']);
+		if(count($etype) > 1) {
+			$qaafile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/secqaa/secqaa_'.$etype[1].'.php';
+			$class = $etype[1];
+		} else {
+			$qaafile = libfile('secqaa/'.$_G['cache']['secqaa'][$secqaakey]['question'], 'class');
+			$class = $_G['cache']['secqaa'][$secqaakey]['question'];
+		}
+		if(file_exists($qaafile)) {
 			@include_once $qaafile;
-			$class = 'secqaa_'.$_G['cache']['secqaa'][$secqaakey]['question'];
+			$class = 'secqaa_'.$class;
 			if(class_exists($class)) {
 				$qaa = new $class();
 				if(method_exists($qaa, 'make')) {

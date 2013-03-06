@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_guide.php 32048 2012-11-02 04:05:01Z liulanbo $
+ *      $Id: forum_guide.php 32049 2012-11-02 04:07:14Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,8 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 $view = $_GET['view'];
 loadcache('forum_guide');
-if(!in_array($view, array('hot', 'digest', 'new', 'my'))) {
-	$view = 'index';
+if(!in_array($view, array('hot', 'digest', 'new', 'my', 'newthread', 'sofa'))) {
+	$view = 'hot';
 }
 $lang = lang('forum/template');
 $navtitle = $lang['guide'].'-'.$lang['guide_'.$view];
@@ -116,6 +116,7 @@ if($view != 'index') {
 	$data['hot'] = get_guide_list('hot', 0, 30);
 	$data['digest'] = get_guide_list('digest', 0, 30);
 	$data['new'] = get_guide_list('new', 0, 30);
+	$data['newthread'] = get_guide_list('newthread', 0, 30);
 }
 
 loadcache('stamps');
@@ -127,12 +128,13 @@ include template('forum/guide');
 function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 	global $_G;
 	$setting_guide = unserialize($_G['setting']['guide']);
-	if(!in_array($view, array('hot', 'digest', 'new'))) {
+	if(!in_array($view, array('hot', 'digest', 'new', 'newthread', 'sofa'))) {
 		return array();
 	}
 	loadcache('forums');
-	$cache = $_G['cache']['forum_guide'][$view];
-	if($cache && (TIMESTAMP - $cache['cachetime']) < 900) {
+	$cachetimelimit = ($view != 'sofa') ? 900 : 60;
+	$cache = $_G['cache']['forum_guide'][$view.($view=='sofa' && $_G['fid'] ? $_G['fid'] : '')];
+	if($cache && (TIMESTAMP - $cache['cachetime']) < $cachetimelimit) {
 		$tids = $cache['data'];
 		$threadcount = count($tids);
 		$tids = array_slice($tids, $start, $num, true);
@@ -146,13 +148,15 @@ function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 		if($setting_guide[$view.'dt']) {
 			$dateline = time() - intval($setting_guide[$view.'dt']);
 		}
-		$maxtid = C::t('forum_thread')->fetch_max_tid();
-		$limittid = max(0,($maxtid - $maxnum));
-		if($again) {
-			$limittid = max(0,($limittid - $maxnum));
-		}
 
-		$tids = array();
+		if($view != 'sofa') {
+			$maxtid = C::t('forum_thread')->fetch_max_tid();
+			$limittid = max(0,($maxtid - $maxnum));
+			if($again) {
+				$limittid = max(0,($limittid - $maxnum));
+			}
+			$tids = array();
+		}
 		foreach($_G['cache']['forums'] as $fid => $forum) {
 			if($forum['type'] != 'group' && $forum['status'] > 0 && !$forum['viewperm'] && !$forum['havepassword']) {
 				$fids[] = $fid;
@@ -161,7 +165,20 @@ function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 		if(empty($fids)) {
 			return array();
 		}
-		$updatecache  = true;
+		if($view == 'sofa') {
+			if($_GET['fid']) {
+				$sofa = C::t('forum_sofa')->fetch_all_by_fid($_GET['fid'], $start, $num);
+			} else {
+				$sofa = C::t('forum_sofa')->range($start, $num);
+				foreach($sofa as $sofatid => $sofathread) {
+					if(!in_array($sofathread, $fids)) {
+						unset($sofathread[$sofatid]);
+					}
+				}
+			}
+			$tids = array_keys($sofa);
+		}
+		$updatecache = true;
 	}
 	$query = C::t('forum_thread')->fetch_all_for_guide($view, $limittid, $tids, $_G['setting']['heatthread']['guidelimit'], $dateline);
 	$n = 0;
@@ -189,9 +206,11 @@ function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 	}
 	$threadlist = array();
 	if($tids) {
+		$threadids = array();
 		foreach($tids as $key => $tid) {
 			if($list[$tid]) {
 				$threadlist[$key] = $list[$tid];
+				$threadids[] = $tid;
 			}
 		}
 	} else {
@@ -201,7 +220,7 @@ function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 	if($updatecache) {
 		$threadcount = count($threadids);
 		$data = array('cachetime' => TIMESTAMP, 'data' => $threadids);
-		$_G['cache']['forum_guide'][$view] = $data;
+		$_G['cache']['forum_guide'][$view.($view=='sofa' && $_G['fid'] ? $_G['fid'] : '')] = $data;
 		savecache('forum_guide', $_G['cache']['forum_guide']);
 	}
 	return array('forumnames' => $forumnames, 'threadcount' => $threadcount, 'threadlist' => $threadlist);

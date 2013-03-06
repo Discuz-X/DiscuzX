@@ -1,10 +1,9 @@
 <?php
-
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group.php 28091 2012-02-22 07:33:26Z zhengqingpeng $
+ *      $Id: group.php 31307 2012-08-10 02:10:56Z zhengqingpeng $
  */
 
 define('APPTYPEID', 3);

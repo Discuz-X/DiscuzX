@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Security.php 31428 2012-08-28 02:35:36Z songlixin $
+ *		$Id: Security.php 32625 2013-02-27 02:39:39Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -57,8 +57,7 @@ class Cloud_Service_Server_Security extends Cloud_Service_Server_Restful {
 		$evilPost = C::t('#security#security_evilpost')->fetch($pid);
 
 		if (count($evilPost)) {
-			$data = $evilPost;
-			$data['evilcount'] = $evilPost['evilcount'] + 1;
+			return true;
 		} else {
 			require_once libfile('function/delete');
 			require_once libfile('function/forum');
@@ -93,7 +92,10 @@ class Cloud_Service_Server_Security extends Cloud_Service_Server_Restful {
 
 					deletepost(array($pid), 'pid', true, false, true);
 				}
-
+				if(!empty($post['authorid'])) {
+					$data = array('uid' => $post['authorid'], 'createtime' => TIMESTAMP);
+					C::t('#security#security_eviluser')->insert($data, false, true);
+				}
 			} else {
 				$data['operateresult'] = 2;
 				C::t('#security#security_evilpost')->insert($data, false, true);

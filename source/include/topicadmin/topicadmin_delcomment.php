@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_delcomment.php 25832 2011-11-24 01:11:51Z monkey $
+ *      $Id: topicadmin_delcomment.php 31950 2012-10-25 09:05:44Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,6 +42,9 @@ if(!submitcheck('modsubmit')) {
 	if(!$result) {
 		C::t('forum_post')->update($_G['thread']['posttableid'], $postcomment['pid'], array('comment' => 0));
 	}
+	if($thread['comments']) {
+		C::t('forum_thread')->update($_G['tid'], array('comments' => $thread['comments'] - 1));
+	}
 	if(!$postcomment['rpid']) {
 		updatepostcredits('-', $postcomment['authorid'], 'reply', $_G['fid']);
 	}
@@ -70,7 +73,7 @@ if(!submitcheck('modsubmit')) {
 
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=viewthread&tid=$_G[tid]&page=$page",
-	'reasonpm'	=> ($sendreasonpm ? array('data' => array($postcomment), 'var' => 'post', 'item' => 'reason_delete_comment') : array()),
+	'reasonpm'	=> ($sendreasonpm ? array('data' => array($postcomment), 'var' => 'post', 'item' => 'reason_delete_comment', 'notictype' => 'pcomment') : array()),
 	'reasonvar'	=> array('tid' => $thread['tid'], 'pid' => $postcomment['pid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason),
 	'modtids'	=> 0,
 	'modlog'	=> $thread

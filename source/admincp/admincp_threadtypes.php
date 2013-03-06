@@ -95,7 +95,7 @@ var rowtypedata = [
 
 		if(is_array($_GET['delete'])) {
 
-			if($deleteids = dimplode($_GET['delete'])) {
+			if($_GET['delete']) {
 				C::t('forum_typeoptionvar')->delete_by_sortid($_GET['delete']);
 				C::t('forum_typevar')->delete($_GET['delete']);
 				$affected_rows = C::t('forum_threadtype')->delete($_GET['delete']);
@@ -105,8 +105,8 @@ var rowtypedata = [
 				C::t('forum_optionvalue')->drop($_GET['sortid']);
 			}
 
-			if($deleteids && $affected_rows) {
-				C::t('forum_thread')->update_sortid_by_sortid(0, $deleteids);
+			if($_GET['delete'] && $affected_rows) {
+				C::t('forum_thread')->update_sortid_by_sortid(0, $_GET['delete']);
 				foreach($_GET['delete'] as $id) {
 					if(is_array($_GET['namenew']) && isset($_GET['namenew'][$id])) {
 						unset($_GET['namenew'][$id]);
@@ -791,25 +791,25 @@ EOT;
 		echo '<div id="ttype">'.
 			$showoption.
 			'<div id="ttype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="ttypetemplate" name="typetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['template']).'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="ttypetemplate" name="typetemplate" style="width: 95%;" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.dhtmlspecialchars($threadtype['template']).'</textarea>'.
 			'</div>';
 
 		echo '<div id="stype" style="display:none">'.
 			'<button onclick="settip(this, \'subject\', \'subject/'.$lang['threadtype_template_threadtitle'].'|subject_url/'.$lang['threadtype_template_threadurl'].'|tid/'.$lang['threadtype_template_threadid'].'\')" type="button">'.$lang['threadtype_template_threadtitle'].'</button>&nbsp;&nbsp;'.
-			'<textarea id="subject_sample" style="display:none"><a href="{subject_url}">{subject}</a></textarea>'.
+			'<textarea id="subject_sample" style="display:none" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)"><a href="{subject_url}">{subject}</a></textarea>'.
 			'<button onclick="settip(this, \'\', \'dateline/'.$lang['threadtype_template_dateline'].'\')" type="button">'.$lang['threadtype_template_dateline'].'</button>&nbsp;&nbsp;'.
 			'<button onclick="settip(this, \'author\', \'author/'.$lang['threadtype_template_author'].'|authorid/'.$lang['threadtype_template_authorid'].'|author_url/'.$lang['threadtype_template_authorurl'].'|avatar_small/'.$lang['threadtype_template_authoravatar'].'|author_verify/'.$lang['threadtype_template_authorverify'].'\')" type="button">'.$lang['threadtype_template_threadauthor'].'</button>&nbsp;&nbsp;'.
-			'<textarea id="author_sample" style="display:none"><a href="{author_url}">{author}</a></textarea>'.
+			'<textarea id="author_sample" style="display:none" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)"><a href="{author_url}">{author}</a></textarea>'.
 			'<button onclick="settip(this, \'\', \'views/'.$lang['threadtype_template_threadviews'].'\')" type="button">'.$lang['threadtype_template_threadviews'].'</button>&nbsp;&nbsp;'.
 			'<button onclick="settip(this, \'\', \'replies/'.$lang['threadtype_template_threadreplies'].'\')" type="button">'.$lang['threadtype_template_threadreplies'].'</button>&nbsp;&nbsp;'.
 			'<button onclick="settip(this, \'lastpost\', \'lastpost/'.$lang['threadtype_template_lastpostdateline'].'|lastpost_url/'.$lang['threadtype_template_lastposturl'].'|lastposter/'.$lang['threadtype_template_lastpostuser'].'|lastposter_url/'.$lang['threadtype_template_lastpostuserurl'].'\')" type="button">'.$lang['threadtype_template_lastpost'].'</button>&nbsp;&nbsp;'.
-			'<textarea id="lastpost_sample" style="display:none"><a href="{lastpost_url}">{lastpost}</a> by <a href="{lastposter_url}">{lastposter}</a></textarea>'.
+			'<textarea id="lastpost_sample" style="display:none" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)"><a href="{lastpost_url}">{lastpost}</a> by <a href="{lastposter_url}">{lastposter}</a></textarea>'.
 			'<button onclick="settip(this, \'typename\', \'typename/'.$lang['threadtype_template_threadtypename'].'|typename_url/'.$lang['threadtype_template_threadtypeurl'].'\')" type="button">'.$lang['threadtype_template_threadtype'].'</button>&nbsp;&nbsp;'.
-			'<textarea id="typename_sample" style="display:none"><a href="{typename_url}">{typename}</a></textarea>'.
+			'<textarea id="typename_sample" style="display:none" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)"><a href="{typename_url}">{typename}</a></textarea>'.
 			'<button onclick="settip(this, \'\', \'attachment/'.$lang['threadtype_template_attachmentexist'].'\')" type="button">'.$lang['threadtype_template_attachment'].'</button>&nbsp;&nbsp'.
 			'<button onclick="settip(this, \'\', \'modcheck/'.$lang['threadtype_template_modcheck'].'\')" type="button">'.$lang['threadtype_template_threadmod'].'</button>&nbsp;&nbsp'.
 			'<button onclick="settip(this, \'loop\', \'/'.$lang['threadtype_template_loop'].'\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
-			'<textarea id="loop_sample" style="display:none">
+			'<textarea id="loop_sample" style="display:none" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">
 <table><tr><td>'.$lang['threadtype_template_title'].'</td></tr>
 [loop]<tr><td><a href="{subject_url}">{subject}</a></td></tr>[/loop]
 </table>
@@ -817,13 +817,13 @@ EOT;
 			'<br />'.
 			$showoption.
 			'<div id="stype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="stypetemplate" name="stypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['stemplate']).'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="stypetemplate" name="stypetemplate" style="width: 95%;" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.dhtmlspecialchars($threadtype['stemplate']).'</textarea>'.
 			'</div>';
 
 		echo '<div id="ptype" style="display:none">'.
 			$showoption.
 			'<div id="ptype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="ptypetemplate" name="ptypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['ptemplate']).'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="ptypetemplate" name="ptypetemplate" style="width: 95%;" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.dhtmlspecialchars($threadtype['ptemplate']).'</textarea>'.
 			'</div>';
 
 		echo '<div id="btype" style="display:none">'.
@@ -839,7 +839,7 @@ EOT;
 			'<br />'.
 			$showoption.
 			'<div id="btype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="btypetemplate" name="btypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['btemplate']).'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="btypetemplate" name="btypetemplate" style="width: 95%;" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.dhtmlspecialchars($threadtype['btemplate']).'</textarea>'.
 			'</div>'.
 			'<input type="submit" class="btn" name="sorttemplatesubmit" value="'.$lang['submit'].'"></form>';
 

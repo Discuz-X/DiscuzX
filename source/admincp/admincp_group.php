@@ -546,6 +546,8 @@ var rowtypedata = [
 		cpmsg('group_nonexist', 'action=group&operation=manage', 'error');
 	}
 	$group = C::t('forum_forum')->fetch_info_by_fid($fid);
+	require_once libfile('function/editor');
+	$group['description'] = html2bbcode($group['description']);
 
 	if(!$group || $group['status'] != 3 || $group['type'] != 'sub') {
 		cpmsg('group_nonexist', '', 'error');
@@ -583,7 +585,8 @@ var rowtypedata = [
 		$_GET['jointypenew'] = intval($_GET['jointypenew']);
 		$_GET['fupnew'] = intval($_GET['fupnew']);
 		$_GET['gviewpermnew'] = intval($_GET['gviewpermnew']);
-		$_GET['descriptionnew'] = dhtmlspecialchars(censor(trim($_GET['descriptionnew'])));
+		require_once libfile('function/discuzcode');
+		$_GET['descriptionnew'] = discuzcode(dhtmlspecialchars(censor(trim($_GET['descriptionnew']))), 0, 0, 0, 0, 1, 1, 0, 0, 1);
 		$_GET['namenew'] = dhtmlspecialchars(censor(trim($_GET['namenew'])));
 		$icondata = array();
 		$iconnew = upload_icon_banner($group, $_FILES['iconnew'], 'icon');
@@ -643,6 +646,7 @@ var rowtypedata = [
 		 	array('allowstickthread', cplang('admingroup_edit_stick_thread'), '1'),
 		 	array('allowbumpthread', cplang('admingroup_edit_bump_thread'), '1'),
 		 	array('allowhighlightthread', cplang('admingroup_edit_highlight_thread'), '1'),
+			array('allowlivethread', cplang('admingroup_edit_live_thread'), '1'),
 		 	array('allowstampthread', cplang('admingroup_edit_stamp_thread'), '1'),
 		 	array('allowrepairthread', cplang('admingroup_edit_repair_thread'), '1'),
 		 	array('allowrefund', cplang('admingroup_edit_refund'), '1'),
@@ -690,7 +694,7 @@ var rowtypedata = [
 		showtablefooter();
 		showformfooter();
 	} else {
-		$default_perm = array('allowstickthread' => 0, 'allowbumpthread' => 0, 'allowhighlightthread' => 0, 'allowstampthread' => 0, 'allowclosethread' => 0, 'allowmergethread' => 0, 'allowsplitthread' => 0, 'allowrepairthread' => 0, 'allowrefund' => 0, 'alloweditpoll' => 0, 'allowremovereward' => 0, 'alloweditactivity' => 0, 'allowedittrade' => 0, 'allowdigestthread' => 0, 'alloweditpost' => 0, 'allowwarnpost' => 0, 'allowbanpost' => 0, 'allowdelpost' => 0, 'allowupbanner' => 0, 'disablepostctrl' => 0, 'allowviewip' => 0);
+		$default_perm = array('allowstickthread' => 0, 'allowbumpthread' => 0, 'allowhighlightthread' => 0, 'allowlivethread' => 0, 'allowstampthread' => 0, 'allowclosethread' => 0, 'allowmergethread' => 0, 'allowsplitthread' => 0, 'allowrepairthread' => 0, 'allowrefund' => 0, 'alloweditpoll' => 0, 'allowremovereward' => 0, 'alloweditactivity' => 0, 'allowedittrade' => 0, 'allowdigestthread' => 0, 'alloweditpost' => 0, 'allowwarnpost' => 0, 'allowbanpost' => 0, 'allowdelpost' => 0, 'allowupbanner' => 0, 'disablepostctrl' => 0, 'allowviewip' => 0);
 		$_GET['newgroup_userperm'] = array_merge($default_perm, $_GET['newgroup_userperm']);
 		if(serialize($_GET['newgroup_userperm']) != serialize($group_userperm)) {
 			C::t('common_setting')->update('group_userperm', $_GET['newgroup_userperm']);

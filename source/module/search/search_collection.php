@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_collection.php 29284 2012-03-31 09:42:04Z chenmengshu $
+ *      $Id: search_collection.php 31371 2012-08-21 01:51:24Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,7 +111,7 @@ if(!submitcheck('searchsubmit', 1)) {
 
 			$num = $ids = 0;
 			$_G['setting']['search']['collection']['maxsearchresults'] = $_G['setting']['search']['collection']['maxsearchresults'] ? intval($_G['setting']['search']['collection']['maxsearchresults']) : 500;
-			list($srchtxt, $srchtxtsql) = searchkey($keyword, "name LIKE '%{text}%'", true);
+			list($srchtxt, $srchtxtsql) = searchkey($keyword, "name LIKE '%{text}%' OR keyword LIKE '%{text}%'", true);
 			$query = C::t('forum_collection')->fetch_ctid_by_searchkey($srchtxtsql, $_G['setting']['search']['collection']['maxsearchresults']);
 			foreach($query as $collection) {
 				$ids .= ','.$collection['ctid'];

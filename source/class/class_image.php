@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_image.php 30998 2012-07-06 07:22:08Z zhangguosheng $
+ *      $Id: class_image.php 31941 2012-10-25 08:11:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -122,10 +122,10 @@ class image {
 			}
 			$data = dfsockopen($source);
 			$this->tmpfile = $source = tempnam($_G['setting']['attachdir'].'./temp/', 'tmpimg_');
-			file_put_contents($source, $data);
 			if(!$data || $source === FALSE) {
 				return -2;
 			}
+			file_put_contents($source, $data);
 		}
 		if($method == 'thumb') {
 			$target = empty($target) ? (!$nosuffix ? getimgthumbname($source) : $source) : $_G['setting']['attachdir'].'./'.$target;
@@ -199,6 +199,9 @@ class image {
 		if($return > 0 && file_exists($this->target)) {
 			return true;
 		} else {
+			if($this->tmpfile) {
+				@unlink($this->tmpfile);
+			}
 			$this->errorcode = $return;
 			return false;
 		}
@@ -260,8 +263,6 @@ class image {
 			return $attach_photo;
 		}
 		$copy_photo = imagecreatetruecolor($this->imginfo['width'], $this->imginfo['height']);
-		$bg = imagecolorallocate($copy_photo, 255, 255, 255);
-		imagefill($copy_photo, 0, 0, $bg);
 		imagecopy($copy_photo, $attach_photo ,0, 0, 0, 0, $this->imginfo['width'], $this->imginfo['height']);
 		$attach_photo = $copy_photo;
 

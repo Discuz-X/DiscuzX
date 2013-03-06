@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 32372 2013-01-07 04:28:23Z zhengqingpeng $
+ *      $Id: cache_setting.php 32571 2013-02-21 08:24:04Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,14 +17,14 @@ function build_cache_setting() {
 	$skipkeys = array('posttableids', 'mastermobile', 'masterqq', 'masteremail', 'closedreason',
 		'creditsnotify', 'backupdir', 'custombackup', 'jswizard', 'maxonlines', 'modreasons', 'newsletter',
 		'postno', 'postnocustom', 'customauthorinfo', 'domainwhitelist', 'ipregctrl',
-		'ipverifywhite', 'fastsmiley', 'defaultdoing',
+		'ipverifywhite', 'fastsmiley', 'defaultdoing', 'antitheftsetting',
 		);
 	$serialized = array('reginput', 'memory', 'search', 'creditspolicy', 'ftp', 'secqaa', 'ec_credit', 'qihoo', 'spacedata',
 		'infosidestatus', 'uc', 'indexhot', 'relatedtag', 'sitemessage', 'uchome', 'heatthread', 'recommendthread',
 		'disallowfloat', 'allowviewuserthread', 'advtype', 'click', 'card', 'rewritestatus', 'rewriterule', 'privacy', 'focus',
 		'forumkeys', 'article_tags', 'verify', 'seotitle', 'seodescription', 'seokeywords', 'domain', 'ranklist', 'my_search_data',
 		'seccodedata', 'inviteconfig', 'advexpiration', 'allowpostcomment', /*(IN_MOBILE)*/ 'mobile', 'connect', 'upgrade', 'patch', 'strongpw',
-		'posttable_info', 'threadtable_info', 'profilegroup'
+		'posttable_info', 'threadtable_info', 'profilegroup', 'antitheft', 'makehtml', 'guestviewthumb', 'grid'
 		);
 
 	$data = array();
@@ -94,6 +94,7 @@ function build_cache_setting() {
 
 	$usergroup = C::t('common_usergroup')->fetch_by_credits($data['initcredits'], '');
 	$data['newusergroupid'] = $usergroup['groupid'];
+	$data['buyusergroupexists'] = C::t('common_usergroup')->buyusergroup_exists();
 
 	if($data['srchhotkeywords']) {
 		$data['srchhotkeywords'] = explode("\n", $data['srchhotkeywords']);
@@ -307,6 +308,7 @@ function build_cache_setting() {
 	$data['ucenterurl'] = UC_API;
 
 	foreach(C::t('common_magic')->fetch_all_data(1) as $magic) {
+		$magic['identifier'] = str_replace(':', '_', $magic['identifier']);
 		$data['magics'][$magic['identifier']] = $magic['name'];
 	}
 
@@ -334,6 +336,7 @@ function build_cache_setting() {
 	$data['spacenavs'] = get_cachedata_spacenavs();
 	$data['mynavs'] = get_cachedata_mynavs();
 	$data['topnavs'] = get_cachedata_topnav();
+	$data['profilenode'] = get_cachedata_threadprofile();
 
 	require_once DISCUZ_ROOT.'./uc_client/client.php';
 	$ucapparray = uc_app_ls();
@@ -471,7 +474,7 @@ function get_cachedata_setting_creditspolicy() {
 
 function get_cachedata_setting_plugin($method = '') {
 	global $_G;
-	$hookfuncs = array('common', 'discuzcode', 'deletemember', 'deletethread', 'deletepost', 'avatar', 'savebanlog', 'cacheuserstats', 'undeletethreads', 'recyclebinpostundelete', 'threadpubsave');
+	$hookfuncs = array('common', 'discuzcode', 'deletemember', 'deletethread', 'deletepost', 'avatar', 'savebanlog', 'cacheuserstats', 'undeletethreads', 'recyclebinpostundelete', 'threadpubsave', 'profile_node');
 	$data = $adminmenu = array();
 	$data['plugins'] = $data['pluginlinks'] = $data['hookscript'] = $data['hookscriptmobile'] = $data['threadplugins'] = $data['specialicon'] = array();
 	$data['plugins']['func'] = $data['plugins']['available'] = array();
@@ -569,6 +572,9 @@ function get_cachedata_setting_plugin($method = '') {
 								foreach($hookmethods as $funcname) {
 									if($hscript == 'global' && in_array($funcname, $hookfuncs)) {
 										$data['plugins']['func'][$k][$funcname] = true;
+										if($funcname == 'profile_node') {
+											$data['plugins']['profile_node'][$plugin['identifier']] = $script;
+										}
 									}
 									$v = explode('_', $funcname);
 									$curscript = $v[0];
@@ -716,6 +722,8 @@ function get_cachedata_mainnav() {
 		if($nav['type'] || $navid == 'misc' || $nav['identifier'] == 6) {
 			if($nav['type'] == 4) {
 				$navid = 'P'.$nav['identifier'];
+			} elseif($nav['type'] == 5) {
+				$navid = 'F'.$nav['identifier'];
 			} else {
 				$navid = 'N'.substr(md5(($nav['url'] != '#' ? $nav['url'] : $nav['name'])), 0, 4);
 			}
@@ -928,6 +936,46 @@ function get_cachedata_topnav() {
 		$data['topnavs'][$nav['subtype']][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'type' => $nav['type'], 'level' => $nav['level'], 'id' => $nav['identifier']);
 	}
 	return $data['topnavs'];
+}
+
+function get_cachedata_threadprofile() {
+	global $_G;
+	$threadprofiles = C::t('forum_threadprofile')->fetch_all();
+	$threadprofile_group = C::t('forum_threadprofile_group')->fetch_all();
+	$data = array();
+	foreach($threadprofiles as $id => $threadprofile) {
+		if($threadprofile['global']) {
+			$data['template'][0] = dunserialize($threadprofile['template']);
+		}
+	}
+	foreach($threadprofile_group as $group) {
+		if($threadprofiles[$group['tpid']]) {
+			$id = $threadprofiles[$group['tpid']]['global'] ? 0 : $group['tpid'];
+			if(!isset($data['template'][$id])) {
+				$data['template'][$id] = dunserialize($threadprofiles[$group['tpid']]['template']);
+			}
+			if($id) {
+				$data['groupid'][$group['gid']] = $id;
+			}
+		}
+	}
+	foreach($data['template'] as $id => $template) {
+		foreach($template as $type => $row) {
+			$data['template'][$id][$type] = preg_replace('/\{([\w:]+)(=([^}]+?))?\}(([^}]+?)\{\*\}([^}]+?)\{\/\\1\})?/es', "get_cachedata_threadprofile_nodeparse(\$id, \$type, '\\1', '\\5', '\\6', '\\3')", $template[$type]);
+		}
+	}
+	$data['code'] = $_G['cachedata_threadprofile_code'];
+	return $data;
+}
+
+function get_cachedata_threadprofile_nodeparse($id, $type, $name, $s, $e, $extra) {
+	$s = stripslashes($s);
+	$e = stripslashes($e);
+	$extra = stripslashes($extra);
+	global $_G;
+	$hash = random(8);
+	$_G['cachedata_threadprofile_code'][$id][$type]['{'.$hash.'}'] = array($name, $s, $e, $extra);
+	return '{'.$hash.'}';
 }
 
 function writetojscache() {

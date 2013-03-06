@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: viewthread.php 32474 2013-01-24 07:38:35Z monkey $
+ *      $Id: viewthread.php 31700 2012-09-24 03:46:59Z zhangjie $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -31,9 +31,10 @@ class mobile_api {
 		}
 
 		$variable = array(
-			'thread' => mobile_core::getvalues($_G['thread'], array('tid', 'author', 'authorid', 'subject', 'views', 'replies', 'attachment', 'price', 'freemessage')),
+			'thread' => $_G['thread'],
 			'fid' => $_G['fid'],
 			'postlist' => array_values(mobile_core::getvalues($GLOBALS['postlist'], array('/^\d+$/'), array('pid', 'tid', 'author', 'first', 'dbdateline', 'dateline', 'username', 'adminid', 'memberstatus', 'authorid', 'username', 'groupid', 'memberstatus', 'status', 'message', 'number', 'memberstatus', 'groupid', 'attachment', 'attachments', 'attachlist', 'imagelist', 'anonymous'))),
+			'imagelist' => array(),
 			'ppp' => $_G['ppp'],
 			'setting_rewriterule' => $_G['setting']['rewriterule'],
 			'setting_rewritestatus' => $_G['setting']['rewritestatus'],
@@ -56,8 +57,30 @@ class mobile_api {
 		if(!empty($threadsortshow)) {
 			$variable['threadsortshow'] = $threadsortshow;
 		}
-		foreach($variable['$postlist'] as $k => $v) {
-			$variable['$postlist'][$k]['attachments'] = array_values(mobile_core::getvalues($v['attachments'], array('/^\d+$/'), array('aid', 'tid', 'uid', 'dbdateline', 'dateline', 'filename', 'filesize', 'url', 'attachment', 'remote', 'description', 'readperm', 'price', 'width', 'thumb', 'picid', 'ext', 'imgalt', 'attachsize', 'payed', 'downloads')));
+		foreach($variable['postlist'] as $k => $post) {
+			if(!$_G['forum']['ismoderator'] && $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))) {
+				$message = lang('forum/template', 'message_banned');
+			} elseif(!$_G['forum']['ismoderator'] && $post['status'] & 1) {
+				$message = lang('forum/template', 'message_single_banned');
+			} elseif($GLOBALS['needhiddenreply']) {
+				$message = lang('forum/template', 'message_ishidden_hiddenreplies');
+			} elseif($post['first'] && $_G['forum_threadpay']) {
+				$message = lang('forum/template', 'pay_threads').' '.$GLOBALS['thread']['price'].' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['unit'].$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['title'];
+			} elseif($_G['forum_discuzcode']['passwordlock']) {
+				$message = lang('forum/template', 'message_password_exists');
+			} else {
+				$message = '';
+			}
+			if($message) {
+				$variable['postlist'][$k]['message'] = $message;
+			}
+			$variable['postlist'][$k]['attachments'] = array_values(mobile_core::getvalues($post['attachments'], array('/^\d+$/'), array('aid', 'tid', 'uid', 'dbdateline', 'dateline', 'filename', 'filesize', 'url', 'attachment', 'remote', 'description', 'readperm', 'price', 'width', 'thumb', 'picid', 'ext', 'imgalt', 'attachsize', 'payed', 'downloads')));
+		}
+
+		foreach($GLOBALS['aimgs'] as $pid => $aids) {
+			foreach($aids as $aid) {
+				$variable['imagelist'][] = $GLOBALS['postlist'][$pid]['attachments'][$aid]['url'].$GLOBALS['postlist'][$pid]['attachments'][$aid]['attachment'];
+			}
 		}
 
 		if(!empty($GLOBALS['polloptions'])) {
@@ -69,6 +92,19 @@ class mobile_api {
 			$variable['special_poll']['visiblepoll'] = $GLOBALS['visiblepoll'];
 			$variable['special_poll']['allowvote'] = $_G['group']['allowvote'];
 			$variable['special_poll']['remaintime'] = $thread['remaintime'];
+		}
+		if(!empty($GLOBALS['rewardprice'])) {
+			$variable['special_reward']['rewardprice'] = $GLOBALS['rewardprice'].' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]]['title'];
+			$variable['special_reward']['bestpost'] = $GLOBALS['bestpost'];
+		}
+		if(!empty($GLOBALS['trades'])) {
+			$variable['special_trade'] = $GLOBALS['trades'];
+		}
+		if(!empty($GLOBALS['debate'])) {
+			$variable['special_debate'] = $GLOBALS['debate'];
+		}
+		if(!empty($GLOBALS['activity'])) {
+			$variable['special_activity'] = $GLOBALS['activity'];
 		}
 
 		$variable['forum']['password'] = $variable['forum']['password'] ? '1' : '0';

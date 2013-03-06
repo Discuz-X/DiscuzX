@@ -4,13 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_category.php 28997 2012-03-22 03:32:51Z chenmengshu $
+ *      $Id: misc_category.php 31560 2012-09-10 03:47:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+$_G['mnid'] = 'mn_F'.$gid;
 $gquery = C::t('forum_forum')->fetch_all_info_by_fids($gid);
 $query = C::t('forum_forum')->fetch_all_info_by_fids(0, 1, 0, $gid, 1, 0, 0, 'forum');
 if(!empty($_G['member']['accessmasks'])) {

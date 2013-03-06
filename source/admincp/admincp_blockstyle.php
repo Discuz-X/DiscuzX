@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blockstyle.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp_blockstyle.php 32661 2013-02-28 06:29:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -120,7 +120,6 @@ BLOCKCLASSSEL;
 		}
 
 		showformheader('blockstyle&operation='.$operation.'&blockclass='.$_GET['blockclass'].'&styleid='.$_GET['styleid']);
-		jsinsertunit();
 		showtableheader();
 		if($_GET['styleid']) {
 			showtitle('blockstyle_add_editstyle');
@@ -133,22 +132,22 @@ BLOCKCLASSSEL;
 		$template = '';
 		foreach($theclass['fields'] as $key=>$value) {
 			if($value['name']) {
-				$template .= $value['name']. ': <a href="###" onclick="insertunit(\'{'.$key.'}\')">{'.$key.'}</a>';
+				$template .= $value['name']. ': <a href="###" onclick="insertunit($(\'jstemplate\'), \'{'.$key.'}\')">{'.$key.'}</a>';
 			}
 		}
 		$template .= '<br />';
-		$template .= cplang('blockstyle_add_loop').': <a href="###" onclick="insertunit(\'[loop]\n\n[/loop]\')">[loop]...[/loop]</a>';
-		$template .= cplang('blockstyle_add_order').': <a href="###" onclick="insertunit(\'[order=N]\n\n[/order]\')">[order=N]...[/order]</a>';
-		$template .= cplang('blockstyle_add_index').': <a href="###" onclick="insertunit(\'[index=N]\n\n[/index]\')">[index=N]...[/index]</a>';
-		$template .= cplang('blockstyle_add_urltitle').': <a href="###" onclick=\'insertunit("<a href=\"{url}\"{target}>{title}</a>")\'>&lt;a href=...</a>';
-		$template .= cplang('blockstyle_add_picthumb').': <a href="###" onclick=\'insertunit("<img src=\"{pic}\" width=\"{picwidth}\" height=\"{picheight}\" />")\'>&lt;img src=...&gt;</a>';
+		$template .= cplang('blockstyle_add_loop').': <a href="###" onclick="insertunit($(\'jstemplate\'), \'[loop]\n\n[/loop]\')">[loop]...[/loop]</a>';
+		$template .= cplang('blockstyle_add_order').': <a href="###" onclick="insertunit($(\'jstemplate\'), \'[order=N]\n\n[/order]\')">[order=N]...[/order]</a>';
+		$template .= cplang('blockstyle_add_index').': <a href="###" onclick="insertunit($(\'jstemplate\'), \'[index=N]\n\n[/index]\')">[index=N]...[/index]</a>';
+		$template .= cplang('blockstyle_add_urltitle').': <a href="###" onclick=\'insertunit($("jstemplate"), "<a href=\"{url}\"{target}>{title}</a>")\'>&lt;a href=...</a>';
+		$template .= cplang('blockstyle_add_picthumb').': <a href="###" onclick=\'insertunit($("jstemplate"), "<img src=\"{pic}\" width=\"{picwidth}\" height=\"{picheight}\" />")\'>&lt;img src=...&gt;</a>';
 		if(in_array($_GET['blockclass'], array('forum_thread', 'portal_article', 'group_thread'), true)) {
-			$template .= cplang('blockstyle_add_moreurl').': <a href="###" onclick="insertunit(\'{moreurl}\')">{moreurl}</a>';
+			$template .= cplang('blockstyle_add_moreurl').': <a href="###" onclick="insertunit($(\'jstemplate\'), \'{moreurl}\')">{moreurl}</a>';
 		}
-		$template .= cplang('blockstyle_add_currentorder').': <a href="###" onclick="insertunit(\'{currentorder}\')">{currentorder}</a>';
-		$template .= cplang('blockstyle_add_parity').': <a href="###" onclick="insertunit(\'{parity}\')">{parity}</a>';
+		$template .= cplang('blockstyle_add_currentorder').': <a href="###" onclick="insertunit($(\'jstemplate\'), \'{currentorder}\')">{currentorder}</a>';
+		$template .= cplang('blockstyle_add_parity').': <a href="###" onclick="insertunit($(\'jstemplate\'), \'{parity}\')">{parity}</a>';
 		$template .= '</div><br />';
-		$template .= '<textarea cols="100" rows="5" id="jstemplate" name="template" style="width: 95%;" onkeyup="textareasize(this)">'.$thestyle['template'].'</textarea>';
+		$template .= '<textarea cols="100" rows="5" id="jstemplate" name="template" style="width: 95%;" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.$thestyle['template'].'</textarea>';
 		$template .= '<input type="hidden" name="preview" value="0" /><input type="hidden" name="stylesubmit" value="1" />';
 		$template .= '<br /><!--input type="button" class="btn" onclick="this.form.preview=\'1\';this.form.submit()" value="'.$lang['preview'].'">&nbsp; &nbsp;--><input type="submit" class="btn" value="'.$lang['submit'].'"></div><br /><br />';
 		echo '<div class="colorbox">';
@@ -324,36 +323,6 @@ SEARCH;
 	showtablefooter();
 	showformfooter();
 
-}
-
-
-function jsinsertunit() {
-?>
-<script type="text/JavaScript">
-	function isUndefined(variable) {
-		return typeof variable == 'undefined' ? true : false;
-	}
-
-	function insertunit(text, obj) {
-		if(!obj) {
-			obj = 'jstemplate';
-		}
-		$(obj).focus();
-		if(!isUndefined($(obj).selectionStart)) {
-			var opn = $(obj).selectionStart + 0;
-			$(obj).value = $(obj).value.substr(0, $(obj).selectionStart) + text + $(obj).value.substr($(obj).selectionEnd);
-			$(obj).selectionStart = opn + strlen(text);
-			$(obj).selectionEnd = opn + strlen(text);
-		} else if(document.selection && document.selection.createRange) {
-			var sel = document.selection.createRange();
-			sel.text = text.replace(/\r?\n/g, '\r\n');
-			sel.moveStart('character', -strlen(text));
-		} else {
-			$(obj).value += text;
-		}
-	}
-</script>
-<?php
 }
 
 ?>

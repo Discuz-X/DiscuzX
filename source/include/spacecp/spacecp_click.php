@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_click.php 25756 2011-11-22 02:47:45Z zhangguosheng $
+ *      $Id: spacecp_click.php 31313 2012-08-10 03:51:03Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -84,7 +84,6 @@ if($_GET['op'] == 'add') {
 
 	hot_update($idtype, $id, $item['hotuser']);
 
-	$note_type = '';
 	$q_note = '';
 	$q_note_values = array();
 
@@ -98,7 +97,6 @@ if($_GET['op'] == 'add') {
 				'click' => $click['name']
 			);
 
-			$note_type = 'clickblog';
 			$q_note = 'click_blog';
 			$q_note_values = array(
 				'url'=>"home.php?mod=space&uid=$item[uid]&do=blog&id=$item[blogid]",
@@ -108,17 +106,18 @@ if($_GET['op'] == 'add') {
 			);
 			break;
 		case 'aid':
+			require_once libfile('function/portal');
+			$article_url = fetch_article_url($item);
 			$fs['title_template'] = 'feed_click_article';
 			$fs['title_data'] = array(
 				'touser' => "<a href=\"home.php?mod=space&uid=$item[uid]\">{$item[username]}</a>",
-				'subject' => "<a href=\"portal.php?mod=view&aid=$item[aid]\">$item[title]</a>",
+				'subject' => "<a href=\"$article_url\">$item[title]</a>",
 				'click' => $click['name']
 			);
 
-			$note_type = 'clickarticle';
 			$q_note = 'click_article';
 			$q_note_values = array(
-				'url'=>"portal.php?mod=view&aid=$item[aid]",
+				'url'=>$article_url,
 				'subject'=>$item['title'],
 				'from_id' => $item['aid'],
 				'from_idtype' => 'aid'
@@ -134,7 +133,6 @@ if($_GET['op'] == 'add') {
 			$fs['image_links'] = array("home.php?mod=space&uid=$item[uid]&do=album&picid=$item[picid]");
 			$fs['body_general'] = $item['title'];
 
-			$note_type = 'clickpic';
 			$q_note = 'click_pic';
 			$q_note_values = array(
 				'url'=>"home.php?mod=space&uid=$item[uid]&do=album&picid=$item[picid]",
@@ -155,7 +153,7 @@ if($_GET['op'] == 'add') {
 	require_once libfile('function/stat');
 	updatestat('click');
 
-	notification_add($item['uid'], $note_type, $q_note, $q_note_values);
+	notification_add($item['uid'], 'click', $q_note, $q_note_values);
 
 	showmessage('click_success', '', array('idtype' => $idtype, 'id' => $id, 'clickid' => $clickid), array('msgtype' => 3, 'showmsg' => true, 'closetime' => true));
 

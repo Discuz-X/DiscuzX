@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_admincp.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: discuz_admincp.php 31471 2012-08-31 07:33:26Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -151,7 +151,7 @@ class discuz_admincp
 
 	function check_admin_login() {
 		global $_G;
-		if((empty($_POST['admin_questionid']) || empty($_POST['admin_answer'])) && $_G['config']['admincp']['forcesecques']) {
+		if((empty($_POST['admin_questionid']) || empty($_POST['admin_answer'])) && ($_G['config']['admincp']['forcesecques'] || $_G['group']['forcesecques'])) {
 			$this->do_user_login();
 		}
 		loaducenter();
@@ -172,7 +172,7 @@ class discuz_admincp
 
 			require_once libfile('function/member');
 			if(logincheck($_POST['admin_username'])) {
-				if((empty($_POST['admin_questionid']) || empty($_POST['admin_answer'])) && $_G['config']['admincp']['forcesecques']) {
+				if((empty($_POST['admin_questionid']) || empty($_POST['admin_answer'])) && ($_G['config']['admincp']['forcesecques'] || $_G['group']['forcesecques'])) {
 					$this->do_user_login();
 				}
 				$result = userlogin($_POST['admin_username'], $_POST['admin_password'], $_POST['admin_questionid'], $_POST['admin_answer'], 'username', $this->core->var['clientip']);

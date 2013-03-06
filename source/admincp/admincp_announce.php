@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_announce.php 28390 2012-02-28 10:41:08Z monkey $
+ *      $Id: admincp_announce.php 32114 2012-11-12 08:17:09Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -108,7 +108,7 @@ if(empty($operation)) {
 			$newmessage = $_GET['newtype'] == 1 ? explode("\n", $_GET['newmessage']) : array(0 => $_GET['newmessage']);
 			$data = array(
 				'author' => $_G['username'],
-				'subject' => $newsubject,
+				'subject' => strip_tags($newsubject, '<u><i><b>'),
 				'type' => $_GET['newtype'],
 				'starttime' => $newstarttime,
 				'endtime' => $newendtime,

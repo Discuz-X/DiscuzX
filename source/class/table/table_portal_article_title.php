@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_article_title.php 27776 2012-02-14 06:59:55Z liulanbo $
+ *      $Id: table_portal_article_title.php 31618 2012-09-14 09:32:26Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,6 +87,51 @@ class table_portal_article_title extends discuz_table
 	}
 	public function fetch_all_for_search($aids, $orderby = '', $ascdesc = '', $start = 0, $limit = 0) {
 		return DB::fetch_all("SELECT at.*,ac.viewnum, ac.commentnum FROM ".DB::table($this->_table)." at LEFT JOIN ".DB::table('portal_article_count')." ac ON at.aid=ac.aid WHERE at.".DB::field('aid', $aids).($orderby ? " ORDER BY ".DB::order($orderby, $ascdesc) : ' ').DB::limit($start, $limit));
+	}
+
+
+	public function repair_htmlmade($ids) {
+		if(($ids = dintval($ids, true))) {
+			return DB::update($this->_table, array('htmlmade' => 0), DB::field($this->_pk, $ids));
+		}
+		return false;
+	}
+
+	public function fetch_all_aid_by_dateline($dateline, $catids = array(), $startid = 0, $endid = 0) {
+		$data = array();
+		$where = array();
+		if($startid) {
+			$where[] = DB::field('aid', intval($startid), '>=');
+		}
+		if($endid) {
+			$where[] = DB::field('aid', intval($endid), '<=');
+		}
+		if($catids) {
+			$where[] = DB::field('catid', dintval($catids, true));
+		}
+		if($dateline) {
+			$where[] = DB::field('dateline', intval($dateline), '>=');
+		}
+		if($where) {
+			$data = DB::fetch_all('SELECT aid FROM '.DB::table($this->_table).' WHERE '. implode(' AND ', $where).' LIMIT 200000', NULL, $this->_pk);
+		}
+		return $data;
+	}
+
+	public function fetch_preaid_by_catid_aid($catid, $aid) {
+		$ret = 0;
+		if(($catid = intval($catid)) && ($aid = intval($aid))) {
+			$ret = DB::result_first('SELECT aid FROM %t WHERE catid=%d AND aid<%d ORDER BY aid DESC LIMIT 1', array($this->_table, $catid, $aid));
+		}
+		return $ret;
+	}
+
+	public function fetch_nextaid_by_catid_aid($catid, $aid) {
+		$ret = 0;
+		if(($catid = intval($catid)) && ($aid = intval($aid))) {
+			$ret = DB::result_first('SELECT aid FROM %t WHERE catid=%d AND aid>%d ORDER BY aid ASC LIMIT 1', array($this->_table, $catid, $aid));
+		}
+		return $ret;
 	}
 }
 

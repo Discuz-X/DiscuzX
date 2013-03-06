@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_group.php 32368 2013-01-07 02:31:01Z liulanbo $
+ *      $Id: function_group.php 32367 2013-01-07 02:30:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -184,7 +184,7 @@ function get_viewedgroup() {
 }
 
 function getgroupthread($fid, $type, $timestamp = 0, $num = 10) {
-	$typearray = array('replies', 'views', 'dateline', 'lastpost', 'digest');
+	$typearray = array('replies', 'views', 'dateline', 'lastpost', 'digest', 'comments');
 	$type = in_array($type, $typearray) ? $type : '';
 
 	$groupthreadlist = array();
@@ -211,6 +211,7 @@ function getgroupthread($fid, $type, $timestamp = 0, $num = 10) {
 			$groupthreadlist[$thread['tid']]['authorid'] = $thread['authorid'];
 			$groupthreadlist[$thread['tid']]['views'] = $thread['views'];
 			$groupthreadlist[$thread['tid']]['replies'] = $thread['replies'];
+			$groupthreadlist[$thread['tid']]['comments'] = $thread['comments'];
 			$groupthreadlist[$thread['tid']]['lastpost'] = dgmdate($thread['lastpost'], 'u');
 			$groupthreadlist[$thread['tid']]['lastposter'] = $thread['lastposter'];
 			$groupthreadlist[$thread['tid']]['lastposterenc'] = rawurlencode($thread['lastposter']);

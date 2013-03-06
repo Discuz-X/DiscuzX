@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_rss.php 28366 2012-02-28 07:38:23Z chenmengshu $
+ *      $Id: forum_rss.php 31587 2012-09-11 06:51:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -100,7 +100,7 @@ if($fidarray) {
 					if($attachremote) {
 						$filename = $_G['setting']['ftp']['attachurl'].'forum/'.$attachfile;
 					} else {
-						$filename = $_G['siteurl'].$_G['setting']['attachurl'].'forum/'.$attachfile;
+						$filename = (!strstr($_G['setting']['attachurl'], '://') ? $_G['siteurl'] : '').$_G['setting']['attachurl'].'forum/'.$attachfile;
 					}
 				}
 				echo 	"    <item>\n".

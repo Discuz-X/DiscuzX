@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_blog.php 25870 2011-11-24 07:05:44Z zhengqingpeng $
+ *      $Id: space_blog.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,6 +47,10 @@ if($id) {
 		}
 	}
 
+	if(!empty($_G['setting']['antitheft']['allow']) && empty($_G['setting']['antitheft']['disable']['blog'])) {
+		helper_antitheft::check($id, 'bid');
+	}
+
 	$classarr = C::t('home_class')->fetch($blog['classid']);
 
 	if($blog['catid']) {
@@ -62,7 +66,7 @@ if($id) {
 	$otherlist = array();
 	$query = C::t('home_blog')->fetch_all_by_uid($space['uid'], 'dateline', 0, 6);
 	foreach($query as $value) {
-		if($value['blogid'] != $blog['blogid'] && empty($value['friend'])) {
+		if($value['blogid'] != $blog['blogid'] && empty($value['friend']) && $blog['status'] == 0) {
 			$otherlist[] = $value;
 		}
 	}
@@ -70,7 +74,7 @@ if($id) {
 	$newlist = array();
 	$query = C::t('home_blog')->fetch_all_by_hot($minhot, 'dateline', 0, 6);
 	foreach($query as $value) {
-		if($value['blogid'] != $blog['blogid'] && empty($value['friend'])) {
+		if($value['blogid'] != $blog['blogid'] && empty($value['friend']) && $blog['status'] == 0) {
 			$newlist[] = $value;
 		}
 	}
@@ -213,7 +217,7 @@ if($id) {
 	$f_index = $searchsubject = '';
 	$uids = array();
 	$need_count = true;
-
+	$status = null;
 	if($_GET['view'] == 'all') {
 		if($_GET['order'] == 'hot') {
 			$gthot = $minhot;
@@ -223,6 +227,7 @@ if($id) {
 			$orderactives = array('dateline' => ' class="a"');
 		}
 
+		$status = 0;
 	} elseif($_GET['view'] == 'me') {
 
 		space_merge($space, 'field_home');
@@ -239,7 +244,7 @@ if($id) {
 		}
 
 		if($_GET['from'] == 'space') $diymode = 1;
-
+		$status = array(0, 1);
 	} else {
 
 		space_merge($space, 'field_home');
@@ -263,6 +268,7 @@ if($id) {
 			foreach($query as $value) {
 				$userlist[] = $value;
 			}
+			$status = 0;
 		} else {
 			$need_count = false;
 		}
@@ -278,9 +284,9 @@ if($id) {
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);
 
-		$count = C::t('home_blog')->count_all_by_search(null, $uids, null, null, $gthot, null, null, null, null, null, $privacyfriend, null, null, null, $classid, $catid, $searchsubject, true);
+		$count = C::t('home_blog')->count_all_by_search(null, $uids, null, null, $gthot, null, null, null, null, null, $privacyfriend, null, null, null, $classid, $catid, $searchsubject, true, $status);
 		if($count) {
-			$query = C::t('home_blog')->fetch_all_by_search(1, null, $uids, null, null, $gthot, null, null, null, null, null, $privacyfriend, null, null, null, 'dateline', 'DESC', $start, $perpage, $classid, $catid, $searchsubject, $f_index);
+			$query = C::t('home_blog')->fetch_all_by_search(1, null, $uids, null, null, $gthot, null, null, null, null, null, $privacyfriend, null, null, null, 'dateline', 'DESC', $start, $perpage, $classid, $catid, $searchsubject, $f_index, false, $status);
 		}
 	}
 

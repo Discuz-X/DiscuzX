@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_uploadpic.js 23838 2011-08-11 06:51:58Z monkey $
+	$Id: home_uploadpic.js 32590 2013-02-22 09:42:48Z monkey $
 */
 
 var attachexts = new Array();
@@ -34,13 +34,13 @@ function addAttach() {
 	var id = nowid;
 	var tags;
 	tags = newnode.getElementsByTagName('form');
-	for(i in tags) {
+	for(i = 0;i < tags.length;i++) {
 		if(tags[i].id == 'upload') {
 			tags[i].id = 'upload_' + id;
 		}
 	}
 	tags = newnode.getElementsByTagName('input');
-	for(i in tags) {
+	for(i = 0;i < tags.length;i++) {
 		if(tags[i].name == 'attach') {
 			tags[i].id = 'attach_' + id;
 			tags[i].name = 'attach';
@@ -52,7 +52,7 @@ function addAttach() {
 		}
 	}
 	tags = newnode.getElementsByTagName('span');
-	for(i in tags) {
+	for(i = 0;i < tags.length;i++) {
 		if(tags[i].id == 'localfile') {
 			tags[i].id = 'localfile_' + id;
 		}
@@ -75,18 +75,18 @@ function insertAttach(id) {
 		return;
 	}
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
-		alert('å¯¹ä¸èµ·ï¼Œä¸æ”¯æŒä¸Šä¼ æ­¤ç±»æ‰©å±•åçš„å›¾ç‰‡');
+		alert('¶Ô²»Æğ£¬²»Ö§³ÖÉÏ´«´ËÀàÀ©Õ¹ÃûµÄÍ¼Æ¬');
 		return;
 	}
 	attachexts[id] = inArray(ext, ['gif', 'jpg', 'jpeg', 'png']) ? 2 : 1;
 
 	var inhtml = '<table cellspacing="0" cellpadding="0" class="up_row"><tr>';
 	if(typeof no_insert=='undefined') {
-		localfile += '&nbsp;<a href="javascript:;" class="xi2" title="ç‚¹å‡»è¿™é‡Œæ’å…¥å†…å®¹ä¸­å½“å‰å…‰æ ‡çš„ä½ç½®" onclick="insertAttachimgTag(' + id + ');return false;">[æ’å…¥]</a>';
+		localfile += '&nbsp;<a href="javascript:;" class="xi2" title="µã»÷ÕâÀï²åÈëÄÚÈİÖĞµ±Ç°¹â±êµÄÎ»ÖÃ" onclick="insertAttachimgTag(' + id + ');return false;">[²åÈë]</a>';
 	}
 	inhtml += '<td><strong>' + localfile +'</strong>';
-	inhtml += '</td><td class="d">å›¾ç‰‡æè¿°<br/><textarea name="pic_title" cols="40" rows="2" class="pt"></textarea>';
-	inhtml += '</td><td class="o"><span id="showmsg' + id + '"><a href="javascript:;" onclick="delAttach(' + id + ');return false;" class="xi2">[åˆ é™¤]</a></span>';
+	inhtml += '</td><td class="d">Í¼Æ¬ÃèÊö<br/><textarea name="pic_title" cols="40" rows="2" class="pt"></textarea>';
+	inhtml += '</td><td class="o"><span id="showmsg' + id + '"><a href="javascript:;" onclick="delAttach(' + id + ');return false;" class="xi2">[É¾³ı]</a></span>';
 	inhtml += '</td></tr></table>';
 
 	$('localfile_' + id).innerHTML = inhtml;
@@ -149,7 +149,7 @@ function upload() {
 	if(nowUid>0) {
 		var upobj = $('showmsg'+nowid);
 		if(uploadStat==1) {
-			upobj.innerHTML = 'ä¸Šä¼ æˆåŠŸ';
+			upobj.innerHTML = 'ÉÏ´«³É¹¦';
 			successState = true;
 			var InputNode;
 			try {
@@ -165,12 +165,12 @@ function upload() {
 
 		} else {
 			upobj.style.color = "#f00";
-			upobj.innerHTML = 'ä¸Šä¼ å¤±è´¥ '+uploadStat;
+			upobj.innerHTML = 'ÉÏ´«Ê§°Ü '+uploadStat;
 		}
 	}
 
 	if($('showmsg'+nid) != null) {
-		$('showmsg'+nid).innerHTML = 'ä¸Šä¼ ä¸­ï¼Œè¯·ç­‰å¾…(<a href="javascript:;" onclick="forms[nowUid].submit();">é‡è¯•</a>)';
+		$('showmsg'+nid).innerHTML = 'ÉÏ´«ÖĞ£¬ÇëµÈ´ı(<a href="javascript:;" onclick="forms[nowUid].submit();">ÖØÊÔ</a>)';
 		$('albumid_'+nid).value = albumid;
 		forms[nowUid].submit();
 	} else if(nowUid+1 == forms.length) {

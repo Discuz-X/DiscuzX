@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_thread.php 31364 2012-08-20 03:19:05Z zhengqingpeng $
+ *      $Id: space_thread.php 31365 2012-08-20 03:19:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {

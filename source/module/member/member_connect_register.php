@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: member_connect_register.php 31721 2012-09-25 01:43:49Z zhangguosheng $
+ *	  $Id: member_connect_register.php 32560 2013-02-20 09:43:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -72,10 +72,14 @@ if(empty($_POST)) {
 		showmessage('qqconnect:connect_register_bind_uin_already');
 	}
 
-	$conispublishfeed = $conispublisht = 1;
+	$conispublishfeed = 0;
+	$conispublisht = 1;
 
 	$is_qzone_avatar = !empty($_GET['use_qzone_avatar']) ? 1 : 0;
 	$is_use_qqshow = !empty($_GET['use_qqshow']) ? 1 : 0;
+	if(!empty($_GET['use_qzone_avatar_qqshow'])) {
+		$is_qzone_avatar = $is_use_qqshow = 1;
+	}
 	$userdata = array();
 	$userdata['avatarstatus'] = $is_qzone_avatar;
 	$userdata['conisbind'] = 1;

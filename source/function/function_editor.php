@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_editor.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_editor.php 32078 2012-11-07 05:28:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -123,7 +123,8 @@ function html2bbcode($text) {
 		"/<\/td>/i",
 		"/<\/tr>/i",
 		"/<\/table>/i",
-		'/<h([0-9]+)[^>]*>(.*)<\/h\\1>/siU',
+		'/<h([0-9]+)[^>]*>/siUe',
+		'/<\/h([0-9]+)>/siU',
 		"/<img[^>]+smilieid=\"(\d+)\".*>/esiU",
 		"/<img([^>]*src[^>]*)>/eiU",
 		"/<a\s+?name=.+?\".\">(.+?)<\/a>/is",
@@ -142,7 +143,8 @@ function html2bbcode($text) {
 		'[/td]',
 		'[/tr]',
 		'[/table]',
-		"[size=\\1]\\2[/size]\n\n",
+		"\"[size=\".(7 - \\1).\"]\"",
+		"[/size]\n\n",
 		"smileycode('\\1')",
 		"imgtag('\\1')",
 		'\1',

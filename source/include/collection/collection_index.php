@@ -69,10 +69,7 @@ if($op == 'all' || $op == 'search') {
 		loadcache('collection');
 
 		if(TIMESTAMP - $_G['cache']['collection']['dateline'] > 300) {
-			$collection = C::t('forum_collection')->range(0, 500, 10);
-			if(!$collection) {
-				$collection = C::t('forum_collection')->range(0, 500);
-			}
+			$collection = getHotCollection(500, false);
 			$collectioncache = array('dateline' => TIMESTAMP, 'data' => $collection);
 			savecache('collection', $collectioncache);
 		} else {
@@ -81,7 +78,7 @@ if($op == 'all' || $op == 'search') {
 		$count = count($collection);
 		for($i = $start; $i < $start+$cpp; $i++) {
 			if(!$collection[$i]) {
-				break;
+				continue;
 			}
 			$collectiondata[] = $collection[$i];
 		}

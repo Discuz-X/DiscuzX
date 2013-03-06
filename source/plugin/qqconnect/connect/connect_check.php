@@ -21,10 +21,8 @@ if (!in_array($op, array('cookie'))) {
 if ($op == 'cookie') {
 	loadcache('connect_login_report_date');
 	$cookieLogins = C::t('common_setting')->fetch('connect_login_times');
-	//note 次数非0 且上次上报日期非今日
 	if (dgmdate(TIMESTAMP, 'Y-m-d') != $_G['cache']['connect_login_report_date']) {
 		if (!discuz_process::islocked('connect_login_report', 600)) {
-			// 如果cookieLogins 是 0 的话，直接返回成功，下次再上报
 			$result = $connectService->connectCookieLoginReport($cookieLogins);
 			if (isset($result['status']) && $result['status'] == 0) {
 				$date = dgmdate(TIMESTAMP, 'Y-m-d');

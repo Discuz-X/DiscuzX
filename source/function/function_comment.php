@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_comment.php 28115 2012-02-22 09:47:40Z zhengqingpeng $
+ *      $Id: function_comment.php 30866 2012-06-27 06:00:03Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -237,7 +237,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 		case 'picid':
 			$n_url = "home.php?mod=space&uid=$tospace[uid]&do=album&picid=$id&cid=$cid";
 
-			$note_type = 'piccomment';
+			$note_type = 'comment';
 			$note = 'pic_comment';
 			$note_values = array('url'=>$n_url);
 			$q_note = 'pic_comment_reply';
@@ -250,7 +250,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 		case 'blogid':
 			$n_url = "home.php?mod=space&uid=$tospace[uid]&do=blog&id=$id&cid=$cid";
 
-			$note_type = 'blogcomment';
+			$note_type = 'comment';
 			$note = 'blog_comment';
 			$note_values = array('url'=>$n_url, 'subject'=>$blog['subject']);
 			$q_note = 'blog_comment_reply';
@@ -263,7 +263,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 		case 'sid':
 			$n_url = "home.php?mod=space&uid=$tospace[uid]&do=share&id=$id&cid=$cid";
 
-			$note_type = 'sharecomment';
+			$note_type = 'comment';
 			$note = 'share_comment';
 			$note_values = array('url'=>$n_url);
 			$q_note = 'share_comment_reply';

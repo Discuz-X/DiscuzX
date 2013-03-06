@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_split.php 27209 2012-01-11 04:38:59Z liulanbo $
+ *      $Id: topicadmin_split.php 30872 2012-06-27 10:11:44Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -104,7 +104,7 @@ if(!submitcheck('modsubmit')) {
 	$modpostsnum++;
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=forumdisplay&fid=$_G[fid]",
-	'reasonpm'	=> ($sendreasonpm ? array('data' => $splitauthors, 'var' => 'thread', 'item' => 'reason_moderate') : array()),
+	'reasonpm'	=> ($sendreasonpm ? array('data' => $splitauthors, 'var' => 'thread', 'item' => 'reason_moderate', 'notictype' => 'post') : array()),
 	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason),
 	'modtids'	=> $thread['tid'].','.$newtid,
 	'modlog'	=> array($thread, array('tid' => $newtid, 'subject' => $subject))

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_seccode.php 27489 2012-02-02 07:41:46Z zhangguosheng $
+ *      $Id: class_seccode.php 32385 2013-01-08 02:18:27Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,8 +36,6 @@ class seccode {
 
 	function display() {
 		$this->type == 2 && !extension_loaded('ming') && $this->type = 0;
-		$this->width = $this->width >= 100 && $this->width <= 200 ? $this->width : 150;
-		$this->height = $this->height >= 30 && $this->height <= 80 ? $this->height : 60;
 		if($this->type < 2 && function_exists('imagecreate') && function_exists('imagecolorset') && function_exists('imagecopyresized') &&
 			function_exists('imagecolorallocate') && function_exists('imagechar') && function_exists('imagecolorsforindex') &&
 			function_exists('imageline') && function_exists('imagecreatefromstring') && (function_exists('imagegif') || function_exists('imagepng') || function_exists('imagejpeg'))) {

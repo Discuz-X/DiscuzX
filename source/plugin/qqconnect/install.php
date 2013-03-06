@@ -4,14 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install.php 31305 2012-08-09 06:36:16Z liudongdong $
+ *      $Id: install.php 32492 2013-01-29 05:45:03Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-// ´´½¨QQ»¥Áª¿ìËÙµÇÂ¼ÓÃ»§×é
 $connect = C::t('common_setting')->fetch('connect', true);
 
 $sql = <<<EOF
@@ -99,20 +98,20 @@ CREATE TABLE IF NOT EXISTS pre_common_connect_guest (
 ) TYPE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `pre_connect_disktask` (
-  `taskid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ÈÎÎñID',
-  `aid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '¸½¼şID',
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ÓÃ»§ID',
+  `taskid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä»»åŠ¡ID',
+  `aid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'é™„ä»¶ID',
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ç”¨æˆ·ID',
   `openid` char(32) NOT NULL DEFAULT '' COMMENT 'openId',
-  `filename` varchar(255) NOT NULL DEFAULT '' COMMENT '¸½¼şÃû³Æ',
-  `verifycode` char(32) NOT NULL DEFAULT '' COMMENT 'ÏÂÔØÑéÖ¤Âë',
-  `status` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT 'ÏÂÔØ×´Ì¬',
-  `dateline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Ìí¼ÓÈÎÎñµÄÊ±¼ä',
-  `downloadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ÏÂÔØÍê³ÉÊ±¼ä',
-  `extra` text COMMENT '±£Áô×Ö¶Î',
+  `filename` varchar(255) NOT NULL DEFAULT '' COMMENT 'é™„ä»¶åç§°',
+  `verifycode` char(32) NOT NULL DEFAULT '' COMMENT 'ä¸‹è½½éªŒè¯ç ',
+  `status` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT 'ä¸‹è½½çŠ¶æ€',
+  `dateline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'æ·»åŠ ä»»åŠ¡çš„æ—¶é—´',
+  `downloadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ä¸‹è½½å®Œæˆæ—¶é—´',
+  `extra` text COMMENT 'ä¿ç•™å­—æ®µ',
   PRIMARY KEY (`taskid`),
   KEY `openid` (`openid`),
   KEY `status` (`status`)
-) TYPE=MyISAM COMMENT='ÍøÅÌÏÂÔØÈÎÎñ±í';
+) TYPE=MyISAM COMMENT='ç½‘ç›˜ä¸‹è½½ä»»åŠ¡è¡¨';
 
 
 REPLACE INTO pre_common_setting VALUES ('regconnect', '1');
@@ -123,8 +122,6 @@ runquery($sql);
 
 $needCreateGroup = true;
 if ($connect['feed']) {
-	// Èç¹ûsetting ±íÖĞÓĞ connect ÅäÖÃ£¬ÔòÅĞ¶ÏÊÇ·ñ´æÔÚ¿ìËÙµÇÂ½ÓÃ»§×é
-	// ¼ì²âÓÃ»§×éÊÇ·ñ´æÔÚ
 	$group = C::t('common_usergroup')->fetch($connect['guest_groupid']);
 	if ($group) {
 		$needCreateGroup = false;
@@ -156,14 +153,13 @@ if ($connect['feed']) {
 		'register_addcredit' => '',
 		'register_groupid' => '0',
 		'register_regverify' => '1',
-		'register_invite' => '1',
+		'register_invite' => '0',
 		'newbiespan' => '',
 		'turl_code' => '',
 		'mblog_app_key' => 'abc',
 	);
 }
 
-// ´´½¨ÓÃ»§×é
 if ($needCreateGroup) {
 	include DISCUZ_ROOT . 'source/language/lang_admincp_cloud.php';
 	$name = $extend_lang['connect_guest_group_name'];
@@ -176,17 +172,15 @@ if ($needCreateGroup) {
 	);
 	$newGroupId = C::t('common_usergroup')->insert($userGroupData, true);
 
-	// ÓÃ»§×éÈ¨ÏŞ
 	$dataField = array(
 		'groupid' => $newGroupId,
-		'allowsearch' => 2, // ÔÊĞíËÑË÷ÂÛÌ³
-		'readaccess' => 1, // ÔÄ¶ÁÈ¨ÏŞ
-		'allowgetattach' => 1, // ÏÂÔØ¸½¼ş
-		'allowgetimage' => 1, // ÏÂÔØÍ¼Æ¬
+		'allowsearch' => 2,
+		'readaccess' => 1,
+		'allowgetattach' => 1,
+		'allowgetimage' => 1,
 	);
 	C::t('common_usergroup_field')->insert($dataField);
 
-	// ±£´æÓÃ»§×é
 	$connect['guest_groupid'] = $newGroupId;
 	updatecache('usergroups');
 }

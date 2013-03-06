@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: connect.class.php 32318 2012-12-25 02:18:50Z liudongdong $
+ *		$Id: connect.class.php 32630 2013-02-27 05:46:25Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -366,6 +366,7 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		$_G['connect']['qzone_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=1&thread_id=' . $_G['tid'];
 		$_G['connect']['weibo_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=2&thread_id=' . $_G['tid'];
 		$_G['connect']['pengyou_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=3&thread_id=' . $_G['tid'];
+		$_G['connect']['qq_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=4&thread_id=' . $_G['tid'];
 		$_G['connect']['first_post'] = $postlist[$_G['forum_firstpid']];
 		if ($_G['connect']['first_post']['anonymous']) {
 			$_G['connect']['first_post']['authorid'] = 0;

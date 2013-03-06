@@ -3,9 +3,8 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
 *      This is NOT a freeware, use is subject to license terms
 *
-*      $Id: pollvote.php 31418 2012-08-27 08:47:01Z zhangjie $
+*      $Id: pollvote.php 32489 2013-01-29 03:57:16Z monkey $
 */
-//note Õ∂∆±¥¶¿Ì @ Discuz! X2.5
 
 if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

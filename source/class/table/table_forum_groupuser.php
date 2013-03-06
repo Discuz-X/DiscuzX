@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_groupuser.php 31120 2012-07-18 06:01:46Z liulanbo $
+ *      $Id: table_forum_groupuser.php 31121 2012-07-18 06:01:56Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {

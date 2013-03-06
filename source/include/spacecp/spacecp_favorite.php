@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_favorite.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
+ *      $Id: spacecp_favorite.php 32325 2012-12-25 08:53:33Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,20 @@ if($_GET['op'] == 'delete') {
 
 	if($_GET['checkall']) {
 		if($_GET['favorite']) {
+			$deletecounter = array();
+			$data = C::t('home_favorite')->fetch_all($_GET['favorite']);
+			foreach($data as $dataone) {
+				switch($dataone['idtype']) {
+					case 'fid':
+						$deletecounter['fids'][] = $dataone['id'];
+						break;
+					default:
+						break;
+				}
+			}
+			if($deletecounter['fids']) {
+				C::t('forum_forum')->update_forum_counter($deletecounter['fids'], 0, 0, 0, 0, -1);
+			}
 			C::t('home_favorite')->delete($_GET['favorite'], false, $_G['uid']);
 			if($_G['setting']['cloud_status']) {
 				$favoriteService = Cloud::loadClass('Service_Client_Favorite');
@@ -30,6 +44,13 @@ if($_GET['op'] == 'delete') {
 		}
 
 		if(submitcheck('deletesubmit')) {
+			switch($thevalue['idtype']) {
+				case 'fid':
+					C::t('forum_forum')->update_forum_counter($thevalue['id'], 0, 0, 0, 0, -1);
+					break;
+				default:
+					break;
+			}
 			C::t('home_favorite')->delete($favid);
 			if($_G['setting']['cloud_status']) {
 				$favoriteService = Cloud::loadClass('Service_Client_Favorite');
@@ -101,7 +122,7 @@ if($_GET['op'] == 'delete') {
 	if($fav) {
 		showmessage('favorite_repeat');
 	}
-	$description = '';
+	$description = $extrajs = '';
 	$description_show = nl2br($description);
 
 	$fav_count = C::t('home_favorite')->count_by_id_idtype($id, $idtype);
@@ -128,6 +149,7 @@ if($_GET['op'] == 'delete') {
 				break;
 			case 'forum':
 				C::t('forum_forum')->update_forum_counter($id, 0, 0, 0, 0, 1);
+				$extrajs = '<script type="text/javascript">$("number_favorite").innerHTML = parseInt($("number_favorite").innerHTML)+1;</script>';
 				dsetcookie('nofavfid', '', -1);
 				break;
 			case 'blog':
@@ -146,7 +168,7 @@ if($_GET['op'] == 'delete') {
 				C::t('portal_article_count')->increase($id, array('favtimes' => 1));
 				break;
 		}
-		showmessage('favorite_do_success', dreferer(), array('id' => $id), array('showdialog' => true, 'closetime' => true));
+		showmessage('favorite_do_success', dreferer(), array('id' => $id, 'favid' => $favid), array('showdialog' => true, 'closetime' => true, 'extrajs' => $extrajs));
 	}
 }
 

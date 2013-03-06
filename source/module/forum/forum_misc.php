@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 32454 2013-01-21 02:57:23Z monkey $
+ *      $Id: forum_misc.php 32533 2013-02-17 06:09:10Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -103,10 +103,10 @@ if($_GET['action'] == 'paysucceed') {
 	}
 
 	$attach['netprice'] = $status != 2 ? round($attach['price'] * (1 - $_G['setting']['creditstax'])) : 0;
-
+	$lockid = 'attachpay_'.$_G['uid'];
 	if(!submitcheck('paysubmit')) {
 		include template('forum/attachpay');
-	} else {
+	} elseif(!discuz_process::islocked($lockid)) {
 		if(!empty($_GET['buyall'])) {
 			$aids = $prices = array();
 			$tprice = 0;
@@ -150,7 +150,7 @@ if($_GET['action'] == 'paysucceed') {
 
 			$aidencode = aidencode($aid, 0, $_GET['tid']);
 		}
-
+		discuz_process::unlock($lockid);
 		if(count($aids) > 1) {
 			showmessage('attachment_buyall', 'forum.php?mod=redirect&goto=findpost&ptid='.$attach['tid'].'&pid='.$attach['pid']);
 		} else {
@@ -356,6 +356,78 @@ if($_GET['action'] == 'paysucceed') {
 	require_once libfile('function/cache');
 	updatecache('heats');
 	dheader('Location: '.dreferer());
+
+} elseif($_GET['action'] == 'showdarkroom') {
+
+	include_once libfile('class/member');
+	if($_G['setting']['darkroom']) {
+		$limit = $_G['tpp'];
+		$page = $_GET['page'] ? $_GET['page'] : 1;
+		$start = $limit * ($page -1);
+		$count = C::t('common_member')->count_by_groupid(array(4, 5));
+		$users = C::t('common_member')->fetch_all_by_groupid(array(4, 5), $start, $limit);
+		foreach(C::t('common_member_crime')->fetch_all_by_uid_action(array_keys($users), array(4, 5)) as $crime) {
+			$crime['action'] = lang('forum/template', crime_action_ctl::$actions[$crime['action']]);
+			$crime['groupexpiry'] = $users[$crime['uid']]['groupexpiry'] ? dgmdate($users[$crime['uid']]['groupexpiry'], 'u') : lang('forum/misc', 'never_expired');
+			$crimes[$crime['uid']] = $crime;
+		}
+		if($count > $limit) {
+			$multi = multi($count, $limit, $page, 'forum.php?mod=misc&action=showdarkroom');
+		}
+		include_once template("forum/darkroom");
+		exit;
+	}
+	showmessage('undefined_action');
+} elseif($_GET['action'] == 'shortcut') {
+
+	if($_GET['type'] == 'ico') {
+		$shortcut = @readfile(DISCUZ_ROOT.'favicon.ico');
+		$filename = 'favicon.ico';
+	} else {
+		$shortcut = '[InternetShortcut]
+URL='.$_G['siteurl'].'
+IconFile='.$_G['siteurl'].'favicon.ico
+IconIndex=1
+';
+		$filename = $_G['setting']['bbname'].'.url';
+	}
+
+	if(!strexists($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+		$filename = diconv($filename, CHARSET, 'UTF-8');
+	} else {
+		$filename = diconv($filename, CHARSET, 'GBK');
+	}
+	dheader('Content-type: application/octet-stream');
+	dheader('Content-Disposition: attachment; filename='.$filename);
+	echo $shortcut;
+	exit;
+} elseif($_GET['action'] == 'livelastpost') {
+	$fid = dintval($_GET['fid']);
+	$forum = C::t('forum_forumfield')->fetch($fid);
+	$livetid = $forum['livetid'];
+	$postlist = array();
+	if($livetid) {
+		$thread = C::t('forum_thread')->fetch($livetid);
+		$postlist['count'] = $thread['replies'];
+		$postarr = C::t('forum_post')->fetch_all_by_tid('tid:'.$livetid, $livetid, true, 'DESC', 20);
+		ksort($postarr);
+		foreach($postarr as $post) {
+			if($post['first'] == 1) {
+				continue;
+			}
+			$contentarr = array(
+				'authorid' => $post['authorid'],
+				'author' => $post['author'],
+				'message' => messagecutstr($post['message']),
+				'dateline' => dgmdate($post['dateline'], 'u'),
+				'avatar' => avatar($post['authorid'], 'small'),
+			);
+			$postlist['list'][$post['pid']] = $contentarr;
+		}
+	}
+
+	showmessage('', '', $postlist);
+	exit;
 
 } else {
 
@@ -1462,6 +1534,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	if(empty($_G['uid'])) {
 		showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));
 	}
+
 	if(empty($_GET['hash']) || $_GET['hash'] != formhash()) {
 		showmessage('submit_invalid');
 	}
@@ -1495,6 +1568,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		$fieldarr['heats'] = 0;
 	$fieldarr['recommends'] = $_G['group']['allowrecommend'];
 	C::t('forum_thread')->increase($_G['tid'], $fieldarr);
+	C::t('forum_thread')->update($_G['tid'], array('lastpost' => TIMESTAMP));
 	C::t('forum_memberrecommend')->insert(array('tid'=>$_G['tid'], 'recommenduid'=>$_G['uid'], 'dateline'=>$_G['timestamp']));
 
 	dsetcookie('recommend', 1, 43200);
@@ -1626,6 +1700,55 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		showmessage('parameters_error', '', array('haserror' => 1));
 	}
 	include_once template("forum/usertag");
+} elseif($_GET['action'] == 'postreview') {
+
+	if(!$_G['setting']['repliesrank'] || empty($_G['uid'])) {
+		showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));
+	}
+	if(empty($_GET['hash']) || $_GET['hash'] != formhash()) {
+		showmessage('submit_invalid');
+	}
+
+	$doArray = array('support', 'against');
+
+	$post = C::t('forum_post')->fetch('tid:'.$_GET['tid'], $_GET['pid'], false);
+
+	if(!in_array($_GET['do'], $doArray) || empty($post) || $post['first'] == 1 || ($_G['setting']['threadfilternum'] && $_G['setting']['filterednovote'] && getstatus($post['status'], 11))) {
+		showmessage('undefined_action', NULL);
+	}
+
+	$hotreply = C::t('forum_hotreply_number')->fetch_by_pid($post['pid']);
+	if($_G['uid'] == $post['authorid']) {
+		showmessage('您不能对自己的回帖进行投票', '', array(), array('msgtype' => 3));
+	}
+
+	if(empty($hotreply)) {
+		$hotreply['pid'] = C::t('forum_hotreply_number')->insert(array(
+			'pid' => $post['pid'],
+			'tid' => $post['tid'],
+			'support' => 0,
+			'against' => 0,
+			'total' => 0,
+		), true);
+	} else {
+		if(C::t('forum_hotreply_member')->fetch($post['pid'], $_G['uid'])) {
+			showmessage('您已经对此回帖投过票了', '', array(), array('msgtype' => 3));
+		}
+	}
+
+	$typeid = $_GET['do'] == 'support' ? 1 : 0;
+
+	C::t('forum_hotreply_number')->update_num($post['pid'], $typeid);
+	C::t('forum_hotreply_member')->insert(array(
+		'tid' => $post['tid'],
+		'pid' => $post['pid'],
+		'uid' => $_G['uid'],
+		'attitude' => $typeid,
+	));
+
+	$hotreply[$_GET['do']]++;
+
+	showmessage('投票成功', '', array(), array('msgtype' => 3, 'extrajs' => '<script type="text/javascript">postreviewupdate('.$post['pid'].', '.$typeid.');</script>'));
 }
 
 function getratelist($raterange) {

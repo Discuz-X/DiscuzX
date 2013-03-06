@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_task.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: class_task.php 30363 2012-05-24 07:16:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -70,8 +70,14 @@ class task {
 			$task['lastupdate'] = intval($csc[1]);
 			if(!$updated && $item == 'doing' && $task['csc'] < 100) {
 				$updated = TRUE;
-				require_once libfile('task/'.$task['scriptname'], 'class');
-				$taskclassname = 'task_'.$task['scriptname'];
+				$escript = explode(':', $task['scriptname']);
+				if(count($escript) > 1) {
+					include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+					$taskclassname = 'task_'.$escript[1];
+				} else {
+					require_once libfile('task/'.$task['scriptname'], 'class');
+					$taskclassname = 'task_'.$task['scriptname'];
+				}
 				$taskclass = new $taskclassname;
 				$task['applytime'] = $task['dateline'];
 				if(method_exists($taskclass, 'csc')) {
@@ -94,7 +100,14 @@ class task {
 				$task['allowapply'] = $task['allowapply'] > 0 ? 1 : 0;
 			}
 			$task['icon'] = $task['icon'] ? $task['icon'] : 'task.gif';
-			$task['icon'] = strtolower(substr($task['icon'], 0, 7)) == 'http://' ? $task['icon'] : "static/image/task/$task[icon]";
+			if(strtolower(substr($task['icon'], 0, 7)) != 'http://') {
+				$escript = explode(':', $task['scriptname']);
+				if(count($escript) > 1 && file_exists(DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif')) {
+					$task['icon'] = 'source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif';
+				} else {
+					$task['icon'] = 'static/image/task/'.$task['icon'];
+				}
+			}
 			$task['dateline'] = $task['dateline'] ? dgmdate($task['dateline'], 'u') : '';
 			$tasklist[] = $task;
 		}
@@ -148,7 +161,14 @@ class task {
 				break;
 		}
 		$this->task['icon'] = $this->task['icon'] ? $this->task['icon'] : 'task.gif';
-		$this->task['icon'] = strtolower(substr($this->task['icon'], 0, 7)) == 'http://' ? $this->task['icon'] : 'static/image/task/'.$this->task['icon'];
+		if(strtolower(substr($this->task['icon'], 0, 7)) != 'http://') {
+			$escript = explode(':', $this->task['scriptname']);
+			if(count($escript) > 1 && file_exists(DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif')) {
+				$this->task['icon'] = 'source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif';
+			} else {
+				$this->task['icon'] = 'static/image/task/'.$this->task['icon'];
+			}
+		}
 		$this->task['endtime'] = $this->task['endtime'] ? dgmdate($this->task['endtime'], 'u') : '';
 		$this->task['description'] = nl2br($this->task['description']);
 
@@ -183,8 +203,14 @@ class task {
 			$_G['taskrequired'] = $task['name'];
 		}
 
-		require_once libfile('task/'.$this->task['scriptname'], 'class');
-		$taskclassname = 'task_'.$this->task['scriptname'];
+		$escript = explode(':', $this->task['scriptname']);
+		if(count($escript) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+			$taskclassname = 'task_'.$escript[1];
+		} else {
+			require_once libfile('task/'.$this->task['scriptname'], 'class');
+			$taskclassname = 'task_'.$this->task['scriptname'];
+		}
 		$taskclass = new $taskclassname;
 		if($this->task['status'] == '-1') {
 			if($this->task['period']) {
@@ -315,8 +341,14 @@ class task {
 			}
 		}
 
-		require_once libfile('task/'.$this->task['scriptname'], 'class');
-		$taskclassname = 'task_'.$this->task['scriptname'];
+		$escript = explode(':', $this->task['scriptname']);
+		if(count($escript) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+			$taskclassname = 'task_'.$escript[1];
+		} else {
+			require_once libfile('task/'.$this->task['scriptname'], 'class');
+			$taskclassname = 'task_'.$this->task['scriptname'];
+		}
 		$taskclass = new $taskclassname;
 		if(method_exists($taskclass, 'condition')) {
 			$taskclass->condition();
@@ -346,8 +378,14 @@ class task {
 			return -1;
 		}
 
-		require_once libfile('task/'.$this->task['scriptname'], 'class');
-		$taskclassname = 'task_'.$this->task['scriptname'];
+		$escript = explode(':', $this->task['scriptname']);
+		if(count($escript) > 1) {
+			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
+			$taskclassname = 'task_'.$escript[1];
+		} else {
+			require_once libfile('task/'.$this->task['scriptname'], 'class');
+			$taskclassname = 'task_'.$this->task['scriptname'];
+		}
 		$taskclass = new $taskclassname;
 		if(method_exists($taskclass, 'csc')) {
 			$result = $taskclass->csc($this->task);

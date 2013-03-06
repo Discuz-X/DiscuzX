@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: cloud_security.php 29273 2012-03-31 07:58:50Z yexinhao $
+ *		$Id: cloud_security.php 32561 2013-02-20 09:44:25Z liulanbo $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 $op = trim($_GET['op']);
 
-$_GET['anchor'] = in_array($_GET['anchor'], array('index', 'setting', 'thread', 'post', 'reportOperation')) ? $_GET['anchor'] : 'index';
+$_GET['anchor'] = in_array($_GET['anchor'], array('index', 'setting', 'thread', 'post', 'member', 'reportOperation')) ? $_GET['anchor'] : 'index';
 $pt = in_array($_GET['anchor'], array('thread', 'post')) ? $_GET['anchor'] : 'thread';
 
 $current = array($_GET['anchor'] => 1);
@@ -29,6 +29,7 @@ $securitynav[0] = array('security_index', 'cloud&operation=security&anchor=index
 $securitynav[1] = array('security_blanklist', 'cloud&operation=security&anchor=setting', $current['setting']);
 $securitynav[2] = array('security_thread_list', 'cloud&operation=security&anchor=thread', $current['thread']);
 $securitynav[3] = array('security_post_list', 'cloud&operation=security&anchor=post', $current['post']);
+$securitynav[4] = array('security_member_list', 'cloud&operation=security&anchor=member', $current['member']);
 
 if (!$_G['inajax']) {
 	cpheader();
@@ -172,28 +173,45 @@ if ($_GET['anchor'] == 'index') {
 	$multipage = multi($count, $memberperpage, $page, ADMINSCRIPT.'?action=cloud&operation=security&anchor=member');
 
 	list($datas, $eviluids) = getEvilList('user', $start_limit, $memberperpage);
+
+	showformheader('recyclebinpost&operation=search', 'style="display: none;"', 'recyclebinmember');
+	showhiddenfields(array('security' => 1, 'searchsubmit' => 1));
+	echo "\n<input type=\"hidden\" name=\"authors\" id=\"authors\" value=\"\">";
+	showformfooter();
+	showformheader("members&operation=clean", ' target="_blank"');
 	showtableheader();
-	showsubtitle(array('security_members_name', 'members_edit_info', 'security_members_eviltype', 'security_thread_member'));
+	showsubtitle(array('','security_members_name', 'members_edit_info', 'security_thread_member_group', 'security_createtime', '', '', ''));
 
 	foreach($datas as $value) {
 		if ($value['username']) {
-			$username = '<a href="' . ADMINSCRIPT . '?action=members&operation=group&uid='.$value['uid'].'" target="_blank" title="'.$title.'">'.$value['username'].'</a>';
+			$username = '<a href="home.php?mod=space&uid='.$value['uid'].'&do=profile" target="_blank" title="'.$title.'">'.$value['username'].'</a>';
 		} else {
 			$username = $lang['security_userdeleted']."(uid:{$value['uid']})";
 		}
-		$member = array($username, convertMemberInfo($value), convertIdtoStr($value['eviltype']), $value['grouptitle']);
-		showtablerow('',array('width = "220px"'),$member);
+		$del = '<input type="checkbox" name="uidarray[]" value="'.$value['uid'].'"'.($value['adminid'] == 1 ? 'disabled' : '').' class="checkbox">';
+		$optmember = '<a href="' . ADMINSCRIPT . '?action=members&operation=ban&uid='.$value['uid'].'" target="_blank">'.cplang('members_ban').'</a>';
+		$createtime = date('Y-m-d', $value['createtime']);
+		$evilthreads = '<a href="javascript:void(0);" onclick="searchevilpost_member(\''.$value['username'].'\', 1);return false;">'.cplang('security_thread_list').'</a>';
+		$evilposts = '<a href="javascript:void(0);" onclick="searchevilpost_member(\''.$value['username'].'\', 2);return false;">'.cplang('security_post_list').'</a>';
+		$member = array($del, $username, convertMemberInfo($value), $value['grouptitle'], $createtime, $evilthreads, $evilposts, $optmember);
+		showtablerow('',array('class="td25"'),$member);
 	}
-	if ($multipage) {
-		showtablerow('','colspan = "5"',$multipage);
-	}
+	showsubmit('deletesubmit', cplang('delete'), '', '', $multipage);
 
 	showtablefooter();
+	showformfooter();
 }
-
+echo "
+		<script type='text/javascript'>
+			function searchevilpost_member(username, type) {
+				$('recyclebinmember').action= '".ADMINSCRIPT."?'+(type == 1 ? 'action=recyclebin&operation=search' : 'action=recyclebinpost&operation=search');
+				$('authors').value=username;
+				$('recyclebinmember').submit();
+				return false;
+			}
+			</script>";
 $jsScript = <<<EOF
 		<script type='text/javascript'>
-
 			function toggle_mod(id) {
 				if($(id).style.display == 'none') {
 					$(id).style.display = '';
@@ -311,7 +329,6 @@ function getEvilList($type, $start, $ppp) {
 		return false;
 	}
 	if ($type == 'user') {
-
 		$usergroups = array();
 		foreach (C::t('common_usergroup')->range() as $group) {
 			$usergroups[$group['groupid']] = $group['grouptitle'];
@@ -321,9 +338,20 @@ function getEvilList($type, $start, $ppp) {
 
 		$query = C::t('common_member')->fetch_all($evilids);
 		foreach ($query as $key => $user) {
-			$query[$key]['regip'] = $regips[$key]['regip'];
+			if(!empty($user) && !in_array($user['groupid'], array(4,5,6))) {
+				$query[$key]['regip'] = $regips[$key]['regip'];
+			}
 		}
-
+		if(count($evilids) != count($query)) {
+			$deleviluids = array();
+			foreach($evilids as $key => $eviluid) {
+				if(empty($query[$eviluid])) {
+					$deleviluids[] = $eviluid;
+					unset($evilids[$key]);
+				}
+			}
+			C::t('#security#security_eviluser')->delete($deleviluids);
+		}
 	} elseif($type == 'thread' || $type == 'post') {
 
 		$query = C::t('forum_thread')->fetch_all_by_tid($evilTids);

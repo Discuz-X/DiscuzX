@@ -24,8 +24,10 @@ textarea, input, select, .html { padding:2px; border:1px solid; border-color:#66
 .txtnobd{ border:1px solid #FFF; background:#FFF; cursor:pointer; }
 .radio, .checkbox, .pr, .pc { border:none; background:none; vertical-align:middle; }
 .checkbox{ height:14px; }
-.btn{ margin:3px 0; padding:2px 5px; *padding:4px 5px 1px; border-color:#ddd #666 #666 #ddd; background:#DDD; color:#000; cursor:pointer; vertical-align:middle; }
+.btn{ margin:3px 0; padding:2px 5px; *padding:4px 5px 1px; border: 1px solid; border-color:#ddd #666 #666 #ddd; background:#DDD; color:#000; cursor:pointer; vertical-align:middle; }
 	.btn:hover { text-decoration: none; }
+.btn_big { display: inline-block; width: 90px; height: 30px; line-height: 30px; text-align: center; background: url(btn_big.png) no-repeat 0 0; font-size: 14px; font-weight: 700; color: #FFF; }
+	.btn_big:hover { text-decoration: none; }
 .uploadbtn{ width:250px; border-color:#999; }
 .line { border-bottom: 1px solid #0F0; }
 .num{ width:20px !important; height: 16px; vertical-align:middle; }
@@ -186,8 +188,9 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.cachelist{ overflow:hidden;}
 		.cachelist li{ float:left; margin-right:10px; }
 .colorbox{ clear: both; padding:10px; border-top:4px solid #DEEFFA; border-bottom:4px solid #DEEFFA; background:#F2F9FD; zoom:1; }
-	.extcredits{ margin:-5px 0 10px; }
-		.extcredits a{ margin-right:5px; padding:2px 5px; line-height:220%; border:1px solid #B6CFD9; background:#FFF; white-space:nowrap; }
+	.extcredits, .threadprofilenode { margin:-5px 0 10px; }
+		.extcredits a, .threadprofilenode a { margin-right:5px; padding:2px 5px; line-height:220%; border:1px solid #B6CFD9; background:#FFF; white-space:nowrap; }
+	.threadprofilenode { width: 650px; }
 	.jswizard{ margin:10px 0; }
 	.jswizard iframe { border: 1px dashed #DEEFFA; }
 .fileperms{ list-style:disc; margin:15px; }
@@ -199,6 +202,12 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 		.tipsblock li{ margin-bottom:5px; padding:0 0 5px 20px; line-height:160%; background:url(bg_repno.gif) no-repeat -340px 6px; }
 .tips a, .tips2 a, .tipsblock a{ margin:0 3px; text-decoration:underline; color:#666; }
 	.tips a:hover, .tips2 a:hover, .tipsblock a:hover{ color:#09C; }
+/* admincp_optimizer.php */
+.optblock { margin: 20px 0; height: 30px; line-height: 30px; }
+	.optblock #checking { float: left; }
+	.optblock #checkstatus { float: left; margin: 0 10px; }
+	.optblock .pbg { float: left; margin: 6px 10px 0; }
+	.optblock .pbg .xs0 { line-height: 1.5; }
 
 /* table */
 .tb{ clear:both; width:100%; margin-top: 8px}
@@ -538,7 +547,12 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.mtw { margin-top: 20px !important; }
 	.mbw { margin-bottom: 20px !important; }
 
-.psetting { margin-top: 5px; }
-	.psetting a { margin-left: 0; margin-right: 5px; }
-/* 模板预览图 */
- .stylepreview { width: 110px; height: 120px; }
+.psetting p { margin-top: 10px; }
+	.psetting .light, .psetting .light a { color: #777; }
+	.psetting a.memo { color: #999; margin-left: 20px; }
+	.psetting div.memo { margin:5px;padding: 5px; border: 1px dotted #DEEFFB; background: #FFF; }
+
+/* 进度条 */
+.pbg { position: relative; margin: 10px 0; width: 200px; height: 16px; background: url(bg_progressbar.png) 0 0 repeat-x; border-radius: 5px; }
+	.pbr { height: 16px; width: 200px; background-image: url(bg_progressbar.png); background-color: #5AAF4A; background-position: 0 -16px; background-repeat: repeat-x; border-radius: 5px; }
+	.pbg .xs0 { position: absolute; top: 0; right: 8px; }

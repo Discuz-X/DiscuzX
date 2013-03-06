@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: check.php 31281 2012-08-03 02:29:27Z zhangjie $
+ *      $Id: check.php 32489 2013-01-29 03:57:16Z monkey $
  */
 
 chdir('../../../');

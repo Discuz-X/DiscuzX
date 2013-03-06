@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_list.php 28903 2012-03-19 06:37:49Z zhangguosheng $
+ *      $Id: portal_list.php 31313 2012-08-10 03:51:03Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,9 +27,11 @@ if($cat['closed'] && !$_G['group']['allowdiy'] && !$categoryperm[$catid]['allowm
 	showmessage('list_category_is_closed', dreferer());
 }
 
-if(!empty($cat['url']))	dheader('location:'.$cat['url']);
-if(defined('SUB_DIR') && $_G['siteurl']. substr(SUB_DIR, 1) != $cat['caturl'] || !defined('SUB_DIR') && $_G['siteurl'] != substr($cat['caturl'], 0, strrpos($cat['caturl'], '/')+1)) {
-	dheader('location:'.$cat['caturl'], '301');
+if(!isset($_G['makehtml'])) {
+	if(!empty($cat['url']))	dheader('location:'.$cat['url']);
+	if(defined('SUB_DIR') && $_G['siteurl']. substr(SUB_DIR, 1) != $cat['caturl'] || !defined('SUB_DIR') && $_G['siteurl'] != substr($cat['caturl'], 0, strrpos($cat['caturl'], '/')+1)) {
+		dheader('location:'.$cat['caturl'], '301');
+	}
 }
 
 $cat = category_remake($catid);
@@ -70,6 +72,10 @@ if(!$metakeywords) {
 }
 if(!$metadescription) {
 	$metadescription = $cat['catname'];
+}
+
+if(isset($_G['makehtml'])){
+	helper_makehtml::portal_list($cat);
 }
 
 $file = 'portal/list:'.$catid;

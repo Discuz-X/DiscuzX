@@ -4,9 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_extvar.php 20376 2011-02-22 10:26:24Z monkey $
+ *      $Id: install_extvar.php 31245 2012-07-31 02:54:24Z liulanbo $
  */
 
+if(!defined('IN_COMSENZ')) {
+	exit('Access Denied');
+}
 $settings = array(
 	'extcredits' => array(
 		1 => array('title' => $lang['init_credits_money'], 'ratio' => 0, 'available' => 1),

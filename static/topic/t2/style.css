@@ -4,7 +4,7 @@ Powered by Discuz! X
 */
 
 body { background: #FAF9F1 url(images/bg.png) no-repeat 50% 0; }
-#pt { margin-top: 76px; margin-bottom:6px; padding-left: 3px; background: none; }
+#pt { margin-top: 70px; padding-left: 20px; background: none; }
 #pt, #pt a { color: #FFF; }
 #ft, #ft a { color: #FF731F; }
 .frame, .frame-tab { margin-bottom: 0; border: none; }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_topic.php 30584 2012-06-05 06:54:07Z zhangguosheng $
+ *      $Id: block_topic.php 31470 2012-08-31 03:29:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -115,6 +115,7 @@ class block_topic extends discuz_block {
 			$wherearr[] = "cover != ''";
 		}
 		$wherearr[] = "closed = '0'";
+		require_once libfile('function/portal');
 		foreach(C::t('portal_topic')->fetch_all_by_search_where($wherearr, "ORDER BY $orderby DESC", $startrow, $items) as $data) {
 			if(empty($data['cover'])) {
 				$data['cover'] = STATICURL.'image/common/nophoto.gif';
@@ -124,7 +125,7 @@ class block_topic extends discuz_block {
 				'id' => $data['topicid'],
 				'idtype' => 'topicid',
 				'title' => cutstr($data['title'], $titlelength, ''),
-				'url' => 'portal.php?mod=topic&topic='.$data['name'],
+				'url' => !empty($_G['setting']['makehtml']['flag']) && !empty($_G['setting']['makehtml']['topichtmldir']) && !$data['htmlmade'] ? fetch_topic_url($data) : 'portal.php?mod=topic&topic='.$data['name'],
 				'pic' => $data['cover'] ? $data['cover'] : '',
 				'picflag' => $data['picflag'] ? $data['picflag'] : '',
 				'summary' => $data['summary'] ? cutstr($data['summary'], $summarylength, '') : '',

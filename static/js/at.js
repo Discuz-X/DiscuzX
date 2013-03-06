@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: at.js 27406 2012-01-30 09:22:34Z monkey $
+	$Id: at.js 31619 2012-09-17 01:05:07Z monkey $
 */
 
 if(typeof EXTRAFUNC['keydown'] != "undefined") {
@@ -40,7 +40,7 @@ function extrafunc_atMenuKeyUp() {
 		doane(EXTRAEVENT);
 	}
 	if(wysiwyg && $('at_menu') && $('at_menu').style.display == '' && postaction && (postaction == 'newthread' || postaction == 'reply' || postaction == 'edit')) {
-		if(EXTRAEVENT.keyCode == 32 || EXTRAEVENT.keyCode == 9 || EXTRAEVENT.keyCode == 13 || EXTRAEVENT.keyCode == 8 && !keyMenuObj.innerHTML.substr(1).length) {
+		if(EXTRAEVENT.keyCode == 32 || EXTRAEVENT.keyCode == 9 || EXTRAEVENT.keyCode == 8 && !keyMenuObj.innerHTML.substr(1).length) {
 			$('at_menu').style.display = 'none';
 			ctlent_enable[13] = 1;
 		} else {
@@ -61,7 +61,7 @@ function extrafunc_atListMenu(tag, op) {
 		}
 		curatli = 0;
 		setTimeout(function() {atFilter('', 'at_list','atListSet');$('atkeyword').focus();}, 100);
-		return 'è¯·è¾“ç”¨æˆ·å:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atEnter(event, \'atListSet\')" onkeyup="atFilter(this.value, \'at_list\',\'atListSet\',event, true);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@æœ‹å‹è´¦å·ï¼Œå°±èƒ½æé†’ä»–æ¥çœ‹å¸–å­</li></ul></div>';
+		return 'ÇëÊäÓÃ»§Ãû:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atEnter(event, \'atListSet\')" onkeyup="atFilter(this.value, \'at_list\',\'atListSet\',event, true);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@ÅóÓÑÕËºÅ£¬¾ÍÄÜÌáĞÑËûÀ´¿´Ìû×Ó</li></ul></div>';
 	} else {
 		if($('atkeyword').value) {
 			str = '@' + $('atkeyword').value + (wysiwyg ? '&nbsp;' : ' ');
@@ -88,7 +88,7 @@ function atMenu(x, y) {
 	$('at_menu').style.left = x + 'px';
 	$('at_menu').style.top = y + 'px';
 	$('at_menu').style.display = '';
-	$('at_menu').innerHTML = '<img src="' + IMGDIR + '/loading.gif" class="vm"> è¯·ç¨å€™... ';
+	$('at_menu').innerHTML = '<img src="' + IMGDIR + '/loading.gif" class="vm"> ÇëÉÔºò... ';
 }
 
 function atSearch(kw, call) {
@@ -158,7 +158,7 @@ function atFilter(kw, id, call, e, nae) {
 				var atclass = i == curatli ? ' class="a"' : '';
 				newlist += '<li><a href="javascript:;" id="atli_'+i+'"'+atclass+' onclick="'+call+'(this.innerText)">' + atResult[i] + '</a></li>';
 			}
-			$(id).innerHTML = '<ul>' + newlist + '<li class="xg1">@æœ‹å‹è´¦å·ï¼Œå°±èƒ½æé†’ä»–æ¥çœ‹å¸–å­</li></ul>';
+			$(id).innerHTML = '<ul>' + newlist + '<li class="xg1">@ÅóÓÑÕËºÅ£¬¾ÍÄÜÌáĞÑËûÀ´¿´Ìû×Ó</li></ul>';
 		} else {
 			$(id).style.visibility = 'hidden';
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 31530 2012-09-06 04:00:59Z zhangguosheng $
+ *      $Id: lang_template.php 32499 2013-01-29 09:05:55Z liulanbo $
  *
  *      This file is automatically generate
  */
@@ -34,7 +34,7 @@ $lang = array (
   'need_money' => '需支付',
   'reg_continue' => '继续注册',
   'trade_type' => '付款方式',
-  'e_fontoptions' => '"宋体", "新宋体", "黑体", "微软雅黑", "Arial", "Verdana", "simsun", "Helvetica", "Trebuchet MS", "Tahoma", "Impact", "Times New Roman", "仿宋,仿宋_GB2312", "楷体,楷体_GB2312"',
+  'e_fontoptions' => '"宋体", "新宋体", "黑体", "微软雅黑", "Arial", "Verdana", "Mingliu", "Helvetica", "Trebuchet MS", "Tahoma", "Impact", "Times New Roman", "仿宋,仿宋_GB2312", "楷体,楷体_GB2312"',
   'editor_increase' => '加大编辑框',
   'editor_narrow' => '缩小编辑框',
   'post_autosave_restore' => '恢复数据',
@@ -51,11 +51,14 @@ $lang = array (
   'close' => '关闭',
   'focus_hottopics' => '站长推荐',
   'focus_show' => '查看',
+  'newpm_subject' => '新的短消息',
+  'newpm_notice_info' => '有新的短消息，快去看看吧',
+  'newnotice_notice_info' => '有新的提醒，快去看看吧',
   'footer_next' => '下一条',
   'footer_previous' => '上一条',
   'login_invisible_mode' => '隐身',
   'login_normal_mode' => '在线',
-  'scrolltop' => '回顶部',
+  'scrolltop' => '返回顶部',
   'thread_groupupgrade' => '距离下一级还需',
   'time_now' => 'GMT{$_G[timenow][offset]}, {$_G[timenow][time]}',
   'activation' => '激活',
@@ -64,6 +67,8 @@ $lang = array (
   'cloudcp' => '云平台',
   'default' => '默认',
   'forum_manager' => '{$_G[setting][navs][2][navname]}管理',
+  'shortcut_notice' => '您经常访问 {$_G[setting][bbname]}，试试添加到桌面，访问更方便！',
+  'shortcut_add' => '添加 {$_G[setting][bbname]} 到桌面',
   'go_to_mobile' => '进入手机版',
   'header_diy_mode_adv' => '高级模式',
   'header_diy_mode_simple' => '简洁模式',
@@ -281,6 +286,27 @@ $lang = array (
   'medals' => '勋章',
   'task' => '任务',
   'notice' => '提醒',
+  'notice_pm' => '我的私信',
+  'notice_mypost' => '我的帖子',
+  'notice_mypost_at' => '提到我的',
+  'notice_mypost_post' => '帖子',
+  'notice_mypost_pcomment' => '点评',
+  'notice_mypost_activity' => '活动',
+  'notice_mypost_reward' => '悬赏',
+  'notice_mypost_goods' => '商品',
+  'notice_interactive' => '坛友互动',
+  'notice_interactive_follow' => '我关注的',
+  'notice_interactive_follower' => '新听众',
+  'notice_interactive_poke' => '打招呼',
+  'notice_interactive_friend' => '好友',
+  'notice_interactive_comment' => '评论',
+  'notice_interactive_wall' => '留言',
+  'notice_interactive_click' => '挺你',
+  'notice_interactive_sharenotice' => '分享',
+  'notice_system' => '系统提醒',
+  'notice_manage' => '管理工作',
+  'notice_app' => '应用提醒',
+  'notice_userapp' => '应用邀请',
   'you' => '您',
   'group_expiry_type_ext' => '扩展用户组',
   'task_done' => '已完成的任务',
@@ -315,6 +341,9 @@ $lang = array (
   'password_security' => '密码安全',
   'increase' => '增加',
   'friend_top' => '排行榜',
+  'connect_register_profile' => '创建新帐号',
+  'connect_register_bind' => '已有本站帐号',
+  'connect_member_login_tip' => '欢迎使用QQ帐号登录  {$_G[setting][bbname]}',
   'connect_config_newpassword_comment' => '您目前使用的是QQ帐号绑定本站，您可以在这里设置独立密码，只有设置了独立密码后本站需要填写密码的相应功能才可使用',
   'email' => 'Email',
   'security_question' => '安全提问(未设置请忽略)',
@@ -377,6 +406,11 @@ $lang = array (
   'file_size' => '文件大小',
   'click_filename_to_article' => '点击文件名将附件添加到文章中',
   'connect_fill_profile_to_visit' => '请先<br /><a class="xi2" href="member.php?mod=connect"><strong>完善帐号信息</strong></a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2 xw1"><strong>绑定已有帐号</strong></a><br />后使用快捷导航',
+  'ipnoice_current' => '本次登录位置',
+  'ipnoice_last' => '上次登录位置',
+  'ipnoice_lasttime' => '上次登录时间',
+  'ipnoice_title' => '安全提醒',
+  'ipnoice_link' => '登录地点异常，建议立即更改密码',
 );
 
 ?>

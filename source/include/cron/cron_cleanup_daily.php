@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: cron_cleanup_daily.php 32406 2013-01-14 05:57:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,7 @@ C::t('forum_threadmod')->delete_by_dateline($_G['timestamp']-31536000);
 C::t('forum_forumrecommend')->delete_old();
 C::t('home_visitor')->delete_by_dateline($_G['timestamp']-7776000);
 C::t('forum_postcache')->delete_by_dateline(TIMESTAMP-86400);
+C::t('forum_newthread')->delete_by_dateline(TIMESTAMP-1296000);
 
 if($settingnew['heatthread']['type'] == 2 && $settingnew['heatthread']['period']) {
 	$partakeperoid = 86400 * $settingnew['heatthread']['period'];
@@ -44,6 +45,8 @@ removedir($_G['setting']['attachdir'].'image', TRUE);
 @touch($_G['setting']['attachdir'].'image/index.htm');
 
 C::t('forum_attachment_unused')->clear();
+
+C::t('forum_polloption_image')->clear();
 
 $uids = $members = array();
 $members = C::t('common_member')->fetch_all_ban_by_groupexpiry(TIMESTAMP);

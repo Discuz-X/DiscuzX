@@ -4,12 +4,9 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dz_newthread.php 31964 2012-10-26 07:27:36Z zhangjie $
+ *      $Id: dz_newthread.php 31963 2012-10-26 07:27:05Z zhangjie $
  */
 class dz_newthread extends extends_data {
-//	private $variable;
-//	private $page;
-//	private $perpage = 50;
 	function __construct() {
 		parent::__construct();
 	}
@@ -111,48 +108,8 @@ class dz_newthread extends extends_data {
 
 			$this->insertrow();
 
-//			$threadtmp = array(
-//				'id' => $thread['tid'],
-//				'title' => $thread['subject'],
-//				'image' => '',
-//				'icon' => '1',
-//				'poptype' => '0',
-//				'popvalue' => '',
-//				'clicktype' => 'tid',
-//				'clickvalue' => $thread['tid'],
-//				'fields' => array(
-//					array(
-//						'id' => 'author',
-//						'icon' => '0',
-//						'value' => $thread['author'],
-//					),
-//					array(
-//						'id' => 'dateline',
-//						'icon' => '0',
-//						'value' => $thread['dateline'],
-//					),
-//					array(
-//						'id' => 'replies',
-//						'icon' => '1',
-//						'value' => $thread['replies'],
-//					),
-//					array(
-//						'id' => 'views',
-//						'icon' => '2',
-//						'value' => $thread['views'],
-//					),
-//				),
-//
-//			);
-//			$threadlist[] = $threadtmp;
 		}
-//		$this->variable = array(
-//			__CLASS__ => array('page' => $this->page, 'perpage' => $this->perpage, 'list' => $threadlist)
-//		);
 	}
-	
-	//public function output() {
-	//	return $this->variable;
-	//}
+
 }
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 30365 2012-05-24 07:51:03Z chenmengshu $
+ *      $Id: admincp_menu.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
  */
 
 global $_G;
@@ -58,6 +58,7 @@ $menu['global'] = array(
 	array('menu_setting_district', 'district'),
 	array('menu_setting_ranklist', 'setting_ranklist'),
 	array('menu_setting_mobile', 'setting_mobile'),
+	array('menu_setting_antitheft', 'setting_antitheft'),
 );
 
 $menu['style'] = array(
@@ -97,6 +98,7 @@ $menu['topic'] = array(
 	array(cplang('nav_home'), '', 1),
 		array('menu_maint_doing', 'doing'),
 		array('menu_maint_blog', 'blog'),
+		array('menu_maint_blog_recycle_bin', 'blogrecyclebin'),
 		array('menu_maint_feed', 'feed'),
 		array('menu_maint_album', 'album'),
 		array('menu_maint_pic', 'pic'),
@@ -137,6 +139,7 @@ $menu['portal'] = array(
 	array('menu_portalcategory', 'portalcategory'),
 	array('menu_article', 'article'),
 	array('menu_topic', 'topic'),
+	array('menu_html', 'makehtml'),
 	array('menu_diytemplate', 'diytemplate'),
 	array('menu_block', 'block'),
 	array('menu_blockstyle', 'blockstyle'),
@@ -150,6 +153,7 @@ $menu['forum'] = array(
 	array('menu_forums', 'forums'),
 	array('menu_forums_merge', 'forums_merge'),
 	array('menu_forums_infotypes', 'threadtypes'),
+	array('menu_grid', 'grid'),
 );
 
 $menu['group'] = array(
@@ -235,6 +239,7 @@ if($isfounder) {
 		array('menu_postsplit', 'postsplit_manage'),
 		array('menu_threadsplit', 'threadsplit_manage'),
 		array('menu_upgrade', 'upgrade'),
+		array('menu_optimizer', 'optimizer'),
 	);
 
 	$menu['uc'] = array();

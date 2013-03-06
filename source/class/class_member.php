@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 32498 2013-01-29 08:58:42Z monkey $
+ *      $Id: class_member.php 32645 2013-02-27 09:09:41Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -114,6 +114,9 @@ class logging_ctl {
 				setloginstatus($result['member'], $_GET['cookietime'] ? 2592000 : 0);
 				checkfollowfeed();
 
+				if($_G['member']['lastip'] && $_G['member']['lastvisit']) {
+					dsetcookie('lip', $_G['member']['lastip'].','.$_G['member']['lastvisit']);
+				}
 				C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'lastvisit' =>TIMESTAMP, 'lastactivity' => TIMESTAMP));
 				$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
@@ -220,7 +223,11 @@ class logging_ctl {
 		$_G['username'] = $_G['member']['username'] = $_G['member']['password'] = '';
 		$_G['setting']['styleid'] = $this->setting['styleid'];
 
-		showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout));
+		if(defined('IN_MOBILE')) {
+			showmessage('location_logout_succeed_mobile', dreferer(), array('formhash' => FORMHASH));
+		} else {
+			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout));
+		}
 	}
 
 }
@@ -356,7 +363,6 @@ class register_ctl {
 				}
 			}
 		}
-
 		if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 			if($_GET['action'] == 'activation') {
@@ -368,7 +374,9 @@ class register_ctl {
 				$activationauth = authcode("$auth[0]\t".FORMHASH, 'ENCODE');
 				$sendurl = false;
 			}
+
 			if(!$sendurl) {
+
 				if($fromuid) {
 					$member = getuserbyuid($fromuid);
 					if(!empty($member)) {
@@ -419,8 +427,10 @@ class register_ctl {
 				}
 				$sendurl = false;
 			}
-			if($sendurl) {
+			if($sendurl || !$_G['setting']['forgeemail']) {
 				checkemail($_GET['email']);
+			}
+			if($sendurl) {
 				$hashstr = urlencode(authcode("$_GET[email]\t$_G[timestamp]", 'ENCODE', $_G['config']['security']['authkey']));
 				$registerurl = "{$_G[siteurl]}member.php?mod=".$this->setting['regname']."&amp;hash={$hashstr}&amp;email={$_GET[email]}";
 				$email_register_message = lang('email', 'email_register_message', array(
@@ -496,6 +506,9 @@ class register_ctl {
 					}
 				}
 				$email = strtolower(trim($_GET['email']));
+				if(empty($email) && $_G['setting']['forgeemail']) {
+					$_GET['email'] = $email = strtolower(random(6)).'@'.$_SERVER['HTTP_HOST'];
+				}
 				if(empty($this->setting['ignorepassword'])) {
 					if($_GET['password'] !== $_GET['password2']) {
 						showmessage('profile_passwd_notmatch');
@@ -584,7 +597,6 @@ class register_ctl {
 
 			if(!$activation) {
 				$uid = uc_user_register(addslashes($username), $password, $email, $questionid, $answer, $_G['clientip']);
-
 				if($uid <= 0) {
 					if($uid == -1) {
 						showmessage('profile_username_illegal');
@@ -828,7 +840,7 @@ class register_ctl {
 
 class crime_action_ctl {
 
-	var $actions = array('all', 'crime_delpost', 'crime_warnpost', 'crime_banpost', 'crime_banspeak', 'crime_banvisit', 'crime_banstatus', 'crime_avatar', 'crime_sightml', 'crime_customstatus');
+	static $actions = array('all', 'crime_delpost', 'crime_warnpost', 'crime_banpost', 'crime_banspeak', 'crime_banvisit', 'crime_banstatus', 'crime_avatar', 'crime_sightml', 'crime_customstatus');
 
 	function crime_action_ctl() {}
 
@@ -844,7 +856,7 @@ class crime_action_ctl {
 		global $_G;
 
 		$uid = intval($uid);
-		$key = array_search($action, $this->actions);
+		$key = array_search($action, self::$actions);
 		if($key === FALSE) {
 			return false;
 		}
@@ -864,7 +876,7 @@ class crime_action_ctl {
 		$uid = intval($uid);
 		$clist = array();
 		foreach(C::t('common_member_crime')->fetch_all_by_uid($uid) as $c) {
-			$c['action'] = $this->actions[$c['action']];
+			$c['action'] = self::$actions[$c['action']];
 			$clist[] = $c;
 		}
 		return $clist;
@@ -872,7 +884,7 @@ class crime_action_ctl {
 
 	function getcount($uid, $action) {
 		$uid = intval($uid);
-		$key = array_search($action, $this->actions);
+		$key = array_search($action, self::$actions);
 		if($key === FALSE) {
 			return 0;
 		}
@@ -920,7 +932,7 @@ class crime_action_ctl {
 		if($count) {
 			$uids = array();
 			foreach(C::t('common_member_crime')->fetch_all_by_where($wheresql, $start, $limit) as $crime) {
-				$crime['action'] = $this->actions[$crime['action']];
+				$crime['action'] = self::$actions[$crime['action']];
 				$clist[] = $crime;
 				$uids[$crime['uid']] = $crime['uid'];
 			}

@@ -451,8 +451,10 @@ function getblockhtml($blockname,$parameters = array()) {
 				} else {
 					$html .= lang('space', 'visitor_list', array(
 							'uid' => $value['vuid'],
+							'cuid' => $uid,
 							'username' => $value['vusername'],
 							'class' => ($_G['ols'][$value['vuid']]?'gol':''),
+							'self' => $value['vuid'] == $_G['uid'] ? 'god' : '',
 							'avatar' => avatar($value['vuid'],'small')));
 				}
 				$html .= "<span class=\"xg2\">".dgmdate($value['dateline'],'u', '9999', 'Y-m-d')."</span>";
@@ -737,6 +739,7 @@ function getblockdata($blockname = '') {
 function check_ban_block($blockname, $space) {
 	global $_G;
 	$return = true;
+	loadcache('usergroup_'.$space['groupid']);
 	if($blockname == 'group' && !helper_access::check_module('group')) {
 		$return = false;
 	} elseif($blockname == 'thread' && $_G['setting']['allowviewuserthread'] === -1) {

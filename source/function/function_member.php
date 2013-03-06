@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_member.php 31458 2012-08-30 03:39:40Z zhengqingpeng $
+ *      $Id: function_member.php 32100 2012-11-09 08:27:37Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -91,10 +91,7 @@ function setloginstatus($member, $cookietime) {
 	if($_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
 		updatestat('connectlogin', 1);
 	}
-	$rule = updatecreditbyaction('daylogin', $_G['uid']);
-	if(!$rule['updatecredit']) {
-		checkusergroup($_G['uid']);
-	}
+	checkusergroup($_G['uid']);
 }
 
 function logincheck($username) {
@@ -266,11 +263,21 @@ function checkfollowfeed() {
 	dsetcookie('checkfollow', 1, 30);
 }
 function checkemail($email) {
+	global $_G;
 
 	$email = strtolower(trim($email));
 	if(strlen($email) > 32) {
 		showmessage('profile_email_illegal', '', array(), array('handle' => false));
 	}
+	if($_G['setting']['regmaildomain']) {
+		$maildomainexp = '/('.str_replace("\r\n", '|', preg_quote(trim($_G['setting']['maildomainlist']), '/')).')$/i';
+		if($_G['setting']['regmaildomain'] == 1 && !preg_match($maildomainexp, $email)) {
+			showmessage('profile_email_domain_illegal', '', array(), array('handle' => false));
+		} elseif($_G['setting']['regmaildomain'] == 2 && preg_match($maildomainexp, $email)) {
+			showmessage('profile_email_domain_illegal', '', array(), array('handle' => false));
+		}
+	}
+
 	loaducenter();
 	$ucresult = uc_user_checkemail($email);
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_view.php 29503 2012-04-17 03:11:41Z chenmengshu $
+ *      $Id: collection_view.php 31387 2012-08-23 02:15:12Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -81,6 +81,8 @@ if(!$op || $op == 'related') {
 		collectionThread($threadlist, false, $lastvisit, $collectiontids);
 
 		$multipage = multi($_G['collection']['threadnum'], $tpp, $page, "forum.php?mod=collection&action=view&ctid={$_G['collection']['ctid']}");
+
+		$userCollections = C::t('forum_collection')->fetch_all_by_uid($_G['collection']['uid'], 0, 5, $_G['collection']['ctid']);
 	}
 
 	if($_G['collection']['commentnum'] > 0) {

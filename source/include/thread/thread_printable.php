@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_printable.php 32320 2012-12-25 02:31:56Z liulanbo $
+ *      $Id: thread_printable.php 32319 2012-12-25 02:30:41Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,6 +32,13 @@ foreach($posts as $post) {
 		$post['message'] = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/is", "", $post['message']);
 	}
 	$post['message'] = discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], sprintf('%00b', $post['htmlon']), $_G['forum']['allowsmilies'], $_G['forum']['allowbbcode'], $_G['forum']['allowimgcode'], $_G['forum']['allowhtml'], ($_G['forum']['jammer'] && $post['authorid'] != $_G['uid'] ? 1 : 0));
+
+	if(strpos($post['message'], '[page]') !== FALSE) {
+		$post['message'] = preg_replace("/\s?\[page\]\s?/is", '', $post['message']);
+	}
+	if(strpos($post['message'], '[/index]') !== FALSE) {
+		$post['message'] = preg_replace("/\s?\[index\](.+?)\[\/index\]\s?/is", '', $post['message']);
+	}
 
 	if($post['attachment']) {
 		$attachment = 1;

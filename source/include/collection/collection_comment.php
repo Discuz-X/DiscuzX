@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_comment.php 30986 2012-07-06 01:53:01Z zhengqingpeng $
+ *      $Id: collection_comment.php 30987 2012-07-06 01:54:38Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,23 +111,22 @@ if(empty($op) || $op == 'add') {
 		$touid = &$_G['collection']['uid'];
 		$coef = 1;
 
-		if($touid) {
-			$subject = $message = lang('message', 'collection_recommend_message', array('fromuser' => $_G['username'], 'collectioname' => $_G['collection']['name'], 'url' => $_GET['threadurl']));
-			if(C::t('home_blacklist')->count_by_uid_buid($touid, $_G['uid'])) {
-				showmessage('is_blacklist', '', array(), array('return' => true));
-			}
-			if(($value = getuserbyuid($touid))) {
-				require_once libfile('function/friend');
-				$value['onlyacceptfriendpm'] = $value['onlyacceptfriendpm'] ? $value['onlyacceptfriendpm'] : ($_G['setting']['onlyacceptfriendpm'] ? 1 : 2);
-				if($_G['group']['allowsendallpm'] || $value['onlyacceptfriendpm'] == 2 || ($value['onlyacceptfriendpm'] == 1 && friend_check($touid))) {
-					$return = sendpm($touid, $subject, $message, '', 0, 0);
-				} else {
-					showmessage('message_can_not_send_onlyfriend', '', array(), array('return' => true));
-				}
-			} else {
-				showmessage('message_bad_touid', '', array(), array('return' => true));
-			}
+		$subject = $message = lang('message', 'collection_recommend_message', array('fromuser' => $_G['username'], 'collectioname' => $_G['collection']['name'], 'url' => $_GET['threadurl']));
+		if(C::t('home_blacklist')->count_by_uid_buid($touid, $_G['uid'])) {
+			showmessage('is_blacklist', '', array(), array('return' => true));
 		}
+		if(($value = getuserbyuid($touid))) {
+			require_once libfile('function/friend');
+			$value['onlyacceptfriendpm'] = $value['onlyacceptfriendpm'] ? $value['onlyacceptfriendpm'] : ($_G['setting']['onlyacceptfriendpm'] ? 1 : 2);
+			if($_G['group']['allowsendallpm'] || $value['onlyacceptfriendpm'] == 2 || ($value['onlyacceptfriendpm'] == 1 && friend_check($touid))) {
+				$return = sendpm($touid, $subject, $message, '', 0, 0);
+			} else {
+				showmessage('message_can_not_send_onlyfriend', '', array(), array('return' => true));
+			}
+		} else {
+			showmessage('message_bad_touid', '', array(), array('return' => true));
+		}
+
 		if($return > 0) {
 			include_once libfile('function/stat');
 			updatestat('sendpm', 0, $coef);

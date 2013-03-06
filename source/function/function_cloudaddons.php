@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 32402 2013-01-14 02:04:22Z monkey $
+ *      $Id: function_cloudaddons.php 32559 2013-02-20 09:35:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -95,7 +95,7 @@ function cloudaddons_removelog($rid) {
 
 function cloudaddons_validator($addonid) {
 	$array = cloudaddons_getmd5($addonid);
-	if(cloudaddons_open('&mod=app&ac=validator&addonid='.$addonid.($array !== false ? '&rid='.$array['RevisionID'].'&sn='.$array['SN'].'&rd='.$array['RevisionDateline'] : '')) === '0') {
+	if(cloudaddons_open('&mod=app&ac=validator&ver=2&addonid='.$addonid.($array !== false ? '&rid='.$array['RevisionID'].'&sn='.$array['SN'].'&rd='.$array['RevisionDateline'] : '')) === '0') {
 		cpmsg('cloudaddons_genuine_message', '', 'error', array('addonid' => $addonid));
 	}
 }
@@ -106,7 +106,7 @@ function cloudaddons_upgradecheck($addonids) {
 		$array = cloudaddons_getmd5($addonid);
 		$post[] = 'rid['.$addonid.']='.$array['RevisionID'].'&sn['.$addonid.']='.$array['SN'].'&rd['.$addonid.']='.$array['RevisionDateline'];
 	}
-	return cloudaddons_open('&mod=app&ac=validator', implode('&', $post));
+	return cloudaddons_open('&mod=app&ac=validator&ver=2', implode('&', $post));
 }
 
 function cloudaddons_getmd5($md5file) {

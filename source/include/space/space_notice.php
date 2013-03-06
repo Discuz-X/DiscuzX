@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 30269 2012-05-18 01:58:22Z liulanbo $
+ *      $Id: space_notice.php 31062 2012-07-12 07:33:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,10 +24,10 @@ $list = array();
 $mynotice = $count = 0;
 $multi = '';
 
-$view = (!empty($_GET['view']) && in_array($_GET['view'], array('userapp')))?$_GET['view']:'notice';
+$view = (!empty($_GET['view']) && (isset($_G['notice_structure'][$_GET[view]]) || in_array($_GET['view'], array('userapp'))))?$_GET['view']:'mypost';
 $actives = array($view=>' class="a"');
-$opactives['notice'] = 'class="a"';
-
+$opactives[$view] = 'class="a"';
+$categorynum = $newprompt = array();
 if($view == 'userapp') {
 
 	space_merge($space, 'status');
@@ -71,24 +71,39 @@ if($view == 'userapp') {
 	}
 
 	$isread = in_array($_GET['isread'], array(0, 1)) ? intval($_GET['isread']) : 0;
-	$type = trim($_GET['type']);
+	$category = $type = '';
+	if(isset($_G['notice_structure'][$view])) {
+		if(!in_array($view, array('mypost', 'interactive'))) {
+			$category = $view;
+		} else {
+			$deftype = $_G['notice_structure'][$view][0];
+			if($_G['member']['newprompt_num']) {
+				foreach($_G['notice_structure'][$view] as $subtype) {
+					if($_G['member']['newprompt_num'][$subtype]) {
+						$deftype = $subtype;
+						break;
+					}
+				}
+			}
+			$type = in_array($_GET['type'], $_G['notice_structure'][$view]) ? trim($_GET['type']) : $deftype;
+		}
+	}
 	$wherearr = array();
+	$new = -1;
 	if(!empty($type)) {
 		$wherearr[] = "`type`='$type'";
 	}
-	$new = !$isread;
-	$wherearr[] = "`new`='$new'";
 
 	$sql = ' AND '.implode(' AND ', $wherearr);
 
 
 	$newnotify = false;
-	$count = C::t('home_notification')->count_by_uid($_G['uid'], $new, $type);
+	$count = C::t('home_notification')->count_by_uid($_G['uid'], $new, $type, $category);
 	if($count) {
-		if($new && $perpage == 30) {
+		if($new == 1 && $perpage == 30) {
 			$perpage = 200;
 		}
-		foreach(C::t('home_notification')->fetch_all_by_uid($_G['uid'], $new, $type, $start, $perpage) as $value) {
+		foreach(C::t('home_notification')->fetch_all_by_uid($_G['uid'], $new, $type, $start, $perpage, $category) as $value) {
 			if($value['new']) {
 				$newnotify = true;
 				$value['style'] = 'color:#000;font-weight:bold;';
@@ -110,21 +125,18 @@ if($view == 'userapp') {
 	}
 
 	if($newnotify) {
-		C::t('home_notification')->ignore($_G['uid'], true, true);
+		C::t('home_notification')->ignore($_G['uid'], $type, $category, true, true);
 		if($_G['setting']['cloud_status']) {
 			$noticeService = Cloud::loadClass('Service_Client_Notification');
 			$noticeService->setNoticeFlag($_G['uid'], TIMESTAMP);
 		}
 	}
-
-	if($space['newprompt']) {
-		C::t('common_member')->update($_G['uid'], array('newprompt'=>0));
-	}
+	helper_notification::update_newprompt($_G['uid'], ($type ? $type : $category));
 	if($_G['setting']['my_app_status']) {
 		$mynotice = C::t('common_myinvite')->count_by_touid($_G['uid']);
 	}
 
-	$readtag = array($isread => ' class="a"');
+	$readtag = array($type => ' class="a"');
 
 
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 31053 2012-07-12 03:53:04Z liulanbo $
+ *      $Id: forum_group.php 32539 2013-02-18 07:36:00Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -121,7 +121,7 @@ if($_G['group']['allowpost']) {
 }
 if($action == 'index') {
 
-	$newthreadlist = array();
+	$newthreadlist = $livethread = array();
 	if($status != 2) {
 		loadcache('forumstick');
 		$forumstickytids = '';
@@ -133,6 +133,7 @@ if($action == 'index') {
 			foreach(C::t('forum_thread')->fetch_all_by_tid_or_fid($_G['fid'], $forumstickytids) as $row) {
 				$row['dateline'] = dgmdate($row['dateline'], 'd');
 				$row['lastpost'] = dgmdate($row['lastpost'], 'u');
+				$row['allreplies'] = $row['replies'] + $row['comments'];
 				$row['lastposterenc'] = rawurlencode($row['lastposter']);
 				$stickythread[$row['tid']] = $row;
 			}
@@ -143,6 +144,7 @@ if($action == 'index') {
 				unset($newthreadlist['dateline']['data'][$key]);
 				continue;
 			}
+			$newthreadlist['dateline']['data'][$key]['allreplies'] = $newthreadlist['dateline']['data'][$key]['replies'] + $newthreadlist['dateline']['data'][$key]['comments'];
 			if($thread['closed'] == 1) {
 				$newthreadlist['dateline']['data'][$key]['folder'] = 'lock';
 			} elseif(empty($_G['cookie']['oldtopics']) || strpos($_G['cookie']['oldtopics'], 'D'.$thread['tid'].'D') === FALSE) {
@@ -151,6 +153,7 @@ if($action == 'index') {
 				$newthreadlist['dateline']['data'][$key]['folder'] = 'common';
 			}
 		}
+
 		if($stickythread) {
 			$newthreadlist['dateline']['data'] = array_merge($stickythread, $newthreadlist['dateline']['data']);
 		}
@@ -166,6 +169,13 @@ if($action == 'index') {
 				}
 			}
 		}
+
+		if($_G['forum']['livetid']) {
+			$livethread = C::t('forum_thread')->fetch($_G['forum']['livetid']);
+			$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
+			$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+		}
+
 	} else {
 		$newuserlist = $activityuserlist = array();
 		$newuserlist = array_slice($groupcache['newuserlist']['data'], 0, 4);
@@ -269,6 +279,19 @@ if($action == 'index') {
 	if(!$_G['group']['allowbuildgroup']) {
 		showmessage('group_create_usergroup_failed', "group.php");
 	}
+
+	$creditstransextra = $_G['setting']['creditstransextra']['12'] ? $_G['setting']['creditstransextra']['12'] : $_G['setting']['creditstrans'];
+	if($_G['group']['buildgroupcredits']) {
+		if(empty($creditstransextra)) {
+			$_G['group']['buildgroupcredits'] = 0;
+		} else {
+			getuserprofile('extcredits'.$creditstransextra);
+			if($_G['member']['extcredits'.$creditstransextra] < $_G['group']['buildgroupcredits']) {
+				showmessage('group_create_usergroup_credits_failed', '', array('buildgroupcredits' => $_G['group']['buildgroupcredits']. $_G['setting']['extcredits'][$creditstransextra]['unit'].$_G['setting']['extcredits'][$creditstransextra]['title']));
+			}
+		}
+	}
+
 	$groupnum = C::t('forum_forumfield')->fetch_groupnum_by_founderuid($_G['uid']);
 	$allowbuildgroup = $_G['group']['allowbuildgroup'] - $groupnum;
 	if($allowbuildgroup < 1) {
@@ -323,6 +346,9 @@ if($action == 'index') {
 			C::t('forum_groupuser')->insert($newfid, $_G['uid'], $_G['username'], 1, TIMESTAMP);
 			require_once libfile('function/cache');
 			updatecache('grouptype');
+		}
+		if($creditstransextra && $_G['group']['buildgroupcredits']) {
+			updatemembercount($_G['uid'], array($creditstransextra => -$_G['group']['buildgroupcredits']), 1, 'BGR', $newfid);
 		}
 		include_once libfile('function/stat');
 		updatestat('group');

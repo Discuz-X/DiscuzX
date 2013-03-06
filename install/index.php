@@ -49,8 +49,9 @@ timezone_set();
 $uchidden = getgpc('uchidden');
 
 if(in_array($method, array('app_reg', 'ext_info'))) {
+	$isHTTPS = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off') ? true : false;
 	$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-	$bbserver = 'http://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
+	$bbserver = 'http'.($isHTTPS ? 's' : '').'://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443 ? ':'.$_SERVER['SERVER_PORT'] : '');
 	$default_ucapi = $bbserver.'/ucenter';
 	$default_appurl = $bbserver.substr($PHP_SELF, 0, strrpos($PHP_SELF, '/') - 8);
 }
@@ -456,10 +457,10 @@ if($method == 'show_license') {
 		show_msg('ext_info_succ');
 	} else {
 		show_header();
-		echo '</div><div class="main" style="margin-top: -123px;"><ul style="line-height: 200%; margin-left: 30px;">';
-		echo '<div id="platformIntro"></div>';
-		echo '</ul></div>';
+		echo '</div><div class="main" style="margin-top: -123px;padding-left:30px"><span id="platformIntro"></span>';
 		echo '<script type="text/javascript" src="http://cp.discuz.qq.com/cloud/platformIntroJS?siteurl='.urlencode($default_appurl).'&version='.DISCUZ_VERSION.'" charset="utf-8"></script>';
+		echo '<iframe frameborder="0" width="700" height="550" allowTransparency="true" src="http://addon.discuz.com/api/outer.php?id=installed&siteurl='.urlencode($default_appurl).'&version='.DISCUZ_VERSION.'"></iframe>';
+		echo '</div>';
 		show_footer();
 	}
 

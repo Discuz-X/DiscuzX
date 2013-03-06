@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: profile.php 32474 2013-01-24 07:38:35Z monkey $
+ *      $Id: profile.php 27451 2012-02-01 05:48:47Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {

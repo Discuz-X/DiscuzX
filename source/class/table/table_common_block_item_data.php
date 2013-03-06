@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_block_item_data.php 31094 2012-07-16 06:16:03Z zhangguosheng $
+ *      $Id: table_common_block_item_data.php 31958 2012-10-26 05:11:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ class table_common_block_item_data extends discuz_table
 		$data = array();
 		if(($bid = dintval($bid, true))) {
 			$addsql = $bannedids = dintval($bannedids, true) ? ' AND id NOT IN ('.dimplode($bannedids).')' : '';
-			$query = DB::query('SELECT * FROM %t WHERE '.DB::field('bid', $bid).' AND isverified=%d'.$addsql.' ORDER BY stickgrade DESC, verifiedtime DESC, dataid DESC '.DB::limit($start, $limit), array($this->_table, $isverified));
+			$query = DB::query('SELECT * FROM %t WHERE '.DB::field('bid', $bid).' AND isverified=%d'.$addsql.' ORDER BY stickgrade DESC, displayorder DESC, verifiedtime DESC, dataid DESC '.DB::limit($start, $limit), array($this->_table, $isverified));
 			while($value = DB::fetch($query)) {
 				if($format) {
 					$value['fields'] = unserialize($value['fields']);

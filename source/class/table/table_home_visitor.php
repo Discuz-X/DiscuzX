@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_visitor.php 27887 2012-02-16 06:40:08Z zhengqingpeng $
+ *      $Id: table_home_visitor.php 31354 2012-08-16 03:03:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,6 +43,11 @@ class table_home_visitor extends discuz_table
 			return DB::delete($this->_table, DB::field('uid', $uids).' OR '.DB::field('vuid', $uids));
 		}
 		return 0;
+	}
+	public function delete_by_uid_vuid($uid, $vuid) {
+		$uid = dintval($uid);
+		$vuid = dintval($vuid);
+		return DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('vuid', $vuid));
 	}
 	public function delete_by_dateline($dateline) {
 		$dateline = dintval($dateline);

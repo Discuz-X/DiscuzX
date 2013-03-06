@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Message.php 31447 2012-08-28 09:03:49Z songlixin $
+ *      $Id: Message.php 31448 2012-08-28 09:04:57Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
