@@ -10,7 +10,7 @@ function validate_ajax(obj) {
 	if (subject) {
 		var slen = strlen(subject.value);
 		if (slen < 1 || slen > 80) {
-			alert("±êÌâ³¤¶È(1~80×Ö·û)²»·ûºÏÒªÇó");
+			alert("æ ‡é¢˜é•¿åº¦(1~80å­—ç¬¦)ä¸ç¬¦åˆè¦æ±‚");
 			subject.focus();
 			return false;
 		}

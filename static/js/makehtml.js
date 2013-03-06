@@ -15,19 +15,19 @@ function make_html(url, obj) {
 		if(ret && (ret=ret['data']) && ret['status'] == 'html_ok') {
 			if(obj) {
 				obj.style.color = 'blue';
-				obj.innerHTML = '<a href="./'+ret['path']+'" target="_blank">'+title+'Éú³É³É¹¦</a>';
+				obj.innerHTML = '<a href="./'+ret['path']+'" target="_blank">'+title+'ç”ŸæˆæˆåŠŸ</a>';
 			}
 			if(ret['nexturl']) {
 				if(obj) {
 					obj.style.color = 'green';
-					obj.innerHTML = 'Éú³É'+title+(Math.round((ret['current']/ret['count'])*100))+'%';
+					obj.innerHTML = 'ç”Ÿæˆ'+title+(Math.round((ret['current']/ret['count'])*100))+'%';
 				}
 				make_html(ret['nexturl'], obj);
 			}
 		} else {
 			if(obj) {
 				obj.style.color = 'red';
-				obj.innerHTML = title+'Éú³ÉÊ§°Ü';
+				obj.innerHTML = title+'ç”Ÿæˆå¤±è´¥';
 			}
 		}
 	});
@@ -52,13 +52,13 @@ function make_html_batch(url, ids, callback, dom, single) {
 		child.style.color = 'green';
 		var cent = ((1/this.count)*100).toFixed(2);
 		progress_bar(cent);
-		child.innerHTML = '¿ªÊ¼Éú³É'+this.dom.getAttribute('mktitle');
+		child.innerHTML = 'å¼€å§‹ç”Ÿæˆ'+this.dom.getAttribute('mktitle');
 		this.dom.innerHTML = '';
 		this.dom.appendChild(child);
 		this.make(id, child);
 		this.child = child;
 		var child2 = document.createElement('div');
-		child2.innerHTML = '<a href="javascript:void(0);" id="mk_goon">Èç¹ûÄúµÄä¯ÀÀÆ÷Ã»ÓĞ·´Ó¦£¬Çëµã»÷¼ÌĞø...</a>';
+		child2.innerHTML = '<a href="javascript:void(0);" id="mk_goon">å¦‚æœæ‚¨çš„æµè§ˆå™¨æ²¡æœ‰ååº”ï¼Œè¯·ç‚¹å‡»ç»§ç»­...</a>';
 		this.dom.appendChild(child2);
 		var obj = this;
 		$('mk_goon').onclick = function (e) {make_html_batch.prototype.make_goon.call(obj, e)};
@@ -96,7 +96,7 @@ make_html_batch.prototype = {
 					makehtml_error.style.height = '200px';
 					makehtml_error.style.overflow = 'scroll';
 					makehtml_error.id = 'makehtml_error';
-					makehtml_error.innerHTML = '´íÎóĞÅÏ¢';
+					makehtml_error.innerHTML = 'é”™è¯¯ä¿¡æ¯';
 					obj.dom.appendChild(makehtml_error);
 				}
 				makehtml_error.innerHTML += '<br>[id]' + id + ':' + ret['message'];
@@ -105,7 +105,7 @@ make_html_batch.prototype = {
 
 			if(obj.single) {
 				child.style.color = 'blue';
-				child.innerHTML = '<div class="mk_msg">'+'<a href="./'+data['path']+'" target="_blank">'+obj.dom.getAttribute('mktitle')+'</a>Éú³É³É¹¦'+'</div>';
+				child.innerHTML = '<div class="mk_msg">'+'<a href="./'+data['path']+'" target="_blank">'+obj.dom.getAttribute('mktitle')+'</a>ç”ŸæˆæˆåŠŸ'+'</div>';
 				if(obj.callback) {
 					setTimeout(function(){(obj.callback)();}, 2000);
 				}
@@ -113,12 +113,12 @@ make_html_batch.prototype = {
 				var current = obj.count - obj.ids.length;
 				var cent = ((current/obj.count)*100).toFixed(2);
 				progress_bar(cent);
-				var str = '±¾´Î¹²ĞèÒªÉú³É'+obj.count+'¸ö'+obj.dom.getAttribute('mktitle')+'ÎÄ¼ş£¬³É¹¦Éú³É'+obj.makedcount+'¸ö£¬';
+				var str = 'æœ¬æ¬¡å…±éœ€è¦ç”Ÿæˆ'+obj.count+'ä¸ª'+obj.dom.getAttribute('mktitle')+'æ–‡ä»¶ï¼ŒæˆåŠŸç”Ÿæˆ'+obj.makedcount+'ä¸ªï¼Œ';
 				if(cent != 100) {
-					child.innerHTML = str+'ÕıÔÚÉú³ÉµÚ'+current+'¸ö£¬ÒÑ¾­Íê³É'+cent+'%';
+					child.innerHTML = str+'æ­£åœ¨ç”Ÿæˆç¬¬'+current+'ä¸ªï¼Œå·²ç»å®Œæˆ'+cent+'%';
 				} else {
 					child.style.color = 'blue';
-					child.innerHTML = str+obj.dom.getAttribute('mktitle')+'Éú³É³É¹¦';
+					child.innerHTML = str+obj.dom.getAttribute('mktitle')+'ç”ŸæˆæˆåŠŸ';
 				}
 				if(id) {
 					obj.make(id, child);

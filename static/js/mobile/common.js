@@ -86,13 +86,13 @@ var page = {
 			selector += '<a id="select_a" style="margin:0 2px;padding:1px 0 0 0;border:0;display:inline-block;position:relative;width:100px;height:31px;line-height:27px;background:url('+STATICURL+'/image/mobile/images/pic_select.png) no-repeat;text-align:left;text-indent:20px;">';
 			selector += '<select id="dumppage" style="position:absolute;left:0;top:0;height:27px;opacity:0;width:100px;">';
 			for(var i=1; i<=lastpage; i++) {
-				selector += '<option value="'+i+'" '+ (i == curpage ? 'selected' : '') +'>µÚ'+i+'Ò³</option>';
+				selector += '<option value="'+i+'" '+ (i == curpage ? 'selected' : '') +'>ç¬¬'+i+'é¡µ</option>';
 			}
 			selector += '</select>';
-			selector += '<span>µÚ'+curpage+'Ò³</span>';
+			selector += '<span>ç¬¬'+curpage+'é¡µ</span>';
 		}
 
-		$('div.pg').removeClass('pg').addClass('page').html('<a href="'+ prevpagehref +'">ÉÏÒ»Ò³</a>'+ selector +'<a href="'+ nextpagehref +'">ÏÂÒ»Ò³</a>');
+		$('div.pg').removeClass('pg').addClass('page').html('<a href="'+ prevpagehref +'">ä¸Šä¸€é¡µ</a>'+ selector +'<a href="'+ nextpagehref +'">ä¸‹ä¸€é¡µ</a>');
 		$('#dumppage').bind('change', function() {
 			var href = (prevpage || nextpage);
 			window.location.href = href.replace(/page=\d+/, 'page=' + $(this).val());
@@ -192,7 +192,7 @@ var img = {
 		if(is_err_t) {
 			var parentnode = obj.parent();
 			parentnode.find('.loading').remove();
-			parentnode.append('<div class="error_text">µã»÷ÖØĞÂ¼ÓÔØ</div>');
+			parentnode.append('<div class="error_text">ç‚¹å‡»é‡æ–°åŠ è½½</div>');
 			parentnode.find('.error_text').one('click', function() {
 				obj.attr('load', 0).find('.error_text').remove();
 				parentnode.append('<div class="loading" style="background:url('+ IMGDIR +'/imageloading.gif) no-repeat center center;width:'+parentnode.width()+'px;height:'+parentnode.height()+'px"></div>');
@@ -244,9 +244,9 @@ var popup = {
 		if(typeof pop == 'string') {
 			$('#ntcmsg').remove();
 			if(type == 'alert') {
-				pop = '<div class="tip"><dt>'+ pop +'</dt><dd><input class="button2" type="button" value="È·¶¨" onclick="popup.close();"></dd></div>'
+				pop = '<div class="tip"><dt>'+ pop +'</dt><dd><input class="button2" type="button" value="ç¡®å®š" onclick="popup.close();"></dd></div>'
 			} else if(type == 'confirm') {
-				pop = '<div class="tip"><dt>'+ pop +'</dt><dd><input class="redirect button2" type="button" value="È·¶¨" href="'+ url +'"><a href="javascript:;" onclick="popup.close();">È¡Ïû</a></dd></div>'
+				pop = '<div class="tip"><dt>'+ pop +'</dt><dd><input class="redirect button2" type="button" value="ç¡®å®š" href="'+ url +'"><a href="javascript:;" onclick="popup.close();">å–æ¶ˆ</a></dd></div>'
 			}
 			$('body').append('<div id="ntcmsg" style="display:none;">'+ pop +'</div>');
 			pop = $('#ntcmsg');
@@ -370,16 +370,16 @@ var geo = {
 		this.errmsg = 'error';
 		switch(error.code) {
 			case error.TIMEOUT:
-				this.errmsg = "»ñÈ¡Î»ÖÃ³¬Ê±£¬ÇëÖØÊÔ";
+				this.errmsg = "è·å–ä½ç½®è¶…æ—¶ï¼Œè¯·é‡è¯•";
 				break;
 			case error.POSITION_UNAVAILABLE:
-				this.errmsg = 'ÎŞ·¨¼ì²âµ½ÄúµÄµ±Ç°Î»ÖÃ';
+				this.errmsg = 'æ— æ³•æ£€æµ‹åˆ°æ‚¨çš„å½“å‰ä½ç½®';
 			    break;
 		    case error.PERMISSION_DENIED:
-		        this.errmsg = 'ÇëÔÊĞíÄÜ¹»Õı³£·ÃÎÊÄúµÄµ±Ç°Î»ÖÃ';
+		        this.errmsg = 'è¯·å…è®¸èƒ½å¤Ÿæ­£å¸¸è®¿é—®æ‚¨çš„å½“å‰ä½ç½®';
 		        break;
 		    case error.UNKNOWN_ERROR:
-		        this.errmsg = '·¢ÉúÎ´Öª´íÎó';
+		        this.errmsg = 'å‘ç”ŸæœªçŸ¥é”™è¯¯';
 		        break;
 		}
 	},

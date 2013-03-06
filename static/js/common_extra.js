@@ -63,7 +63,7 @@ function _updatesecqaa(idhash) {
 		}
 		$('checksecqaaverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
 		ajaxget('misc.php?mod=secqaa&action=update&idhash=' + idhash, 'secqaa_' + idhash, null, '', '', function() {
-			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updatesecqaa(\''+idhash+'\')">Ë¢ĞÂÑéÖ¤ÎÊ´ğ</span>';}, 180000);
+			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updatesecqaa(\''+idhash+'\')">åˆ·æ–°éªŒè¯é—®ç­”</span>';}, 180000);
 		});
 	}
 }
@@ -77,7 +77,7 @@ function _updateseccode(idhash, play) {
 			}
 			$('checkseccodeverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
 			ajaxget('misc.php?mod=seccode&action=update&idhash=' + idhash, 'seccode_' + idhash, null, '', '', function() {
-				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updateseccode(\''+idhash+'\')">Ë¢ĞÂÑéÖ¤Âë</span>';}, 180000);
+				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updateseccode(\''+idhash+'\')">åˆ·æ–°éªŒè¯ç </span>';}, 180000);
 			});
 		}
 	} else {
@@ -106,9 +106,9 @@ function _checksec(type, idhash, showmsg, recall) {
 			obj.innerHTML = '<img src="'+ IMGDIR + '/check_error.gif" width="16" height="16" class="vm" />';
 			if(showmsg) {
 				if(type == 'code') {
-					showError('ÑéÖ¤Âë´íÎó£¬ÇëÖØĞÂÌîĞ´');
+					showError('éªŒè¯ç é”™è¯¯ï¼Œè¯·é‡æ–°å¡«å†™');
 				} else if(type == 'qaa') {
-					showError('ÑéÖ¤ÎÊ´ğ´íÎó£¬ÇëÖØĞÂÌîĞ´');
+					showError('éªŒè¯é—®ç­”é”™è¯¯ï¼Œè¯·é‡æ–°å¡«å†™');
 				}
 				recall(0);
 			}
@@ -172,7 +172,7 @@ function _copycode(obj) {
 		rng.moveToElementText(obj);
 		rng.select();
 	}
-	setCopy(BROWSER.ie ? obj.innerText.replace(/\r\n\r\n/g, '\r\n') : obj.textContent, '´úÂëÒÑ¸´ÖÆµ½¼ôÌù°å');
+	setCopy(BROWSER.ie ? obj.innerText.replace(/\r\n\r\n/g, '\r\n') : obj.textContent, 'ä»£ç å·²å¤åˆ¶åˆ°å‰ªè´´æ¿');
 }
 
 function _setCopy(text, msg){
@@ -183,10 +183,10 @@ function _setCopy(text, msg){
 				showPrompt(null, null, '<span>' + msg + '</span>', 1500);
 			}
 		} else {
-			showDialog('<div class="c"><div style="width: 200px; text-align: center;">¸´ÖÆÊ§°Ü£¬ÇëÑ¡Ôñ¡°ÔÊĞí·ÃÎÊ¡±</div></div>', 'alert');
+			showDialog('<div class="c"><div style="width: 200px; text-align: center;">å¤åˆ¶å¤±è´¥ï¼Œè¯·é€‰æ‹©â€œå…è®¸è®¿é—®â€</div></div>', 'alert');
 		}
 	} else {
-		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">µã´Ë¸´ÖÆµ½¼ôÌù°å</div>' +
+		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">ç‚¹æ­¤å¤åˆ¶åˆ°å‰ªè´´æ¿</div>' +
 		AC_FL_RunContent('id', 'clipboardswf', 'name', 'clipboardswf', 'devicefont', 'false', 'width', '200', 'height', '40', 'src', STATICURL + 'image/common/clipboard.swf', 'menu', 'false',  'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent', 'style' , 'margin-top:-20px') + '</div>';
 		showDialog(msg, 'info');
 		text = text.replace(/[\xA0]/g, ' ');
@@ -233,27 +233,27 @@ function _showselect(obj, inpid, t, rettype) {
 		$('append_parent').appendChild(div);
 		s = '';
 		if(!t) {
-			s += showselect_row(inpid, 'Ò»Ìì', 1, 0, rettype);
-			s += showselect_row(inpid, 'Ò»ÖÜ', 7, 0, rettype);
-			s += showselect_row(inpid, 'Ò»¸öÔÂ', 30, 0, rettype);
-			s += showselect_row(inpid, 'Èı¸öÔÂ', 90, 0, rettype);
-			s += showselect_row(inpid, '×Ô¶¨Òå', -2);
+			s += showselect_row(inpid, 'ä¸€å¤©', 1, 0, rettype);
+			s += showselect_row(inpid, 'ä¸€å‘¨', 7, 0, rettype);
+			s += showselect_row(inpid, 'ä¸€ä¸ªæœˆ', 30, 0, rettype);
+			s += showselect_row(inpid, 'ä¸‰ä¸ªæœˆ', 90, 0, rettype);
+			s += showselect_row(inpid, 'è‡ªå®šä¹‰', -2);
 		} else {
 			if($(t)) {
 				var lis = $(t).getElementsByTagName('LI');
 				for(i = 0;i < lis.length;i++) {
 					s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = this.innerHTML;$(\''+obj.id+'_menu\').style.display=\'none\'">' + lis[i].innerHTML + '</a>';
 				}
-				s += showselect_row(inpid, '×Ô¶¨Òå', -1);
+				s += showselect_row(inpid, 'è‡ªå®šä¹‰', -1);
 			} else {
-				s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'0\'">ÓÀ¾Ã</a>';
-				s += showselect_row(inpid, '7 Ìì', 7, 1, rettype);
-				s += showselect_row(inpid, '14 Ìì', 14, 1, rettype);
-				s += showselect_row(inpid, 'Ò»¸öÔÂ', 30, 1, rettype);
-				s += showselect_row(inpid, 'Èı¸öÔÂ', 90, 1, rettype);
-				s += showselect_row(inpid, '°ëÄê', 182, 1, rettype);
-				s += showselect_row(inpid, 'Ò»Äê', 365, 1, rettype);
-				s += showselect_row(inpid, '×Ô¶¨Òå', -1);
+				s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'0\'">æ°¸ä¹…</a>';
+				s += showselect_row(inpid, '7 å¤©', 7, 1, rettype);
+				s += showselect_row(inpid, '14 å¤©', 14, 1, rettype);
+				s += showselect_row(inpid, 'ä¸€ä¸ªæœˆ', 30, 1, rettype);
+				s += showselect_row(inpid, 'ä¸‰ä¸ªæœˆ', 90, 1, rettype);
+				s += showselect_row(inpid, 'åŠå¹´', 182, 1, rettype);
+				s += showselect_row(inpid, 'ä¸€å¹´', 365, 1, rettype);
+				s += showselect_row(inpid, 'è‡ªå®šä¹‰', -1);
 			}
 		}
 		$(div.id).innerHTML = s;
@@ -472,11 +472,11 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 		menu = document.createElement('div');
 		menu.id = menuid;
 		if(cover) {
-			menu.innerHTML = '<div class="zoominner" id="' + menuid + '_zoomlayer" style="display:none"><p><span class="y"><a id="' + menuid + '_imglink" class="imglink" target="_blank" title="ÔÚĞÂ´°¿Ú´ò¿ª">ÔÚĞÂ´°¿Ú´ò¿ª</a><a id="' + menuid + '_adjust" href="javascipt:;" class="imgadjust" title="Êµ¼Ê´óĞ¡">Êµ¼Ê´óĞ¡</a>' +
-				'<a href="javascript:;" onclick="hideMenu()" class="imgclose" title="¹Ø±Õ">¹Ø±Õ</a></span>Êó±ê¹öÂÖËõ·ÅÍ¼Æ¬</p>' +
+			menu.innerHTML = '<div class="zoominner" id="' + menuid + '_zoomlayer" style="display:none"><p><span class="y"><a id="' + menuid + '_imglink" class="imglink" target="_blank" title="åœ¨æ–°çª—å£æ‰“å¼€">åœ¨æ–°çª—å£æ‰“å¼€</a><a id="' + menuid + '_adjust" href="javascipt:;" class="imgadjust" title="å®é™…å¤§å°">å®é™…å¤§å°</a>' +
+				'<a href="javascript:;" onclick="hideMenu()" class="imgclose" title="å…³é—­">å…³é—­</a></span>é¼ æ ‡æ»šè½®ç¼©æ”¾å›¾ç‰‡</p>' +
 				'<div class="zimg_p" id="' + menuid + '_picpage"></div><div class="hm" id="' + menuid + '_img"></div></div>';
 		} else {
-			menu.innerHTML = '<div class="popupmenu_popup" id="' + menuid + '_zoomlayer" style="width:auto"><span class="right y"><a href="javascript:;" onclick="hideMenu()" class="flbc" style="width:20px;margin:0 0 2px 0">¹Ø±Õ</a></span>Êó±ê¹öÂÖËõ·ÅÍ¼Æ¬<div class="zimg_p" id="' + menuid + '_picpage"></div><div class="hm" id="' + menuid + '_img"></div></div>';
+			menu.innerHTML = '<div class="popupmenu_popup" id="' + menuid + '_zoomlayer" style="width:auto"><span class="right y"><a href="javascript:;" onclick="hideMenu()" class="flbc" style="width:20px;margin:0 0 2px 0">å…³é—­</a></span>é¼ æ ‡æ»šè½®ç¼©æ”¾å›¾ç‰‡<div class="zimg_p" id="' + menuid + '_picpage"></div><div class="hm" id="' + menuid + '_img"></div></div>';
 		}
 		if(BROWSER.ie || BROWSER.chrome){
 			menu.onmousewheel = adjust;
@@ -502,9 +502,9 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 			}
 			if(authorcurrent !== '') {
 				paid = authorcurrent > 0 ? authorimgs[authorcurrent - 1] : authorimgs[authorlength - 1];
-				picpage += ' <div id="zimg_prev" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'0 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'0 -100px\';" onclick="_zoom_page(\'' + paid + '\', ' + (showexif ? 1 : 0) + ')" class="zimg_prev"><strong>ÉÏÒ»ÕÅ</strong></div> ';
+				picpage += ' <div id="zimg_prev" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'0 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'0 -100px\';" onclick="_zoom_page(\'' + paid + '\', ' + (showexif ? 1 : 0) + ')" class="zimg_prev"><strong>ä¸Šä¸€å¼ </strong></div> ';
 				paid = authorcurrent < authorlength - 1 ? authorimgs[authorcurrent + 1] : authorimgs[0];
-				picpage += ' <div id="zimg_next" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'100% 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'100% -100px\';" onclick="_zoom_page(\'' + paid + '\', ' + (showexif ? 1 : 0) + ')" class="zimg_next"><strong>ÏÂÒ»ÕÅ</strong></div> ';
+				picpage += ' <div id="zimg_next" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'100% 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'100% -100px\';" onclick="_zoom_page(\'' + paid + '\', ' + (showexif ? 1 : 0) + ')" class="zimg_next"><strong>ä¸‹ä¸€å¼ </strong></div> ';
 			}
 			if(picpage) {
 				$(menuid + '_picpage').innerHTML = picpage;
@@ -1042,7 +1042,7 @@ function _showColorBox(ctrlid, layer, k, bgcolor) {
 		menu.unselectable = true;
 		menu.style.display = 'none';
 		var coloroptions = ['Black', 'Sienna', 'DarkOliveGreen', 'DarkGreen', 'DarkSlateBlue', 'Navy', 'Indigo', 'DarkSlateGray', 'DarkRed', 'DarkOrange', 'Olive', 'Green', 'Teal', 'Blue', 'SlateGray', 'DimGray', 'Red', 'SandyBrown', 'YellowGreen', 'SeaGreen', 'MediumTurquoise', 'RoyalBlue', 'Purple', 'Gray', 'Magenta', 'Orange', 'Yellow', 'Lime', 'Cyan', 'DeepSkyBlue', 'DarkOrchid', 'Silver', 'Pink', 'Wheat', 'LemonChiffon', 'PaleGreen', 'PaleTurquoise', 'LightBlue', 'Plum', 'White'];
-		var colortexts = ['ºÚÉ«', 'ô÷É«', '°µéÏé­ÂÌÉ«', '°µÂÌÉ«', '°µ»ÒÀ¶É«', 'º£¾üÉ«', 'µåÇàÉ«', 'Ä«ÂÌÉ«', '°µºìÉ«', '°µ½Û»ÆÉ«', 'éÏé­É«', 'ÂÌÉ«', 'Ë®Ñ¼É«', 'À¶É«', '»ÒÊ¯É«', '°µ»ÒÉ«', 'ºìÉ«', 'É³ºÖÉ«', '»ÆÂÌÉ«', 'º£ÂÌÉ«', '¼äÂÌ±¦Ê¯', '»Ê¼ÒÀ¶', '×ÏÉ«', '»ÒÉ«', 'ºì×ÏÉ«', '³ÈÉ«', '»ÆÉ«', 'Ëá³ÈÉ«', 'ÇàÉ«', 'ÉîÌìÀ¶É«', '°µ×ÏÉ«', 'ÒøÉ«', '·ÛÉ«', 'Ç³»ÆÉ«', 'ÄûÃÊ³ñÉ«', '²ÔÂÌÉ«', '²Ô±¦Ê¯ÂÌ', 'ÁÁÀ¶É«', 'ÑóÀîÉ«', '°×É«'];
+		var colortexts = ['é»‘è‰²', 'èµ­è‰²', 'æš—æ©„æ¦„ç»¿è‰²', 'æš—ç»¿è‰²', 'æš—ç°è“è‰²', 'æµ·å†›è‰²', 'é›é’è‰²', 'å¢¨ç»¿è‰²', 'æš—çº¢è‰²', 'æš—æ¡”é»„è‰²', 'æ©„æ¦„è‰²', 'ç»¿è‰²', 'æ°´é¸­è‰²', 'è“è‰²', 'ç°çŸ³è‰²', 'æš—ç°è‰²', 'çº¢è‰²', 'æ²™è¤è‰²', 'é»„ç»¿è‰²', 'æµ·ç»¿è‰²', 'é—´ç»¿å®çŸ³', 'çš‡å®¶è“', 'ç´«è‰²', 'ç°è‰²', 'çº¢ç´«è‰²', 'æ©™è‰²', 'é»„è‰²', 'é…¸æ©™è‰²', 'é’è‰²', 'æ·±å¤©è“è‰²', 'æš—ç´«è‰²', 'é“¶è‰²', 'ç²‰è‰²', 'æµ…é»„è‰²', 'æŸ æª¬ç»¸è‰²', 'è‹ç»¿è‰²', 'è‹å®çŸ³ç»¿', 'äº®è“è‰²', 'æ´‹æè‰²', 'ç™½è‰²'];
 		var str = '';
 		for(var i = 0; i < 40; i++) {
 			str += '<input type="button" style="background-color: ' + coloroptions[i] + '"' + (typeof setEditorTip == 'function' ? ' onmouseover="setEditorTip(\'' + colortexts[i] + '\')" onmouseout="setEditorTip(\'\')"' : '') + ' onclick="'
@@ -1105,7 +1105,7 @@ function _extstyle(css) {
 }
 
 function _widthauto(obj) {
-	var strs = ['ÇĞ»»µ½¿í°æ', 'ÇĞ»»µ½Õ­°æ'];
+	var strs = ['åˆ‡æ¢åˆ°å®½ç‰ˆ', 'åˆ‡æ¢åˆ°çª„ç‰ˆ'];
 	if($('css_widthauto')) {
 		CSSLOADED['widthauto'] = 1;
 	}
@@ -1135,7 +1135,7 @@ function _showCreditmenu() {
 		menu.id = 'extcreditmenu_menu';
 		menu.style.display = 'none';
 		menu.className = 'p_pop';
-		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> ÇëÉÔºò...</div>';
+		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> è¯·ç¨å€™...</div>';
 		$('append_parent').appendChild(menu);
 		ajaxget($('extcreditmenu').href, 'extcreditmenu_menu', 'ajaxwaitid');
 	}
@@ -1148,7 +1148,7 @@ function _showUpgradeinfo() {
 		menu.id = 'g_upmine_menu';
 		menu.style.display = 'none';
 		menu.className = 'p_pop';
-		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> ÇëÉÔºò...</div>';
+		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> è¯·ç¨å€™...</div>';
 		$('append_parent').appendChild(menu);
 		ajaxget('home.php?mod=spacecp&ac=usergroup&showextgroups=1', 'g_upmine_menu', 'ajaxwaitid');
 	}
@@ -1234,12 +1234,12 @@ function _createPalette(colorid, id, func) {
 
 function _setShortcut() {
 	$('shortcuttip').onclick = function() {
-		var msg = '1¡¢µã»÷"' + '<a href="javascript:;" class="xi2 xw1" ';
+		var msg = '1ã€ç‚¹å‡»"' + '<a href="javascript:;" class="xi2 xw1" ';
 		msg += 'onclick="this.href = \'forum.php?mod=misc&action=shortcut\';this.click();saveUserdata(\'setshortcut\', 1);"';
-		msg += '>ÏÂÔØ×ÀÃæ¿ì½İ</a>' + '"£¬ÏÂÔØÍê³Éºó£¬¿ÉÒÆ¶¯ÎÄ¼şµ½ÏµÍ³×ÀÃæ<br />';
-		msg += '2¡¢µã»÷"' + '<a href="forum.php?mod=misc&action=shortcut&type=ico" class="xi2 xw1">';
-		msg += 'ÏÂÔØICOÍ¼±ê</a>' + '"£¬ÏÂÔØÍê³Éºó£¬ÓÒ»÷×ÀÃæ¿ì½İÎÄ¼ş->ÊôĞÔ->¸ü¸ÄÍ¼±ê£¬Ñ¡ÔñÒÑÏÂÔØµÄICOÍ¼±ê¼´¿É';
-		showDialog(msg, 'notice', 'Ìí¼Ó×ÀÃæ¿ì½İ');
+		msg += '>ä¸‹è½½æ¡Œé¢å¿«æ·</a>' + '"ï¼Œä¸‹è½½å®Œæˆåï¼Œå¯ç§»åŠ¨æ–‡ä»¶åˆ°ç³»ç»Ÿæ¡Œé¢<br />';
+		msg += '2ã€ç‚¹å‡»"' + '<a href="forum.php?mod=misc&action=shortcut&type=ico" class="xi2 xw1">';
+		msg += 'ä¸‹è½½ICOå›¾æ ‡</a>' + '"ï¼Œä¸‹è½½å®Œæˆåï¼Œå³å‡»æ¡Œé¢å¿«æ·æ–‡ä»¶->å±æ€§->æ›´æ”¹å›¾æ ‡ï¼Œé€‰æ‹©å·²ä¸‹è½½çš„ICOå›¾æ ‡å³å¯';
+		showDialog(msg, 'notice', 'æ·»åŠ æ¡Œé¢å¿«æ·');
 	};
 
 	$('shortcutcloseid').onclick = function() {

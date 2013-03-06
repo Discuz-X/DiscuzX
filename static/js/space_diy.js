@@ -9,8 +9,8 @@ var drag = new Drag();
 drag.extend({
 
 	setDefalutMenu : function () {
-		this.addMenu('default', 'É¾³ı', 'drag.removeBlock(event)');
-		this.addMenu('block', 'ÊôĞÔ', 'drag.openBlockEdit(event)');
+		this.addMenu('default', 'åˆ é™¤', 'drag.removeBlock(event)');
+		this.addMenu('block', 'å±æ€§', 'drag.openBlockEdit(event)');
 	},
 	removeBlock : function (e) {
 		if ( typeof e !== 'string') {
@@ -19,7 +19,7 @@ drag.extend({
 		} else {
 			id = e;
 		}
-		if (!confirm('ÄúÈ·ÊµÒªÉ¾³ıÂğ,É¾³ıÒÔºó½«²»¿É»Ö¸´')) return false;
+		if (!confirm('æ‚¨ç¡®å®è¦åˆ é™¤å—,åˆ é™¤ä»¥åå°†ä¸å¯æ¢å¤')) return false;
 		$(id).parentNode.removeChild($(id));
 		var el = $('chk'+id);
 		if (el != null) el.className = '';
@@ -63,7 +63,7 @@ drag.extend({
 					el  = document.createElement("div");
 					el.className = drag.blockClass + ' ' + drag.moveableObject;
 					el.id = blockname;
-					s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [javascript½Å±¾±£´æºóÏÔÊ¾] </font>');
+					s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [javascriptè„šæœ¬ä¿å­˜åæ˜¾ç¤º] </font>');
 					el.innerHTML = s;
 					var id = drag.data['diypage'][0]['columns']['frame1_left']['children'][0]['name'];
 					$('frame1_left').insertBefore(el,$(id));
@@ -191,7 +191,7 @@ spaceDiy.extend({
 			if (!$('infoedit')) {
 				var dom = document.createElement('em');
 				dom.id = 'infoedit';
-				dom.innerHTML = '±à¼­';
+				dom.innerHTML = 'ç¼–è¾‘';
 				$('spacename').appendChild(dom);
 			}
 			$('spaceinfoshow').onmousedown = function () {spaceDiy.showEditSpaceInfo();};
@@ -208,7 +208,7 @@ spaceDiy.extend({
 		var nv = $('editnvinfo');
 		if(!nv) {
 			var dom = document.createElement('div');
-			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">ÉèÖÃ</span>';
+			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">è®¾ç½®</span>';
 			$('nv').appendChild(dom.childNodes[0]);
 		} else {
 			nv.style.display = '';

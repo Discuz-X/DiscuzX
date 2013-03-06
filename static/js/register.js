@@ -5,7 +5,7 @@
 	$Id: register.js 32487 2013-01-28 09:11:34Z zhengqingpeng $
 */
 
-var lastusername = '', lastpassword = '', lastemail = '', lastinvitecode = '', stmp = new Array(), modifypwd = false, profileTips = 'Èç²»ĞèÒª¸ü¸ÄÃÜÂë£¬´Ë´¦ÇëÁô¿Õ';
+var lastusername = '', lastpassword = '', lastemail = '', lastinvitecode = '', stmp = new Array(), modifypwd = false, profileTips = 'å¦‚ä¸éœ€è¦æ›´æ”¹å¯†ç ï¼Œæ­¤å¤„è¯·ç•™ç©º';
 
 function errormessage(id, msg) {
 	if($(id)) {
@@ -71,9 +71,9 @@ function checkPwdComplexity(firstObj, secondObj, modify) {
 	modifypwd = modify || false;
 	firstObj.onblur = function () {
 		if(firstObj.value == '') {
-			var pwmsg = !modifypwd ? 'ÇëÌîĞ´ÃÜÂë' : profileTips;
+			var pwmsg = !modifypwd ? 'è¯·å¡«å†™å¯†ç ' : profileTips;
 			if(pwlength > 0) {
-				pwmsg += ', ×îĞ¡³¤¶ÈÎª '+pwlength+' ¸ö×Ö·û';
+				pwmsg += ', æœ€å°é•¿åº¦ä¸º '+pwlength+' ä¸ªå­—ç¬¦';
 			}
 			errormessage(firstObj.id, pwmsg);
 		}else{
@@ -83,14 +83,14 @@ function checkPwdComplexity(firstObj, secondObj, modify) {
 	};
 	firstObj.onkeyup = function () {
 		if(pwlength == 0 || $(firstObj.id).value.length >= pwlength) {
-			var passlevels = new Array('','Èõ','ÖĞ','Ç¿');
+			var passlevels = new Array('','å¼±','ä¸­','å¼º');
 			var passlevel = checkstrongpw(firstObj.id);
-			errormessage(firstObj.id, '<span class="passlevel passlevel'+passlevel+'">ÃÜÂëÇ¿¶È:'+passlevels[passlevel]+'</span>');
+			errormessage(firstObj.id, '<span class="passlevel passlevel'+passlevel+'">å¯†ç å¼ºåº¦:'+passlevels[passlevel]+'</span>');
 		}
 	};
 	secondObj.onblur = function () {
 		if(secondObj.value == '') {
-			errormessage(secondObj.id, !modifypwd ? 'ÇëÔÙ´ÎÊäÈëÃÜÂë' : profileTips);
+			errormessage(secondObj.id, !modifypwd ? 'è¯·å†æ¬¡è¾“å…¥å¯†ç ' : profileTips);
 		}
 		checkpassword(firstObj.id, secondObj.id);
 	};
@@ -109,7 +109,7 @@ function addMailEvent(mailObj) {
 	};
 	mailObj.onblur = function () {
 		if(mailObj.value == '') {
-			errormessage(mailObj.id, 'ÇëÊäÈëÓÊÏäµØÖ·');
+			errormessage(mailObj.id, 'è¯·è¾“å…¥é‚®ç®±åœ°å€');
 		}
 		emailMenuOp(3, null, mailObj.id);
 	};
@@ -144,7 +144,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('ÈÕ', ''));
+	el.options.add(new Option('æ—¥', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}
@@ -274,12 +274,12 @@ function checkusername(id) {
 		lastusername = username;
 	}
 	if(username.match(/<|"/ig)) {
-		errormessage(id, 'ÓÃ»§Ãû°üº¬Ãô¸Ğ×Ö·û');
+		errormessage(id, 'ç”¨æˆ·ååŒ…å«æ•æ„Ÿå­—ç¬¦');
 		return;
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? 'ÓÃ»§Ãû²»µÃĞ¡ÓÚ 3 ¸ö×Ö·û' : 'ÓÃ»§Ãû²»µÃ³¬¹ı 15 ¸ö×Ö·û');
+		errormessage(id, unlen < 3 ? 'ç”¨æˆ·åä¸å¾—å°äº 3 ä¸ªå­—ç¬¦' : 'ç”¨æˆ·åä¸å¾—è¶…è¿‡ 15 ä¸ªå­—ç¬¦');
 		return;
 	}
 	var x = new Ajax();
@@ -295,7 +295,7 @@ function checkpassword(id1, id2) {
 	}
 	if(pwlength > 0) {
 		if($(id1).value.length < pwlength) {
-			errormessage(id1, 'ÃÜÂëÌ«¶Ì£¬²»µÃÉÙÓÚ '+pwlength+' ¸ö×Ö·û');
+			errormessage(id1, 'å¯†ç å¤ªçŸ­ï¼Œä¸å¾—å°‘äº '+pwlength+' ä¸ªå­—ç¬¦');
 			return;
 		}
 	}
@@ -305,33 +305,33 @@ function checkpassword(id1, id2) {
 		for(var i in strongpw) {
 			if(strongpw[i] === 1 && !$(id1).value.match(/\d+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = 'Êı×Ö';
+				strongpw_str[j] = 'æ•°å­—';
 				j++;
 			}
 			if(strongpw[i] === 2 && !$(id1).value.match(/[a-z]+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = 'Ğ¡Ğ´×ÖÄ¸';
+				strongpw_str[j] = 'å°å†™å­—æ¯';
 				j++;
 			}
 			if(strongpw[i] === 3 && !$(id1).value.match(/[A-Z]+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = '´óĞ´×ÖÄ¸';
+				strongpw_str[j] = 'å¤§å†™å­—æ¯';
 				j++;
 			}
 			if(strongpw[i] === 4 && !$(id1).value.match(/[^A-Za-z0-9]+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = 'ÌØÊâ·ûºÅ';
+				strongpw_str[j] = 'ç‰¹æ®Šç¬¦å·';
 				j++;
 			}
 		}
 		if(strongpw_error) {
-			errormessage(id1, 'ÃÜÂëÌ«Èõ£¬ÃÜÂëÖĞ±ØĞë°üº¬ '+strongpw_str.join('£¬'));
+			errormessage(id1, 'å¯†ç å¤ªå¼±ï¼Œå¯†ç ä¸­å¿…é¡»åŒ…å« '+strongpw_str.join('ï¼Œ'));
 			return;
 		}
 	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {
-		errormessage(id2, 'Á½´ÎÊäÈëµÄÃÜÂë²»Ò»ÖÂ');
+		errormessage(id2, 'ä¸¤æ¬¡è¾“å…¥çš„å¯†ç ä¸ä¸€è‡´');
 	} else {
 		errormessage(id2, !modifypwd ? 'succeed' : profileTips);
 	}
@@ -346,7 +346,7 @@ function checkemail(id) {
 		lastemail = email;
 	}
 	if(email.match(/<|"/ig)) {
-		errormessage(id, 'Email °üº¬Ãô¸Ğ×Ö·û');
+		errormessage(id, 'Email åŒ…å«æ•æ„Ÿå­—ç¬¦');
 		return;
 	}
 	var x = new Ajax();
@@ -365,7 +365,7 @@ function checkinvite() {
 		lastinvitecode = invitecode;
 	}
 	if(invitecode.match(/<|"/ig)) {
-		errormessage('invitecode', 'ÑûÇëÂë°üº¬Ãô¸Ğ×Ö·û');
+		errormessage('invitecode', 'é‚€è¯·ç åŒ…å«æ•æ„Ÿå­—ç¬¦');
 		return;
 	}
 	var x = new Ajax();

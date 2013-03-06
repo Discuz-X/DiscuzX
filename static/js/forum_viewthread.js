@@ -70,10 +70,10 @@ function attachimglstshow(pid, islazy, fid, showexif) {
 					continue;
 				}
 				if(fid) {
-					imagelist += '<div id="pattimg_' + aimgcount[pid][i] + '_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c"><a href="forum.php?mod=ajax&action=setthreadcover&aid=' + aimgcount[pid][i] + '&fid=' + fid + '" class="xi2" onclick="showWindow(\'setcover' + aimgcount[pid][i] + '\', this.href)">ÉèÎª·âÃæ</a></div></div>';
+					imagelist += '<div id="pattimg_' + aimgcount[pid][i] + '_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c"><a href="forum.php?mod=ajax&action=setthreadcover&aid=' + aimgcount[pid][i] + '&fid=' + fid + '" class="xi2" onclick="showWindow(\'setcover' + aimgcount[pid][i] + '\', this.href)">è®¾ä¸ºå°é¢</a></div></div>';
 				}
 				imagelist += '<div class="pattimg">' +
-					'<a id="pattimg_' + aimgcount[pid][i] + '" class="pattimg_zoom" href="javascript:;"' + s + ' onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'), 0, 0, ' + (parseInt(showexif) ? 1 : 0) + ')" title="µã»÷·Å´ó">µã»÷·Å´ó</a>' +
+					'<a id="pattimg_' + aimgcount[pid][i] + '" class="pattimg_zoom" href="javascript:;"' + s + ' onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'), 0, 0, ' + (parseInt(showexif) ? 1 : 0) + ')" title="ç‚¹å‡»æ”¾å¤§">ç‚¹å‡»æ”¾å¤§</a>' +
 					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
 			}
 			if($('imagelistthumb_' + pid)) {
@@ -169,7 +169,7 @@ function parsetag(pid) {
 }
 
 function setanswer(pid, from){
-	if(confirm('ÄúÈ·ÈÏÒª°Ñ¸Ã»Ø¸´Ñ¡Îª¡°×î¼Ñ´ğ°¸¡±Âğ£¿')){
+	if(confirm('æ‚¨ç¡®è®¤è¦æŠŠè¯¥å›å¤é€‰ä¸ºâ€œæœ€ä½³ç­”æ¡ˆâ€å—ï¼Ÿ')){
 		if(BROWSER.ie) {
 			doane(event);
 		}
@@ -242,7 +242,7 @@ function succeedhandle_fastpost(locationhref, message, param) {
 		$('fastpostreturn').className = '';
 	} else {
 		if(!message) {
-			message = '±¾°æ»ØÌûĞèÒªÉóºË£¬ÄúµÄÌû×Ó½«ÔÚÍ¨¹ıÉóºËºóÏÔÊ¾';
+			message = 'æœ¬ç‰ˆå›å¸–éœ€è¦å®¡æ ¸ï¼Œæ‚¨çš„å¸–å­å°†åœ¨é€šè¿‡å®¡æ ¸åæ˜¾ç¤º';
 		}
 		$('post_new').style.display = $('fastpostmessage').value = $('fastpostreturn').className = '';
 		$('fastpostreturn').innerHTML = message;
@@ -375,17 +375,17 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 	if($(tarId).className == 'rate') {
 		$(tarId).className = 'rate rate_collapse';
 		setcookie('ratecollapse', 1, 2592000);
-		ctrlObj.innerHTML = 'Õ¹¿ª';
+		ctrlObj.innerHTML = 'å±•å¼€';
 	} else {
 		$(tarId).className = 'rate';
 		setcookie('ratecollapse', 0, -2592000);
-		ctrlObj.innerHTML = 'ÊÕÆğ';
+		ctrlObj.innerHTML = 'æ”¶èµ·';
 	}
 }
 
 function copyThreadUrl(obj, bbname) {
 	bbname = bbname || SITEURL;
-	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n' + '(³ö´¦:'+bbname+')' + '\n', 'Ìû×ÓµØÖ·ÒÑ¾­¸´ÖÆµ½¼ôÌù°å');
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n' + '(å‡ºå¤„:'+bbname+')' + '\n', 'å¸–å­åœ°å€å·²ç»å¤åˆ¶åˆ°å‰ªè´´æ¿');
 	return false;
 }
 
@@ -395,11 +395,11 @@ function replyNotice() {
 	var status = replynotice.getAttribute("status");
 	if(status == 1) {
 		replynotice.href = newurl + 'receive';
-		replynotice.innerHTML = '½ÓÊÕ»Ø¸´Í¨Öª';
+		replynotice.innerHTML = 'æ¥æ”¶å›å¤é€šçŸ¥';
 		replynotice.setAttribute("status", 0);
 	} else {
 		replynotice.href = newurl + 'ignore';
-		replynotice.innerHTML = 'È¡Ïû»Ø¸´Í¨Öª';
+		replynotice.innerHTML = 'å–æ¶ˆå›å¤é€šçŸ¥';
 		replynotice.setAttribute("status", 1);
 	}
 }
@@ -412,13 +412,13 @@ function connect_share(connect_share_url, connect_uin) {
 		if(connect_uin) {
 			setTimeout(function () {
 				if(!connect_share_loaded) {
-					showDialog('·ÖÏí·şÎñÁ¬½ÓÊ§°Ü£¬ÇëÉÔºóÔÙÊÔ¡£', 'notice');
+					showDialog('åˆ†äº«æœåŠ¡è¿æ¥å¤±è´¥ï¼Œè¯·ç¨åå†è¯•ã€‚', 'notice');
 					$('append_parent').removeChild($('connect_load_js'));
 				}
 			}, 5000);
 			connect_load(connect_share_url);
 		} else {
-			showDialog($('connect_share_unbind').innerHTML, 'info', 'ÇëÏÈ°ó¶¨QQÕËºÅ');
+			showDialog($('connect_share_unbind').innerHTML, 'info', 'è¯·å…ˆç»‘å®šQQè´¦å·');
 		}
 		return false;
 	}
@@ -441,7 +441,7 @@ function connect_show_dialog(title, html, type) {
 function connect_get_thread() {
 	connect_thread_info.subject = $('connect_thread_title').value;
 	if ($('postmessage_' + connect_thread_info.post_id)) {
-		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['±¾Ìû×îºóÓÉ .*? ÓÚ .*? ±à¼­','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">¸´ÖÆ´úÂë</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['æœ¬å¸–æœ€åç”± .*? äº .*? ç¼–è¾‘','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">å¤åˆ¶ä»£ç </em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
 	}
 	return connect_thread_info;
 }
@@ -539,9 +539,9 @@ function show_threadpage(pid, current, maxpage, ispreview) {
 		s += '<a href="javascript:;" onclick="' + clickvalue(maxpage)+ '">... ' + maxpage + '</a>';
 	}
 	if(current < maxpage) {
-		s += '<a href="javascript:;" onclick="' + clickvalue(current + 1) + '" class="nxt">ÏÂÒ»Ò³</a>';
+		s += '<a href="javascript:;" onclick="' + clickvalue(current + 1) + '" class="nxt">ä¸‹ä¸€é¡µ</a>';
 	}
-	s += '<a href="javascript:;" onclick="' + clickvalue('all') + '">²é¿´ËùÓĞ</a>';
+	s += '<a href="javascript:;" onclick="' + clickvalue('all') + '">æŸ¥çœ‹æ‰€æœ‰</a>';
 	s += '</div></div>';
 	$('threadpage').innerHTML = s;
 }
@@ -549,7 +549,7 @@ function show_threadpage(pid, current, maxpage, ispreview) {
 var show_threadindex_data = '';
 function show_threadindex(pid, ispreview) {
 	if(!show_threadindex_data) {
-		var s = '<div class="tindex"><h3>Ä¿Â¼</h3><ul>';
+		var s = '<div class="tindex"><h3>ç›®å½•</h3><ul>';
 		for(i in $('threadindex').childNodes) {
 			o = $('threadindex').childNodes[i];
 			if(o.tagName == 'A') {

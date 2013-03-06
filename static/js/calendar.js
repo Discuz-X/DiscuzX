@@ -24,18 +24,18 @@ function loadcalendar() {
 	s = '';
 	s += '<div id="calendar" style="display:none; position:absolute; z-index:100000;" onclick="doane(event)">';
 	s += '<div style="width: 210px;"><table cellspacing="0" cellpadding="0" width="100%" style="text-align: center;">';
-	s += '<tr align="center" id="calendar_week"><td onclick="refreshcalendar(yy, mm-1)" title="ÉÏÒ»ÔÂ" style="cursor: pointer;"><a href="javascript:;">&laquo;</a></td><td colspan="5" style="text-align: center"><a href="javascript:;" onclick="showdiv(\'year\');doane(event)" class="dropmenu" title="µã»÷Ñ¡ÔñÄê·Ý" id="year"></a>&nbsp; - &nbsp;<a id="month" class="dropmenu" title="µã»÷Ñ¡ÔñÔÂ·Ý" href="javascript:;" onclick="showdiv(\'month\');doane(event)"></a></td><td onclick="refreshcalendar(yy, mm+1)" title="ÏÂÒ»ÔÂ" style="cursor: pointer;"><a href="javascript:;">&raquo;</a></td></tr>';
-	s += '<tr id="calendar_header"><td>ÈÕ</td><td>Ò»</td><td>¶þ</td><td>Èý</td><td>ËÄ</td><td>Îå</td><td>Áù</td></tr>';
+	s += '<tr align="center" id="calendar_week"><td onclick="refreshcalendar(yy, mm-1)" title="ä¸Šä¸€æœˆ" style="cursor: pointer;"><a href="javascript:;">&laquo;</a></td><td colspan="5" style="text-align: center"><a href="javascript:;" onclick="showdiv(\'year\');doane(event)" class="dropmenu" title="ç‚¹å‡»é€‰æ‹©å¹´ä»½" id="year"></a>&nbsp; - &nbsp;<a id="month" class="dropmenu" title="ç‚¹å‡»é€‰æ‹©æœˆä»½" href="javascript:;" onclick="showdiv(\'month\');doane(event)"></a></td><td onclick="refreshcalendar(yy, mm+1)" title="ä¸‹ä¸€æœˆ" style="cursor: pointer;"><a href="javascript:;">&raquo;</a></td></tr>';
+	s += '<tr id="calendar_header"><td>æ—¥</td><td>ä¸€</td><td>äºŒ</td><td>ä¸‰</td><td>å››</td><td>äº”</td><td>å…­</td></tr>';
 	for(var i = 0; i < 6; i++) {
 		s += '<tr>';
 		for(var j = 1; j <= 7; j++)
 			s += "<td id=d" + (i * 7 + j) + " height=\"19\">0</td>";
 		s += "</tr>";
 	}
-	s += '<tr id="hourminute" class="pns"><td colspan="4" align="left"><input type="text" size="1" value="" id="hour" class="px vm" onKeyUp=\'this.value=this.value > 23 ? 23 : zerofill(this.value);controlid.value=controlid.value.replace(/\\d+(\:\\d+)/ig, this.value+"$1")\'>µã';
-	s += '<span id="fullhourselector"><input type="text" size="1" value="" id="minute" class="px vm" onKeyUp=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'>·Ö</span>';
-	s += '<span id="halfhourselector"><select id="minutehalfhourly" onchange=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'><option value="00">00</option><option value="30">30</option></select>·Ö</span>';
-	s += '</td><td align="right" colspan="3"><button class="pn" onclick="confirmcalendar();"><em>È·¶¨</em></button></td></tr>';
+	s += '<tr id="hourminute" class="pns"><td colspan="4" align="left"><input type="text" size="1" value="" id="hour" class="px vm" onKeyUp=\'this.value=this.value > 23 ? 23 : zerofill(this.value);controlid.value=controlid.value.replace(/\\d+(\:\\d+)/ig, this.value+"$1")\'>ç‚¹';
+	s += '<span id="fullhourselector"><input type="text" size="1" value="" id="minute" class="px vm" onKeyUp=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'>åˆ†</span>';
+	s += '<span id="halfhourselector"><select id="minutehalfhourly" onchange=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'><option value="00">00</option><option value="30">30</option></select>åˆ†</span>';
+	s += '</td><td align="right" colspan="3"><button class="pn" onclick="confirmcalendar();"><em>ç¡®å®š</em></button></td></tr>';
 	s += '</table></div></div>';
 	s += '<div id="calendar_year" onclick="doane(event)" style="display: none;z-index:100001;"><div class="col">';
 	for(var k = 2020; k >= 1931; k--) {
@@ -45,7 +45,7 @@ function loadcalendar() {
 	s += '</div></div>';
 	s += '<div id="calendar_month" onclick="doane(event)" style="display: none;z-index:100001;">';
 	for(var k = 1; k <= 12; k++) {
-		s += '<a href="javascript:;" onclick="refreshcalendar(yy, ' + (k - 1) + ');$(\'calendar_month\').style.display=\'none\'"><span' + (today.getMonth()+1 == k ? ' class="calendar_today"' : '') + ' id="calendar_month_' + k + '">' + k + ( k < 10 ? '&nbsp;' : '') + ' ÔÂ</span></a><br />';
+		s += '<a href="javascript:;" onclick="refreshcalendar(yy, ' + (k - 1) + ');$(\'calendar_month\').style.display=\'none\'"><span' + (today.getMonth()+1 == k ? ' class="calendar_today"' : '') + ' id="calendar_month_' + k + '">' + k + ( k < 10 ? '&nbsp;' : '') + ' æœˆ</span></a><br />';
 	}
 	s += '</div>';
 	if(BROWSER.ie && BROWSER.ie < 7) {
@@ -196,7 +196,7 @@ function refreshcalendar(y, m) {
 		}
 		if(x.getFullYear() == today.getFullYear() && x.getMonth() == today.getMonth() && x.getDate() == today.getDate()) {
 			dd.className = 'calendar_today';
-			dd.firstChild.title = '½ñÌì';
+			dd.firstChild.title = 'ä»Šå¤©';
 		}
 		if(x.getFullYear() == currday.getFullYear() && x.getMonth() == currday.getMonth() && x.getDate() == currday.getDate()) {
 			dd.className = 'calendar_checked';

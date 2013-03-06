@@ -12,8 +12,8 @@ drag.extend({
 	'blockDefaultClass' : [],
 	'frameDefaultClass' : [],
 	setSampleMenu : function () {
-		this.addMenu('block', 'Êı¾İ', 'drag.openBlockEdit(event,"data")');
-		this.addMenu('block', '¸üĞÂ', 'drag.blockForceUpdate(event)');
+		this.addMenu('block', 'æ•°æ®', 'drag.openBlockEdit(event,"data")');
+		this.addMenu('block', 'æ›´æ–°', 'drag.blockForceUpdate(event)');
 	},
 	openBlockEdit : function (e,op) {
 		e = Util.event(e);
@@ -48,7 +48,7 @@ drag.extend({
 	},
 	init : function (sampleMode) {
 		this.initCommon();
-		$('samplepanel').innerHTML = '¿ÉÖ±½Ó¹ÜÀíÄ£¿éÊı¾İ [<a href="javascript:;" onclick="spaceDiy.cancel();return false;" class="xi2">ÍË³ö</a>]';
+		$('samplepanel').innerHTML = 'å¯ç›´æ¥ç®¡ç†æ¨¡å—æ•°æ® [<a href="javascript:;" onclick="spaceDiy.cancel();return false;" class="xi2">é€€å‡º</a>]';
 		this.setSampleMode(sampleMode);
 		this.initSample();
 		return true;
@@ -74,13 +74,13 @@ drag.extend({
 		var height = Util.getFinallyStyle(bcontent, 'height');
 		bcontent.style.lineHeight = height == 'auto' ? '' : (height == '0px' ? '20px' : height);
 		var boldcontent = bcontent.innerHTML;
-		bcontent.innerHTML = '<center>ÕıÔÚ¼ÓÔØÄÚÈİ...</center>';
+		bcontent.innerHTML = '<center>æ­£åœ¨åŠ è½½å†…å®¹...</center>';
 		var x = new Ajax();
 		x.get('portal.php?mod=portalcp&ac=block&op=getblock&forceupdate=1&inajax=1&bid='+bid+'&tpl='+document.diyform.template.value, function(s) {
 			if(s.indexOf('errorhandle_') != -1) {
 				bcontent.innerHTML = boldcontent;
 				runslideshow();
-				showDialog('±§Ç¸£¬ÄúÃ»ÓĞÈ¨ÏŞÌí¼Ó»ò±à¼­Ä£¿é', 'alert');
+				showDialog('æŠ±æ­‰ï¼Œæ‚¨æ²¡æœ‰æƒé™æ·»åŠ æˆ–ç¼–è¾‘æ¨¡å—', 'alert');
 				doane();
 			} else {
 				var obj = document.createElement('div');

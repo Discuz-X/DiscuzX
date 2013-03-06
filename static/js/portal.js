@@ -69,7 +69,7 @@ function block_pushitem(bid, itemid) {
 }
 
 function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
-	var msg = itemtype==1 ? 'ÄúÈ·¶¨ÒªÉ¾³ı¸ÃÊı¾İÂğ£¿' : 'ÄúÈ·¶¨ÒªÆÁ±Î¸ÃÊı¾İÂğ£¿';
+	var msg = itemtype==1 ? 'æ‚¨ç¡®å®šè¦åˆ é™¤è¯¥æ•°æ®å—ï¼Ÿ' : 'æ‚¨ç¡®å®šè¦å±è”½è¯¥æ•°æ®å—ï¼Ÿ';
 	if(confirm(msg)) {
 		var url = 'portal.php?mod=portalcp&ac=block&op=remove&bid='+bid+'&itemid='+itemid;
 		if(itemfrom=='ajax') {
@@ -143,7 +143,7 @@ function recommenditem_check() {
 		document.forms['recommendform'].action = document.forms['recommendform'].action+'&bid='+sel.value;
 		return true;
 	} else {
-		alert("ÇëÑ¡ÔñÒ»¸öÄ£¿é£¡");
+		alert("è¯·é€‰æ‹©ä¸€ä¸ªæ¨¡å—ï¼");
 		return false;
 	}
 }
@@ -155,7 +155,7 @@ function recommenditem_byblock(bid, id, idtype) {
 		ajaxinnerhtml(olditemeditarea, editarea.innerHTML);
 		if(!$('recommendback')) {
 			var back = document.createElement('div');
-			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;·µ»Ø</em>';
+			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;è¿”å›</em>';
 			var return_mods = $('return_mods') || $('return_recommend') || $('return_');
 			if(return_mods) {
 				return_mods.parentNode.appendChild(back.childNodes[0]);
@@ -223,10 +223,10 @@ function blockSetCacheTime(timer) {
 function toggleSettingShow() {
 	if(!$('tbody_setting').style.display) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = 'Õ¹¿ªÉèÖÃÏî';
+		$('a_setting_show').innerHTML = 'å±•å¼€è®¾ç½®é¡¹';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = 'ÊÕÆğÉèÖÃÏî';
+		$('a_setting_show').innerHTML = 'æ”¶èµ·è®¾ç½®é¡¹';
 	}
 	doane();
 }
@@ -234,16 +234,16 @@ function switchSetting() {
 	var checked = $('isblank').checked;
 	if(checked) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = 'Õ¹¿ªÉèÖÃÏî';
+		$('a_setting_show').innerHTML = 'å±•å¼€è®¾ç½®é¡¹';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = 'ÊÕÆğÉèÖÃÏî';
+		$('a_setting_show').innerHTML = 'æ”¶èµ·è®¾ç½®é¡¹';
 	}
 }
 
 function checkblockname(form) {
 	if(!(trim(form.name.value) > '')) {
-		showDialog('Ä£¿é±êÊ¶²»ÄÜÎª¿Õ', 'error', null, function(){form.name.focus();});
+		showDialog('æ¨¡å—æ ‡è¯†ä¸èƒ½ä¸ºç©º', 'error', null, function(){form.name.focus();});
 		return false;
 	}
 	if(form.summary && form.summary.value) {
@@ -251,7 +251,7 @@ function checkblockname(form) {
 		if(tag) {
 			showBlockSummary();
 			form.summary.focus();
-			showDialog('×Ô¶¨ÒåÄÚÈİ´íÎó£¬HTML´úÂë£º'+tag+' ±êÇ©²»Æ¥Åä', 'error', null, function(){form.summary.select();});
+			showDialog('è‡ªå®šä¹‰å†…å®¹é”™è¯¯ï¼ŒHTMLä»£ç ï¼š'+tag+' æ ‡ç­¾ä¸åŒ¹é…', 'error', null, function(){form.summary.select();});
 			return false;
 		}
 	}
@@ -287,7 +287,7 @@ function blockCheckTag(summary, returnValue) {
 				if(returnValue) {
 					return tag;
 				} else {
-					showDialog('HTML´úÂë£º'+tag+' ±êÇ©²»Æ¥Åä', 'error', null, fn, true, fn);
+					showDialog('HTMLä»£ç ï¼š'+tag+' æ ‡ç­¾ä¸åŒ¹é…', 'error', null, fn, true, fn);
 					return false;
 				}
 			}
@@ -312,7 +312,7 @@ function hideBlockSummary() {
 
 function blockconver(ele,bid) {
 	if(ele && bid) {
-		if(confirm('ÄúÈ·¶¨Òª×ª»»Ä£¿éµÄÀàĞÍ´Ó '+ele.options[0].innerHTML+' µ½ '+ele.options[ele.selectedIndex].innerHTML)) {
+		if(confirm('æ‚¨ç¡®å®šè¦è½¬æ¢æ¨¡å—çš„ç±»å‹ä» '+ele.options[0].innerHTML+' åˆ° '+ele.options[ele.selectedIndex].innerHTML)) {
 			ajaxget('portal.php?mod=portalcp&ac=block&op=convert&bid='+bid+'&toblockclass='+ele.value,'blockshow');
 		} else {
 			ele.selectedIndex = 0;
@@ -338,10 +338,10 @@ function strLenCalc(obj, checklen, maxlen) {
 	checklen = $(checklen);
 	if(checklen.style.display == 'none') checklen.style.display = '';
 	if(curlen <= maxlen) {
-		checklen.innerHTML = 'ÒÑÊäÈë <b>'+(curlen)+'</b> ¸ö×Ö·û';
+		checklen.innerHTML = 'å·²è¾“å…¥ <b>'+(curlen)+'</b> ä¸ªå­—ç¬¦';
 		return true;
 	} else {
-		checklen.innerHTML = '³¬³ö <b style="color:red">'+(curlen - maxlen)+'</b> ¸ö×Ö·û';
+		checklen.innerHTML = 'è¶…å‡º <b style="color:red">'+(curlen - maxlen)+'</b> ä¸ªå­—ç¬¦';
 		return false;
 	}
 }
@@ -349,12 +349,12 @@ function strLenCalc(obj, checklen, maxlen) {
 function check_itemdata_lentgh(form) {
 	if(form.title && (!strLenCalc(form.title, "titlechk", form.title.getAttribute('_maxlength')) || !form.title.value)) {
 		form.title.focus();
-		showDialog('±êÌâ³¤¶È²»ÕıÈ·', 'error', null, function(){form.title.select();});
+		showDialog('æ ‡é¢˜é•¿åº¦ä¸æ­£ç¡®', 'error', null, function(){form.title.select();});
 		return false;
 	}
 	if(form.summary && !strLenCalc(form.summary, "summarychk", form.summary.getAttribute('_maxlength'))) {
 		form.summary.focus();
-		showDialog('¼ò½é³¤¶È²»ÕıÈ·', 'error', null, function(){form.summary.select();});
+		showDialog('ç®€ä»‹é•¿åº¦ä¸æ­£ç¡®', 'error', null, function(){form.summary.select();});
 		return false;
 	}
 	return true;

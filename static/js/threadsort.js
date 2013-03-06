@@ -116,7 +116,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 	if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[sselectchoiceoptionid]['scount'] == 1) {
 		nameid = name + ' ' + id;
 	}
-	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')" ' + ((forum_optionlist[soptionid]['sunchangeable'] == 1 && type == 'update') ? 'disabled' : '') + '><option value="0">ÇëÑ¡Ôñ</option>';
+	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')" ' + ((forum_optionlist[soptionid]['sunchangeable'] == 1 && type == 'update') ? 'disabled' : '') + '><option value="0">è¯·é€‰æ‹©</option>';
 	for(var i in choicesarr) {
 		nameid = '';
 		if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[i]['scount'] == choicesarr[sselectchoiceoptionid]['scount']) {
@@ -133,7 +133,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 			if(parseInt(choicesarr[i]['scount']) >= (parseInt(choicesarr[sselectchoiceoptionid]['scount']) + parseInt(choicesarr[sselectchoiceoptionid]['slevel']))) {
 				break;
 			}
-			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')" ' + ((forum_optionlist[soptionid]['sunchangeable'] == 1 && type == 'update') ? 'disabled' : '') + '><option value="0">ÇëÑ¡Ôñ</option>';
+			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')" ' + ((forum_optionlist[soptionid]['sunchangeable'] == 1 && type == 'update') ? 'disabled' : '') + '><option value="0">è¯·é€‰æ‹©</option>';
 
 			lastcount = parseInt(choicesarr[i]['scount']);
 		}
@@ -166,10 +166,10 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 
 	if(checktype == 'select') {
 		if(required != '0' && ($('typeoption_' + identifier) == null || $('typeoption_' + identifier).value == '0')) {
-			warning(ce, '±ØÌîÏîÄ¿Ã»ÓÐÌîÐ´');
+			warning(ce, 'å¿…å¡«é¡¹ç›®æ²¡æœ‰å¡«å†™');
 			return false;
 		} else if(required == '0' && ($('typeoption_' + identifier) == null || $('typeoption_' + identifier).value == '0')) {
-			ce.innerHTML = '<img src="' + IMGDIR + '/check_error.gif" width="16" height="16" class="vm" /> ÇëÑ¡ÔñÏÂÒ»¼¶';
+			ce.innerHTML = '<img src="' + IMGDIR + '/check_error.gif" width="16" height="16" class="vm" /> è¯·é€‰æ‹©ä¸‹ä¸€çº§';
 			ce.className = "warning";
 			return true;
 		}
@@ -186,7 +186,7 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 			}
 		}
 		if(!nodechecked && required != '0') {
-			warning(ce, '±ØÌîÏîÄ¿Ã»ÓÐÌîÐ´');
+			warning(ce, 'å¿…å¡«é¡¹ç›®æ²¡æœ‰å¡«å†™');
 			return false;
 		}
 	}
@@ -199,7 +199,7 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 
 	if(required != '0') {
 		if(checkvalue == '') {
-			warning(ce, '±ØÌîÏîÄ¿Ã»ÓÐÌîÐ´');
+			warning(ce, 'å¿…å¡«é¡¹ç›®æ²¡æœ‰å¡«å†™');
 			return false;
 		} else {
 			ce.innerHTML = '<img src="' + IMGDIR + '/check_right.gif" width="16" height="16" class="vm" />';
@@ -208,24 +208,24 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 
 	if(checkvalue) {
 		if(checktype == 'email' && !(/^[\-\.\w]+@[\.\-\w]+(\.\w+)+$/.test(checkvalue))) {
-			warning(ce, 'ÓÊ¼þµØÖ·²»ÕýÈ·');
+			warning(ce, 'é‚®ä»¶åœ°å€ä¸æ­£ç¡®');
 			return false;
 		} else if((checktype == 'text' || checktype == 'textarea') && checkmaxlength != '0' && mb_strlen(checkvalue) > checkmaxlength) {
-			warning(ce, 'ÌîÐ´ÏîÄ¿³¤¶È¹ý³¤');
+			warning(ce, 'å¡«å†™é¡¹ç›®é•¿åº¦è¿‡é•¿');
 			return false;
 		} else if((checktype == 'number' || checktype == 'range')) {
 			if(isNaN(checkvalue)) {
-				warning(ce, 'Êý×ÖÌîÐ´²»ÕýÈ·');
+				warning(ce, 'æ•°å­—å¡«å†™ä¸æ­£ç¡®');
 				return false;
 			} else if(checkmaxnum != '0' && parseInt(checkvalue) > parseInt(checkmaxnum)) {
-				warning(ce, '´óÓÚÉèÖÃ×î´óÖµ');
+				warning(ce, 'å¤§äºŽè®¾ç½®æœ€å¤§å€¼');
 				return false;
 			} else if(checkminnum != '0' && parseInt(checkvalue) < parseInt(checkminnum)) {
-				warning(ce, 'Ð¡ÓÚÉèÖÃ×îÐ¡Öµ');
+				warning(ce, 'å°äºŽè®¾ç½®æœ€å°å€¼');
 				return false;
 			}
 		} else if(checktype == 'url' && !(/(http[s]?|ftp):\/\/[^\/\.]+?\..+\w[\/]?$/i.test(checkvalue))) {
-			warning(ce, 'ÇëÕýÈ·ÌîÐ´ÒÔhttp://¿ªÍ·µÄURLµØÖ·');
+			warning(ce, 'è¯·æ­£ç¡®å¡«å†™ä»¥http://å¼€å¤´çš„URLåœ°å€');
 			return false;
 		}
 		ce.innerHTML = '<img src="' + IMGDIR + '/check_right.gif" width="16" height="16" class="vm" />';

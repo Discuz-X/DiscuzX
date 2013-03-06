@@ -9,22 +9,22 @@ var drag = new Drag();
 drag.extend({
 	'getBlocksTimer' : '',
 	'blocks' : [],
-	'blockDefaultClass' : [{'key':'Ñ¡ÔñÑùÊ½','value':''},{'key':'ÎŞ±ß¿òÇÒÎŞ±ß¾à','value':'cl_block_bm'},{'key':'ÑùÊ½1','value':'xbs_1'},{'key':'ÑùÊ½2','value':'xbs xbs_2'},{'key':'ÑùÊ½3','value':'xbs xbs_3'},{'key':'ÑùÊ½4','value':'xbs xbs_4'},{'key':'ÑùÊ½5','value':'xbs xbs_5'},{'key':'ÑùÊ½6','value':'xbs xbs_6'},{'key':'ÑùÊ½7','value':'xbs xbs_7'}],
-	'frameDefaultClass' : [{'key':'Ñ¡ÔñÑùÊ½','value':''},{'key':'ÎŞ±ß¿òÇÒÎŞ±ß¾à','value':'cl_frame_bm'},{'key':'ÎŞ±ß¿ò¿ò¼Ü','value':'xfs xfs_nbd'},{'key':'ÑùÊ½1','value':'xfs xfs_1'},{'key':'ÑùÊ½2','value':'xfs xfs_2'},{'key':'ÑùÊ½3','value':'xfs xfs_3'},{'key':'ÑùÊ½4','value':'xfs xfs_4'},{'key':'ÑùÊ½5','value':'xfs xfs_5'}],
+	'blockDefaultClass' : [{'key':'é€‰æ‹©æ ·å¼','value':''},{'key':'æ— è¾¹æ¡†ä¸”æ— è¾¹è·','value':'cl_block_bm'},{'key':'æ ·å¼1','value':'xbs_1'},{'key':'æ ·å¼2','value':'xbs xbs_2'},{'key':'æ ·å¼3','value':'xbs xbs_3'},{'key':'æ ·å¼4','value':'xbs xbs_4'},{'key':'æ ·å¼5','value':'xbs xbs_5'},{'key':'æ ·å¼6','value':'xbs xbs_6'},{'key':'æ ·å¼7','value':'xbs xbs_7'}],
+	'frameDefaultClass' : [{'key':'é€‰æ‹©æ ·å¼','value':''},{'key':'æ— è¾¹æ¡†ä¸”æ— è¾¹è·','value':'cl_frame_bm'},{'key':'æ— è¾¹æ¡†æ¡†æ¶','value':'xfs xfs_nbd'},{'key':'æ ·å¼1','value':'xfs xfs_1'},{'key':'æ ·å¼2','value':'xfs xfs_2'},{'key':'æ ·å¼3','value':'xfs xfs_3'},{'key':'æ ·å¼4','value':'xfs xfs_4'},{'key':'æ ·å¼5','value':'xfs xfs_5'}],
 	setDefalutMenu : function () {
-		this.addMenu('default','±êÌâ','drag.openTitleEdit(event)');
-		this.addMenu('default','ÑùÊ½','drag.openStyleEdit(event)');
-		this.addMenu('default', 'É¾³ı', 'drag.removeBlock(event)');
-		this.addMenu('block', 'ÊôĞÔ', 'drag.openBlockEdit(event)');
-		this.addMenu('block', 'Êı¾İ', 'drag.openBlockEdit(event,"data")');
-		this.addMenu('block', '¸üĞÂ', 'drag.blockForceUpdate(event)');
-		this.addMenu('frame', 'µ¼³ö', 'drag.frameExport(event)');
-		this.addMenu('tab', 'µ¼³ö', 'drag.frameExport(event)');
+		this.addMenu('default','æ ‡é¢˜','drag.openTitleEdit(event)');
+		this.addMenu('default','æ ·å¼','drag.openStyleEdit(event)');
+		this.addMenu('default', 'åˆ é™¤', 'drag.removeBlock(event)');
+		this.addMenu('block', 'å±æ€§', 'drag.openBlockEdit(event)');
+		this.addMenu('block', 'æ•°æ®', 'drag.openBlockEdit(event,"data")');
+		this.addMenu('block', 'æ›´æ–°', 'drag.blockForceUpdate(event)');
+		this.addMenu('frame', 'å¯¼å‡º', 'drag.frameExport(event)');
+		this.addMenu('tab', 'å¯¼å‡º', 'drag.frameExport(event)');
 	},
 	setSampleMenu : function () {
-		this.addMenu('block', 'ÊôĞÔ', 'drag.openBlockEdit(event)');
-		this.addMenu('block', 'Êı¾İ', 'drag.openBlockEdit(event,"data")');
-		this.addMenu('block', '¸üĞÂ', 'drag.blockForceUpdate(event)');
+		this.addMenu('block', 'å±æ€§', 'drag.openBlockEdit(event)');
+		this.addMenu('block', 'æ•°æ®', 'drag.openBlockEdit(event,"data")');
+		this.addMenu('block', 'æ›´æ–°', 'drag.blockForceUpdate(event)');
 	},
 	openBlockEdit : function (e,op) {
 		e = Util.event(e);
@@ -138,12 +138,12 @@ drag.extend({
 			key = k+'px';
 			bigarr.push({'key':key,'value':key});
 		}
-		var repeatarr = [{'key':'Æ½ÆÌ','value':'repeat'},{'key':'²»Æ½ÆÌ','value':'no-repeat'},{'key':'ºáÏòÆ½ÆÌ','value':'repeat-x'},{'key':'×İÏòÆ½ÆÌ','value':'repeat-y'}];
-		var stylearr = [{'key':'ÎŞÑùÊ½','value':'none'},{'key':'ÊµÏß','value':'solid'},{'key':'µãÏß','value':'dotted'},{'key':'ĞéÏß','value':'dashed'}];
+		var repeatarr = [{'key':'å¹³é“º','value':'repeat'},{'key':'ä¸å¹³é“º','value':'no-repeat'},{'key':'æ¨ªå‘å¹³é“º','value':'repeat-x'},{'key':'çºµå‘å¹³é“º','value':'repeat-y'}];
+		var stylearr = [{'key':'æ— æ ·å¼','value':'none'},{'key':'å®çº¿','value':'solid'},{'key':'ç‚¹çº¿','value':'dotted'},{'key':'è™šçº¿','value':'dashed'}];
 		var table = '<table class="tfm">';
-		table += '<tr><th>×ÖÌå</th><td><input type="text" id="fontsize" class="px p_fre vm" value="'+fontsize+'" size="2" />px <input type="text" id="fontcolor" class="px p_fre vm" value="'+fontcolor+'" size="2" />';
+		table += '<tr><th>å­—ä½“</th><td><input type="text" id="fontsize" class="px p_fre vm" value="'+fontsize+'" size="2" />px <input type="text" id="fontcolor" class="px p_fre vm" value="'+fontcolor+'" size="2" />';
 		table += getColorPalette(id+'_fontPalette', 'fontcolor' ,fontcolor)+'</td></tr>';
-		table += '<tr><th>Á´½Ó</th><td><input type="text" id="linkfontsize" class="px p_fre vm" value="'+linkfontsize+'" size="2" />px <input type="text" id="linkcolor" class="px p_fre vm" value="'+linkcolor+'" size="2" />';
+		table += '<tr><th>é“¾æ¥</th><td><input type="text" id="linkfontsize" class="px p_fre vm" value="'+linkfontsize+'" size="2" />px <input type="text" id="linkcolor" class="px p_fre vm" value="'+linkcolor+'" size="2" />';
 		table += getColorPalette(id+'_linkPalette', 'linkcolor' ,linkcolor)+'</td></tr>';
 
 		var ulclass = 'borderul', opchecked = '';
@@ -152,27 +152,27 @@ drag.extend({
 			opchecked = ' checked="checked"';
 		}
 
-		table += '<tr><th>±ß¿ò</th><td><ul id="borderul" class="'+ulclass+'">';
-		table += '<li><label>ÉÏ</label><select class="ps vm" id="bdtwidth" ><option value="">´óĞ¡</option>'+this.getOption(widtharr,bdtwidth)+'</select>';
-		table += ' <select class="ps vm" id="bdtstyle" ><option value="">ÑùÊ½</option>'+this.getOption(stylearr,bdtstyle)+'</select>';
-		table += ' ÑÕÉ« <input type="text" id="bdtcolor" class="px p_fre vm" value="'+bdtcolor+'" size="7" />';
+		table += '<tr><th>è¾¹æ¡†</th><td><ul id="borderul" class="'+ulclass+'">';
+		table += '<li><label>ä¸Š</label><select class="ps vm" id="bdtwidth" ><option value="">å¤§å°</option>'+this.getOption(widtharr,bdtwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdtstyle" ><option value="">æ ·å¼</option>'+this.getOption(stylearr,bdtstyle)+'</select>';
+		table += ' é¢œè‰² <input type="text" id="bdtcolor" class="px p_fre vm" value="'+bdtcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdtPalette', 'bdtcolor' ,bdtcolor)+'</li>';
 
-		table += '<li class="bordera mtn"><label>ÓÒ</label><select class="ps vm" id="bdrwidth" ><option value="">´óĞ¡</option>'+this.getOption(widtharr,bdrwidth)+'</select>';
-		table += ' <select class="ps vm" id="bdrstyle" ><option value="">ÑùÊ½</option>'+this.getOption(stylearr,bdrstyle)+'</select>';
-		table += ' ÑÕÉ« <input type="text" id="bdrcolor" class="px p_fre vm" value="'+bdrcolor+'" size="7" />';
+		table += '<li class="bordera mtn"><label>å³</label><select class="ps vm" id="bdrwidth" ><option value="">å¤§å°</option>'+this.getOption(widtharr,bdrwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdrstyle" ><option value="">æ ·å¼</option>'+this.getOption(stylearr,bdrstyle)+'</select>';
+		table += ' é¢œè‰² <input type="text" id="bdrcolor" class="px p_fre vm" value="'+bdrcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdrPalette', 'bdrcolor' ,bdrcolor)+'</li>';
 
-		table += '<li class="bordera mtn"><label>ÏÂ</label><select class="ps vm" id="bdbwidth" ><option value="">´óĞ¡</option>'+this.getOption(widtharr,bdbwidth)+'</select>';
-		table += ' <select class="ps vm" id="bdbstyle" ><option value="">ÑùÊ½</option>'+this.getOption(stylearr,bdbstyle)+'</select>';
-		table += ' ÑÕÉ« <input type="text" id="bdbcolor" class="px p_fre vm" value="'+bdbcolor+'" size="7" />';
+		table += '<li class="bordera mtn"><label>ä¸‹</label><select class="ps vm" id="bdbwidth" ><option value="">å¤§å°</option>'+this.getOption(widtharr,bdbwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdbstyle" ><option value="">æ ·å¼</option>'+this.getOption(stylearr,bdbstyle)+'</select>';
+		table += ' é¢œè‰² <input type="text" id="bdbcolor" class="px p_fre vm" value="'+bdbcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdbPalette', 'bdbcolor' ,bdbcolor)+'</li>';
 
-		table += '<li class="bordera mtn"><label>×ó</label><select class="ps vm" id="bdlwidth" ><option value="">´óĞ¡</option>'+this.getOption(widtharr,bdlwidth)+'</select>';
-		table += ' <select class="ps vm" id="bdlstyle" ><option value="">ÑùÊ½</option>'+this.getOption(stylearr,bdlstyle)+'</select>';
-		table += ' ÑÕÉ« <input type="text" id="bdlcolor" class="px p_fre vm" value="'+bdlcolor+'" size="7" />';
+		table += '<li class="bordera mtn"><label>å·¦</label><select class="ps vm" id="bdlwidth" ><option value="">å¤§å°</option>'+this.getOption(widtharr,bdlwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdlstyle" ><option value="">æ ·å¼</option>'+this.getOption(stylearr,bdlstyle)+'</select>';
+		table += ' é¢œè‰² <input type="text" id="bdlcolor" class="px p_fre vm" value="'+bdlcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdlPalette', 'bdlcolor' ,bdlcolor)+'</li>';
-		table += '</ul><p class="ptm"><label><input id="borderop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'borderul\').className = $(\'borderul\').className == \'borderul\' ? \'borderula\' : \'borderul\'">·Ö±ğÉèÖÃ</label></p></td></tr>';
+		table += '</ul><p class="ptm"><label><input id="borderop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'borderul\').className = $(\'borderul\').className == \'borderul\' ? \'borderula\' : \'borderul\'">åˆ†åˆ«è®¾ç½®</label></p></td></tr>';
 
 		bigarr = [];
 		for (k=-20;k<31;k++) {
@@ -186,11 +186,11 @@ drag.extend({
 			opchecked = ' checked="checked"';
 		}
 
-		table += '<tr><th>Íâ±ß¾à</th><td><div id="margindiv" class="'+ulclass+'"><span><label>ÉÏ</label> <input type="text" id="margint" class="px p_fre vm" value="'+margint+'" size="1"/>px </span>';
-		table += '<span class="bordera"><label>ÓÒ</label> <input type="text" id="marginr" class="px p_fre vm" value="'+marginr+'" size="1" />px </span>';
-		table += '<span class="bordera"><label>ÏÂ</label> <input type="text" id="marginb" class="px p_fre vm" value="'+marginb+'" size="1" />px </span>';
-		table += '<span class="bordera"><label>×ó</label> <input type="text" id="marginl" class="px p_fre vm" value="'+marginl+'" size="1" />px</span>';
-		table += '</div><p class="ptm"><label><input id="marginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'margindiv\').className = $(\'margindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'">·Ö±ğÉèÖÃ</label></p></td></tr>';
+		table += '<tr><th>å¤–è¾¹è·</th><td><div id="margindiv" class="'+ulclass+'"><span><label>ä¸Š</label> <input type="text" id="margint" class="px p_fre vm" value="'+margint+'" size="1"/>px </span>';
+		table += '<span class="bordera"><label>å³</label> <input type="text" id="marginr" class="px p_fre vm" value="'+marginr+'" size="1" />px </span>';
+		table += '<span class="bordera"><label>ä¸‹</label> <input type="text" id="marginb" class="px p_fre vm" value="'+marginb+'" size="1" />px </span>';
+		table += '<span class="bordera"><label>å·¦</label> <input type="text" id="marginl" class="px p_fre vm" value="'+marginl+'" size="1" />px</span>';
+		table += '</div><p class="ptm"><label><input id="marginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'margindiv\').className = $(\'margindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'">åˆ†åˆ«è®¾ç½®</label></p></td></tr>';
 
 		if (objType == 1) {
 
@@ -200,25 +200,25 @@ drag.extend({
 				opchecked = ' checked="checked"';
 			}
 
-			table += '<tr><th>ÄÚ±ß¾à</th><td><div id="cmargindiv" class="'+ulclass+'"><span><label>ÉÏ</label> <input class="px p_fre" id="cmargint" value="'+cmargint+'" size="1" />px </span>';
-			table += '<span class="bordera"><label>ÓÒ</label> <input class="px p_fre" id="cmarginr" value="'+cmarginr+'" size="1" />px </span>';
-			table += '<span class="bordera"><label>ÏÂ</label> <input class="px p_fre" id="cmarginb" value="'+cmarginb+'" size="1" />px </span>';
-			table += '<span class="bordera"><label>×ó</label> <input class="px p_fre" id="cmarginl" value="'+cmarginl+'" size="1" />px </span>';
-			table += '</div><p class="ptm"><label><input id="cmarginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'cmargindiv\').className = $(\'cmargindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'"> ·Ö±ğÉèÖÃ</label></p></td></tr>';
+			table += '<tr><th>å†…è¾¹è·</th><td><div id="cmargindiv" class="'+ulclass+'"><span><label>ä¸Š</label> <input class="px p_fre" id="cmargint" value="'+cmargint+'" size="1" />px </span>';
+			table += '<span class="bordera"><label>å³</label> <input class="px p_fre" id="cmarginr" value="'+cmarginr+'" size="1" />px </span>';
+			table += '<span class="bordera"><label>ä¸‹</label> <input class="px p_fre" id="cmarginb" value="'+cmarginb+'" size="1" />px </span>';
+			table += '<span class="bordera"><label>å·¦</label> <input class="px p_fre" id="cmarginl" value="'+cmarginl+'" size="1" />px </span>';
+			table += '</div><p class="ptm"><label><input id="cmarginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'cmargindiv\').className = $(\'cmargindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'"> åˆ†åˆ«è®¾ç½®</label></p></td></tr>';
 		}
-		table += '<tr><th>±³¾°ÑÕÉ«</th><td><input type="text" id="bgcolor" class="px p_fre vm" value="'+bgcolor+'" size="4" />';
+		table += '<tr><th>èƒŒæ™¯é¢œè‰²</th><td><input type="text" id="bgcolor" class="px p_fre vm" value="'+bgcolor+'" size="4" />';
 		table += getColorPalette(id+'_bgcPalette', 'bgcolor' ,bgcolor)+'</td></tr>';
-		table += '<tr><th>±³¾°Í¼Æ¬</th><td><input type="text" id="bgimage" class="px p_fre vm" value="'+bgimage+'" size="25" /> <select class="ps vm" id="bgrepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
+		table += '<tr><th>èƒŒæ™¯å›¾ç‰‡</th><td><input type="text" id="bgimage" class="px p_fre vm" value="'+bgimage+'" size="25" /> <select class="ps vm" id="bgrepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
 		var classarr = objType == 1 ? this.blockDefaultClass : this.frameDefaultClass;
-		table += '<tr><th>Ö¸¶¨class</th><td><input type="text" id="diyClassName" class="px p_fre" value="'+diyClassName+'" size="8" /> <select class="ps vm" id="bgrepeat" onchange="$(\'diyClassName\').value=this.value;" >'+this.getOption(classarr, diyClassName)+'</select></td></tr>';
+		table += '<tr><th>æŒ‡å®šclass</th><td><input type="text" id="diyClassName" class="px p_fre" value="'+diyClassName+'" size="8" /> <select class="ps vm" id="bgrepeat" onchange="$(\'diyClassName\').value=this.value;" >'+this.getOption(classarr, diyClassName)+'</select></td></tr>';
 		table += '</table>';
 
-		var wname = objType ? 'Ä£¿é' : '¿ò¼Ü';
+		var wname = objType ? 'æ¨¡å—' : 'æ¡†æ¶';
 		html = '<div class="c diywin" style="width:450px;position:relative;">'+table+'</div>';
-		var h = '<h3 class="flb"><em>±à¼­'+wname+'ÑùÊ½</em><span><a href="javascript:;" class="flbc" onclick="drag.closeStyleEdit(\''+id+'\');return false;" title="¹Ø±Õ">\n\
-			¹Ø±Õ</a></span></h3>';
+		var h = '<h3 class="flb"><em>ç¼–è¾‘'+wname+'æ ·å¼</em><span><a href="javascript:;" class="flbc" onclick="drag.closeStyleEdit(\''+id+'\');return false;" title="å…³é—­">\n\
+			å…³é—­</a></span></h3>';
 		var f = '<p class="o pns"><button onclick="drag.saveStyle(\''+id+'\');drag.closeStyleEdit(\''+id+'\');" class="pn pnc" value="true">\n\
-			<strong>È·¶¨</strong></button><button onclick="drag.closeStyleEdit(\''+id+'\')" class="pn" value="true"><strong>È¡Ïû</strong></button></p>';
+			<strong>ç¡®å®š</strong></button><button onclick="drag.closeStyleEdit(\''+id+'\')" class="pn" value="true"><strong>å–æ¶ˆ</strong></button></p>';
 		this.removeMenu(e);
 		showWindow('eleStyle',h + html + f, 'html', 0);
 	},
@@ -334,8 +334,8 @@ drag.extend({
 			fid = e;
 		}
 		var obj = this.getObjByName(fid);
-		var titlename = obj instanceof Block ? 'Ä£¿é' : '¿ò¼Ü';
-		var repeatarr = [{'key':'Æ½ÆÌ','value':'repeat'},{'key':'²»Æ½ÆÌ','value':'no-repeat'},{'key':'ºáÏòÆ½ÆÌ','value':'repeat-x'},{'key':'×İÏòÆ½ÆÌ','value':'repeat-y'}];
+		var titlename = obj instanceof Block ? 'æ¨¡å—' : 'æ¡†æ¶';
+		var repeatarr = [{'key':'å¹³é“º','value':'repeat'},{'key':'ä¸å¹³é“º','value':'no-repeat'},{'key':'æ¨ªå‘å¹³é“º','value':'repeat-x'},{'key':'çºµå‘å¹³é“º','value':'repeat-y'}];
 
 		var len = obj.titles.length;
 		var bgimage = obj.titles.style && obj.titles.style['background-image'] ? obj.titles.style['background-image'] : '';
@@ -345,23 +345,23 @@ drag.extend({
 		var bgrepeat = obj.titles.style && obj.titles.style['background-repeat'] ? obj.titles.style['background-repeat'] : '';
 
 		var common = '<table class="tfm">';
-		common += '<tr><th>±³¾°Í¼Æ¬:</th><td><input type="text" id="titleBgImage" class="px p_fre" value="'+bgimage+'" /> <select class="ps vm" id="titleBgRepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
-		common += '<tr><th>±³¾°ÑÕÉ«:</th><td><input type="text" id="titleBgColor" class="px p_fre" value="'+bgcolor+'" size="7" />';
+		common += '<tr><th>èƒŒæ™¯å›¾ç‰‡:</th><td><input type="text" id="titleBgImage" class="px p_fre" value="'+bgimage+'" /> <select class="ps vm" id="titleBgRepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
+		common += '<tr><th>èƒŒæ™¯é¢œè‰²:</th><td><input type="text" id="titleBgColor" class="px p_fre" value="'+bgcolor+'" size="7" />';
 		common += getColorPalette(fid+'bgPalette_0', 'titleBgColor' ,bgcolor)+'</td></tr>';
 		if (obj instanceof Tab) {
-			var switchArr = [{'key':'µã»÷','value':'click'},{'key':'»¬¹ı','value':'mouseover'}];
+			var switchArr = [{'key':'ç‚¹å‡»','value':'click'},{'key':'æ»‘è¿‡','value':'mouseover'}];
 			var switchType = obj.titles['switchType'] ? obj.titles['switchType'][0] : 'click';
-			common += '<tr><th>ÇĞ»»ÀàĞÍ:</th><td><select class="ps" id="switchType" >'+this.getOption(switchArr,switchType)+'</select></td></tr>';
+			common += '<tr><th>åˆ‡æ¢ç±»å‹:</th><td><select class="ps" id="switchType" >'+this.getOption(switchArr,switchType)+'</select></td></tr>';
 		}
 		common += '</table><hr class="l">';
 		var li = '';
-		li += '<div id="titleInput_0"><table class="tfm"><tr><th>'+titlename+'±êÌâ:</th><td><input type="text" id="titleText_0" class="px p_fre" value="`title`" /></td></tr>';
-		li += '<tr><th>Á´½Ó:</th><td><input type="text" id="titleLink_0" class="px p_fre" value="`link`" /></td></tr>';
-		li += '<tr><th>Í¼Æ¬:</th><td><input type="text" id="titleSrc_0" class="px p_fre" value="`src`" /></td></tr>';
-		li += '<tr><th>Î»ÖÃ:</th><td><select id="titleFloat_0" class="ps vm"><option value="" `left`>¾Ó×ó</option><option value="right" `right`>¾ÓÓÒ</option></select>';
-		li += '&nbsp;&nbsp;Æ«ÒÆÁ¿: <input type="text" id="titleMargin_0" class="px p_fre vm" value="`margin`" size="2" />px</td></tr>';
-		li += '<tr><th>×ÖÌå:</th><td><select class="ps vm" id="titleSize_0" ><option value="">´óĞ¡</option>`size`</select>';
-		li += '&nbsp;&nbsp;ÑÕÉ«: <input type="text" id="titleColor_0" class="px p_fre vm" value="`color`" size="4" />';
+		li += '<div id="titleInput_0"><table class="tfm"><tr><th>'+titlename+'æ ‡é¢˜:</th><td><input type="text" id="titleText_0" class="px p_fre" value="`title`" /></td></tr>';
+		li += '<tr><th>é“¾æ¥:</th><td><input type="text" id="titleLink_0" class="px p_fre" value="`link`" /></td></tr>';
+		li += '<tr><th>å›¾ç‰‡:</th><td><input type="text" id="titleSrc_0" class="px p_fre" value="`src`" /></td></tr>';
+		li += '<tr><th>ä½ç½®:</th><td><select id="titleFloat_0" class="ps vm"><option value="" `left`>å±…å·¦</option><option value="right" `right`>å±…å³</option></select>';
+		li += '&nbsp;&nbsp;åç§»é‡: <input type="text" id="titleMargin_0" class="px p_fre vm" value="`margin`" size="2" />px</td></tr>';
+		li += '<tr><th>å­—ä½“:</th><td><select class="ps vm" id="titleSize_0" ><option value="">å¤§å°</option>`size`</select>';
+		li += '&nbsp;&nbsp;é¢œè‰²: <input type="text" id="titleColor_0" class="px p_fre vm" value="`color`" size="4" />';
 		li += getColorPalette(fid+'Palette_0', 'titleColor_0' ,'`color`');
 		li += '</td></tr><tr><td colspan="2"><hr class="l"></td></tr></table></div>';
 		var html = '';
@@ -382,11 +382,11 @@ drag.extend({
 		}
 
 		var c = len + 1;
-			html = '<div class="c diywin" style="width:450px;height:400px; overflow:auto;"><table cellspacing="0" cellpadding="0" class="tfm pns"><tr><th></th><td><button type="button" id="addTitleInput" class="pn" onclick="drag.addTitleInput('+c+');"><em>Ìí¼ÓĞÂ±êÌâ</em></button></td></tr></table><div id="titleEdit">'+html+common+'</div></div>';
-		var h = '<h3 class="flb"><em>±à¼­'+titlename+'±êÌâ</em><span><a href="javascript:;" class="flbc" onclick="drag.closeTitleEdit(\''+fid+'\');return false;" title="¹Ø±Õ">\n\
-			¹Ø±Õ</a></span></h3>';
+			html = '<div class="c diywin" style="width:450px;height:400px; overflow:auto;"><table cellspacing="0" cellpadding="0" class="tfm pns"><tr><th></th><td><button type="button" id="addTitleInput" class="pn" onclick="drag.addTitleInput('+c+');"><em>æ·»åŠ æ–°æ ‡é¢˜</em></button></td></tr></table><div id="titleEdit">'+html+common+'</div></div>';
+		var h = '<h3 class="flb"><em>ç¼–è¾‘'+titlename+'æ ‡é¢˜</em><span><a href="javascript:;" class="flbc" onclick="drag.closeTitleEdit(\''+fid+'\');return false;" title="å…³é—­">\n\
+			å…³é—­</a></span></h3>';
 		var f = '<p class="o pns"><button onclick="drag.saveTitleEdit(\''+fid+'\');drag.closeTitleEdit(\''+fid+'\');" class="pn pnc" value="true">\n\
-			<strong>È·¶¨</strong></button><button onclick="drag.closeTitleEdit(\''+fid+'\')" class="pn" value="true"><strong>È¡Ïû</strong></button></p>';
+			<strong>ç¡®å®š</strong></button><button onclick="drag.closeTitleEdit(\''+fid+'\')" class="pn" value="true"><strong>å–æ¶ˆ</strong></button></p>';
 		this.removeMenu(e);
 		showWindow('frameTitle',h + html + f, 'html', 0);
 	},
@@ -562,7 +562,7 @@ drag.extend({
 		if ($(id) == null) return false;
 		var obj = this.getObjByName(id);
 		if (!flag) {
-			if (!confirm('ÄúÈ·ÊµÒªÉ¾³ıÂğ,É¾³ıÒÔºó½«²»¿É»Ö¸´')) return false;
+			if (!confirm('æ‚¨ç¡®å®è¦åˆ é™¤å—,åˆ é™¤ä»¥åå°†ä¸å¯æ¢å¤')) return false;
 		}
 		if (obj instanceof Block) {
 			this.delBlock(id);
@@ -655,13 +655,13 @@ drag.extend({
 		var height = Util.getFinallyStyle(bcontent, 'height');
 		bcontent.style.lineHeight = height == 'auto' ? '' : (height == '0px' ? '20px' : height);
 		var boldcontent = bcontent.innerHTML;
-		bcontent.innerHTML = '<center>ÕıÔÚ¼ÓÔØÄÚÈİ...</center>';
+		bcontent.innerHTML = '<center>æ­£åœ¨åŠ è½½å†…å®¹...</center>';
 		var x = new Ajax();
 		x.get('portal.php?mod=portalcp&ac=block&op=getblock&forceupdate=1&inajax=1&bid='+bid+'&tpl='+document.diyform.template.value, function(s) {
 			if(s.indexOf('errorhandle_') != -1) {
 				bcontent.innerHTML = boldcontent;
 				runslideshow();
-				showDialog('±§Ç¸£¬ÄúÃ»ÓĞÈ¨ÏŞÌí¼Ó»ò±à¼­Ä£¿é', 'alert');
+				showDialog('æŠ±æ­‰ï¼Œæ‚¨æ²¡æœ‰æƒé™æ·»åŠ æˆ–ç¼–è¾‘æ¨¡å—', 'alert');
 				doane();
 			} else {
 				var obj = document.createElement('div');
@@ -678,7 +678,7 @@ drag.extend({
 	frameExport : function (e) {
 		var flag = true;
 		if (drag.isChange) {
-			flag = confirm('ÄúÒÑ¾­×ö¹ıĞŞ¸Ä£¬Çë±£´æºóÔÙ×öµ¼³ö£¬·ñÔòµ¼³öµÄÊı¾İ½«²»°üÀ¨ÄúÕâ´ÎËù×öµÄĞŞ¸Ä¡£');
+			flag = confirm('æ‚¨å·²ç»åšè¿‡ä¿®æ”¹ï¼Œè¯·ä¿å­˜åå†åšå¯¼å‡ºï¼Œå¦åˆ™å¯¼å‡ºçš„æ•°æ®å°†ä¸åŒ…æ‹¬æ‚¨è¿™æ¬¡æ‰€åšçš„ä¿®æ”¹ã€‚');
 		}
 		if (flag) {
 			if ( typeof e == 'object') {
@@ -708,7 +708,7 @@ drag.extend({
 	},
 	endBlockForceUpdateBatch : function () {
 		if($('allupdate')) {
-			$('allupdate').innerHTML = 'ÒÑ²Ù×÷Íê³É¡£';
+			$('allupdate').innerHTML = 'å·²æ“ä½œå®Œæˆã€‚';
 			$('fwin_dialog_submit').style.display = '';
 			$('fwin_dialog_cancel').style.display = 'none';
 		}
@@ -721,7 +721,7 @@ drag.extend({
 		if (this.blocks.length > 0) {
 			var cur = this.blocksLen - this.blocks.length;
 			if($('allupdate')) {
-				$('allupdate').innerHTML = '¹²<span style="color:blue">'+this.blocksLen+'</span>¸öÄ£¿é,ÕıÔÚ¸üĞÂµÚ<span style="color:red">'+cur+'</span>¸ö,ÒÑÍê³É<span style="color:red">'+(parseInt(cur / this.blocksLen * 100)) + '%</span>';
+				$('allupdate').innerHTML = 'å…±<span style="color:blue">'+this.blocksLen+'</span>ä¸ªæ¨¡å—,æ­£åœ¨æ›´æ–°ç¬¬<span style="color:red">'+cur+'</span>ä¸ª,å·²å®Œæˆ<span style="color:red">'+(parseInt(cur / this.blocksLen * 100)) + '%</span>';
 				var bid = 'portal_block_'+this.blocks.pop();
 				this.blockForceUpdate(bid,true);
 			}
@@ -735,7 +735,7 @@ drag.extend({
 			this.blocks = this.allBlocks;
 		}
 		this.blocksLen = this.blocks.length;
-		showDialog('<div id="allupdate" style="width:350px;line-height:28px;">¿ªÊ¼¸üĞÂ...</div>','confirm','¸üĞÂÄ£¿éÊı¾İ', '', true, 'drag.endBlockForceUpdateBatch()');
+		showDialog('<div id="allupdate" style="width:350px;line-height:28px;">å¼€å§‹æ›´æ–°...</div>','confirm','æ›´æ–°æ¨¡å—æ•°æ®', '', true, 'drag.endBlockForceUpdateBatch()');
 		var wait = function() {
 			if($('fwin_dialog_submit')) {
 				$('fwin_dialog_submit').style.display = 'none';
@@ -749,7 +749,7 @@ drag.extend({
 		doane();
 	},
 	clearAll : function () {
-		if (confirm('ÄúÈ·ÊµÒªÇå¿ÕÒ³ÃæÉÏËùÔÚDIYÊı¾İÂğ,Çå¿ÕÒÔºó½«²»¿É»Ö¸´')) {
+		if (confirm('æ‚¨ç¡®å®è¦æ¸…ç©ºé¡µé¢ä¸Šæ‰€åœ¨DIYæ•°æ®å—,æ¸…ç©ºä»¥åå°†ä¸å¯æ¢å¤')) {
 			for (var i in this.data) {
 				for (var j in this.data[i]) {
 					if (typeof(this.data[i][j]) == 'object' && this.data[i][j].name.indexOf('_temp')<0) {
@@ -764,7 +764,7 @@ drag.extend({
 		doane();
 	},
 	createObj : function (e,objType,contentType) {
-		if (objType == 'block' && !this.checkHasFrame()) {alert("ÌáÊ¾£ºÎ´ÕÒµ½¿ò¼Ü£¬ÇëÏÈÌí¼Ó¿ò¼Ü¡£");spaceDiy.getdiy('frame');return false;}
+		if (objType == 'block' && !this.checkHasFrame()) {alert("æç¤ºï¼šæœªæ‰¾åˆ°æ¡†æ¶ï¼Œè¯·å…ˆæ·»åŠ æ¡†æ¶ã€‚");spaceDiy.getdiy('frame');return false;}
 		e = Util.event(e);
 		if(e.which != 1 ) {return false;}
 		var html = '',offWidth = 0;
@@ -809,7 +809,7 @@ drag.extend({
 		var className = [this.frameClass,this.moveableObject].join(' ');
 		className = className + ' cl frame-' + type;
 		var str = '<div id="'+id+'" class="'+className+'">';
-		str += '<div id="'+id+'_title" class="'+this.titleClass+' '+this.frameTitleClass+'"><span class="'+this.titleTextClass+'">'+type+'¿ò¼Ü</span></div>';
+		str += '<div id="'+id+'_title" class="'+this.titleClass+' '+this.frameTitleClass+'"><span class="'+this.titleTextClass+'">'+type+'æ¡†æ¶</span></div>';
 		var cols = type.split('-');
 		var clsl='',clsc='',clsr='';
 		clsl = ' frame-'+type+'-l';
@@ -835,7 +835,7 @@ drag.extend({
 		className = className + ' cl';
 		var titleClassName = [this.tabTitleClass, this.titleClass, this.moveableColumn, 'cl'].join(' ');
 		var str = '<div id="'+id+'" class="'+className+'">';
-		str += '<div id="'+id+'_title" class="'+titleClassName+'"><span class="'+this.titleTextClass+'">tab±êÇ©</span></div>';
+		str += '<div id="'+id+'_title" class="'+titleClassName+'"><span class="'+this.titleTextClass+'">tabæ ‡ç­¾</span></div>';
 		str += '<div id="'+id+'_content" class="'+this.tabContentClass+'"></div>';
 		str += '</div>';
 		return str;
@@ -852,7 +852,7 @@ drag.extend({
 		} else {
 			if (!this.isChange) {
 				window.onbeforeunload = function() {
-					return 'ÄúµÄÊı¾İÒÑ¾­ĞŞ¸Ä,ÍË³ö½«ÎŞ·¨±£´æÄúµÄĞŞ¸Ä¡£';
+					return 'æ‚¨çš„æ•°æ®å·²ç»ä¿®æ”¹,é€€å‡ºå°†æ— æ³•ä¿å­˜æ‚¨çš„ä¿®æ”¹ã€‚';
 				};
 			}
 			this.isChange = true;
@@ -866,7 +866,7 @@ drag.extend({
 	},
 	goonDIY : function () {
 		if ($('prefile').value == '1') {
-			showDialog('<div style="line-height:28px;">°´¼ÌĞø°´Å¥½«´ò¿ªÔİ´æÊı¾İ²¢DIY£¬<br />°´É¾³ı°´Å¥½«É¾³ıÔİ´æÊı¾İ¡£</div>','confirm','ÊÇ·ñ¼ÌĞøÔİ´æÊı¾İµÄDIY£¿', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', '¼ÌĞø', 'É¾³ı');
+			showDialog('<div style="line-height:28px;">æŒ‰ç»§ç»­æŒ‰é’®å°†æ‰“å¼€æš‚å­˜æ•°æ®å¹¶DIYï¼Œ<br />æŒ‰åˆ é™¤æŒ‰é’®å°†åˆ é™¤æš‚å­˜æ•°æ®ã€‚</div>','confirm','æ˜¯å¦ç»§ç»­æš‚å­˜æ•°æ®çš„DIYï¼Ÿ', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', 'ç»§ç»­', 'åˆ é™¤');
 		} else if (location.search.indexOf('preview=yes') > -1) {
 			spaceDiy.enablePreviewButton();
 		} else {
@@ -891,8 +891,8 @@ spaceDiy.extend({
 					} else {
 						schecked = ' checked';
 					}
-					showDialog('<form name="selectsave" action="" method="get"><label><input type="radio" value="0" name="savemod"'+schecked+' />Ó¦ÓÃÓÚ´ËÀàÈ«²¿Ò³Ãæ</label>\n\
-					<label><input type="radio" value="1" name="savemod"'+dchecked+' />Ö»Ó¦ÓÃÓÚ±¾Ò³Ãæ</label></form>','notice', '', spaceDiy.save);
+					showDialog('<form name="selectsave" action="" method="get"><label><input type="radio" value="0" name="savemod"'+schecked+' />åº”ç”¨äºæ­¤ç±»å…¨éƒ¨é¡µé¢</label>\n\
+					<label><input type="radio" value="1" name="savemod"'+dchecked+' />åªåº”ç”¨äºæœ¬é¡µé¢</label></form>','notice', '', spaceDiy.save);
 					return false;
 				}
 				if (document.selectsave) {
@@ -956,14 +956,14 @@ spaceDiy.extend({
 	cancel : function () {
 		saveUserdata('diy_advance_mode', '');
 		if (drag.isClearClose) {
-			showDialog('<div style="line-height:28px;">ÊÇ·ñ±£ÁôÔİ´æÊı¾İ£¿<br />°´È·¶¨°´Å¥½«±£ÁôÔİ´æÊı¾İ£¬°´È¡Ïû°´Å¥½«É¾³ıÔİ´æÊı¾İ¡£</div>','confirm','±£ÁôÔİ´æÊı¾İ', function(){location.href = spaceDiy.cancelDiyUrl();}, true, function(){window.onunload=function(){spaceDiy.cancelDIY()};location.href = spaceDiy.cancelDiyUrl();});
+			showDialog('<div style="line-height:28px;">æ˜¯å¦ä¿ç•™æš‚å­˜æ•°æ®ï¼Ÿ<br />æŒ‰ç¡®å®šæŒ‰é’®å°†ä¿ç•™æš‚å­˜æ•°æ®ï¼ŒæŒ‰å–æ¶ˆæŒ‰é’®å°†åˆ é™¤æš‚å­˜æ•°æ®ã€‚</div>','confirm','ä¿ç•™æš‚å­˜æ•°æ®', function(){location.href = spaceDiy.cancelDiyUrl();}, true, function(){window.onunload=function(){spaceDiy.cancelDIY()};location.href = spaceDiy.cancelDiyUrl();});
 		} else {
 			location.href = this.cancelDiyUrl();
 		}
 
 	},
 	recover : function() {
-		if (confirm('ÄúÈ·¶¨Òª»Ö¸´µ½ÉÏÒ»°æ±¾±£´æµÄ½á¹ûÂğ£¿')) {
+		if (confirm('æ‚¨ç¡®å®šè¦æ¢å¤åˆ°ä¸Šä¸€ç‰ˆæœ¬ä¿å­˜çš„ç»“æœå—ï¼Ÿ')) {
 			drag.clearClose();
 			document.diyform.recover.value = '1';
 			document.diyform.gobackurl.value = location.href.replace(/(\?diy=yes)|(\&diy=yes)/,'').replace(/[\?|\&]preview=yes/,'');

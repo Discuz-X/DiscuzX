@@ -715,7 +715,7 @@ var Util = {
 				var dom = document.createElement('div');
 				dom.className = 'edit hide';
 				dom.id = id+'_edit';
-				dom.innerHTML = '<span id="'+id+'_edit_menu">±à¼­</span>';
+				dom.innerHTML = '<span id="'+id+'_edit_menu">ç¼–è¾‘</span>';
 				ele.appendChild(dom);
 				$(id+'_edit_menu').onclick = function (e){Drag.prototype.toggleMenu.call(_method, e, this);};
 			}
@@ -1224,7 +1224,7 @@ var Util = {
 		setClose : function () {
 			if (!this.isChange) {
 				window.onbeforeunload = function() {
-					return 'ÄúµÄÊı¾İÒÑ¾­ĞŞ¸Ä,ÍË³ö½«ÎŞ·¨±£´æÄúµÄĞŞ¸Ä¡£';
+					return 'æ‚¨çš„æ•°æ®å·²ç»ä¿®æ”¹,é€€å‡ºå°†æ— æ³•ä¿å­˜æ‚¨çš„ä¿®æ”¹ã€‚';
 				};
 			}
 			this.isChange = true;
@@ -1872,7 +1872,7 @@ var Util = {
 		},
 		uploadSubmit : function (){
 			if (document.uploadpic.attach.value.length<3) {
-				alert('ÇëÑ¡ÔñÄúÒªÉÏ´«µÄÍ¼Æ¬');
+				alert('è¯·é€‰æ‹©æ‚¨è¦ä¸Šä¼ çš„å›¾ç‰‡');
 				return false;
 			}
 			if (document.uploadpic.albumid != null) document.uploadpic.albumid.value = $('selectalbum').value;
@@ -1884,7 +1884,7 @@ var Util = {
 		cancel : function () {
 			var flag = false;
 			if (this.isChange) {
-				flag = confirm(this.cancelConfirm ? this.cancelConfirm : 'ÍË³ö½«²»»á±£´æÄú¸Õ²ÅµÄÉèÖÃ¡£ÊÇ·ñÈ·ÈÏÍË³ö£¿');
+				flag = confirm(this.cancelConfirm ? this.cancelConfirm : 'é€€å‡ºå°†ä¸ä¼šä¿å­˜æ‚¨åˆšæ‰çš„è®¾ç½®ã€‚æ˜¯å¦ç¡®è®¤é€€å‡ºï¼Ÿ');
 			}
 			if (!this.isChange || flag) {
 				location.href = location.href.replace(/[\?|\&]diy\=yes/g,'');

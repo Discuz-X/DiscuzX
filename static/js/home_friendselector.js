@@ -170,11 +170,11 @@
 						this.selectUser[userName] = userName;
 					}
 					this.selectNumber++;
-					spanObj.innerHTML= '<a href="javascript:;" class="x" onclick="'+this.handleKey+'.delSelUser(\''+(spanObj.id)+'\');">É¾³ı</a><em class="z" title="' + userName + '">' + userName + '</em><input type="hidden" name="users[]" value="'+userName+'" uid="uid'+uid+'" />';
+					spanObj.innerHTML= '<a href="javascript:;" class="x" onclick="'+this.handleKey+'.delSelUser(\''+(spanObj.id)+'\');">åˆ é™¤</a><em class="z" title="' + userName + '">' + userName + '</em><input type="hidden" name="users[]" value="'+userName+'" uid="uid'+uid+'" />';
 					this.handleObj.parentNode.insertBefore(spanObj, this.handleObj);
 					this.showObj.style.display = 'none';
 				} else {
-					alert('ÒÑ¾­´æÔÚ'+userName);
+					alert('å·²ç»å­˜åœ¨'+userName);
 				}
 			}
 		},
@@ -284,7 +284,7 @@
 				var select = false;
 				if(typeof this.selectUser[uid] == 'undefined') {
 					if(this.maxSelectNumber && this.selectNumber >= this.maxSelectNumber) {
-			            alert('×î¶àÖ»ÔÊĞíÑ¡Ôñ'+this.maxSelectNumber+'¸öÓÃ»§');
+			            alert('æœ€å¤šåªå…è®¸é€‰æ‹©'+this.maxSelectNumber+'ä¸ªç”¨æˆ·');
 			            return false;
 			        }
 					this.selectUser[uid] = this.dataSource[uid];

@@ -159,7 +159,7 @@ function announcement() {
 }
 
 function removeindexheats() {
-	return confirm('ÄúÈ·ÈÏÒª°Ñ´ËÖ÷Ìâ´ÓÈÈµãÖ÷ÌâÖĞÒÆ³ıÃ´£¿');
+	return confirm('æ‚¨ç¡®è®¤è¦æŠŠæ­¤ä¸»é¢˜ä»çƒ­ç‚¹ä¸»é¢˜ä¸­ç§»é™¤ä¹ˆï¼Ÿ');
 }
 
 function showTypes(id, mod) {
@@ -169,7 +169,7 @@ function showTypes(id, mod) {
 	mod = isUndefined(mod) ? 1 : mod;
 	var baseh = o.getElementsByTagName('li')[0].offsetHeight * 2;
 	var tmph = o.offsetHeight;
-	var lang = ['Õ¹¿ª', 'ÊÕÆğ'];
+	var lang = ['å±•å¼€', 'æ”¶èµ·'];
 	var cls = ['unfold', 'fold'];
 	if(tmph > baseh) {
 		var octrl = document.createElement('li');
@@ -210,14 +210,14 @@ function fastpostvalidate(theform, noajaxpost) {
 		}
 	}
 	if(theform.message.value == '' || theform.subject.value == '') {
-		s = '±§Ç¸£¬ÄúÉĞÎ´ÊäÈë±êÌâ»òÄÚÈİ';
+		s = 'æŠ±æ­‰ï¼Œæ‚¨å°šæœªè¾“å…¥æ ‡é¢˜æˆ–å†…å®¹';
 		theform.message.focus();
 	} else if(mb_strlen(theform.subject.value) > 80) {
-		s = 'ÄúµÄ±êÌâ³¬¹ı 80 ¸ö×Ö·ûµÄÏŞÖÆ';
+		s = 'æ‚¨çš„æ ‡é¢˜è¶…è¿‡ 80 ä¸ªå­—ç¬¦çš„é™åˆ¶';
 		theform.subject.focus();
 	}
 	if(!disablepostctrl && ((postminchars != 0 && mb_strlen(theform.message.value) < postminchars) || (postmaxchars != 0 && mb_strlen(theform.message.value) > postmaxchars))) {
-		s = 'ÄúµÄÌû×Ó³¤¶È²»·ûºÏÒªÇó¡£\n\nµ±Ç°³¤¶È: ' + mb_strlen(theform.message.value) + ' ' + '×Ö½Ú\nÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú';
+		s = 'æ‚¨çš„å¸–å­é•¿åº¦ä¸ç¬¦åˆè¦æ±‚ã€‚\n\nå½“å‰é•¿åº¦: ' + mb_strlen(theform.message.value) + ' ' + 'å­—èŠ‚\nç³»ç»Ÿé™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—èŠ‚';
 	}
 	if(s) {
 		showError(s);
@@ -277,12 +277,12 @@ function loadData(quiet, formobj) {
 
 	if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
 		if(!quiet) {
-			showDialog('Ã»ÓĞ¿ÉÒÔ»Ö¸´µÄÊı¾İ£¡', 'info');
+			showDialog('æ²¡æœ‰å¯ä»¥æ¢å¤çš„æ•°æ®ï¼', 'info');
 		}
 		return;
 	}
 
-	if(!quiet && !confirm('´Ë²Ù×÷½«¸²¸Çµ±Ç°Ìû×ÓÄÚÈİ£¬È·¶¨Òª»Ö¸´Êı¾İÂğ£¿')) {
+	if(!quiet && !confirm('æ­¤æ“ä½œå°†è¦†ç›–å½“å‰å¸–å­å†…å®¹ï¼Œç¡®å®šè¦æ¢å¤æ•°æ®å—ï¼Ÿ')) {
 		return;
 	}
 
@@ -373,7 +373,7 @@ function checkForumnew(fid, lasttime) {
 			}
 			removetbodyrow(table, 'forumnewshow');
 			var colspan = table.getElementsByTagName('tbody')[0].rows[0].children.length;
-			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">ÓĞĞÂ»Ø¸´µÄÖ÷Ìâ£¬µã»÷²é¿´', 'colspan': colspan }}};
+			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">æœ‰æ–°å›å¤çš„ä¸»é¢˜ï¼Œç‚¹å‡»æŸ¥çœ‹', 'colspan': colspan }}};
 			addtbodyrow(table, ['tbody'], ['forumnewshow'], 'separatorline', checknew);
 		} else {
 			if(checkForumcount < 50) {
@@ -469,7 +469,7 @@ function showtime() {
 	for(i=0; i<=DTimers.length; i++) {
 		if(DItemIDs[i]) {
 			if(DTimers[i] == 0) {
-				$(DItemIDs[i]).innerHTML = 'ÒÑ½áÊø';
+				$(DItemIDs[i]).innerHTML = 'å·²ç»“æŸ';
 				DItemIDs[i] = '';
 				continue;
 			}
@@ -479,16 +479,16 @@ function showtime() {
 			var timer_minute = Math.floor(((DTimers[i] % 86400) % 3600) / 60);
 			var timer_second = (((DTimers[i] % 86400) % 3600) % 60);
 			if(timer_day > 0) {
-				timestr += timer_day + 'Ìì';
+				timestr += timer_day + 'å¤©';
 			}
 			if(timer_hour > 0) {
-				timestr += timer_hour + 'Ğ¡Ê±'
+				timestr += timer_hour + 'å°æ—¶'
 			}
 			if(timer_minute > 0) {
-				timestr += timer_minute + '·Ö'
+				timestr += timer_minute + 'åˆ†'
 			}
 			if(timer_second > 0) {
-				timestr += timer_second + 'Ãë'
+				timestr += timer_second + 'ç§’'
 			}
 			DTimers[i] = DTimers[i] - 1;
 			$(DItemIDs[i]).innerHTML = timestr;

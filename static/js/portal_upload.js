@@ -44,11 +44,11 @@ function insertAttach(id) {
 	var ext = path.lastIndexOf('.') == -1 ? '' : path.substr(path.lastIndexOf('.') + 1, path.length).toLowerCase();
 	var re = new RegExp("(^|\\s|,)" + ext + "($|\\s|,)", "ig");
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
-		alert('¶Ô²»Æğ£¬²»Ö§³ÖÉÏ´«´ËÀàÎÄ¼ş');
+		alert('å¯¹ä¸èµ·ï¼Œä¸æ”¯æŒä¸Šä¼ æ­¤ç±»æ–‡ä»¶');
 		return;
 	}
 	var localfile = $('attach_' + id).value.substr($('attach_' + id).value.replace(/\\/g, '/').lastIndexOf('/') + 1);
-	$('localfile_' + id).innerHTML = localfile + ' ÉÏ´«ÖĞ...';
+	$('localfile_' + id).innerHTML = localfile + ' ä¸Šä¼ ä¸­...';
 	$('attach_' + id).style.display = 'none';
 	$('upload_' + id).action += '&attach_target_id=' + id;
 	$('upload_' + id).submit();

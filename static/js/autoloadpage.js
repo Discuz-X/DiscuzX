@@ -22,7 +22,7 @@
 	autopbn.onclick = function() {
 		var oldloadstatus = loadstatus;
 		loadstatus = 2;
-		autopbn.innerHTML = 'ÕýÔÚ¼ÓÔØ, ÇëÉÔºó...';
+		autopbn.innerHTML = 'æ­£åœ¨åŠ è½½, è¯·ç¨åŽ...';
 		getnextpagecontent();
 		loadstatus = oldloadstatus;
 	};
@@ -32,7 +32,7 @@
 			var curtop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
 			if(curtop + document.documentElement.clientHeight + 500 >= document.documentElement.scrollHeight && !loadstatus) {
 				loadstatus = 1;
-				autopbn.innerHTML = 'ÕýÔÚ¼ÓÔØ, ÇëÉÔºó...';
+				autopbn.innerHTML = 'æ­£åœ¨åŠ è½½, è¯·ç¨åŽ...';
 				setTimeout(getnextpagecontent, 1000);
 			}
 		};
@@ -46,7 +46,7 @@
 			return;
 		}
 		if(loadstatus != 2 && curpage + 1 > maxpage) {
-			autopbn.innerHTML = 'ÏÂÒ»Ò³ &darr;';
+			autopbn.innerHTML = 'ä¸‹ä¸€é¡µ &darr;';
 			if(curpage + 1 > maxpage) {
 				window.onscroll = null;
 			}
@@ -92,7 +92,7 @@
 			if(curpage + 1 > totalpage) {
 				autopbn.style.display = 'none';
 			} else {
-				autopbn.innerHTML = 'ÏÂÒ»Ò³ &darr;';
+				autopbn.innerHTML = 'ä¸‹ä¸€é¡µ &darr;';
 			}
 			loadstatus = 0;
 		});

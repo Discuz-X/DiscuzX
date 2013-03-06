@@ -89,7 +89,7 @@ function fileQueued(file) {
 
 		}
 		if(createQueue) {
-			progress.setStatus("µÈ´ıÉÏ´«...");
+			progress.setStatus("ç­‰å¾…ä¸Šä¼ ...");
 		} else {
 			this.cancelUpload(file.id);
 			progress.setCancelled();
@@ -107,7 +107,7 @@ function fileQueueError(file, errorCode, message) {
 	try {
 		if (errorCode === SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
 			message = parseInt(message);
-			showDialog("ÄúÑ¡ÔñµÄÎÄ¼ş¸öÊı³¬¹ıÏŞÖÆ¡£\n"+(message === 0 ? "ÄúÒÑ´ïµ½ÉÏ´«ÎÄ¼şµÄÉÏÏŞÁË¡£" : "Äú»¹¿ÉÒÔÑ¡Ôñ " + message + " ¸öÎÄ¼ş"), 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+			showDialog("æ‚¨é€‰æ‹©çš„æ–‡ä»¶ä¸ªæ•°è¶…è¿‡é™åˆ¶ã€‚\n"+(message === 0 ? "æ‚¨å·²è¾¾åˆ°ä¸Šä¼ æ–‡ä»¶çš„ä¸Šé™äº†ã€‚" : "æ‚¨è¿˜å¯ä»¥é€‰æ‹© " + message + " ä¸ªæ–‡ä»¶"), 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			return;
 		}
 
@@ -117,15 +117,15 @@ function fileQueueError(file, errorCode, message) {
 
 		switch (errorCode) {
 			case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-				progress.setStatus("ÎÄ¼şÌ«´ó.");
+				progress.setStatus("æ–‡ä»¶å¤ªå¤§.");
 				this.debug("Error Code: File too big, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-				progress.setStatus("²»ÄÜÉÏ´«Áã×Ö½ÚÎÄ¼ş.");
+				progress.setStatus("ä¸èƒ½ä¸Šä¼ é›¶å­—èŠ‚æ–‡ä»¶.");
 				this.debug("Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-				progress.setStatus("½ûÖ¹ÉÏ´«¸ÃÀàĞÍµÄÎÄ¼ş.");
+				progress.setStatus("ç¦æ­¢ä¸Šä¼ è¯¥ç±»å‹çš„æ–‡ä»¶.");
 				this.debug("Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
@@ -190,7 +190,7 @@ function uploadStart(file) {
 			preObj.innerHTML = '';
 		}
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("ÉÏ´«ÖĞ...");
+		progress.setStatus("ä¸Šä¼ ä¸­...");
 		progress.toggleCancel(true, this);
 		if(this.customSettings.uploadSource == 'forum') {
 			var objId = this.customSettings.uploadType == 'attach' ? 'attachlist' : 'imgattachlist';
@@ -209,7 +209,7 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 		var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("ÕıÔÚÉÏ´«("+percent+"%)...");
+		progress.setStatus("æ­£åœ¨ä¸Šä¼ ("+percent+"%)...");
 
 	} catch (ex) {
 		this.debug(ex);
@@ -266,7 +266,7 @@ function uploadSuccess(file, serverData) {
 						progress.setStatus(STATUSMSG[aid]);
 						showDialog(STATUSMSG[aid], 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 					} else {
-						progress.setStatus("È¡ÏûÉÏ´«");
+						progress.setStatus("å–æ¶ˆä¸Šä¼ ");
 					}
 					this.cancelUpload(file.id);
 					progress.setCancelled();
@@ -293,11 +293,11 @@ function uploadSuccess(file, serverData) {
 				newTr.appendChild(newTd);
 				newTd = document.createElement("TD");
 				newTd.className = 'd';
-				newTd.innerHTML = 'Í¼Æ¬ÃèÊö<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
+				newTd.innerHTML = 'å›¾ç‰‡æè¿°<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
 				newTr.appendChild(newTd);
 				this.customSettings.imgBoxObj.appendChild(newTr);
 			} else {
-				showDialog('Í¼Æ¬ÉÏ´«Ê§°Ü', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('å›¾ç‰‡ä¸Šä¼ å¤±è´¥', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			}
 			$(file.id).style.display = 'none';
 		} else if(this.customSettings.uploadType == 'blog') {
@@ -317,7 +317,7 @@ function uploadSuccess(file, serverData) {
 				inputObj.value= data.picid;
 				tdObj.appendChild(inputObj);
 			} else {
-				showDialog('Í¼Æ¬ÉÏ´«Ê§°Ü', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('å›¾ç‰‡ä¸Šä¼ å¤±è´¥', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			}
 			$(file.id).style.display = 'none';
 		} else if(this.customSettings.uploadSource == 'portal') {
@@ -334,7 +334,7 @@ function uploadSuccess(file, serverData) {
 					$(file.id).style.display = 'none';
 				}
 			} else {
-				showDialog('ÉÏ´«Ê§°Ü', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('ä¸Šä¼ å¤±è´¥', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 				progress.setStatus("Cancelled");
 				this.cancelUpload(file.id);
 				progress.setCancelled();
@@ -342,7 +342,7 @@ function uploadSuccess(file, serverData) {
 			}
 		} else {
 			progress.setComplete();
-			progress.setStatus("ÉÏ´«Íê³É.");
+			progress.setStatus("ä¸Šä¼ å®Œæˆ.");
 			progress.toggleCancel(false);
 		}
 	} catch (ex) {

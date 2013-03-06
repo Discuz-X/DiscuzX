@@ -63,11 +63,11 @@ function initEditor() {
 		if(buttons[i].id.indexOf(editorid + '_') != -1) {
 			buttons[i].href = 'javascript:;';
 			if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'fullswitcher') {
-				buttons[i].innerHTML = !editorisfull ? 'È«ÆÁ' : '·µ»Ø';
-				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? '»Ö¸´±à¼­Æ÷´óĞ¡' : 'È«ÆÁ·½Ê½±à¼­');};
+				buttons[i].innerHTML = !editorisfull ? 'å…¨å±' : 'è¿”å›';
+				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? 'æ¢å¤ç¼–è¾‘å™¨å¤§å°' : 'å…¨å±æ–¹å¼ç¼–è¾‘');};
 				buttons[i].onclick = function(e) {editorfull();doane();}
 			} else if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'simple') {
-				buttons[i].innerHTML = !simplodemode ? '³£ÓÃ' : '¸ß¼¶';
+				buttons[i].innerHTML = !simplodemode ? 'å¸¸ç”¨' : 'é«˜çº§';
 				buttons[i].onclick = function(e) {editorsimple();doane();}
 			} else {
 				_attachEvent(buttons[i], 'mouseover', function(e) {setEditorTip(BROWSER.ie ? window.event.srcElement.title : e.target.title);});
@@ -96,7 +96,7 @@ function initEditor() {
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
 		$(editorid + '_fullswitcher').onclick = function () {
-			showDialog('ÄúµÄä¯ÀÀÆ÷²»Ö§³Ö´Ë¹¦ÄÜ£¬ÇëÉı¼¶ä¯ÀÀÆ÷°æ±¾', 'notice', 'ÓÑÇéÌáÊ¾');
+			showDialog('æ‚¨çš„æµè§ˆå™¨ä¸æ”¯æŒæ­¤åŠŸèƒ½ï¼Œè¯·å‡çº§æµè§ˆå™¨ç‰ˆæœ¬', 'notice', 'å‹æƒ…æç¤º');
 		};
 		$(editorid + '_fullswitcher').className = 'xg1';
 	}
@@ -126,7 +126,7 @@ function initesbar() {
 
 function savedataTime() {
 	if(!autosave) {
-		$(editorid + '_svdsecond').innerHTML = '<a title="µã»÷¿ªÆô×Ô¶¯±£´æ" href="javascript:;" onclick="setAutosave()">¿ªÆô×Ô¶¯±£´æ</a> ';
+		$(editorid + '_svdsecond').innerHTML = '<a title="ç‚¹å‡»å¼€å¯è‡ªåŠ¨ä¿å­˜" href="javascript:;" onclick="setAutosave()">å¼€å¯è‡ªåŠ¨ä¿å­˜</a> ';
 		return;
 	}
 	if(!savedatac) {
@@ -137,15 +137,15 @@ function savedataTime() {
 		var m = d.getMinutes();
 		h = h < 10 ? '0' + h : h;
 		m = m < 10 ? '0' + m : m;
-		setEditorTip('Êı¾İÒÑÓÚ ' + h + ':' + m + ' ±£´æ');
+		setEditorTip('æ•°æ®å·²äº ' + h + ':' + m + ' ä¿å­˜');
 	}
-	$(editorid + '_svdsecond').innerHTML = '<a title="µã»÷¹Ø±Õ×Ô¶¯±£´æ" href="javascript:;" onclick="setAutosave()">' + savedatac + ' Ãëºó±£´æ</a> ';
+	$(editorid + '_svdsecond').innerHTML = '<a title="ç‚¹å‡»å…³é—­è‡ªåŠ¨ä¿å­˜" href="javascript:;" onclick="setAutosave()">' + savedatac + ' ç§’åä¿å­˜</a> ';
 	savedatac -= 10;
 }
 
 function setAutosave() {
 	autosave = !autosave;
-	setEditorTip(autosave ? 'Êı¾İ×Ô¶¯±£´æÒÑ¿ªÆô' : 'Êı¾İ×Ô¶¯±£´æÒÑ¹Ø±Õ');
+	setEditorTip(autosave ? 'æ•°æ®è‡ªåŠ¨ä¿å­˜å·²å¼€å¯' : 'æ•°æ®è‡ªåŠ¨ä¿å­˜å·²å…³é—­');
 	setcookie('editorautosave_' + editorid, autosave ? 1 : -1, 2592000);
 	savedataTime();
 }
@@ -301,14 +301,14 @@ function editorfull(op) {
 		editorisfull = 0;
 		editorcontrolpos();
 	}
-	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '·µ»Ø' : 'È«ÆÁ';
+	$(editorid + '_fullswitcher').innerHTML = editorisfull ? 'è¿”å›' : 'å…¨å±';
 	initesbar();
 }
 
 function editorsimple() {
 	if($(editorid + '_body').className == 'edt') {
 		v = 'none';
-		$(editorid + '_simple').innerHTML = '¸ß¼¶';
+		$(editorid + '_simple').innerHTML = 'é«˜çº§';
 		$(editorid + '_body').className = 'edt simpleedt';
 		$(editorid + '_adv_s1').className = 'b2r';
 		$(editorid + '_adv_s2').className = 'b2r nbl';
@@ -319,7 +319,7 @@ function editorsimple() {
 		simplodemode = 1;
 	} else {
 		v = '';
-		$(editorid + '_simple').innerHTML = '³£ÓÃ';
+		$(editorid + '_simple').innerHTML = 'å¸¸ç”¨';
 		$(editorid + '_body').className = 'edt';
 		$(editorid + '_adv_s1').className = 'b1r';
 		$(editorid + '_adv_s2').className = 'b2r nbr nbl';
@@ -466,7 +466,7 @@ function checkFocus() {
 
 function checklength(theform) {
 	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
-	showDialog('µ±Ç°³¤¶È: ' + mb_strlen(message) + ' ×Ö½Ú£¬' + (postmaxchars != 0 ? 'ÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú¡£' : ''), 'notice', '×ÖÊı¼ì²é');
+	showDialog('å½“å‰é•¿åº¦: ' + mb_strlen(message) + ' å­—èŠ‚ï¼Œ' + (postmaxchars != 0 ? 'ç³»ç»Ÿé™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—èŠ‚ã€‚' : ''), 'notice', 'å­—æ•°æ£€æŸ¥');
 }
 
 function setUnselectable(obj) {
@@ -805,7 +805,7 @@ function discuzcode(cmd, arg) {
 		} else {
 			insertText(opentag + closetag, opentag.length, closetag.length);
 
-			while(listvalue = prompt('ÊäÈëÒ»¸öÁĞ±íÏîÄ¿.\r\nÁô¿Õ»òÕßµã»÷È¡ÏûÍê³É´ËÁĞ±í.', '')) {
+			while(listvalue = prompt('è¾“å…¥ä¸€ä¸ªåˆ—è¡¨é¡¹ç›®.\r\nç•™ç©ºæˆ–è€…ç‚¹å‡»å–æ¶ˆå®Œæˆæ­¤åˆ—è¡¨.', '')) {
 				if(BROWSER.opera > 8) {
 					listvalue = '\n' + '[*]' + listvalue;
 					insertText(listvalue, strlen(listvalue) + 1, 0);
@@ -839,18 +839,18 @@ function discuzcode(cmd, arg) {
 		}
 	} else if(cmd == 'rst') {
 		loadData();
-		setEditorTip('Êı¾İÒÑ»Ö¸´');
+		setEditorTip('æ•°æ®å·²æ¢å¤');
 	} else if(cmd == 'svd') {
 		saveData();
-		setEditorTip('Êı¾İÒÑ±£´æ');
+		setEditorTip('æ•°æ®å·²ä¿å­˜');
 	} else if(cmd == 'chck') {
 		checklength(editorform);
 	} else if(cmd == 'tpr') {
-		if(confirm('ÄúÈ·ÈÏÒªÇå³ıËùÓĞÄÚÈİÂğ£¿')) {
+		if(confirm('æ‚¨ç¡®è®¤è¦æ¸…é™¤æ‰€æœ‰å†…å®¹å—ï¼Ÿ')) {
 			clearContent();
 		}
 	} else if(cmd == 'downremoteimg') {
-		showDialog('<div id="remotedowninfo"><p class="mbn">ÕıÔÚÏÂÔØÔ¶³Ì¸½¼ş£¬ÇëÉÔµÈ¡­¡­</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
+		showDialog('<div id="remotedowninfo"><p class="mbn">æ­£åœ¨ä¸‹è½½è¿œç¨‹é™„ä»¶ï¼Œè¯·ç¨ç­‰â€¦â€¦</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
 		var message = wysiwyg ? html2bbcode(getEditorContents()) : (!editorform.parseurloff.checked ? parseurl(editorform.message.value) : editorform.message.value);
 		var oldValidate = editorform.onsubmit;
 		var oldAction = editorform.action;
@@ -920,7 +920,7 @@ function setContext(cmd) {
 	} else if(fs == null) {
 		fs = '';
 	}
-	fs = fs && cmd != 'clear' ? fs : '×ÖÌå';
+	fs = fs && cmd != 'clear' ? fs : 'å­—ä½“';
 	if(fs != $(editorid + '_font').fontstate) {
 		thingy = fs.indexOf(',') > 0 ? fs.substr(0, fs.indexOf(',')) : fs;
 		$(editorid + '_font').innerHTML = thingy;
@@ -937,7 +937,7 @@ function setContext(cmd) {
 			}
 		}
 	} catch(e) {
-		ss = '´óĞ¡';
+		ss = 'å¤§å°';
 	}
 
 	if(ss != $(editorid + '_size').sizestate) {
@@ -982,7 +982,7 @@ function formatFontsize(csssize) {
 		case '24pt': return 6;
 		case '48px':
 		case '36pt': return 7;
-		default: return '´óĞ¡';
+		default: return 'å¤§å°';
 	}
 }
 
@@ -1027,8 +1027,8 @@ function showEditorMenu(tag, params) {
 	} else {
 		switch(tag) {
 			case 'url':
-				str = 'ÇëÊäÈëÁ´½ÓµØÖ·:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
-					(selection ? '' : '<br />ÇëÊäÈëÁ´½ÓÎÄ×Ö:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
+				str = 'è¯·è¾“å…¥é“¾æ¥åœ°å€:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
+					(selection ? '' : '<br />è¯·è¾“å…¥é“¾æ¥æ–‡å­—:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
 				break;
 			case 'forecolor':
 				showColorBox(ctrlid, 1);
@@ -1043,7 +1043,7 @@ function showEditorMenu(tag, params) {
 				showHrBox(ctrlid, 'postbg');
 				break;
 			case 'password':
-				str = '<p class="pbn">ÇëÊäÈëÌû×ÓÃÜÂë: <input type="text" id="' + ctrlid + '_param_1" size="10" value="" class="px" /></p>';
+				str = '<p class="pbn">è¯·è¾“å…¥å¸–å­å¯†ç : <input type="text" id="' + ctrlid + '_param_1" size="10" value="" class="px" /></p>';
 				break;
 			case 'code':
 				if(wysiwyg) {
@@ -1060,48 +1060,48 @@ function showEditorMenu(tag, params) {
 				if(selection) {
 					return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
 				}
-				var lang = {'quote' : 'ÇëÊäÈëÒª²åÈëµÄÒıÓÃ', 'code' : 'ÇëÊäÈëÒª²åÈëµÄ´úÂë', 'hide' : 'ÇëÊäÈëÒªÒş²ØµÄĞÅÏ¢ÄÚÈİ', 'free' : 'Èç¹ûÄúÉèÖÃÁËÌû×ÓÊÛ¼Û£¬ÇëÊäÈë¹ºÂòÇ°Ãâ·Ñ¿É¼ûµÄĞÅÏ¢ÄÚÈİ'};
+				var lang = {'quote' : 'è¯·è¾“å…¥è¦æ’å…¥çš„å¼•ç”¨', 'code' : 'è¯·è¾“å…¥è¦æ’å…¥çš„ä»£ç ', 'hide' : 'è¯·è¾“å…¥è¦éšè—çš„ä¿¡æ¯å†…å®¹', 'free' : 'å¦‚æœæ‚¨è®¾ç½®äº†å¸–å­å”®ä»·ï¼Œè¯·è¾“å…¥è´­ä¹°å‰å…è´¹å¯è§çš„ä¿¡æ¯å†…å®¹'};
 				str += lang[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>' +
-					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />Ö»ÓĞµ±ä¯ÀÀÕß»Ø¸´±¾ÌûÊ±²ÅÏÔÊ¾</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />Ö»ÓĞµ±ä¯ÀÀÕß»ı·Ö¸ßÓÚ</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> Ê±²ÅÏÔÊ¾<br /><br /><label>ÓĞĞ§ÌìÊı:</label> <input type="text" size="3" id="' + ctrlid + '_param_3" class="px pxs" /> <br />¾àÀë·¢ÌûÈÕÆÚ´óÓÚÕâ¸öÌìÊıÊ±±êÇ©×Ô¶¯Ê§Ğ§' : '');
+					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />åªæœ‰å½“æµè§ˆè€…å›å¤æœ¬å¸–æ—¶æ‰æ˜¾ç¤º</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />åªæœ‰å½“æµè§ˆè€…ç§¯åˆ†é«˜äº</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> æ—¶æ‰æ˜¾ç¤º<br /><br /><label>æœ‰æ•ˆå¤©æ•°:</label> <input type="text" size="3" id="' + ctrlid + '_param_3" class="px pxs" /> <br />è·ç¦»å‘å¸–æ—¥æœŸå¤§äºè¿™ä¸ªå¤©æ•°æ—¶æ ‡ç­¾è‡ªåŠ¨å¤±æ•ˆ' : '');
 				break;
 			case 'tbl':
-				str = '<p class="pbn">±í¸ñĞĞÊı: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; ±í¸ñÁĞÊı: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">±í¸ñ¿í¶È: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; ±³¾°ÑÕÉ«: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'Ğ¡ÌáÊ¾\', null, 0)"><img id="tbltips" title="Ğ¡ÌáÊ¾" class="vm" src="' + IMGDIR + '/info_small.gif"> ¿ìËÙÊéĞ´±í¸ñÌáÊ¾</p>';
-				str += '<div id="tbltips_msg" style="display: none">¡°[tr=ÑÕÉ«]¡± ¶¨ÒåĞĞ±³¾°<br />¡°[td=¿í¶È]¡± ¶¨ÒåÁĞ¿í<br />¡°[td=ÁĞ¿ç¶È,ĞĞ¿ç¶È,¿í¶È]¡± ¶¨ÒåĞĞÁĞ¿ç¶È<br /><br />¿ìËÙÊéĞ´±í¸ñ·¶Àı£º<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>ÓÃ¡°|¡±·Ö¸ôÃ¿Ò»ÁĞ£¬±í¸ñÖĞÈçÓĞ¡°|¡±ÓÃ¡°\\|¡±´úÌæ£¬»»ĞĞÓÃ¡°\\n¡±´úÌæ¡£</div>';
+				str = '<p class="pbn">è¡¨æ ¼è¡Œæ•°: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; è¡¨æ ¼åˆ—æ•°: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">è¡¨æ ¼å®½åº¦: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; èƒŒæ™¯é¢œè‰²: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'å°æç¤º\', null, 0)"><img id="tbltips" title="å°æç¤º" class="vm" src="' + IMGDIR + '/info_small.gif"> å¿«é€Ÿä¹¦å†™è¡¨æ ¼æç¤º</p>';
+				str += '<div id="tbltips_msg" style="display: none">â€œ[tr=é¢œè‰²]â€ å®šä¹‰è¡ŒèƒŒæ™¯<br />â€œ[td=å®½åº¦]â€ å®šä¹‰åˆ—å®½<br />â€œ[td=åˆ—è·¨åº¦,è¡Œè·¨åº¦,å®½åº¦]â€ å®šä¹‰è¡Œåˆ—è·¨åº¦<br /><br />å¿«é€Ÿä¹¦å†™è¡¨æ ¼èŒƒä¾‹ï¼š<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>ç”¨â€œ|â€åˆ†éš”æ¯ä¸€åˆ—ï¼Œè¡¨æ ¼ä¸­å¦‚æœ‰â€œ|â€ç”¨â€œ\\|â€ä»£æ›¿ï¼Œæ¢è¡Œç”¨â€œ\\nâ€ä»£æ›¿ã€‚</div>';
 				break;
 			case 'aud':
-				str = '<p class="pbn">ÇëÊäÈëÒôÀÖÎÄ¼şµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">Ö§³Ö wma mp3 ra rm µÈÒôÀÖ¸ñÊ½<br />Ê¾Àı: http://server/audio.wma</p>';
+				str = '<p class="pbn">è¯·è¾“å…¥éŸ³ä¹æ–‡ä»¶åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">æ”¯æŒ wma mp3 ra rm ç­‰éŸ³ä¹æ ¼å¼<br />ç¤ºä¾‹: http://server/audio.wma</p>';
 				break;
 			case 'vid':
-				str = '<p class="pbn">ÇëÊäÈëÊÓÆµµØÖ·:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">¿í: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">Ö§³ÖÓÅ¿á¡¢ÍÁ¶¹¡¢56¡¢¿á6µÈÊÓÆµÕ¾µÄÊÓÆµÍøÖ·<br />Ö§³Ö wmv avi rmvb mov swf flv µÈÊÓÆµ¸ñÊ½<br />Ê¾Àı: http://server/movie.wmv</p>';
+				str = '<p class="pbn">è¯·è¾“å…¥è§†é¢‘åœ°å€:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">å®½: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">æ”¯æŒä¼˜é…·ã€åœŸè±†ã€56ã€é…·6ç­‰è§†é¢‘ç«™çš„è§†é¢‘ç½‘å€<br />æ”¯æŒ wmv avi rmvb mov swf flv ç­‰è§†é¢‘æ ¼å¼<br />ç¤ºä¾‹: http://server/movie.wmv</p>';
 				break;
 			case 'fls':
-				str = '<p class="pbn">ÇëÊäÈë Flash ÎÄ¼şµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">¿í: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">Ö§³Ö swf flv µÈ Flash ÍøÖ·<br />Ê¾Àı: http://server/flash.swf</p>';
+				str = '<p class="pbn">è¯·è¾“å…¥ Flash æ–‡ä»¶åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">å®½: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">æ”¯æŒ swf flv ç­‰ Flash ç½‘å€<br />ç¤ºä¾‹: http://server/flash.swf</p>';
 				break;
 			case 'beginning':
-				str = '<p class="pbn">ÇëÊäÈë¿ªÍ·¶¯»­ Flash »ò Í¼Æ¬ µØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p>';
-				str += '<p class="pbn">µã»÷Á´½ÓµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_2" class="px" value="" style="width: 220px;" /></p>';
-				str += '<p class="pbn">¿í: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_4" size="5" value="" class="px" /></p>';
-				str += '<p class="pbn">Í£ÁôÃëÊı: <input id="' + ctrlid + '_param_8" size="5" value="" class="px" /></p>';
-				str += '<p class="pbn">ÔØÈë¡¢ÏûÊ§µÄĞ§¹û: </p><p class="pbn"><input id="' + ctrlid + '_param_7" type="radio" name="effect" checked />ÎŞ &nbsp; <input id="' + ctrlid + '_param_5" type="radio" name="effect" />µ­Èëµ­³ö &nbsp; <input id="' + ctrlid + '_param_6" type="radio" name="effect" />Õ¹¿ª±ÕºÏ</p>';
-				str += '<p class="xg2 pbn">Ö§³Ö swf flv jpg gif png ÍøÖ·<br />¿í¸ß·¶Î§: ¿í400~1024 ¸ß300~640<br />Ê¾Àı: http://server/flash.swf</p>';
+				str = '<p class="pbn">è¯·è¾“å…¥å¼€å¤´åŠ¨ç”» Flash æˆ– å›¾ç‰‡ åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p>';
+				str += '<p class="pbn">ç‚¹å‡»é“¾æ¥åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_2" class="px" value="" style="width: 220px;" /></p>';
+				str += '<p class="pbn">å®½: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_4" size="5" value="" class="px" /></p>';
+				str += '<p class="pbn">åœç•™ç§’æ•°: <input id="' + ctrlid + '_param_8" size="5" value="" class="px" /></p>';
+				str += '<p class="pbn">è½½å…¥ã€æ¶ˆå¤±çš„æ•ˆæœ: </p><p class="pbn"><input id="' + ctrlid + '_param_7" type="radio" name="effect" checked />æ—  &nbsp; <input id="' + ctrlid + '_param_5" type="radio" name="effect" />æ·¡å…¥æ·¡å‡º &nbsp; <input id="' + ctrlid + '_param_6" type="radio" name="effect" />å±•å¼€é—­åˆ</p>';
+				str += '<p class="xg2 pbn">æ”¯æŒ swf flv jpg gif png ç½‘å€<br />å®½é«˜èŒƒå›´: å®½400~1024 é«˜300~640<br />ç¤ºä¾‹: http://server/flash.swf</p>';
 				break;
 			case 'pasteword':
-				stitle = '´Ó Word Õ³ÌùÄÚÈİ';
-				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">ÇëÍ¨¹ı¿ì½İ¼ü(Ctrl+V)°Ñ Word ÎÄ¼şÖĞµÄÄÚÈİÕ³Ìùµ½ÉÏ·½</p>';
+				stitle = 'ä» Word ç²˜è´´å†…å®¹';
+				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">è¯·é€šè¿‡å¿«æ·é”®(Ctrl+V)æŠŠ Word æ–‡ä»¶ä¸­çš„å†…å®¹ç²˜è´´åˆ°ä¸Šæ–¹</p>';
 				menuwidth = 600;
 				menupos = '00';
 				menutype = 'win';
 				break;
 			case 'index':
-				stitle = '´´½¨Ìû×ÓÄ¿Â¼';
+				stitle = 'åˆ›å»ºå¸–å­ç›®å½•';
 				str = '<p class="pbn">[index]<br />\n\
-					[#<span class="xi1">Ò³Âë</span>]<span class="xi1">±êÌâ</span> &nbsp;&nbsp;<span class="xg1">Ìø×ªµ½Ö¸¶¨µÄÒ³</span><br />\n\
-					<span class="xi1">*</span>[#<span class="xi1">tid,pid</span>]<span class="xi1">±êÌâ</span> &nbsp;&nbsp;<span class="xg1">Ìø×ªµ½Ö¸¶¨µÄÌû×Ó</span><br />\n\
+					[#<span class="xi1">é¡µç </span>]<span class="xi1">æ ‡é¢˜</span> &nbsp;&nbsp;<span class="xg1">è·³è½¬åˆ°æŒ‡å®šçš„é¡µ</span><br />\n\
+					<span class="xi1">*</span>[#<span class="xi1">tid,pid</span>]<span class="xi1">æ ‡é¢˜</span> &nbsp;&nbsp;<span class="xg1">è·³è½¬åˆ°æŒ‡å®šçš„å¸–å­</span><br />\n\
 					[/index]<br />\n\
 					<br />\n\
-					<span class="xi1">Ò³Âë</span> &nbsp;&nbsp;<span class="xg1">ÓÃ [page] ¶Ôµ±Ç°Ìû×Ó·ÖÒ³ºóµÄÒ³Âë</span><br />\n\
-					<span class="xi1">tid,pid</span> &nbsp;&nbsp;<span class="xg1">Ìû×ÓµÄ TID ºÍ PID</span><br />\n\
-					<span class="xi1">*</span> &nbsp;&nbsp;<span class="xg1">Ìí¼ÓĞĞÊ×Ëõ½ø</span></p>';
+					<span class="xi1">é¡µç </span> &nbsp;&nbsp;<span class="xg1">ç”¨ [page] å¯¹å½“å‰å¸–å­åˆ†é¡µåçš„é¡µç </span><br />\n\
+					<span class="xi1">tid,pid</span> &nbsp;&nbsp;<span class="xg1">å¸–å­çš„ TID å’Œ PID</span><br />\n\
+					<span class="xi1">*</span> &nbsp;&nbsp;<span class="xg1">æ·»åŠ è¡Œé¦–ç¼©è¿›</span></p>';
 				break;
 			default:
 				for(i in EXTRAFUNC['showEditorMenu']) {
@@ -1120,7 +1120,7 @@ function showEditorMenu(tag, params) {
 					var promptlang = custombbcodes[tag]['prompt'].split("\t");
 					for(var i = 1; i <= params; i++) {
 						if(i != params || !haveSel) {
-							str += (promptlang[i - 1] ? promptlang[i - 1] : 'ÇëÊäÈëµÚ ' + i + ' ¸ö²ÎÊı:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+							str += (promptlang[i - 1] ? promptlang[i - 1] : 'è¯·è¾“å…¥ç¬¬ ' + i + ' ä¸ªå‚æ•°:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
 						}
 					}
 				}
@@ -1135,11 +1135,11 @@ function showEditorMenu(tag, params) {
 		if(menupos == '00') {
 			menu.className = 'fwinmask';
 			s = '<table width="100%" cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c">'
-				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">¹Ø±Õ</a></span></h3><div class="c">' + str + '</div>'
-				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button></p>'
+				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">å…³é—­</a></span></h3><div class="c">' + str + '</div>'
+				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>æäº¤</strong></button></p>'
 				+ '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
 		} else {
-			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">¹Ø±Õ</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button></div></div>';
+			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">å…³é—­</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>æäº¤</strong></button></div></div>';
 		}
 		menu.innerHTML = s;
 		$(editorid + '_editortoolbar').appendChild(menu);
