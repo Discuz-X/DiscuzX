@@ -6,14 +6,14 @@
  * To change this template use File | Settings | File Templates.
  */
 jQuery(document).ready(function () {
-	jQuery("head").append('<link rel="stylesheet" href="./dps_asset/scripts/lib/jquery-ui/themes/base/jquery.ui.all.css"><style>.ui-state-highlight { height: 1.5em; line-height: 1.2em;margin:2px;padding:5px; }</style>');
+	jQuery("head").append('<link rel="stylesheet" href="./asset/scripts/lib/jquery-ui/themes/base/jquery.ui.all.css"><style>.ui-state-highlight { height: 1.5em; line-height: 1.2em;margin:2px;padding:5px; }</style>');
 	jQuery('.title.flinks').css({background:'#F0F0F0 url(./template/yeei_dream1/css/yeei//title.png) repeat-x 0 100%'});
 	jQuery('.flink_block').css({border:'1px solid #ccc', margin:10})
 	$LAB
-		.script("./dps_asset/scripts/lib/jquery-ui/ui/jquery.ui.core.js").wait()
-		.script("./dps_asset/scripts/lib/jquery-ui/ui/jquery.ui.widget.js").wait()
-		.script("./dps_asset/scripts/lib/jquery-ui/ui/jquery.ui.mouse.js").wait()
-		.script('./dps_asset/scripts/lib/jquery-ui/ui/jquery.ui.sortable.js')
+		.script("./asset/scripts/lib/jquery-ui/ui/jquery.ui.core.js").wait()
+		.script("./asset/scripts/lib/jquery-ui/ui/jquery.ui.widget.js").wait()
+		.script("./asset/scripts/lib/jquery-ui/ui/jquery.ui.mouse.js").wait()
+		.script('./asset/scripts/lib/jquery-ui/ui/jquery.ui.sortable.js')
 		.wait(function () {
 			jQuery('.portal_block_summary li').addClass('ui-state-default').css({padding:5, margin:2, overflow:'hidden', whiteSpace:'nowrap'})
 			jQuery(".portal_block_summary ul").sortable({
