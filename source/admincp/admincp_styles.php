@@ -175,12 +175,11 @@ if($operation == 'admin') {
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=export&id=$id\">$lang[export]</a></p>
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=copy&id=$id\">$lang[copy]</a></p>
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=import&dir=yes&restore=$id\">$lang[restore]</a></p>" :
-				"<p style=\"margin-bottom: 2px;\">&nbsp;</p>
-				<img src=\"$preview\" />
+				"<p style=\"margin-bottom: 2px;\">&nbsp;<img src=\"$preview\" /></p>
 				<p style=\"margin: 13px 0\" class=\"lightfont\">($style[tplname])</p></td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=import&dir=$style[name]\">$lang[styles_install]</a></p>
 				<p style=\"margin: 2px 0\">$lang[styles_stylecount]$style[stylecount]</p>".
-				($style['filemtime'] > $timestamp - 86400 ? '<p style=\"margin-bottom: 2px;\"><font color="red">New!</font></p>' : '')).
+				($style['filemtime'] > $timestamp - 86400 ? '<p style="margin-bottom: 2px;"><font color="red">New!</font></p>' : '')).
 				"</td></tr></table></div>\n";//.($i == 3 ? '</tr>' : '');
 //			$i++;
 //			if($i == 3) {
