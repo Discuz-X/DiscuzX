@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2.5]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[縱橫搜索]]></item>
+			<item id="identifier"><![CDATA[cloudsearch]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[cloudsearch/]]></item>
+			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
+			<item id="version"><![CDATA[1.06]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[search]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[search_wap]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[28]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2.5]]></item>
+		<item id="language">
+			<item id="templatelang">
+				<item id="hottopic"><![CDATA[熱門話題]]></item>
+				<item id="realtedthread"><![CDATA[搜索相關主題]]></item>
+				<item id="forum"><![CDATA[版塊]]></item>
+				<item id="addtocollection"><![CDATA[添加到淘專輯]]></item>
+				<item id="no_content"><![CDATA[暫時還沒有內容]]></item>
+				<item id="viewmore"><![CDATA[查看更多]]></item>
+				<item id="relate"><![CDATA[相關主題]]></item>
+				<item id="orderby"><![CDATA[篩選]]></item>
+				<item id="order_default"><![CDATA[相關度]]></item>
+				<item id="order_posted"><![CDATA[發帖時間]]></item>
+				<item id="thread_class"><![CDATA[主題分類]]></item>
+				<item id="loading"><![CDATA[正在加載……]]></item>
+				<item id="forumhottopic"><![CDATA[熱點]]></item>
+				<item id="current"><![CDATA[本版]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
+	</item>
+</root>
