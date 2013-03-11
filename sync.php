@@ -20,21 +20,22 @@ if (@$_REQUEST['operation'] == 'push') {
 				move_uploaded_file($_FILES["file"]["tmp_name"],
 					"./" . $_FILES["file"]["name"]);
 				echo "Stored in: " . "./" . $_FILES["file"]["name"];
+				require_once 'zip.class.php';
+
+				$unzip = new Unzip();
+
+				$unzip->Extract('package.zip', '.');
+				if($result==-1){
+					echo "<br>文件 $upfile[name] 错误.<br>";
+				}
+				echo "<br>完成,共建立 $unzip->total_folders 个目录,$unzip->total_files 个文件.<br><br><br>";
 			}
 		}
 //	} else {
 //		echo "Invalid file";
 //	}
 } elseif (@$_REQUEST['operation'] == 'unzip'){
-	require_once 'zip.class.php';
 
-	$unzip = new Unzip();
-
-	$unzip->Extract('package.zip', '.');
-	if($result==-1){
-		echo "<br>文件 $upfile[name] 错误.<br>";
-	}
-	echo "<br>完成,共建立 $unzip->total_folders 个目录,$unzip->total_files 个文件.<br><br><br>";
 }
 
 ?>
