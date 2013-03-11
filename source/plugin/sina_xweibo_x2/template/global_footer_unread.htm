@@ -1,0 +1,17 @@
+<!--{block return}-->
+		<ul id="xwb_unread_{$_G['uid']}_menu" class="p_pop" style="display: none">
+			<li id="xwb_followers_{$_G['uid']}_container" style="display: none"><a href="{$std_url}index.php?m=index.fans" target="_blank" onclick="xwbUnreadCtr.hideContainer('followers');">&#26032;&#22686;&#31881;&#19997;: <span id="xwb_followers_{$_G['uid']}">0</span></a></li>
+			<li id="xwb_comments_{$_G['uid']}_container" style="display: none"><a href="{$std_url}index.php?m=index.comments" target="_blank" onclick="xwbUnreadCtr.hideContainer('comments');">&#26032;&#22686;&#35780;&#35770;: <span id="xwb_comments_{$_G['uid']}">0</span></a></li>
+			<li id="xwb_mentions_{$_G['uid']}_container" style="display: none"><a href="{$std_url}index.php?m=index.atme" target="_blank" onclick="xwbUnreadCtr.hideContainer('mentions');">@&#21040;&#25105;&#30340;: <span id="xwb_mentions_{$_G['uid']}">0</span></a></li>
+			<li id="xwb_dm_{$_G['uid']}_container" style="display: none"><a href="{$std_url}index.php?m=index.messages" target="_blank" onclick="xwbUnreadCtr.hideContainer('dm');">&#26410;&#35835;&#31169;&#20449;: <span id="xwb_dm_{$_G['uid']}">0</span></a></li>
+		</ul>
+		
+		<!--{if !isset($_G['cookie']['xwb_nextunread_'. $_G['uid']])}-->
+		<script src="xwb.php?m=xwbSiteInterface.setUnreadCookie" type="text/javascript"></script>
+		<!--{/if}-->
+		<script src="xwb/images/xwb_unreadctr.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			xwbUnreadCtr.init({$_G['uid']});
+		</script>
+		
+<!--{/block}-->

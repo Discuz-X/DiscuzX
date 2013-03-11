@@ -1,0 +1,84 @@
+<?php
+$tipsType = $GLOBALS['xwb_tips_type'];
+$site_uid = XWB_S_UID;
+$sina_uid = XWB_plugin::getBindInfo("sina_uid");
+$siteVer = XWB_S_VERSION ;
+$siteName = str_replace("'","\'", $GLOBALS['_G']['setting']['bbname'] ) ;
+$pName = CURSCRIPT. '_'. CURMODULE;
+$regUrl = XWB_plugin::getEntryURL("xwbSiteInterface.reg");
+$setUrl = XWB_plugin::getEntryURL("xwbSiteInterface.bind");
+$bindUrl = XWB_plugin::getEntryURL("xwbSiteInterface.bind");
+$signerUrl = XWB_plugin::getEntryURL("xwbSiteInterface.signer");
+$authUrl = XWB_plugin::getEntryURL("xwbAuth.login");
+$getTipsUrl = XWB_plugin::getEntryURL("xwbSiteInterface.getTips");
+$attentionUrl = XWB_plugin::getEntryURL("xwbSiteInterface.attention");
+$wbxUrl = '';
+$xwb_loadScript2 =  XWB_plugin::getPluginUrl('images/xwb.js');
+$xwb_css_base = XWB_plugin::getPluginUrl('images/xwb_base.css');
+$xwb_css_append = XWB_plugin::getPluginUrl('images/xwb_'. XWB_S_VERSION. '.css');
+
+$xwb_loadingImg = XWB_plugin::getPluginUrl('images/bgimg/xwb_loading.gif');
+$tipGetCountUrl = XWB_plugin::getEntryURL("xwbSiteInterface.getTips");
+
+$switch_to_xweibo = intval(XWB_Plugin::pCfg('switch_to_xweibo'));
+$baseurl_to_xweibo = XWB_Plugin::pCfg('baseurl_to_xweibo');
+
+$return = <<<EOF
+<script language="javascript">
+function xwb_loadScript(file, charset){
+	var script = document.createElement('SCRIPT');
+	script.type = 'text/javascript'; script.charset = charset; script.src = file;
+	document.getElementsByTagName('HEAD')[0].appendChild(script);
+}
+
+var _xwb_cfg_data ={
+	tipsType:	'$tipsType',site_uid:	'$site_uid',sina_uid:	'$sina_uid',
+	siteVer:	'$siteVer',siteName:	'$siteName',pName:'$pName',
+	regUrl:		'$regUrl',
+	setUrl:		'$setUrl',
+	bindUrl:	'$bindUrl',
+	signerUrl:	'$signerUrl',
+	authUrl:	'$authUrl',
+	getTipsUrl:	'$getTipsUrl',
+	attentionUrl:	'$attentionUrl',
+	wbxUrl:		'$wbxUrl',
+    tipGetCountUrl: '$tipGetCountUrl',
+    loadingImgUrl : '$xwb_loadingImg',
+	switchToStd: '$switch_to_xweibo',
+	baseurlToStd: '$baseurl_to_xweibo'
+};
+
+xwb_loadScript("$xwb_loadScript2", "UTF-8");
+</script>
+<link href="$xwb_css_base" rel="stylesheet" type="text/css" />
+<link href="$xwb_css_append" rel="stylesheet" type="text/css" />
+
+EOF;
+
+
+if((int)XWB_plugin::pCfg('is_tgc_display')){
+	$tipTgcJS =  XWB_plugin::getPluginUrl('images/xwb_tgc.js');
+	$return .= <<<EOF
+<script language="javascript">
+xwb_loadScript("$tipTgcJS", "UTF-8");
+</script>
+EOF;
+}
+
+
+$sess = XWB_plugin::getUser();
+$xwb_statInfo = $sess->getStat();
+foreach( $xwb_statInfo as $k => $stat ){
+	$xwb_statType = isset($stat['xt']) ? (string)$stat['xt'] : 'unknown';
+	$return .= XWB_plugin::statUrl( $xwb_statType, $stat, true );
+}
+
+if( !empty($xwb_statInfo) ){
+	$sess->clearStat();
+}
+
+//评论回推前期运行（改在global footer运行）
+if(  XWB_plugin::pCfg('is_pushback_open') && rand(1,10) <= 1 ){
+	$pushInstance = XWB_Plugin::O('pushbackDispatcher');
+	$pushInstance->prepare();
+}

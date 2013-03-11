@@ -1,0 +1,14 @@
+<!--{block return}-->
+<link rel="stylesheet" type="text/css" href="{$this->xwb_p_rootname}/images/xwb_admin_forum_index.css" />
+<script src="xwb/images/xwb_owshow.js" type="text/javascript"></script>
+<script type="text/javascript">
+try{
+	<!--{if isset($GLOBALS['_G']['uid']) && $GLOBALS['_G']['uid'] > 0}-->
+	xwbOw.show('{$owbUserRs['id']}', '{$owbUserRs['screen_name_local_encode']}', '{$profile_url}', 1);
+	<!--{else}-->
+	xwbOw.show('{$owbUserRs['id']}', '{$owbUserRs['screen_name_local_encode']}', '{$profile_url}', 0);
+	<!--{/if}-->
+}catch(e){
+}		
+</script>
+<!--{/block}-->
