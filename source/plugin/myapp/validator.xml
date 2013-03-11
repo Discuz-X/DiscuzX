@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Data">
+		<item id="0"><![CDATA[source/plugin/myapp/myapp.class.php]]></item>
+	</item>
+</root>
