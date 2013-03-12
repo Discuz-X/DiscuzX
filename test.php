@@ -7,7 +7,7 @@
 	$Id: test.php 13226 2010-07-23 00:24:28Z monkey $
 */
 
-//定义应用 ID
+//瀹氫箟搴旂敤 ID
 define('APPTYPEID', 127);
 
 require './source/class/class_core.php';
