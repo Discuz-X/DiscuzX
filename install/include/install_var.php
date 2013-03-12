@@ -13,7 +13,7 @@ if(!defined('IN_COMSENZ')) {
 
 define('SOFT_NAME', 'Discuz!');
 
-define('INSTALL_LANG', 'SC_GBK');
+define('INSTALL_LANG', 'SC_UTF8');
 
 define('CONFIG', './config/config_global.php');
 define('CONFIG_UC', './config/config_ucenter.php');
@@ -23,8 +23,8 @@ $lockfile = ROOT_PATH.'./data/install.lock';
 
 @include ROOT_PATH.CONFIG;
 
-define('CHARSET', 'gbk');
-define('DBCHARSET', 'gbk');
+define('CHARSET', 'utf-8');
+define('DBCHARSET', 'utf-8');
 
 define('ORIG_TABLEPRE', 'pre_');
 
