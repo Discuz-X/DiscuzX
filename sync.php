@@ -34,7 +34,15 @@ if (@$_REQUEST['operation'] == 'push') {
 //	} else {
 //		echo "Invalid file";
 //	}
-} elseif (@$_REQUEST['operation'] == 'unzip'){
+} elseif (@$_REQUEST['operation'] == 'unzip'){require_once 'zip.class.php';
+
+	$unzip = new Unzip();
+
+	$result = $unzip->Extract('./package.zip', '.');
+	if($result==-1){
+		echo "<br>文件 $upfile[name] 错误.<br>";
+	}
+	echo "<br>完成,共建立 $unzip->total_folders 个目录,$unzip->total_files 个文件.<br><br><br>";
 
 }
 
