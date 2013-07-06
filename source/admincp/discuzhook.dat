@@ -5,19 +5,19 @@ template/default/common/footer.htm *<!--{hook/global_footerlink}-->
 template/default/common/header.htm *<!--{hook/global_cpnav_top}-->
 template/default/common/header.htm *<!--{hook/global_cpnav_extra1}-->
 template/default/common/header.htm *<!--{hook/global_cpnav_extra2}-->
-template/default/common/header.htm *<!--{hook/global_qmenu_top}-->
-template/default/common/header.htm *<!--{hook/global_qmenu_bottom}-->
 template/default/common/header.htm *<!--{hook/global_nav_extra}-->
 template/default/common/header.htm *<!--{hook/global_header}-->
+template/default/common/header_qmenu.htm *<!--{hook/global_qmenu_top}-->
+template/default/common/header_qmenu.htm *<!--{hook/global_qmenu_bottom}-->
+template/default/common/header_userstatus.htm *<!--{hook/global_usernav_extra1}-->
+template/default/common/header_userstatus.htm *<!--{hook/global_usernav_extra4}-->
+template/default/common/header_userstatus.htm *<!--{hook/global_usernav_extra2}-->
+template/default/common/header_userstatus.htm *<!--{hook/global_usernav_extra3}-->
+template/default/common/header_userstatus.htm *<!--{hook/global_usernav_extra1}-->
 template/default/common/userabout.htm *<!--{hook/global_userabout_top $_G['basescript'].'::'.CURMODULE}-->
 template/default/common/userabout.htm *<!--{hook/userapp_menu_top}-->
 template/default/common/userabout.htm *<!--{hook/userapp_menu_middle}-->
 template/default/common/userabout.htm *<!--{hook/global_userabout_bottom $_G['basescript'].'::'.CURMODULE}-->
-template/default/common/userstatus.htm *<!--{hook/global_usernav_extra1}-->
-template/default/common/userstatus.htm *<!--{hook/global_usernav_extra4}-->
-template/default/common/userstatus.htm *<!--{hook/global_usernav_extra2}-->
-template/default/common/userstatus.htm *<!--{hook/global_usernav_extra3}-->
-template/default/common/userstatus.htm *<!--{hook/global_usernav_extra1}-->
 template/default/forum/collection_all.htm *<!--{hook/collection_index_top}-->
 template/default/forum/collection_all.htm *<!--{hook/collection_index_bottom}-->
 template/default/forum/collection_comment.htm *<!--{hook/collection_nav_extra}-->
@@ -142,7 +142,6 @@ template/default/forum/viewthread_node.htm *<!--{hook/viewthread_avatar $postcou
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_sidetop $postcount}-->
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_sidebottom $postcount}-->
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_postheader $postcount}-->
-template/default/forum/viewthread_node.htm *<!--{hook/viewthread_modaction}-->
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_share_method}-->
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_useraction}-->
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_postsightmlafter $postcount}-->
@@ -152,6 +151,8 @@ template/default/forum/viewthread_node.htm *<!--{hook/viewthread_magic_thread}--
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_magic_post $postcount}-->
 template/default/forum/viewthread_node.htm *<!--{hook/viewthread_endline $postcount}-->
 template/default/forum/viewthread_node_body.htm *<!--{hook/viewthread_posttop $postcount}-->
+template/default/forum/viewthread_node_body.htm *<!--{hook/global_login_text}-->
+template/default/forum/viewthread_node_body.htm *<!--{hook/viewthread_modaction}-->
 template/default/forum/viewthread_node_body.htm *<!--{hook/global_login_text}-->
 template/default/forum/viewthread_node_body.htm *<!--{hook/viewthread_postbottom $postcount}-->
 template/default/forum/viewthread_poll.htm *<!--{hook/viewthread_poll_top}-->
@@ -324,13 +325,24 @@ template/default/search/header.htm *<!--{hook/global_usernav_extra1}-->
 template/default/search/header.htm *<!--{hook/global_usernav_extra2}-->
 template/default/search/portal.htm *<!--{hook/portal_top}-->
 template/default/search/portal.htm *<!--{hook/portal_bottom}-->
+template/default/touch/common/footer.htm *<!--{hook/global_footer_mobile}-->
+template/default/touch/common/header.htm *<!--{hook/global_header_mobile}-->
+template/default/touch/forum/discuz.htm *<!--{hook/index_top_mobile}-->
+template/default/touch/forum/discuz.htm *<!--{hook/index_middle_mobile}-->
+template/default/touch/forum/forumdisplay.htm *<!--{hook/forumdisplay_top_mobile}-->
+template/default/touch/forum/forumdisplay.htm *<!--{hook/forumdisplay_thread_mobile $key}-->
+template/default/touch/forum/forumdisplay.htm *<!--{hook/forumdisplay_bottom_mobile}-->
+template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_top_mobile}-->
+template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_posttop_mobile $postcount}-->
+template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_postbottom_mobile $postcount}-->
+template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_bottom_mobile}-->
 template/default/userapp/userapp_app.htm *<!--{hook/userapp_app_top}-->
 template/default/userapp/userapp_app.htm *<!--{hook/userapp_app_bottom}-->
-template/default/userapp/userapp_index.htm *<!--{hook/userapp_index_top}-->
-template/default/userapp/userapp_index.htm *<!--{hook/userapp_index_bottom}-->
 template/default/userapp/userapp_menu_list.htm *<!--{hook/userapp_menu_top}-->
 template/default/userapp/userapp_menu_list.htm *<!--{hook/userapp_menu_middle}-->
 template/default/userapp/userapp_menu_list.htm *<!--{hook/userapp_menu_bottom}-->
+template/default/wml/common/footer.htm *<!--{hook/global_footer_mobile}-->
+template/default/wml/common/header.htm *<!--{hook/global_header_mobile}-->
 template/default/wml/forum/discuz.htm *<!--{hook/index_top_mobile}-->
 template/default/wml/forum/discuz.htm *<!--{hook/index_middle_mobile}-->
 template/default/wml/forum/forumdisplay.htm *<!--{hook/forumdisplay_top_mobile}-->

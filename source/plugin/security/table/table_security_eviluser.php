@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_security_eviluser.php 29265 2012-03-31 06:03:26Z yexinhao $
+ *      $Id: table_security_eviluser.php 33076 2013-04-18 06:22:07Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,7 +34,7 @@ class table_security_eviluser extends discuz_table {
 		$orderSql = " ORDER BY $orderBy DESC ";
 		$limitSql = DB::limit($start, $perPage);
 
-		return DB::fetch_all('SELECT * FROM %t', array($this->_table, $orderSql, $limitSql));
+		return DB::fetch_all("SELECT * FROM %t $orderSql $limitSql", array($this->_table));
 	}
 
 }

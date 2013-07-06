@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 31130 2012-07-18 09:29:13Z zhengqingpeng $
+ *      $Id: spacecp_profile.php 33364 2013-06-03 02:30:46Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,6 +28,7 @@ $secqaacheck = $_G['setting']['secqaa']['status'] & 4;
 $_G['group']['seccode'] = 1;
 @include_once DISCUZ_ROOT.'./data/cache/cache_domain.php';
 $spacedomain = isset($rootdomain['home']) && $rootdomain['home'] ? $rootdomain['home'] : array();
+$_GET['id'] = $_GET['id'] ? preg_replace("/[^A-Za-z0-9_:]/", '', $_GET['id']) : '';
 if($operation != 'password') {
 
 	include_once libfile('function/profile');
@@ -118,6 +119,10 @@ if(submitcheck('profilesubmit')) {
 			continue;
 		} elseif($key == 'timeoffset') {
 			C::t('common_member')->update($_G['uid'], array('timeoffset' => intval($value)));
+		} elseif($key == 'site') {
+			if(!in_array(strtolower(substr($value, 0, 6)), array('http:/', 'https:', 'ftp://', 'rtsp:/', 'mms://')) && !preg_match('/^static\//', $value) && !preg_match('/^data\//', $value)) {
+				$value = 'http://'.$value;
+			}
 		}
 		if($field['formtype'] == 'file') {
 			if((!empty($_FILES[$key]) && $_FILES[$key]['error'] == 0) || (!empty($space[$key]) && empty($_GET['deletefile'][$key]))) {

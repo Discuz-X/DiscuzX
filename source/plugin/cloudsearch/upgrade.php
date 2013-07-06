@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: upgrade.php 29278 2012-03-31 09:02:13Z zhouxiaobo $
+ *      $Id: upgrade.php 33387 2013-06-05 03:21:26Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,7 @@ if ($_GET['fromversion'] < 1.04) {
 		'status' => 0,
 		'allow_hot_topic' => 1,
 		'allow_thread_related' => 1,
+		'allow_recommend_related' => 1,
 		'allow_thread_related_bottom' => 0,
 		'allow_forum_recommend' => 1,
 		'allow_forum_related' => 0,

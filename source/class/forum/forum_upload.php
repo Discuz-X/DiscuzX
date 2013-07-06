@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_upload.php 32612 2013-02-26 09:09:06Z monkey $
+ *      $Id: forum_upload.php 32858 2013-03-15 03:36:22Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,7 +31,7 @@ class forum_upload {
 		$this->simple = !empty($_GET['simple']) ? $_GET['simple'] : 0;
 
 		if($_GET['hash'] != $swfhash) {
-			$this->uploadmsg(10);
+			return $this->uploadmsg(10);
 		}
 
 
@@ -40,25 +40,25 @@ class forum_upload {
 		$this->attach = &$upload->attach;
 
 		if($upload->error()) {
-			$this->uploadmsg(2);
+			return $this->uploadmsg(2);
 		}
 
 		$allowupload = !$_G['group']['maxattachnum'] || $_G['group']['maxattachnum'] && $_G['group']['maxattachnum'] > getuserprofile('todayattachs');;
 		if(!$allowupload) {
-			$this->uploadmsg(6);
+			return $this->uploadmsg(6);
 		}
 
 		if($_G['group']['attachextensions'] && (!preg_match("/(^|\s|,)".preg_quote($upload->attach['ext'], '/')."($|\s|,)/i", $_G['group']['attachextensions']) || !$upload->attach['ext'])) {
-			$this->uploadmsg(1);
+			return $this->uploadmsg(1);
 		}
 
 		if(empty($upload->attach['size'])) {
-			$this->uploadmsg(2);
+			return $this->uploadmsg(2);
 		}
 
 		if($_G['group']['maxattachsize'] && $upload->attach['size'] > $_G['group']['maxattachsize']) {
 			$this->error_sizelimit = $_G['group']['maxattachsize'];
-			$this->uploadmsg(3);
+			return $this->uploadmsg(3);
 		}
 
 		loadcache('attachtype');
@@ -70,10 +70,10 @@ class forum_upload {
 		if(isset($maxsize)) {
 			if(!$maxsize) {
 				$this->error_sizelimit = 'ban';
-				$this->uploadmsg(4);
+				return $this->uploadmsg(4);
 			} elseif($upload->attach['size'] > $maxsize) {
 				$this->error_sizelimit = $maxsize;
-				$this->uploadmsg(5);
+				return $this->uploadmsg(5);
 			}
 		}
 
@@ -81,23 +81,23 @@ class forum_upload {
 			$todaysize = getuserprofile('todayattachsize') + $upload->attach['size'];
 			if($todaysize >= $_G['group']['maxsizeperday']) {
 				$this->error_sizelimit = 'perday|'.$_G['group']['maxsizeperday'];
-				$this->uploadmsg(11);
+				return $this->uploadmsg(11);
 			}
 		}
 		updatemembercount($_G['uid'], array('todayattachs' => 1, 'todayattachsize' => $upload->attach['size']));
 		$upload->save();
 		if($upload->error() == -103) {
-			$this->uploadmsg(8);
+			return $this->uploadmsg(8);
 		} elseif($upload->error()) {
-			$this->uploadmsg(9);
+			return $this->uploadmsg(9);
 		}
 		$thumb = $remote = $width = 0;
 		if($_GET['type'] == 'image' && !$upload->attach['isimage']) {
-			$this->uploadmsg(7);
+			return $this->uploadmsg(7);
 		}
 		if($upload->attach['isimage']) {
 			if(!in_array($upload->attach['imageinfo']['2'], array(1,2,3,6))) {
-				$this->uploadmsg(7);
+				return $this->uploadmsg(7);
 			}
 			if($_G['setting']['showexif']) {
 				require_once libfile('function/attachment');
@@ -140,7 +140,7 @@ class forum_upload {
 		if($upload->attach['isimage'] && $_G['setting']['showexif']) {
 			C::t('forum_attachment_exif')->insert($aid, $exif);
 		}
-		$this->uploadmsg(0);
+		return $this->uploadmsg(0);
 	}
 
 	function uploadmsg($statusid) {

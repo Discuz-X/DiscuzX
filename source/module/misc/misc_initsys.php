@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 32174 2012-11-22 09:27:28Z monkey $
+ *      $Id: misc_initsys.php 32883 2013-03-20 02:49:01Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,8 +25,9 @@ if($_G['config']['output']['tplrefresh']) {
 	cleartemplatecache();
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'mobile');
-$opens = array('mobile');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'mobile', 'pcmgr_url_safeguard');
+$opens = array('mobile', 'pcmgr_url_safeguard');
+$allowcloses = array('pcmgr_url_safeguard');
 
 $cloudapps = array('qqconnect' => 'connect', 'cloudstat' => 'stats', 'soso_smilies' => 'smilies', 'cloudsearch' => 'search', 'qqgroup' => 'qqgroup', 'security' => 'security');
 
@@ -57,6 +58,7 @@ foreach($plugins as $pluginid) {
 	if(!file_exists($importfile)) {
 		continue;
 	}
+	$systemvalue = in_array($pluginid, $allowcloses) ? 1 : 2;
 	$importtxt = @implode('', file($importfile));
 	$pluginarray = getimportdata('Discuz! Plugin', $importtxt);
 	$plugin = C::t('common_plugin')->fetch_by_identifier($pluginid);
@@ -72,8 +74,8 @@ foreach($plugins as $pluginid) {
 					}
 				}
 			}
-			if($modules['system'] != 2) {
-				$modules['system'] = 2;
+			if($modules['system'] != $systemvalue) {
+				$modules['system'] = $systemvalue;
 				$modules = serialize($modules);
 				C::t('common_plugin')->update($plugin['pluginid'], array('modules' => $modules));
 			}
@@ -87,7 +89,7 @@ foreach($plugins as $pluginid) {
 	}
 
 	$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
-	$pluginarray['plugin']['modules']['system'] = 2;
+	$pluginarray['plugin']['modules']['system'] = $systemvalue;
 	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
 	plugininstall($pluginarray, '', in_array($pluginid, $opens));
 

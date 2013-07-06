@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_optimizer.php 31754 2012-10-08 02:29:22Z zhangjie $
+ *      $Id: lang_optimizer.php 32960 2013-03-28 04:36:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,7 +36,7 @@ $lang = array
 	'optimizer_setting_cache_post_desc' => '开启此功能可减轻服务器负载',
 	'optimizer_setting_cache_post_optimize_desc' => '设置缓存时间为900秒',
 	'optimizer_setting_optimizeviews' => '优化更新主题浏览量',
-	'optimizer_setting_optimizeviews_desc' => '开启此共功能可减轻更新主题浏览量时产生的服务器负载',
+	'optimizer_setting_optimizeviews_desc' => '开启此功能可减轻更新主题浏览量时对服务器产生的负载',
 	'optimizer_setting_optimizeviews_optimize_desc' => '开启此功能',
 	'optimizer_setting_delayviewcount' => '附件下载量延迟更新',
 	'optimizer_setting_delayviewcount_desc' => '延迟更新附件的浏览量，可明显降低访问量很大的站点的服务器负担',

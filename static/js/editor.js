@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 32700 2013-03-01 03:06:43Z monkey $
+	$Id: editor.js 33303 2013-05-23 03:35:36Z andyzheng $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
@@ -113,15 +113,33 @@ function initesbar() {
 	if(!$(editorid + '_adv_s3')) {
 		return;
 	}
-	var btns = $(editorid + '_adv_s3').getElementsByTagName('A');
+	var buttons = $(editorid + '_adv_s3').getElementsByTagName('A');
 	var s = '';
-	for(i = 0;i < btns.length;i++) {
+	for(i = 0;i < buttons.length;i++) {
 		if(i/2 == parseInt(i/2)) {
 			s += '<p>';
 		}
-		s += btns[i].outerHTML;
+		s += buttons[i].outerHTML;
 	}
 	$(editorid + '_adv_s3').innerHTML = s;
+	for(var i = 0; i < buttons.length; i++) {
+		if(buttons[i].id.indexOf(editorid + '_') != -1) {
+			buttons[i].href = 'javascript:;';
+			if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'fullswitcher') {
+			} else if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'simple') {
+			} else {
+				_attachEvent(buttons[i], 'mouseover', function(e) {setEditorTip(BROWSER.ie ? window.event.srcElement.title : e.target.title);});
+				if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'url') {
+					buttons[i].onclick = function(e) {discuzcode('unlink');discuzcode('url');doane();};
+				} else {
+					if(!buttons[i].getAttribute('init')) {
+						buttons[i].onclick = function(e) {discuzcode(this.id.substr(this.id.indexOf('_') + 1));doane();};
+					}
+				}
+			}
+			buttons[i].onmouseout = function(e) {setEditorTip('');};
+		}
+	}
 }
 
 function savedataTime() {
@@ -855,7 +873,7 @@ function discuzcode(cmd, arg) {
 		var oldValidate = editorform.onsubmit;
 		var oldAction = editorform.action;
 		editorform.onsubmit = '';
-		editorform.action = 'forum.php?mod=ajax&action=downremoteimg&fid='+fid+'&wysiwyg='+(wysiwyg ? 1 : 0);
+		editorform.action = 'forum.php?mod=ajax&action=downremoteimg&inajax=1&fid='+fid+'&wysiwyg='+(wysiwyg ? 1 : 0);
 		editorform.target = "ajaxpostframe";
 		editorform.message.value = message;
 		editorform.submit();
@@ -1302,7 +1320,7 @@ function showEditorMenu(tag, params) {
 				var style = '';
 				if(wysiwyg) {
 					style += width ? ' width=' + width : '';
-					style += height ? ' height=' + height : '';
+					style += height ? ' _height=' + height : '';
 					var str = '<img src=' + src + style + ' border=0 />';
 					insertText(str, str.length, 0, false, sel);
 				} else {

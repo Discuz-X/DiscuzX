@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tools.php 27301 2012-01-13 07:23:05Z monkey $
+ *      $Id: admincp_tools.php 33301 2013-05-23 03:10:20Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -44,6 +44,9 @@ if($operation == 'updatecache') {
 			savecache('groupindex', $groupindex);
 			C::t('forum_groupfield')->truncate();
 			savecache('forum_guide', '');
+			if($_G['setting']['grid']['showgrid']) {
+				savecache('grids', array());
+			}
 		}
 		if(in_array('tpl', $type) && $_G['config']['output']['tplrefresh']) {
 			cleartemplatecache();

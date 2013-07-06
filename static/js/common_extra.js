@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 32685 2013-02-28 09:57:01Z zhengqingpeng $
+	$Id: common_extra.js 33043 2013-04-12 03:31:00Z monkey $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -276,7 +276,7 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 	var menuid = 'imgzoom';
 	var menu = $(menuid);
 	var zoomid = menuid + '_zoom';
-	var imgtitle = !nocover && obj.title ? '<div class="imgzoom_title">' + obj.title + '</div>' +
+	var imgtitle = !nocover && obj.title ? '<div class="imgzoom_title">' + htmlspecialchars(obj.title) + '</div>' +
 		(showexif ? '<div id="' + zoomid + '_exif" class="imgzoom_exif" onmouseover="this.className=\'imgzoom_exif imgzoom_exif_hover\'" onmouseout="this.className=\'imgzoom_exif\'"></div>' : '')
 		: '';
 	var cover = !nocover ? 1 : 0;
@@ -916,7 +916,6 @@ function _runslideshow() {
 		new slideshow(slideshows[i]);
 	}
 }
-
 function _showTip(ctrlobj) {
 	if(!ctrlobj.id) {
 		ctrlobj.id = 'tip_' + Math.random();
@@ -927,14 +926,14 @@ function _showTip(ctrlobj) {
 		div.id = ctrlobj.id + '_menu';
 		div.className = 'tip tip_4';
 		div.style.display = 'none';
-		div.innerHTML = '<div class="tip_horn"></div><div class="tip_c">' + htmlspecialchars(ctrlobj.getAttribute('tip')) + '</div>';
+		div.innerHTML = '<div class="tip_horn"></div><div class="tip_c">' + ctrlobj.getAttribute('tip') + '</div>';
 		$('append_parent').appendChild(div);
 	}
 	$(ctrlobj.id).onmouseout = function () { hideMenu('', 'prompt'); };
 	showMenu({'mtype':'prompt','ctrlid':ctrlobj.id,'pos':'12!','duration':2,'zindex':JSMENU['zIndex']['prompt']});
 }
 
-function _showPrompt(ctrlid, evt, msg, timeout) {
+function _showPrompt(ctrlid, evt, msg, timeout, classname) {
 	var menuid = ctrlid ? ctrlid + '_pmenu' : 'ntcwin';
 	var duration = timeout ? 0 : 3;
 	if($(menuid)) {
@@ -942,7 +941,7 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 	}
 	var div = document.createElement('div');
 	div.id = menuid;
-	div.className = ctrlid ? 'tip tip_js' : 'ntcwin';
+	div.className = !classname ? (ctrlid ? 'tip tip_js' : 'ntcwin') : classname;
 	div.style.display = 'none';
 	$('append_parent').appendChild(div);
 	if(ctrlid) {
@@ -1158,6 +1157,13 @@ function _showUpgradeinfo() {
 function _showForummenu(fid) {
 	if($('fjump_menu') && !$('fjump_menu').innerHTML) {
 		ajaxget('forum.php?mod=ajax&action=forumjump&jfid=' + fid, 'fjump_menu', 'ajaxwaitid');
+	}
+}
+
+function _showUserApp(fid) {
+	var menu = $('mn_userapp_menu');
+	if(menu && !menu.innerHTML) {
+		ajaxget('misc.php?mod=manyou&action=menu', 'mn_userapp_menu', 'ajaxwaitid');
 	}
 }
 

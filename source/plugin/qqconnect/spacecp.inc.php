@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: spacecp.inc.php 32630 2013-02-27 05:46:25Z liulanbo $
+ *	  $Id: spacecp.inc.php 32901 2013-03-21 08:54:21Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,6 +49,23 @@ if ($pluginop == 'config') {
 	$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid, 0);
 	$thread = C::t('forum_thread')->fetch_by_tid_displayorder($tid, 0);
 	$msglower = strtolower($post['message']);
+
+	if(strpos($msglower, '[/password]') !== FALSE) {
+		$post['message'] = '';
+	}
+
+	if(strpos($msglower, '[/postbg]') !== FALSE) {
+		$post['message'] = preg_replace("/\s?\[postbg\]\s*([^\[\<\r\n;'\"\?\(\)]+?)\s*\[\/postbg\]\s?/is", '', $post['message']);
+	}
+
+	if(strpos($msglower, '[/index]') !== FALSE) {
+		$post['message'] = preg_replace("/\s?\[index\](.+?)\[\/index\]\s?/is", '', $post['message']);
+	}
+
+	if(strpos($msglower, '[page]') !== FALSE) {
+		$post['message'] = preg_replace("/\s?\[page\]\s?/is", '', $post['message']);
+	}
+
 	if(strpos($msglower, '[/quote]') !== FALSE) {
 		$post['message'] = preg_replace('/\[quote\].*\[\/quote\](\r\n|\n|\r){0,}/is', '', $post['message']);
 	}
@@ -120,7 +137,7 @@ if ($pluginop == 'config') {
 
 	$connectOAuthClient = Cloud::loadClass('Service_Client_ConnectOAuth');
 	$connectService = Cloud::loadClass('Service_Connect');
-	if($sh_type == 1 || $sh_type == 3) {
+	if($sh_type == 3) {
 
 		$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid, 0);
 		$msglower = strtolower($firstpost['message']);

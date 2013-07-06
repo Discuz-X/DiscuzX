@@ -4,17 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_makehtml.php 32684 2013-02-28 09:46:29Z zhangguosheng $
+ *      $Id: admincp_makehtml.php 33048 2013-04-12 08:50:27Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$operation = in_array($operation, array('all', 'index', 'category', 'article', 'topic', 'aids', 'catids', 'topicids', 'makehtmlsetting')) ? $operation : 'all';
+$operation = in_array($operation, array('all', 'index', 'category', 'article', 'topic', 'aids', 'catids', 'topicids', 'makehtmlsetting', 'cleanhtml')) ? $operation : 'all';
 
 cpheader();
-shownav('portal', 'HTML管理');
+shownav('portal', 'nav_makehtml');
 
 $css = '<style>
 		#mk_result {width:100%; margin-top:10px; border: 1px solid #ccc; margin: 0 auto; font-size:16px; text-align:center; display:none; }
@@ -25,33 +25,39 @@ $css = '<style>
 
 $result = '<tr><td colspan="15"><div id="mk_result">
 			<div id="progress_bar"></div>
-			<div id="mk_topic" mktitle="专题"></div>
-			<div id="mk_article" mktitle="文章"></div>
-			<div id="mk_category" mktitle="频道"></div>
-			<div id="mk_index" mktitle="首页"></div>
+			<div id="mk_topic" mktitle="'.$lang['makehtml_topic'].'"></div>
+			<div id="mk_article" mktitle="'.$lang['makehtml_article'].'"></div>
+			<div id="mk_category" mktitle="'.$lang['makehtml_category'].'"></div>
+			<div id="mk_index" mktitle="'.$lang['makehtml_index'].'"></div>
 			</div></td></tr>';
 
 if(!in_array($operation, array('aids', 'catids', 'topicids'))) {
-	showsubmenu('html',  array(
-		array('生成全部', 'makehtml&operation=all', $operation == 'all'),
-		array('生成首页', 'makehtml&operation=index', $operation == 'index'),
-		array('生成频道', 'makehtml&operation=category', $operation == 'category'),
-		array('生成文章', 'makehtml&operation=article', $operation == 'article'),
-		array('生成专题', 'makehtml&operation=topic', $operation == 'topic'),
-		array('设置', 'makehtml&operation=makehtmlsetting', $operation == 'makehtmlsetting')
-	), '');
+	$_nav = array();
+	if(!empty($_G['setting']['makehtml']['flag'])) {
+		$_nav = array(
+			array('makehtml_createall', 'makehtml&operation=all', $operation == 'all'),
+			array('makehtml_createindex', 'makehtml&operation=index', $operation == 'index'),
+			array('makehtml_createcategory', 'makehtml&operation=category', $operation == 'category'),
+			array('makehtml_createarticle', 'makehtml&operation=article', $operation == 'article'),
+			array('makehtml_createtopic', 'makehtml&operation=topic', $operation == 'topic')
+		);
+	}
+	$_nav[] = array('config', 'makehtml&operation=makehtmlsetting', $operation == 'makehtmlsetting');
+	if(empty($_G['setting']['makehtml']['flag'])) {
+		$_nav[] = array('makehtml_clear', 'makehtml&operation=cleanhtml', $operation == 'cleanhtml');
+	}
+	showsubmenu('html', $_nav, '');
 }
 if($operation == 'all') {
-
-	showtips('<li>生成指定起始时间以后发布的文章的HTML文件</li><li>生成指定起始时间以后发布过文章的频道HTML文件</li><li>生成门户首页的HTML文件</li>');
+	showtips('makehtml_tips_all');
 
 	showformheader('makehtml&operation=all');
 	showtableheader('');
 	echo '<script type="text/javascript" src="'.STATICURL.'js/calendar.js"></script>',
 		'<script type="text/javascript" src="'.STATICURL.'js/makehtml.js?1"></script>',
 		$css;
-	showsetting('起始时间', 'starttime', dgmdate(TIMESTAMP, 'Y-m-d'), 'calendar', '', '', '', '1');
-	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">生成全部</a></div></td></tr>', $result;
+	showsetting('start_time', 'starttime', dgmdate(TIMESTAMP, 'Y-m-d'), 'calendar', '', '', '', '1');
+	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">'.$lang['makehtml_createall'].'</a></div></td></tr>', $result;
 	$adminscript = ADMINSCRIPT;
 	echo <<<EOT
 <script type="text/JavaScript">
@@ -60,7 +66,7 @@ form.onsubmit = function(){return false;};
 _attachEvent($('submit_portal_html'), 'click', function(){
 	$('mk_result').style.display = 'block';
 	$('mk_index').style.display = 'none';
-	this.innerHTML = '重新生成';
+	this.innerHTML = '$lang[makehtml_recreate]';
 	var starttime = form['starttime'].value;
 	if(starttime){
 		make_html_article(starttime);
@@ -70,26 +76,42 @@ _attachEvent($('submit_portal_html'), 'click', function(){
 
 function make_html_ok() {
 	var dom = $('mk_index');
-	dom.innerHTML = '<div class="mk_msg">全部文件生成成功</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_allfilecomplete]</div>';
 }
 function make_html_index() {
 	var dom = $('mk_index');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在生成首页...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitmaking]</div>';
 	dom.style.display = 'block';
 	new make_html_batch('portal.php?', 0, make_html_ok, dom, 1);
 }
 
 function make_html_category(starttime){
 	var dom = $('mk_category');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在检查可生成的频道页面...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitmakingcategory]</div>';
 	dom.style.display = 'block';
 	starttime = starttime || form['starttime'].value;
 	var x = new Ajax();
 	x.get('$adminscript?action=makehtml&operation=catids&inajax=1&frame=no&starttime='+starttime, function (s) {
 		if(s) {
-			new make_html_batch('portal.php?mod=list&catid=', s.split(','), make_html_index, dom);
+			new make_html_batch('portal.php?mod=list&catid=', s.split(','), make_html_topic, dom);
 		} else {
-			dom.innerHTML = '没有可生成的频道页面<br/>现在开始生成主页文件...<br /><a href="javascript:void(0);" onclick="\$(\'mk_category\').style.display = \'none\';make_html_index();">如果您的浏览器没有反应，请点击继续...</a>';
+			dom.innerHTML = '$lang[makehtml_nofindcategory]<br/>$lang[makehtml_startmaketopic]<br /><a href="javascript:void(0);" onclick="\$(\'mk_category\').style.display = \'none\';make_html_topic();">$lang[makehtml_browser_error]</a>';
+			setTimeout(function(){\$('mk_category').style.display = 'none'; make_html_topic();}, 1000);
+		}
+	});
+}
+
+function make_html_topic(starttime){
+	var dom = $('mk_topic');
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitchecktopic]</div>';
+	dom.style.display = 'block';
+	starttime = starttime || form['starttime'].value;
+	var x = new Ajax();
+	x.get('$adminscript?action=makehtml&operation=topicids&inajax=1&frame=no&starttime='+starttime, function (s) {
+		if(s) {
+			new make_html_batch('portal.php?mod=topic&topicid=', s.split(','), make_html_index, dom);
+		} else {
+			dom.innerHTML = '$lang[makehtml_nofindtopic]<br/>$lang[makehtml_startmakeindex]<br /><a href="javascript:void(0);" onclick="\$(\'mk_category\').style.display = \'none\';make_html_index();">$lang[makehtml_browser_error]</a>';
 			setTimeout(function(){\$('mk_category').style.display = 'none'; make_html_index();}, 1000);
 		}
 	});
@@ -97,14 +119,14 @@ function make_html_category(starttime){
 
 function make_html_article(starttime) {
 	var dom = $('mk_article');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在检查可生成的文章页面...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitcheckarticle]</div>';
 	dom.style.display = 'block';
 	var x = new Ajax();
 	x.get('$adminscript?action=makehtml&operation=aids&inajax=1&frame=no&starttime='+starttime, function (s) {
 		if(s){
 			new make_html_batch('portal.php?mod=view&aid=', s.split(','), make_html_category, dom);
 		} else {
-			dom.innerHTML = '没有可生成的文章页面<br/>现在开始生成频道文件...<br /><a href="javascript:void(0);" onclick="\$(\'mk_article\').style.display = \'none\';make_html_category();">如果您的浏览器没有反应，请点击继续...</a>';
+			dom.innerHTML = '$lang[makehtml_nofindarticle]<br/>$lang[makehtml_startmakecategory]<br /><a href="javascript:void(0);" onclick="\$(\'mk_article\').style.display = \'none\';make_html_category();">$lang[makehtml_browser_error]</a>';
 			setTimeout(function(){\$('mk_article').style.display = 'none'; make_html_category();}, 1000);
 		}
 	});
@@ -114,15 +136,14 @@ function make_html_article(starttime) {
 EOT;
 	showtablefooter();
 	showformfooter();
-
 } elseif($operation == 'index') {
 
-	showtips('<li>生成门户首页的HTML文件</li>');
+	showtips('makehtml_tips_index');
 
 	showformheader('makehtml&operation=index');
 	showtableheader('');
 	echo '<script type="text/javascript" src="'.STATICURL.'js/makehtml.js?1"></script>', $css;
-	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">生成首页</a></div></td></tr>', $result;
+	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">'.$lang['makehtml_createindex'].'</a></div></td></tr>', $result;
 	$adminscript = ADMINSCRIPT;
 	echo <<<EOT
 <script type="text/JavaScript">
@@ -131,7 +152,7 @@ form.onsubmit = function(){return false;};
 _attachEvent($('submit_portal_html'), 'click', function(){
 	$('mk_result').style.display = 'block';
 	$('mk_index').style.display = 'none';
-	this.innerHTML = '重新生成';
+	this.innerHTML = '$lang[makehtml_recreate]';
 	this.disabled = true;
 	make_html_index();
 	return false;
@@ -139,7 +160,7 @@ _attachEvent($('submit_portal_html'), 'click', function(){
 
 function make_html_index() {
 	var dom = $('mk_index');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在生成首页...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitmaking]</div>';
 	dom.style.display = 'block';
 	new make_html_batch('portal.php?', 0, null, dom, 1);
 }
@@ -150,18 +171,18 @@ EOT;
 } elseif($operation == 'category') {
 
 	loadcache('portalcategory');
-	showtips('<li>生成指定频道首页HTML文件</li><li>生成指定起始时间以后发布过文章的频道首页HTML文件</li>');
+	showtips('makehtml_tips_category');
 	showformheader('makehtml&operation=category');
 	showtableheader('');
 	echo '<script type="text/javascript" src="'.STATICURL.'js/calendar.js"></script>',
 		'<script type="text/javascript" src="'.STATICURL.'js/makehtml.js?1"></script>',
 		$css;
 
-	showsetting('起始时间', 'starttime', '', 'calendar', '', '', '', '1');
-	$selectdata = array('category', array(array(0, '生成所有频道')));
+	showsetting('start_time', 'starttime', '', 'calendar', '', '', '', '1');
+	$selectdata = array('category', array(array(0, $lang['makehtml_createallcategory'])));
 	mk_format_category(array_keys($_G['cache']['portalcategory']));
-	showsetting('选择频道', $selectdata, 0, 'mselect');
-	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">生成频道</a></div></td></tr>', $result;
+	showsetting('makehtml_selectcategory', $selectdata, 0, 'mselect');
+	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">'.$lang['makehtml_createcategory'].'</a></div></td></tr>', $result;
 	$adminscript = ADMINSCRIPT;
 	echo <<<EOT
 <script type="text/JavaScript">
@@ -170,7 +191,7 @@ form.onsubmit = function(){return false;};
 _attachEvent($('submit_portal_html'), 'click', function(){
 	$('mk_result').style.display = 'block';
 	$('mk_index').style.display = 'none';
-	this.innerHTML = '重新生成';
+	this.innerHTML = '$lang[makehtml_recreate]';
 	var starttime = form['starttime'].value;
 	if(starttime){
 		make_html_category(starttime);
@@ -190,7 +211,7 @@ _attachEvent($('submit_portal_html'), 'click', function(){
 		} else {
 			var dom = $('mk_index');
 			dom.style.display = 'block';
-			dom.innerHTML = '没有可生成的频道页面';
+			dom.innerHTML = '$lang[makehtml_nofindcategory]';
 		}
 	}
 	return false;
@@ -200,11 +221,11 @@ function make_html_category_ok() {
 	var dom = $('mk_index');
 	dom.style.display = 'block';
 	dom.style.color = 'green';
-	dom.innerHTML = '<div class="mk_msg">选择的频道全部生成成功</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_selectcategorycomplete]</div>';
 }
 function make_html_category(starttime){
 	var dom = $('mk_category');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在检查可生成的频道页面...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitmakingcategory]</div>';
 	dom.style.display = 'block';
 	starttime = starttime || form['starttime'].value;
 	var x = new Ajax();
@@ -212,7 +233,7 @@ function make_html_category(starttime){
 		if(s) {
 			new make_html_batch('portal.php?mod=list&catid=', s.split(','), make_html_category_ok, dom);
 		} else {
-			dom.innerHTML = '没有可生成的频道页面';
+			dom.innerHTML = '$lang[makehtml_nofindcategory]';
 			setTimeout(function(){\$('mk_category').style.display = 'none'; make_html_index();}, 1000);
 		}
 	});
@@ -225,20 +246,20 @@ EOT;
 } elseif($operation == 'article') {
 
 	loadcache('portalcategory');
-	showtips('<li>生成指定起始时间以后发布的文章的HTML文件</li><li>生成指定频道下所有文章的HTML文件</li><li>生成指定起始时间以后发布的文章的HTML文件</li>');
+	showtips('makehtml_tips_article');
 	showformheader('makehtml&operation=category');
 	showtableheader('');
 	echo '<script type="text/javascript" src="'.STATICURL.'js/calendar.js"></script>',
 		'<script type="text/javascript" src="'.STATICURL.'js/makehtml.js?1"></script>',
 		$css;
 
-	showsetting('起始时间', 'starttime', dgmdate(TIMESTAMP - 86400, 'Y-m-d'), 'calendar', '', '', '', '1');
-	$selectdata = array('category', array(array(0, '生成所有频道')));
+	showsetting('start_time', 'starttime', dgmdate(TIMESTAMP - 86400, 'Y-m-d'), 'calendar', '', '', '', '1');
+	$selectdata = array('category', array(array(0, $lang['makehtml_createallcategory'])));
 	mk_format_category(array_keys($_G['cache']['portalcategory']));
-	showsetting('选择频道', $selectdata, 0, 'mselect');
-	showsetting('起始ID(空或0表示从头开始)', 'startid', 0, 'text');
-	showsetting('结束ID(空或0表示直到结束)', 'endid', 0, 'text');
-	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">生成文章</a></div></td></tr>', $result;
+	showsetting('makehtml_selectcategory', $selectdata, 0, 'mselect');
+	showsetting('makehtml_startid', 'startid', 0, 'text');
+	showsetting('makehtml_endid', 'endid', 0, 'text');
+	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">'.$lang['makehtml_createarticle'].'</a></div></td></tr>', $result;
 	$adminscript = ADMINSCRIPT;
 	echo <<<EOT
 <script type="text/JavaScript">
@@ -247,7 +268,7 @@ form.onsubmit = function(){return false;};
 _attachEvent($('submit_portal_html'), 'click', function(){
 	$('mk_result').style.display = 'block';
 	$('mk_index').style.display = 'none';
-	this.innerHTML = '重新生成';
+	this.innerHTML = '$lang[makehtml_recreate]';
 	var starttime = form['starttime'].value;
 	var category = form['category'];
 	var allcatids = [];
@@ -266,7 +287,7 @@ _attachEvent($('submit_portal_html'), 'click', function(){
 	} else {
 		var dom = $('mk_index');
 		dom.style.display = 'block';
-		dom.innerHTML = '没有可生成的文章页面';
+		dom.innerHTML = '$lang[makehtml_nofindarticle]';
 	}
 	return false;
 });
@@ -275,7 +296,7 @@ function make_html_article_ok() {
 	var dom = $('mk_index');
 	dom.style.display = 'block';
 	dom.style.color = 'green';
-	dom.innerHTML = '<div class="mk_msg">全部文章生成成功</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_allarticlecomplete]</div>';
 }
 
 function make_html_article(starttime, catids, startid, endid) {
@@ -283,14 +304,14 @@ function make_html_article(starttime, catids, startid, endid) {
 	startid = startid || 0;
 	endid = endid || 0;
 	var dom = $('mk_article');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在检查可生成的文章页面...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitcheckarticle]</div>';
 	dom.style.display = 'block';
 	var x = new Ajax();
 	x.get('$adminscript?action=makehtml&operation=aids&inajax=1&frame=no&starttime='+starttime+'&catids='+(catids == -1 ? '' : catids.join(','))+'&startid='+startid+'&endid='+endid, function (s) {
 		if(s && s.indexOf('<') < 0){
 			new make_html_batch('portal.php?mod=view&aid=', s.split(','), make_html_article_ok, dom);
 		} else {
-			dom.innerHTML = '没有可生成的文章页面';
+			dom.innerHTML = '$lang[makehtml_nofindarticle]';
 		}
 	});
 }
@@ -315,15 +336,15 @@ EOT;
 
 } elseif($operation == 'topic') {
 
-	showtips('<li>生成指定起始时间以后发布的专题的HTML文件</li>');
+	showtips('makehtml_tips_topic');
 	showformheader('makehtml&operation=topic');
 	showtableheader('');
 	echo '<script type="text/javascript" src="'.STATICURL.'js/calendar.js"></script>',
 		'<script type="text/javascript" src="'.STATICURL.'js/makehtml.js?1"></script>',
 		$css;
 
-	showsetting('起始时间', 'starttime', '', 'calendar', '', '', '', '1');
-	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">生成专题</a></div></td></tr>', $result;
+	showsetting('start_time', 'starttime', '', 'calendar', '', '', '', '1');
+	echo '<tr><td colspan="15"><div class="fixsel"><a href="javascript:void(0);" class="btn_big" id="submit_portal_html">'.$lang['makehtml_createtopic'].'</a></div></td></tr>', $result;
 	$adminscript = ADMINSCRIPT;
 	echo <<<EOT
 <script type="text/JavaScript">
@@ -332,14 +353,14 @@ form.onsubmit = function(){return false;};
 _attachEvent($('submit_portal_html'), 'click', function(){
 	$('mk_result').style.display = 'block';
 	$('mk_index').style.display = 'none';
-	this.innerHTML = '重新生成';
+	this.innerHTML = '$lang[makehtml_recreate]';
 	var starttime = form['starttime'].value;
 	if(starttime) {
 		make_html_topic(starttime);
 	} else {
 		var dom = $('mk_index');
 		dom.style.display = 'block';
-		dom.innerHTML = '没有可生成的专题页面';
+		dom.innerHTML = '$lang[makehtml_nofindtopic]';
 	}
 	return false;
 });
@@ -348,19 +369,19 @@ function make_html_topic_ok() {
 	var dom = $('mk_index');
 	dom.style.display = 'block';
 	dom.style.color = 'green';
-	dom.innerHTML = '<div class="mk_msg">全部专题生成成功</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_alltopiccomplete]</div>';
 }
 
 function make_html_topic(starttime) {
 	var dom = $('mk_topic');
-	dom.innerHTML = '<div class="mk_msg">请稍等，正在检查可生成的专题页面...</div>';
+	dom.innerHTML = '<div class="mk_msg">$lang[makehtml_waitchecktopic]</div>';
 	dom.style.display = 'block';
 	var x = new Ajax();
 	x.get('$adminscript?action=makehtml&operation=topicids&inajax=1&frame=no&starttime='+starttime, function (s) {
 		if(s && s.indexOf('<') < 0){
 			new make_html_batch('portal.php?mod=topic&topicid=', s.split(','), make_html_topic_ok, dom);
 		} else {
-			dom.innerHTML = '没有可生成的专题页面';
+			dom.innerHTML = '$lang[makehtml_nofindtopic]';
 		}
 	});
 }
@@ -454,6 +475,67 @@ EOT;
 	}
 
 
+} elseif ($operation == 'cleanhtml') {
+	$setting = $_G['setting']['makehtml'];
+	if(!empty($setting['flag'])) {
+		cpmsg('admincp_makehtml_cleanhtml_error', 'action=makehtml&operation=makehtmlsetting', 'error');
+	} else {
+		if(!submitcheck('cleanhtml')) {
+
+			showformheader("makehtml&operation=cleanhtml");
+			showtableheader();
+			showsetting('setting_functions_makehtml_cleanhtml', array('cleandata', array(cplang('setting_functions_makehtml_cleanhtml_index'), cplang('setting_functions_makehtml_cleanhtml_category'), cplang('setting_functions_makehtml_cleanhtml_other'))), 0, 'binmcheckbox');
+			showtagfooter('tbody');
+			showtablefooter();
+			showsubmit('cleanhtml', 'submit');
+			showformfooter();
+		} else {
+			if(isset($_GET['cleandata'])) {
+				$cleandata = $_GET['cleandata'];
+				if(isset($cleandata[1])) {
+					unlink(DISCUZ_ROOT.'./'.$setting['indexname'].'.'.$setting['extendname']);
+				}
+				if(isset($cleandata[2])) {
+					loadcache('portalcategory');
+					foreach($_G['cache']['portalcategory'] as $cat) {
+						if($cat['fullfoldername']) {
+							unlink($cat['fullfoldername'].'/index.'.$setting['extendname']);
+						}
+					}
+				}
+				if(isset($cleandata[3])) {
+					if(!empty($setting['articlehtmldir']) && $setting['articlehtmldir'] === $setting['topichtmldir']) {
+						drmdir(DISCUZ_ROOT.'./'.$setting['articlehtmldir'], $setting['extendname']);
+					} elseif(!empty($setting['topichtmldir'])) {
+						drmdir(DISCUZ_ROOT.'./'.$setting['topichtmldir'], $setting['extendname']);
+					} elseif(!empty($setting['articlehtmldir'])) {
+						drmdir(DISCUZ_ROOT.'./'.$setting['articlehtmldir'], $setting['extendname']);
+					}
+					if(empty($setting['articlehtmldir'])) {
+						loadcache('portalcategory');
+						foreach($_G['cache']['portalcategory'] as $cat) {
+							if($cat['fullfoldername']) {
+								if(($dirobj = dir(DISCUZ_ROOT.'./'.$cat['fullfoldername']))) {
+									while(false !== ($file = $dirobj->read())) {
+										if ($file != "." && $file != "..") {
+											$path = $dirobj->path.'/'.$file;
+											if(is_dir($path) && false === check_son_folder($file, $cat)) {
+												drmdir($path, $setting['extendname']);
+											}
+										}
+									}
+									$dirobj->close();
+								}
+							}
+						}
+					}
+				}
+				cpmsg('admincp_makehtml_cleanhtml_succeed', 'action=makehtml&operation=cleanhtml', 'succeed');
+			} else {
+				cpmsg('admincp_makehtml_cleanhtml_choose_item', 'action=makehtml&operation=cleanhtml', 'error');
+			}
+		}
+	}
 }
 
 function mk_format_category($catids) {
@@ -472,5 +554,50 @@ function mk_format_category($catids) {
 			}
 		}
 	}
+}
+
+function drmdir($dir, $fileext = 'html') {
+	if($dir === '.' || $dir === '..' || strpos($dir, '..') !== false) {
+		return false;
+	}
+	if(substr($dir,-1) === "/") {
+		$dir = substr($dir,0,-1);
+	}
+	if(!file_exists($dir) || !is_dir($dir)) {
+		return false;
+	} elseif(!is_readable($dir)) {
+		return false;
+	} else {
+		if(($dirobj = dir($dir))) {
+			while(false !== ($file = $dirobj->read())) {
+				if ($file != "." && $file != "..") {
+					$path = $dirobj->path . "/" . $file;
+					if(is_dir($path)) {
+						drmdir($path);
+					} elseif(fileext($path) === $fileext) {
+						echo $path,"<br>";
+						unlink($path);
+					}
+				}
+			}
+			$dirobj->close();
+		}
+		rmdir($dir);
+		return true;
+	}
+	return false;
+}
+
+function check_son_folder($file, $cat) {
+	global $_G;
+	$category = $_G['cache']['portalcategory'];
+	if(!empty($cat['children'])) {
+		foreach ($cat['children'] as $catid) {
+			if($category[$catid]['upid'] == $cat['catid'] && $category[$catid]['foldername'] == $file) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 ?>

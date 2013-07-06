@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: UserApplication.php 25522 2011-11-14 03:32:59Z yexinhao $
+ *      $Id: UserApplication.php 33052 2013-04-12 09:39:49Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -127,7 +127,6 @@ class Cloud_Service_Server_UserApplication extends Cloud_Service_Server_Restful 
 				$privacy = 0;
 		}
 
-		$where = sprintf('uid = %d AND appid IN (%s)', $uId, dimplode($appIds));
 		$setarr = array(
 			'appname'	=> $appName,
 			'privacy'	=> $privacy,
@@ -137,6 +136,7 @@ class Cloud_Service_Server_UserApplication extends Cloud_Service_Server_Restful 
 		);
 		if ($displayOrder !== null) {
 			$setarr['displayorder'] = $displayOrder;
+			$setarr['menuorder'] = $displayOrder;
 		}
 
 		$result = C::t('home_userapp')->update_by_uid_appid($uId, $appIds, $setarr);

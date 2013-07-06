@@ -19,10 +19,14 @@ class mobile_api {
 		global $_G;
 		loadcache('mobile_hotforum');
 		if(!$_G['cache']['mobile_hotforum'] || TIMESTAMP - $_G['cache']['mobile_hotforum']['expiration'] > 3600) {
-			$query = DB::query("SELECT * FROM ".DB::table('forum_forum')." WHERE status='1' AND type='forum' ORDER BY todayposts DESC");
+			$query = DB::query("SELECT f.*, ff.redirect FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.status='1' AND f.type='forum' ORDER BY f.todayposts DESC");
 			$data = array();
 			while($row = DB::fetch($query)) {
+				if($row['redirect']) {
+					continue;
+				}
 				list($row['lastpost_tid'], $row['lastpost_subject'], $row['lastpost'], $row['lastposter']) = explode("\t", $row['lastpost']);
+				$row['lastpost'] = dgmdate($row['lastpost']);
 				$data[] = mobile_core::getvalues($row, array('fid', 'name', 'threads', 'posts', 'lastpost', 'lastposter', 'lastpost_tid', 'lastpost_subject', 'todayposts'));
 			}
 			$variable = array(

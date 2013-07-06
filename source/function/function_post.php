@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 32415 2013-01-15 03:53:22Z monkey $
+ *      $Id: function_post.php 33291 2013-05-22 05:59:13Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -166,7 +166,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 				$newattachfile[$attach['aid']] = $attach['attachment'];
 			}
 		}
-		if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
+		if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark']) || !$_G['setting']['thumbdisabledmobile']) {
 			require_once libfile('class/image');
 			$image = new image;
 		}
@@ -366,7 +366,7 @@ function checkpost($subject, $message, $special = 0) {
 			return 'post_message_toolong';
 		} elseif($_G['setting']['minpostsize']) {
 			$minpostsize = !IN_MOBILE || !$_G['setting']['minpostsize_mobile'] ? $_G['setting']['minpostsize'] : $_G['setting']['minpostsize_mobile'];
-			if(strlen(preg_replace("/\[quote\].+?\[\/quote\]/is", '', $message)) < $minpostsize) {
+			if(strlen(preg_replace("/\[quote\].+?\[\/quote\]/is", '', $message)) < $minpostsize || strlen(preg_replace("/\[postbg\].+?\[\/postbg\]/is", '', $message)) < $minpostsize) {
 				return 'post_message_tooshort';
 			}
 		}
@@ -535,8 +535,36 @@ function postfeed($feed) {
 	}
 }
 
+function messagesafeclear($message) {
+	if(strpos($message, '[/password]') !== FALSE) {
+		$message = '';
+	}
+	if(strpos($message, '[/postbg]') !== FALSE) {
+		$message = preg_replace("/\s?\[postbg\]\s*([^\[\<\r\n;'\"\?\(\)]+?)\s*\[\/postbg\]\s?/is", '', $message);
+	}
+	if(strpos($message, '[/begin]') !== FALSE) {
+		$message = preg_replace("/\[begin(=\s*([^\[\<\r\n]*?)\s*,(\d*),(\d*),(\d*),(\d*))?\]\s*([^\[\<\r\n]+?)\s*\[\/begin\]/is", '', $message);
+	}
+	if(strpos($message, '[page]') !== FALSE) {
+		$message = preg_replace("/\s?\[page\]\s?/is", '', $message);
+	}
+	if(strpos($message, '[/index]') !== FALSE) {
+		$message = preg_replace("/\s?\[index\](.+?)\[\/index\]\s?/is", '', $message);
+	}
+	if(strpos($message, '[/begin]') !== FALSE) {
+		$message = preg_replace("/\[begin(=\s*([^\[\<\r\n]*?)\s*,(\d*),(\d*),(\d*),(\d*))?\]\s*([^\[\<\r\n]+?)\s*\[\/begin\]/is", '', $message);
+	}
+	if(strpos($message, '[/groupid]') !== FALSE) {
+		$message = preg_replace("/\[groupid=\d+\].*\[\/groupid\]/i", '', $message);
+	}
+	$language = lang('forum/misc');
+	$message = preg_replace(array($language['post_edithtml_regexp'],$language['post_editnobbcode_regexp'],$language['post_edit_regexp']), '', $message);
+	return $message;
+}
+
 function messagecutstr($str, $length = 0, $dot = ' ...') {
 	global $_G;
+	$str = messagesafeclear($str);
 	$sppos = strpos($str, chr(0).chr(0).chr(0));
 	if($sppos !== false) {
 		$str = substr($str, 0, $sppos);

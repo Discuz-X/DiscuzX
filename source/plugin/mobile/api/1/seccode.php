@@ -34,8 +34,8 @@ class mobile_api {
 		$code = new seccode();
 		$code->code = $seccode;
 		$code->type = $type;
-		$code->width = isset($_GET['width']) && $_GET['width'] >= 100 && $_GET['width'] <= 600 ? $_GET['width'] : $_G['setting']['seccodedata']['width'];
-		$code->height = isset($_GET['height']) && $_GET['height'] >= 30 && $_GET['height'] <= 240 ? $_GET['height'] :$_G['setting']['seccodedata']['height'];
+		$code->width = $_G['setting']['seccodedata']['width'];
+		$code->height = $_G['setting']['seccodedata']['height'];
 		$code->background = $_G['setting']['seccodedata']['background'];
 		$code->adulterate = $_G['setting']['seccodedata']['adulterate'];
 		$code->ttf = $_G['setting']['seccodedata']['ttf'];

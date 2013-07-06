@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_antitheft.php 30814 2012-06-21 06:37:56Z zhangguosheng $
+ *      $Id: cache_antitheft.php 32740 2013-03-05 08:32:47Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,9 +39,15 @@ function build_cache_antitheft() {
 					}
 					$_ipmin = implode('.', $_ipdata);
 					$_ipmax = trim($_ip, '.').$_max;
-					$antitheft[$key]['range'][] = array('min'=>ip2long($_ipmin), 'max'=>ip2long($_ipmax));
+					$_ipmin = ip2long($_ipmin);
+					$_ipmin = $_ipmin < 0 ? sprintf('%u', $_ipmin) : $_ipmin;
+					$_ipmax = ip2long($_ipmax);
+					$_ipmax = $_ipmax < 0 ? sprintf('%u', $_ipmax) : $_ipmax;
+					$antitheft[$key]['range'][] = array('min'=>$_ipmin, 'max'=>$_ipmax);
 				} else {
-					$antitheft[$key]['single'][] = ip2long($_ip);
+					$_ip = ip2long($_ip);
+					$_ip = $_ip < 0 ? sprintf('%u', $_ip) : $_ip;
+					$antitheft[$key]['single'][] = $_ip;
 				}
 			}
 		}

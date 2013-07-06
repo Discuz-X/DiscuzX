@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 30914 2012-06-29 10:02:30Z liulanbo $
+ *      $Id: home_follow.php 32743 2013-03-05 09:37:51Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -98,7 +98,10 @@ if($do == 'feed') {
 		$lastviewtime = getuserprofile('lastactivity');
 	}
 	dsetcookie('lastviewtime', $_G['uid'].'|'.TIMESTAMP, 31536000);
-
+	if($_G['member']['newprompt_num']['follow']) {
+		C::t('home_notification')->delete_by_type('follow', $_G['uid']);
+		helper_notification::update_newprompt($_G['uid'], 'follow');
+	}
 	$recommend = $users = array();
 	if(helper_access::check_module('follow')) {
 		loadcache('recommend_follow');
@@ -175,7 +178,7 @@ if($do == 'feed') {
 		foreach($newfollower as $val) {
 			$newfollower_list[] = $val['from_id'];
 		}
-		C::t('home_notification')->delete_by_type('follower');
+		C::t('home_notification')->delete_by_type('follower', $_G['uid']);
 		helper_notification::update_newprompt($_G['uid'], 'follower');
 	}
 	if($count) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_grouptrade.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_grouptrade.php 32768 2013-03-07 09:40:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -295,7 +295,7 @@ class block_grouptrade extends discuz_block {
 				$posttable = $key == 0 ? 'forum_post' : 'forum_post_'.$key;
 				$query = DB::query("SELECT pid, message FROM ".DB::table($posttable)." WHERE pid IN  (".dimplode($var).")");
 				while($result = DB::fetch($query)) {
-					$list[$result['pid']]['summary'] = messagecutstr($result['message'], $messagelength);
+					$list[$result['pid']]['summary'] = messagecutstr($result['message'], $summarylength, '');
 				}
 			}
 

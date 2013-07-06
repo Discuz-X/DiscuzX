@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_upgrade.php 31966 2012-10-26 08:47:20Z zhangjie $
+ *      $Id: admincp_upgrade.php 33274 2013-05-14 02:08:00Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -116,9 +116,6 @@ if($operation == 'patch' || $operation == 'cross') {
 	} elseif($step == 2) {
 		$fileseq = intval($_GET['fileseq']);
 		$fileseq = $fileseq ? $fileseq : 1;
-		$position = intval($_GET['position']);
-		$position = $position ? $position : 0;
-		$offset = 100 * 1024;
 		if($fileseq > count($updatefilelist)) {
 			if($upgradeinfo['isupdatedb']) {
 				$discuz_upgrade->download_file($upgradeinfo, 'install/data/install.sql');
@@ -128,9 +125,9 @@ if($operation == 'patch' || $operation == 'cross') {
 			$linkurl = 'action='.$theurl.'&step=3';
 			cpmsg('upgrade_download_complete_to_compare', $linkurl, 'loading', array('upgradeurl' => upgradeinformation(0)));
 		} else {
-			$downloadstatus = $discuz_upgrade->download_file($upgradeinfo, $updatefilelist[$fileseq-1], 'upload', $updatemd5filelist[$fileseq-1], $position, $offset);
+			$downloadstatus = $discuz_upgrade->download_file($upgradeinfo, $updatefilelist[$fileseq-1], 'upload', $updatemd5filelist[$fileseq-1]);
 			if($downloadstatus == 1) {
-				$linkurl = 'action='.$theurl.'&step=2&fileseq='.$fileseq.'&position='.($position+$offset);
+				$linkurl = 'action='.$theurl.'&step=2&fileseq='.$fileseq;
 				cpmsg('upgrade_downloading_file', $linkurl, 'loading', array('file' => $updatefilelist[$fileseq-1], 'percent' => sprintf("%2d", 100 * $fileseq/count($updatefilelist)).'%', 'upgradeurl' => upgradeinformation(1)));
 			} elseif($downloadstatus == 2) {
 				$linkurl = 'action='.$theurl.'&step=2&fileseq='.($fileseq+1);

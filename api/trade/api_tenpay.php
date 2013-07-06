@@ -311,7 +311,7 @@ function credit_payurl($price, &$orderid, $bank = 'DEFAULT') {
 
 	$orderid = dgmdate(TIMESTAMP, 'YmdHis').random(14);
 
-	$chinese = new Chinese(strtoupper(CHARSET), 'UTF-8');
+	$chinese = new Chinese(strtoupper(CHARSET), 'GBK');
 	$subject = $chinese->Convert(lang('forum/misc', 'credit_forum_payment').' '.$_G['setting']['extcredits'][$_G['setting']['creditstrans']]['title'].' '.intval($price * $_G['setting']['ec_ratio']).' '.$_G['setting']['extcredits'][$_G['setting']['creditstrans']]['unit']);
 
 	$reqHandler = new RequestHandler();
@@ -334,7 +334,7 @@ function credit_payurl($price, &$orderid, $bank = 'DEFAULT') {
 
 	$reqHandler->setParameter("sign_type", "MD5");
 	$reqHandler->setParameter("service_version", "1.0");
-	$reqHandler->setParameter("input_charset", "UTF-8");
+	$reqHandler->setParameter("input_charset", "GBK");
 	$reqHandler->setParameter("sign_key_index", "1");
 
 	$reqHandler->setParameter("attach", "tenpay");
@@ -373,7 +373,7 @@ function trade_payurl($pay, $trade, $tradelog) {
 
 	$transport_fee = $tradelog['transportfee'] * 100;
 
-	if(strtolower(CHARSET) == 'utf-8') {
+	if(strtolower(CHARSET) == 'gbk') {
 		$encode_type = '1';
 	} else {
 		$encode_type = '2';
@@ -420,7 +420,7 @@ function invite_payurl($amount, $price, &$orderid, $bank = 'DEFAULT') {
 
 	$orderid = dgmdate(TIMESTAMP, 'YmdHis').random(14);
 
-	$chinese = new Chinese(strtoupper(CHARSET), 'UTF-8');
+	$chinese = new Chinese(strtoupper(CHARSET), 'GBK');
 	$subject = $chinese->Convert(lang('forum/misc', 'invite_forum_payment').' '.intval($amount).' '.lang('forum/misc', 'invite_forum_payment_unit'));
 
 	$reqHandler = new RequestHandler();
@@ -443,7 +443,7 @@ function invite_payurl($amount, $price, &$orderid, $bank = 'DEFAULT') {
 
 	$reqHandler->setParameter("sign_type", "MD5");
 	$reqHandler->setParameter("service_version", "1.0");
-	$reqHandler->setParameter("input_charset", "UTF-8");
+	$reqHandler->setParameter("input_charset", "GBK");
 	$reqHandler->setParameter("sign_key_index", "1");
 
 	$reqHandler->setParameter("attach", "tenpay");

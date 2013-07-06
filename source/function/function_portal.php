@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portal.php 32680 2013-02-28 09:32:07Z zhangguosheng $
+ *      $Id: function_portal.php 33047 2013-04-12 08:46:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -52,8 +52,16 @@ function getportalcategoryurl($catid) {
 
 function fetch_article_url($article) {
 	global $_G;
-	if($article && $article['htmlmade']) {
-		return $article['htmldir'].$article['htmlname'].'.'.$_G['setting']['makehtml']['extendname'];
+	if(!empty($_G['setting']['makehtml']['flag']) && $article && $article['htmlmade']) {
+		if(empty($_G['cache']['portalcategory'])) {
+			loadcache('portalcategory');
+		}
+		$caturl = '';
+		if(!empty($_G['cache']['portalcategory'][$article['catid']])) {
+			$topid = $_G['cache']['portalcategory'][$article['catid']]['topid'];
+			$caturl = $_G['cache']['portalcategory'][$topid]['domain'] ? $_G['cache']['portalcategory'][$topid]['caturl'] : '';
+		}
+		return $caturl.$article['htmldir'].$article['htmlname'].'.'.$_G['setting']['makehtml']['extendname'];
 	} else {
 		return 'portal.php?mod=view&aid='.$article['aid'];
 	}
@@ -61,7 +69,7 @@ function fetch_article_url($article) {
 
 function fetch_topic_url($topic) {
 	global $_G;
-	if($topic && $topic['htmlmade']) {
+	if(!empty($_G['setting']['makehtml']['flag']) && $topic && $topic['htmlmade']) {
 		return $_G['setting']['makehtml']['topichtmldir'].'/'.$topic['name'].'.'.$_G['setting']['makehtml']['extendname'];
 	} else {
 		return 'portal.php?mod=topic&topicid='.$topic['topicid'];

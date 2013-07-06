@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: security.class.php 30569 2012-06-04 08:31:10Z songlixin $
+ *		$Id: security.class.php 33393 2013-06-06 02:24:06Z jeffjzhang $
  */
 
 
@@ -48,6 +48,35 @@ class plugin_security {
 			self::$isAdminGroup = 1;
 		}
 
+		if($_G['setting']['connect']['allow'] && $_G['setting']['security_qqlogin_alone']) {
+			$_G['setting']['regstatus'] = 0;
+			$_G['setting']['regconnect'] = 1;
+		}
+
+		if($_G['setting']['connect']['allow'] && $_G['setting']['security_safelogin'] && ((!$_G['uid'] && $_G['connectguest']) || $_G['uid'] && !$_G['member']['conisbind']) && CURMODULE == 'post') {
+			$msg = '<p>'.lang('plugin/security', 'safelogintips').'</p><p class="mtm"><a href="connect.php?mod=config" target="_blank"><img src="'.IMGDIR.'/qq_bind_small.gif" class="qq_bind" align="absmiddle" /></a></p>';
+			if($_G['inajax']) {
+				if(!$_GET['ajaxtarget']) {
+					$_GET['handlekey'] = 'safelogin';
+				}
+				if(!$_G['uid'] && $_G['connectguest']) {
+					showmessage('qqconnect:connectguest_message_complete_or_bind');
+				} else {
+					showmessage($msg, 'connect.php?mod=config', array(), array('alert' => 'info', 'showdialog' => true, 'striptags' => false, 'locationtime' => 0));
+				}
+			} else {
+				if(!$_G['uid'] && $_G['connectguest']) {
+					dheader('location: '.$_G['siteurl'].'member.php?mod=connect&ac=bind');
+				} else {
+					showmessage($msg, '', array(), array('alert' => 'info', 'showdialog' => true, 'msgtype' => 2, 'striptags' => false));
+				}
+			}
+		}
+
+		if($_G['setting']['connect']['allow'] && $_G['setting']['security_qqlogin_alone'] && CURMODULE == 'logging' && $_GET['action'] == 'login' && submitcheck('loginsubmit', 1)) {
+			showmessage('security:qqloginaloneopened');
+		}
+
 		return true;
 	}
 
@@ -85,7 +114,52 @@ EOF;
 			}
 		}
 
-		return $ajaxReportScript . $ajaxRetryScript;
+		if($_G['setting']['connect']['allow'] && !$_G['uid'] && $_G['setting']['security_qqlogin_alone']) {
+			$loginboxdisappear = <<<EOF
+				<script type="text/javascript">
+				if($('lsform')) {
+					var divs = $('lsform').getElementsByTagName('div');
+					for(i in divs) {
+						if(divs[i] && divs[i].className == 'y pns') {
+							divs[i].style.display = 'none';
+						}
+						if(divs[i] && divs[i].className == 'fastlg_fm y') {
+							divs[i].style.borderWidth = '0px';
+						}
+					}
+				}
+				</script>
+EOF;
+			if(!(CURMODULE == 'connect' && $_G['connectguest'])) {
+				$_G['connect']['referer'] = !$_G['inajax'] && CURSCRIPT != 'member' ? $_G['basefilename'].($_SERVER['QUERY_STRING'] ? '?'.$_SERVER['QUERY_STRING'] : '') : dreferer();
+				$_G['connect']['login_url'] = $_G['siteurl'].'connect.php?mod=login&op=init&referer='.urlencode($_G['connect']['referer'] ? $_G['connect']['referer'] : 'index.php');
+				$loginstr = '<div class="rfm bw0"><table><tr><th>'.lang('plugin/security', 'quicklogin').': </th><td><a href="'.$_G['connect']['login_url'].'&statfrom=login" target="_top" rel="nofollow"><img src="'.IMGDIR.'/qq_login.gif" class="vm" /></a></td></tr></table></div>';
+				$loginboxdisappear .= <<<EOF
+				<script type="text/javascript">
+				var loginform = document.getElementsByTagName('form');
+				if(loginform) {
+					for(i in loginform) {
+						if(loginform[i].id && loginform[i].id.substr(0, 11) == 'loginform_L') {
+							loginform[i].innerHTML = '$loginstr';
+						}
+					}
+				}
+				</script>
+EOF;
+			}
+		}
+		if($_G['setting']['connect']['allow'] && $_G['uid'] && $_G['setting']['security_safelogin'] && !$_G['member']['conisbind'] && CURMODULE != 'post' && getcookie('safelogintips')) {
+			$msg = '<p>'.lang('plugin/security', 'safelogintips').'</p><p class="mtm"><a href="connect.php?mod=config" target="_blank"><img src="'.IMGDIR.'/qq_bind_small.gif" class="qq_bind" align="absmiddle" /></a></p>';
+			$safelogintips = <<<EOF
+				<script type="text/javascript">
+				hideWindow('safelogintips');
+				showDialog('$msg', 'notice', null, '(function() { window.location.href="connect.php?mod=config"; })();', 0, null, null, null, null, null, null);
+				</script>
+EOF;
+			dsetcookie('safelogintips');
+		}
+
+		return $ajaxReportScript . $ajaxRetryScript . $loginboxdisappear . $safelogintips;
 	}
 
 	function global_footerlink() {
@@ -358,8 +432,14 @@ class plugin_security_home extends plugin_security_forum {
 class plugin_security_member extends plugin_security {
 
 	public function logging_report_message($param) {
+		global $_G;
+
 		if (self::$securityStatus != TRUE) {
 			return false;
+		}
+
+		if($_G['setting']['connect']['allow'] && $param['param'][0] == 'login_succeed' && $_G['setting']['security_safelogin'] && !$_G['member']['conisbind']) {
+			dsetcookie('safelogintips', 1);
 		}
 
 		$param['message'] = $param['param'][0];
@@ -371,6 +451,28 @@ class plugin_security_member extends plugin_security {
 				$this->_reportMobileLoginUser($param['values']);
 			}
 		}
+	}
+
+	public function logging_method_output($param) {
+		global $_G;
+		if($_G['setting']['connect']['allow'] && !$_G['uid'] && $_G['setting']['security_qqlogin_alone'] && $_GET['action'] == 'login' && $_GET['infloat'] == 'yes') {
+			$_G['connect']['referer'] = !$_G['inajax'] && CURSCRIPT != 'member' ? $_G['basefilename'].($_SERVER['QUERY_STRING'] ? '?'.$_SERVER['QUERY_STRING'] : '') : dreferer();
+			$_G['connect']['login_url'] = $_G['siteurl'].'connect.php?mod=login&op=init&referer='.urlencode($_G['connect']['referer'] ? $_G['connect']['referer'] : 'index.php');
+			$loginstr = '<div class="rfm bw0"><table><tr><th>'.lang('plugin/security', 'quicklogin').': </th><td><a href="'.$_G['connect']['login_url'].'&statfrom=login" target="_top" rel="nofollow"><img src="'.IMGDIR.'/qq_login.gif" class="vm" /></a></td></tr></table></div>';
+			$loginboxdisappear = <<<EOF
+				<script type="text/javascript">
+				var loginform = document.getElementsByTagName('form');
+				if(loginform) {
+					for(i in loginform) {
+						if(loginform[i].id && loginform[i].id.substr(0, 11) == 'loginform_L') {
+							loginform[i].innerHTML = '$loginstr';
+						}
+					}
+				}
+				</script>
+EOF;
+		}
+		return $loginboxdisappear;
 	}
 
 	public function register_report_message($param) {

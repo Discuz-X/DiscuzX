@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[ÉçÇøQQÈº]]></item>
+			<item id="name"><![CDATA[ç¤¾åŒºQQç¾¤]]></item>
 			<item id="identifier"><![CDATA[qqgroup]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -31,8 +31,8 @@
 		<item id="version"><![CDATA[X3]]></item>
 		<item id="language">
 			<item id="templatelang">
-				<item id="pushfeed"><![CDATA[ÍÆËÍµ½QQÈº]]></item>
-				<item id="loading"><![CDATA[<img src="{IMGDIR}/loading.gif" />Ò³Ãæ¼ÓÔØÖÐ...]]></item>
+				<item id="pushfeed"><![CDATA[æŽ¨é€åˆ°QQç¾¤]]></item>
+				<item id="loading"><![CDATA[<img src="{IMGDIR}/loading.gif" />é¡µé¢åŠ è½½ä¸­...]]></item>
 			</item>
 		</item>
 	</item>

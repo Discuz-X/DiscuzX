@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_patch.php 32559 2013-02-20 09:35:24Z monkey $
+ *      $Id: misc_patch.php 33389 2013-06-05 06:27:14Z kamichen $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -97,7 +97,7 @@ if($_GET['action'] == 'checkpatch') {
 		$lastipConvert = convertip($lip[0]);
 		$lastipDate = dgmdate($lip[1]);
 		$nowipConvert = convertip($status['lastip']);
-		if($lastipConvert != $nowipConvert) {
+		if($lastipConvert != $nowipConvert && stripos($lastipConvert, $nowipConvert) == false && stripos($nowipConvert, $lastipConvert) == false) {
 			$lang = lang('forum/misc');
 			include template('common/ipnotice');
 		}

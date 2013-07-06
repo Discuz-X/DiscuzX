@@ -89,7 +89,7 @@ jQuery.extend({
 					s.complete(xml, status);
 				}
 
-				jQuery(io).unbind();
+				jQuery(io).off();
 
 				setTimeout(function() {
 					try {

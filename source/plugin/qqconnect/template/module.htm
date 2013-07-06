@@ -77,27 +77,27 @@ function tpl_sync_method($allowconnectfeed, $allowconnectt, $cssextra = '') {
 global $_G;
 }
 <!--{block return}-->
-	<!--{if $allowconnectfeed || $allowconnectt}-->
+	<!--{if $allowconnectt}-->
 		<script type="text/javascript">
-		var _allow_qq = {if $allowconnectfeed}true{else}false{/if};
+		//var _allow_qq = {if $allowconnectfeed}true{else}false{/if};
 		var _allow_t = {if $allowconnectt}true{else}false{/if};
-		var _syn_qq = {if intval($_G['cookie']['connect_not_sync_feed'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if}{/if};
+		//var _syn_qq = {if intval($_G['cookie']['connect_not_sync_feed'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if}{/if};
 		var _syn_t = {if intval($_G['cookie']['connect_not_sync_t'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublisht']}true{else}false{/if}{/if};
 		var _is_oauth_user = {if $_G['member']['conisbind']}true{else}false{/if};
 		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
 		var _is_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
 		function connect_post_init() {
-			if (_allow_qq && _syn_qq) {
-				if (_is_feed_auth && !_is_token_outofdate) {
-					$('connectPost_synQQ').className = 'syn_qq_check';
-					$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone1}';
-					$('connect_publish_feed').value = 1;
-				} else {
-					$('connectPost_synQQ').className = 'syn_qq';
-					$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
-					$('connect_publish_feed').value = 0;
-				}
-			}
+//			if (_allow_qq && _syn_qq) {
+//				if (_is_feed_auth && !_is_token_outofdate) {
+//					$('connectPost_synQQ').className = 'syn_qq_check';
+//					$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone1}';
+//					$('connect_publish_feed').value = 1;
+//				} else {
+//					$('connectPost_synQQ').className = 'syn_qq';
+//					$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
+//					$('connect_publish_feed').value = 0;
+//				}
+//			}
 
 			if (_allow_t && _syn_t) {
 				if (_is_feed_auth && !_is_token_outofdate) {
@@ -111,11 +111,11 @@ global $_G;
 				}
 			}
 
-			if (_allow_qq) {
-				$('connectPost_synQQ').onclick = function () {
-					connect_syn_option_toggle(this);
-				}
-			}
+//			if (_allow_qq) {
+//				$('connectPost_synQQ').onclick = function () {
+//					connect_syn_option_toggle(this);
+//				}
+//			}
 			if (_allow_t) {
 				$('connectPost_synT').onclick = function () {
 					connect_syn_option_toggle(this);
@@ -177,9 +177,9 @@ global $_G;
 		}
 		function connect_syn_cancel() {
 			ajaxget('{$_G['siteurl']}connect.php?mod=config&op=synconfig', '');
-			$('connectPost_synQQ').className = 'syn_qq';
-			$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
-			$('connect_publish_feed').value = 0;
+//			$('connectPost_synQQ').className = 'syn_qq';
+//			$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
+//			$('connect_publish_feed').value = 0;
 			$('connectPost_synT').className = 'syn_tqq';
 			$('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t2}';
 			$('connect_publish_t').value = 0;
@@ -195,10 +195,6 @@ global $_G;
 			connect_post_init();
 		});
 		</script>
-		<!--{if $allowconnectfeed}-->
-			<a title="{lang qqconnect:connect_post_sync_qzone2}" class="syn_qq" href="javascript:void(0);" id="connectPost_synQQ" rel="connect_publish_feed">{lang qqconnect:connect_viewthread_share_to_qzone}</a>
-			<input type="hidden" name="connect_publish_feed" id="connect_publish_feed" value="0" />
-		<!--{/if}-->
 		<!--{if $allowconnectt}-->
 			<a title="{lang qqconnect:connect_post_sync_t2}" class="syn_tqq" href="javascript:void(0);" id="connectPost_synT" rel="connect_publish_t">{lang qqconnect:connect_viewthread_share_to_t}</a>
 			<input type="hidden" name="connect_publish_t" id="connect_publish_t" value="0" />
@@ -213,35 +209,29 @@ function tpl_infloat_sync_method($allowconnectfeed, $allowconnectt) {
 global $_G;
 }
 <!--{block return}-->
-	<!--{if $allowconnectfeed}-->
-		<a title="{lang qqconnect:connect_post_sync_qzone2}" class="syn_qq" href="javascript:void(0);" id="connectPost_synQQ_infloat" rel="connect_publish_feed_infloat">{lang qqconnect:connect_viewthread_share_to_qzone}</a>
-		<input type="hidden" name="connect_publish_feed" id="connect_publish_feed_infloat" value="0" />
-	<!--{/if}-->
 	<!--{if $allowconnectt}-->
 		<a title="{lang qqconnect:connect_post_sync_t2}" class="syn_tqq" href="javascript:void(0);" id="connectPost_synT_infloat" rel="connect_publish_t_infloat">{lang qqconnect:connect_viewthread_share_to_t}</a>
 		<input type="hidden" name="connect_publish_t" id="connect_publish_t_infloat" value="0" />
-	<!--{/if}-->
-	<!--{if $allowconnectfeed || $allowconnectt}-->
 		<script type="text/javascript" reload="1">
-		var _allow_qq_infloat = {if $allowconnectfeed}true{else}false{/if};
+		//var _allow_qq_infloat = {if $allowconnectfeed}true{else}false{/if};
 		var _allow_t_infloat = {if $allowconnectt}true{else}false{/if};
-		var _syn_qq_infloat = {if intval($_G['cookie']['connect_not_sync_feed'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if}{/if};
+		//var _syn_qq_infloat = {if intval($_G['cookie']['connect_not_sync_feed'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if}{/if};
 		var _syn_t_infloat = {if intval($_G['cookie']['connect_not_sync_t'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublisht']}true{else}false{/if}{/if};
 		var _is_oauth_user_infloat = {if $_G['member']['conisbind']}true{else}false{/if};
 		var _is_feed_auth_infloat = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
 		var _is_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
 		function connect_post_init_infloat() {
-			if (_allow_qq_infloat && _syn_qq_infloat) {
-				if (_is_feed_auth_infloat && !_is_token_outofdate) {
-					$('connectPost_synQQ_infloat').className = 'syn_qq_check';
-					$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone1}';
-					$('connect_publish_feed_infloat').value = 1;
-				} else {
-					$('connectPost_synQQ_infloat').className = 'syn_qq';
-					$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone2}';
-					$('connect_publish_feed_infloat').value = 0;
-				}
-			}
+//			if (_allow_qq_infloat && _syn_qq_infloat) {
+//				if (_is_feed_auth_infloat && !_is_token_outofdate) {
+//					$('connectPost_synQQ_infloat').className = 'syn_qq_check';
+//					$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone1}';
+//					$('connect_publish_feed_infloat').value = 1;
+//				} else {
+//					$('connectPost_synQQ_infloat').className = 'syn_qq';
+//					$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone2}';
+//					$('connect_publish_feed_infloat').value = 0;
+//				}
+//			}
 
 			if (_allow_t_infloat && _syn_t_infloat) {
 				if (_is_feed_auth_infloat && !_is_token_outofdate) {
@@ -255,11 +245,11 @@ global $_G;
 				}
 			}
 
-			if (_allow_qq_infloat) {
-				$('connectPost_synQQ_infloat').onclick = function () {
-					connect_syn_option_toggle_infloat(this);
-				}
-			}
+//			if (_allow_qq_infloat) {
+//				$('connectPost_synQQ_infloat').onclick = function () {
+//					connect_syn_option_toggle_infloat(this);
+//				}
+//			}
 			if (_allow_t_infloat) {
 				$('connectPost_synT_infloat').onclick = function () {
 					connect_syn_option_toggle_infloat(this);
@@ -315,9 +305,9 @@ global $_G;
 		}
 		function connect_syn_cancel_infloat() {
 			ajaxget('{$_G['siteurl']}connect.php?mod=config&op=synconfig', '');
-			$('connectPost_synQQ_infloat').className = 'syn_qq';
-			$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone2}';
-			$('connect_publish_feed_infloat').value = 0;
+			//$('connectPost_synQQ_infloat').className = 'syn_qq';
+			//$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone2}';
+			//$('connect_publish_feed_infloat').value = 0;
 			$('connectPost_synT_infloat').className = 'syn_tqq';
 			$('connectPost_synT_infloat').title = '{lang qqconnect:connect_post_sync_t2}';
 			$('connect_publish_t_infloat').value = 0;
@@ -345,7 +335,7 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 <!--{block return}-->
 	<!--{if $_G['member']['conisbind'] && $_G['member']['conuinsecret']}-->
 		<a href="{$_G[connect][qq_share_url]}" id="k_share_to_qq" title="{lang qqconnect:connect_viewthread_share_to_qq}" target="_blank"><i><img src="{IMGDIR}/qq_share.png" alt="{lang qqconnect:connect_viewthread_share_to_qq}" />{lang qqconnect:connect_viewthread_share_to_qq}</i></a>
-		<a href="javascript:void(0);" ref="{$_G[connect][qzone_share_url]}" id="k_qqshare" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
+		<a href="javascript:void(0);" id="k_qqshare" onclick="postToQzone();" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][weibo_share_url]}" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][pengyou_share_url]}" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
 		<script type="text/javascript">
@@ -353,7 +343,7 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 		var _is_share_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
 		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
 		_is_feed_auth = true;
-		var _share_buttons = ['k_qqshare', 'k_weiboshare', 'k_pengyoushare'];
+		var _share_buttons = ['k_weiboshare', 'k_pengyoushare'];
 		function connect_share_init() {
 			for (var i = 0; i < _share_buttons.length; i++) {
 				$(_share_buttons[i]).onclick = function () {
@@ -413,15 +403,6 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 			var _u = 'http://v.t.qq.com/share/share.php?url='+_url+'&appkey='+_appkey+'&site='+_site+'&pic='+_pic+'&title='+_t+'&from='+_from;
 			window.open( _u,'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
 		}
-		function postToQzone(){
-			var _url = encodeURIComponent(document.location.href);
-			var _site = encodeURIComponent("{$_G['setting']['bbname']}");
-			var _title = encodeURIComponent("{$connect_thread_subject}");
-			var _pics = "{$_G['connect']['share_images']}";
-			var _from = 'discuz';
-			var _u = '{$_G[connect][qzone_public_share_url]}?url='+_url+'&site='+_site+'&title='+_title+'&pics='+_pics+'&from='+_from;
-			window.open(_u);
-		}
 		function postToPengyou(){
 			var _url = encodeURIComponent(document.location.href);
 			var _site = encodeURIComponent("{$_G['setting']['bbname']}");
@@ -433,6 +414,17 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 		}
 		</script>
 	<!--{/if}-->
+	<script type="text/javascript">
+		function postToQzone(){
+			var _url = encodeURIComponent(document.location.href);
+			var _site = encodeURIComponent("{$_G['setting']['bbname']}");
+			var _title = encodeURIComponent("{$connect_thread_subject}");
+			var _pics = "{$_G['connect']['share_images']}";
+			var _from = 'discuz';
+			var _u = '{$_G[connect][qzone_public_share_url]}?url='+_url+'&site='+_site+'&title='+_title+'&pics='+_pics+'&from='+_from;
+			window.open(_u);
+		}
+	</script>
 	<!--{if $jsurl}-->
 		<script type="text/javascript">_attachEvent(window, 'load', function () { appendscript('{$jsurl}', '', 1, 'utf-8') }, document);</script>
 	<!--{/if}-->
@@ -504,7 +496,7 @@ $connect_openid = $_G['qc']['connect_openid'];
 			<tr>
 				<th></th>
 				<td>
-					<label  for="use_qzone_avatar_qqshow"><input type="checkbox" name="use_qzone_avatar_qqshow" id="use_qzone_avatar_qqshow" class="pc" value="1" checked="checked" tabindex="1" />使用QQ头像和QQ秀</label>
+					<label  for="use_qzone_avatar_qqshow"><input type="checkbox" name="use_qzone_avatar_qqshow" id="use_qzone_avatar_qqshow" class="pc" value="1" checked="checked" tabindex="1" />{lang qqconnect:connect_register_use_qzone_avatar_qqshow}</label>
 				</td>
 			</tr>
 		</table>
@@ -547,7 +539,7 @@ $connect_tab_2 = $_GET['ac'] == 'bind' ? ' class="a"' : '';
 		<div class="loging_tit cl">
 			<div class="z avt" style="display:block;"><img src="{$_G[connect][avatar_url]}/$connect_app_id/$connect_openid" width="48" height="48" /></div>
 			<div class="z">
-				<p class="welcome mbn cl" style="clear:both; width:100%; "><strong>Hi</strong>,<strong>$_G['member']['username']</strong>，<span class="xg2">{lang connect_member_login_tip}</span></p>
+				<p class="welcome mbn cl" style="clear:both; width:100%; "><strong>Hi</strong>,<strong>$_G['member']['username']</strong>, <span class="xg2">{lang connect_member_login_tip}</span></p>
 				<ul class="tb cl z">
 					<li id="connect_tab_1"$connect_tab_1><a id="loginlist" href="javascript:;" onclick="connect_switch(1);this.blur();" tabindex="900">{lang connect_register_profile}</a></li>
 					<li id="connect_tab_2"$connect_tab_2><a id="loginlist2" href="javascript:;" onclick="connect_switch(2);this.blur();" tabindex="900">{lang connect_register_bind}</a></li>

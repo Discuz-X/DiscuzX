@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 32680 2013-02-28 09:32:07Z zhangguosheng $
+ *      $Id: portalcp_article.php 32972 2013-03-29 06:21:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$op = in_array($_GET['op'], array('edit', 'delete', 'related', 'batch', 'pushplus', 'verify')) ? $_GET['op'] : 'add';
+$op = in_array($_GET['op'], array('edit', 'delete', 'related', 'batch', 'pushplus', 'verify', 'checkhtmlname')) ? $_GET['op'] : 'add';
 $aid = intval($_GET['aid']);
 $catid = intval($_GET['catid']);
 $seccodecheck = $_G['setting']['seccodestatus'] & 4;
@@ -33,6 +33,10 @@ if($catid && empty($portalcategory[$catid])) {
 if(empty($article) && $catid && $portalcategory[$catid]['disallowpublish']) {
 	showmessage('portal_category_disallowpublish', dreferer());
 }
+
+if(empty($catid) && $article) {
+	$catid = $article['catid'];
+}
 $htmlstatus = !empty($_G['setting']['makehtml']['flag']) && $portalcategory[$catid]['fullfoldername'];
 
 if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
@@ -51,7 +55,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 
 	$_POST['pagetitle'] = getstr(trim($_POST['pagetitle']), 60);
 	$_POST['pagetitle'] = censor($_POST['pagetitle']);
-	$htmlname = trim($_POST['htmlname']);
+	$htmlname = basename(trim($_POST['htmlname']));
 
 	$highlight_style = $_GET['highlight_style'];
 	$style = '';
@@ -438,6 +442,19 @@ if($op == 'delete') {
 
 	if(empty($pids)) {
 		showmessage($pushedids ? 'all_posts_pushed_already' : 'no_posts_for_pushplus');
+	}
+
+} else if($op == 'checkhtmlname') {
+	$htmlname = basename(trim($_GET['htmlname']));
+	if($htmlstatus) {
+		$_time = !empty($article) ? $article['dateline'] : TIMESTAMP;
+		if(file_exists(helper_makehtml::fetch_dir($portalcategory[$catid]['fullfoldername'], $_time).$htmlname.'.'.$_G['setting']['makehtml']['extendname'])) {
+			showmessage('html_existed');
+		} else {
+			showmessage('html_have_no_exists');
+		}
+	} else {
+		showmessage('make_html_closed');
 	}
 
 } else {

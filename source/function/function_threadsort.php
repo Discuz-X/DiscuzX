@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_threadsort.php 32060 2012-11-05 09:59:32Z liulanbo $
+ *      $Id: function_threadsort.php 32856 2013-03-15 03:11:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -404,7 +404,7 @@ function threadsortshow($sortid, $tid) {
 							if(!defined('IN_MOBILE')) {
 								$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<img src=\"".$imgoptiondata['url']."\" onload=\"thumbImg(this)\" $maxwidth $maxheight border=\"0\">" : '';
 							} else {
-								$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<a href=\"".$imgoptiondata['url']."\" target=\"_blank\">".lang('mobile/template', 'viewimg')."</a>" : '';
+								$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<a href=\"".$imgoptiondata['url']."\" target=\"_blank\">".lang('forum/misc', 'click_view')."</a>" : '';
 							}
 						} else {
 							$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? $imgoptiondata['url'] : './static/image/common/nophoto.gif';

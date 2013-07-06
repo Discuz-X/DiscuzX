@@ -24,7 +24,7 @@ $lockfile = ROOT_PATH.'./data/install.lock';
 @include ROOT_PATH.CONFIG;
 
 define('CHARSET', 'utf-8');
-define('DBCHARSET', 'utf-8');
+define('DBCHARSET', 'utf8');
 
 define('ORIG_TABLEPRE', 'pre_');
 

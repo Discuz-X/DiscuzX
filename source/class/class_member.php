@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 32645 2013-02-27 09:09:41Z zhengqingpeng $
+ *      $Id: class_member.php 33436 2013-06-14 02:28:25Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -274,6 +274,9 @@ class register_ctl {
 					showmessage('register_disable_activation');
 				}
 			} elseif(!$this->setting['regstatus']) {
+				if($this->setting['regconnect']) {
+					dheader('location:connect.php?mod=login&op=init&referer=forum.php&statfrom=login_simple');
+				}
 				showmessage(!$this->setting['regclosemessage'] ? 'register_disable' : str_replace(array("\r", "\n"), '', $this->setting['regclosemessage']));
 			}
 		}
@@ -357,6 +360,7 @@ class register_ctl {
 		$sendurl = $this->setting['sendregisterurl'] ? true : false;
 		if($sendurl) {
 			if(!empty($_GET['hash'])) {
+				$_GET['hash'] = preg_replace("/[^\[A-Za-z0-9_\]%]/", '', $_GET['hash']);
 				$hash = explode("\t", authcode($_GET['hash'], 'DECODE', $_G['config']['security']['authkey']));
 				if(is_array($hash) && isemail($hash[0]) && TIMESTAMP - $hash[1] < 259200) {
 					$sendurl = false;
@@ -427,7 +431,7 @@ class register_ctl {
 				}
 				$sendurl = false;
 			}
-			if($sendurl || !$_G['setting']['forgeemail']) {
+			if(!$activationauth && ($sendurl || !$_G['setting']['forgeemail'])) {
 				checkemail($_GET['email']);
 			}
 			if($sendurl) {
@@ -441,7 +445,7 @@ class register_ctl {
 				if(!sendmail("$_GET[email] <$_GET[email]>", lang('email', 'email_register_subject'), $email_register_message)) {
 					runlog('sendmail', "$_GET[email] sendmail failed.");
 				}
-				showmessage('register_email_send_succeed', dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => true, 'msgtype' => 3, 'closetime' => 10));
+				showmessage('register_email_send_succeed', dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => false, 'msgtype' => 3, 'closetime' => 10));
 			}
 			$emailstatus = 0;
 			if($this->setting['sendregisterurl'] && !$sendurl) {

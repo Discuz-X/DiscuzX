@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.class.php 31731 2012-09-25 13:33:46Z zhouxiaobo $
+ *      $Id: search.class.php 33387 2013-06-05 03:21:26Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,8 @@ class plugin_cloudsearch {
 		$this->allow = $cloudAppService->getCloudAppStatus('search');
 		if($this->allow) {
 			$this->allow_hot_topic = $_G['setting']['my_search_data']['allow_hot_topic'];
-			$this->allow_thread_related = $_G['setting']['my_search_data']['allow_thread_related'];
+			$this->allow_thread_related = isset($_G['setting']['my_search_data']['allow_thread_related']) ? $_G['setting']['my_search_data']['allow_thread_related'] : 1;
+			$this->allow_recommend_related = isset($_G['setting']['my_search_data']['allow_recommend_related']) ? $_G['setting']['my_search_data']['allow_recommend_related'] : 1;
 			$this->allow_forum_recommend = $_G['setting']['my_search_data']['allow_forum_recommend'];
 			$this->allow_forum_related = $_G['setting']['my_search_data']['allow_forum_related'];
 			$this->allow_collection_related = $_G['setting']['my_search_data']['allow_collection_related'];
@@ -69,7 +70,7 @@ class plugin_cloudsearch {
 			$res = tpl_cloudsearch_global_footer_related();
 		}
 
-		if(CURSCRIPT == 'forum' && (CURMODULE == 'viewthread' || CURMODULE == 'forumdisplay')) {
+		if($this->allow_recommend_related && CURSCRIPT == 'forum' && (CURMODULE == 'viewthread' || CURMODULE == 'forumdisplay')) {
 			if($this->_is_from_search_engine()) {
 				$res .= tpl_cloudsearch_global_footer_mini();
 			}
@@ -398,14 +399,15 @@ class plugin_cloudsearch_forum extends plugin_cloudsearch {
 		return tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery);
 	}
 
-	public function viewthread_modaction_output() {
+	public function viewthread_postbottom_output() {
 		if(!$this->allow_thread_related) {
 			return;
 		}
 		global $_G;
-
+		$return = array();
 		if($GLOBALS['page'] == 1 && $_G['forum_firstpid'] && $GLOBALS['postlist'][$_G['forum_firstpid']]['invisible'] == 0) {
-			return tpl_cloudsearch_viewthread_modaction_output();
+			$return[] = tpl_cloudsearch_viewthread_postbottom_output();
+			return $return;
 		}
 	}
 

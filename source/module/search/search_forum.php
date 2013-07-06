@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_forum.php 29447 2012-04-12 08:15:15Z chenmengshu $
+ *      $Id: search_forum.php 33198 2013-05-06 09:23:45Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -415,7 +415,7 @@ if(!submitcheck('searchsubmit', 1)) {
 
 				$num = $ids = 0;
 				$_G['setting']['search']['forum']['maxsearchresults'] = $_G['setting']['search']['forum']['maxsearchresults'] ? intval($_G['setting']['search']['forum']['maxsearchresults']) : 500;
-				$query = DB::query("SELECT ".($srchtype == 'fulltext' ? 'DISTINCT' : '')." t.tid, t.closed, t.author, t.authorid $sqlsrch LIMIT ".$_G['setting']['search']['forum']['maxsearchresults']);
+				$query = DB::query("SELECT ".($srchtype == 'fulltext' ? 'DISTINCT' : '')." t.tid, t.closed, t.author, t.authorid $sqlsrch ORDER BY tid DESC LIMIT ".$_G['setting']['search']['forum']['maxsearchresults']);
 				while($thread = DB::fetch($query)) {
 					$ids .= ','.$thread['tid'];
 					$num++;

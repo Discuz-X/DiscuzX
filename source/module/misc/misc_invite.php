@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_invite.php 32494 2013-01-29 08:09:58Z chenmengshu $
+ *      $Id: misc_invite.php 33107 2013-04-26 03:43:21Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,6 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 require_once libfile('function/friend');
 
+$_GET['action'] = dhtmlspecialchars(preg_replace("/[^\[A-Za-z0-9_\]]/", '', $_GET['action']));
 $friendgrouplist = friend_group_list();
 if($_GET['action'] == 'group') {
 	$id = intval($_GET['id']);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_album.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
+ *      $Id: space_album.php 33249 2013-05-09 07:27:16Z kamichen $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -224,7 +224,7 @@ if($id) {
 	if(empty($album['albumname'])) $album['albumname'] = lang('space', 'default_albumname');
 
 	$pic_url = $pic['pic'];
-	if(!preg_match("/^http\:\/\/.+?/i", $pic['pic'])) {
+	if(!preg_match("/^(http|https)\:\/\/.+?/i", $pic['pic'])) {
 		$pic_url = getsiteurl().$pic['pic'];
 	}
 	$pic_url2 = rawurlencode($pic['pic']);

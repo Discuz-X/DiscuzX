@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_edit.php 32294 2012-12-20 07:50:32Z chenmengshu $
+ *      $Id: collection_edit.php 33065 2013-04-16 10:06:07Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -56,7 +56,7 @@ if(empty($op) || $op == 'add') {
 		    'name' => $newCollectionTitle,
 		    'uid' => $_G['uid'],
 		    'username' => $_G['username'],
-		    'desc' => cutstr(censor($_GET['desc']), $desclimit, ''),
+		    'desc' => dhtmlspecialchars(cutstr(censor($_GET['desc']), $desclimit, '')),
 		    'dateline' => $_G['timestamp'],
 		    'lastupdate' => $_G['timestamp'],
 			'lastvisit' => $_G['timestamp'],
@@ -98,7 +98,7 @@ if(empty($op) || $op == 'add') {
 
 		$newcollection = array(
 		    'name' => $newCollectionTitle,
-		    'desc' => cutstr(censor($_GET['desc']), $desclimit, ''),
+		    'desc' => dhtmlspecialchars(cutstr(censor($_GET['desc']), $desclimit, '')),
 			'keyword' => parse_keyword($_GET['keyword'], true)
 		);
 

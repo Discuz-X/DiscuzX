@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_allowat.php 32177 2012-11-23 03:26:33Z liulanbo $
+ *      $Id: extend_thread_allowat.php 32746 2013-03-05 10:29:02Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -104,7 +104,7 @@ class extend_thread_allowat extends extend_thread_base {
 					$atsearch[] = "/@$atusername /i";
 					$atreplace[] = "[url=home.php?mod=space&uid=$atuid]@{$atusername}[/url] ";
 				}
-				$this->param['message'] = preg_replace($atsearch, $atreplace, $this->param['message'].' ', 1);
+				$this->param['message'] = preg_replace($atsearch, $atreplace, $parameters['message'].' ', 1);
 			}
 		}
 	}

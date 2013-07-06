@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_rss.php 31587 2012-09-11 06:51:07Z monkey $
+ *      $Id: forum_rss.php 33056 2013-04-15 06:44:56Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -138,10 +138,6 @@ function updatersscache($num) {
 				$thread['subject'] = addslashes($thread['subject']);
 				$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($thread['tid']);
 				$attachdata = '';
-				if($post['attachment'] == 2) {
-					$attach = C::t('forum_attachment_n')->fetch_max_image('tid:'.$thread['tid'], 'pid', $post['pid']);
-					$attachdata = "\t".$attach['remote']."\t".$attach['attachment']."\t".$attach['filesize'];
-				}
 				$thread['message'] = $post['message'];
 				$thread['status'] = $post['status'];
 				$thread['description'] = $thread['readperm'] > 0 || $thread['price'] > 0 || $thread['status'] & 1 ? '' : addslashes(messagecutstr($thread['message'], 250 - strlen($attachdata)).$attachdata);

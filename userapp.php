@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp.php 25756 2011-11-22 02:47:45Z zhangguosheng $
+ *      $Id: userapp.php 33017 2013-04-08 07:28:47Z zhengqingpeng $
  */
 
 define('APPTYPEID', 5);
@@ -14,7 +14,7 @@ require_once './source/function/function_home.php';
 
 $discuz = C::app();
 
-$modarray = array('index', 'app', 'manage');
+$modarray = array('app', 'manage');
 $cachelist = array('userapp','usergroups', 'myapp');
 
 $mod = !in_array($discuz->var['mod'], $modarray) ? 'manage' : $discuz->var['mod'];

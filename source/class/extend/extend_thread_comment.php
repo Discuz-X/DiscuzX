@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_comment.php 30841 2012-06-25 09:20:58Z liulanbo $
+ *      $Id: extend_thread_comment.php 32746 2013-03-05 10:29:02Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,7 +17,7 @@ class extend_thread_comment extends extend_thread_base {
 
 	public function before_newreply($parameters) {
 		global $nauthorid;
-		list(, $this->param['$modnewreplies']) = threadmodstatus($this->param['subject']."\t".$this->param['message'].$this->param['extramessage']);
+		list(, $this->param['modnewreplies']) = threadmodstatus($this->param['subject']."\t".$this->param['message'].$this->param['extramessage']);
 		if($this->thread['displayorder'] == -4) {
 			$this->param['modnewreplies'] = 0;
 		}

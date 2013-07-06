@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: calendar.js 27363 2012-01-18 08:46:14Z monkey $
+	$Id: calendar.js 33082 2013-04-18 11:13:53Z zhengqingpeng $
 */
 
 var controlid = null;
@@ -19,6 +19,7 @@ var addtime = false;
 var today = new Date();
 var lastcheckedyear = false;
 var lastcheckedmonth = false;
+var calendarrecall = null;
 
 function loadcalendar() {
 	s = '';
@@ -101,6 +102,11 @@ function settime(d) {
 		}
 	}
 	controlid.value = yy + "-" + zerofill(mm + 1) + "-" + zerofill(d) + (addtime ? ' ' + zerofill($('hour').value) + ':' + zerofill($((halfhour) ? 'minutehalfhourly' : 'minute').value) : '');
+	if(typeof calendarrecall == 'function') {
+		calendarrecall();
+	} else {
+		eval(calendarrecall);
+	}
 }
 
 function confirmcalendar() {
@@ -120,7 +126,7 @@ function initclosecalendar() {
 		aim = aim.parentNode;
 	}
 }
-function showcalendar(event, controlid1, addtime1, startdate1, enddate1, halfhour1) {
+function showcalendar(event, controlid1, addtime1, startdate1, enddate1, halfhour1, recall) {
 	controlid = controlid1;
 	addtime = addtime1;
 	startdate = startdate1 ? parsedate(startdate1) : false;
@@ -129,6 +135,7 @@ function showcalendar(event, controlid1, addtime1, startdate1, enddate1, halfhou
 	hh = currday.getHours();
 	ii = currday.getMinutes();
 	halfhour = halfhour1 ? true : false;
+	calendarrecall = recall ? recall : null;
 	var p = fetchOffset(controlid);
 	$('calendar').style.display = 'block';
 	$('calendar').style.left = p['left']+'px';

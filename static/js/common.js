@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 32718 2013-03-04 09:21:06Z zhangguosheng $
+	$Id: common.js 33439 2013-06-17 02:31:32Z nemohou $
 */
 
 var BROWSER = {};
@@ -691,7 +691,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 		}
 		if(!evaled) evalscript(s);
 		ajaxframe.loading = 0;
-		if(!BROWSER.firefox) {
+		if(!BROWSER.firefox || BROWSER.safari) {
 			$('append_parent').removeChild(ajaxframe.parentNode);
 		} else {
 			setTimeout(
@@ -1365,7 +1365,7 @@ function showTip(ctrlobj) {
 	$F('_showTip', arguments);
 }
 
-function showPrompt(ctrlid, evt, msg, timeout) {
+function showPrompt(ctrlid, evt, msg, timeout, classname) {
 	$F('_showPrompt', arguments);
 }
 
@@ -1390,7 +1390,7 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hideMenu(menuid, 'dialog');
 	};
 	if(closetime) {
-		showPrompt(null, null, '<i>' + msg + '</i>', closetime * 1000);
+		showPrompt(null, null, '<i>' + msg + '</i>', closetime * 1000, 'popuptext');
 		return;
 	}
 	locationtime = isUndefined(locationtime) ? '' : locationtime;
@@ -1801,7 +1801,7 @@ function codetag(text, br) {
 	var br = !br ? 1 : br;
 	DISCUZCODE['num']++;
 	if(br > 0 && typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n');
-	text = text.replace(/\$/ig, '$$$$');
+	text = text.replace(/\$/ig, '$$');
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }
@@ -1994,6 +1994,10 @@ function showForummenu(fid) {
 	$F('_showForummenu', arguments);
 }
 
+function showUserApp() {
+	$F('_showUserApp', arguments);
+}
+
 function cardInit() {
 	var cardShow = function (obj) {
 		if(BROWSER.ie && BROWSER.ie < 7 && obj.href.indexOf('username') != -1) {
@@ -2064,7 +2068,7 @@ function pluginNotice() {
 
 function ipNotice() {
 	if($('ip_notice')) {
-		ajaxget('misc.php?mod=patch&action=ipnotice', 'ip_notice', '');
+		ajaxget('misc.php?mod=patch&action=ipnotice&_r='+Math.random(), 'ip_notice', '');
 	}
 }
 

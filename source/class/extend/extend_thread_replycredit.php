@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_replycredit.php 30673 2012-06-11 07:51:54Z svn_project_zhangjie $
+ *      $Id: extend_thread_replycredit.php 33418 2013-06-08 08:46:32Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -73,7 +73,7 @@ class extend_thread_replycredit extends extend_thread_base {
 					if($rand_replycredit) {
 						updatemembercount($this->member['uid'], array($replycredit_rule['extcreditstype'] => $replycredit_rule['extcredits']), 1, 'RCA', $this->thread['tid']);
 						C::t('forum_post')->update('tid:'.$this->thread['tid'], $this->pid, array('replycredit' => $replycredit_rule['extcredits']));
-						$this->param['updatethreaddata'] = array_merge((array)$this->param['updatethreaddata'], (array)DB::field('replycredit', $this->thread['replycredit'] - $replycredit_rule['extcredits']));
+						C::t('forum_thread')->update($this->thread['tid'], (array)DB::field('replycredit', $this->thread['replycredit'] - $replycredit_rule['extcredits']), false, false, 0, true);
 					}
 				}
 			}
@@ -85,6 +85,7 @@ class extend_thread_replycredit extends extend_thread_base {
 		$isorigauthor = $this->member['uid'] && $this->member['uid'] == $this->post['authorid'];
 		if($isfirstpost) {
 			if($isorigauthor && $this->group['allowreplycredit']) {
+				$replycredit_rule = isset($parameters['replycredit_rule']) && $parameters['replycredit_rule'] ? $parameters['replycredit_rule'] : array();
 				$_POST['replycredit_extcredits'] = intval($_POST['replycredit_extcredits']);
 				$_POST['replycredit_times'] = intval($_POST['replycredit_times']);
 				$_POST['replycredit_membertimes'] = intval($_POST['replycredit_membertimes']) > 0 ? intval($_POST['replycredit_membertimes']) : 1;
@@ -95,7 +96,6 @@ class extend_thread_replycredit extends extend_thread_base {
 					if($replycredit_diff > 0) {
 						$replycredit_diff = ceil($replycredit_diff + ($replycredit_diff * $this->setting['creditstax']));
 						if(!$replycredit_rule) {
-							$replycredit_rule = array();
 							if($this->setting['creditstransextra']['10']) {
 								$replycredit_rule['extcreditstype'] = $this->setting['creditstransextra']['10'];
 							}
@@ -107,12 +107,12 @@ class extend_thread_replycredit extends extend_thread_base {
 					}
 
 					if($replycredit_diff) {
-						updatemembercount($this->thread['tid'], array($replycredit_rule['extcreditstype'] => ($replycredit_diff > 0 ? -$replycredit_diff : abs($replycredit_diff))), 1, ($replycredit_diff > 0 ? 'RCT' : 'RCB'), $this->thread['tid']);
+						updatemembercount($this->thread['authorid'], array($replycredit_rule['extcreditstype'] => ($replycredit_diff > 0 ? -$replycredit_diff : abs($replycredit_diff))), 1, ($replycredit_diff > 0 ? 'RCT' : 'RCB'), $this->thread['tid']);
 					}
 				} elseif(($_POST['replycredit_extcredits'] == 0 || $_POST['replycredit_times'] == 0) && $this->thread['replycredit'] > 0) {
 					$replycredit = 0;
 					C::t('forum_replycredit')->delete($this->thread['tid']);
-					updatemembercount($this->thread['authorid'], array($replycredit_rule['extcreditstype'] => $thread['replycredit']), 1, 'RCB', $this->thread['tid']);
+					updatemembercount($this->thread['authorid'], array($replycredit_rule['extcreditstype'] => $this->thread['replycredit']), 1, 'RCB', $this->thread['tid']);
 					$this->param['threadupdatearr']['replycredit'] = 0;
 				} else {
 					$replycredit = $this->thread['replycredit'];

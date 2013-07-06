@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: cloud_security.php 32561 2013-02-20 09:44:25Z liulanbo $
+ *		$Id: cloud_security.php 33344 2013-05-30 04:37:03Z jeffjzhang $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 $op = trim($_GET['op']);
 
-$_GET['anchor'] = in_array($_GET['anchor'], array('index', 'setting', 'thread', 'post', 'member', 'reportOperation')) ? $_GET['anchor'] : 'index';
+$_GET['anchor'] = in_array($_GET['anchor'], array('index', 'setting', 'thread', 'post', 'member', 'safe', 'reportOperation')) ? $_GET['anchor'] : 'index';
 $pt = in_array($_GET['anchor'], array('thread', 'post')) ? $_GET['anchor'] : 'thread';
 
 $current = array($_GET['anchor'] => 1);
@@ -30,6 +30,7 @@ $securitynav[1] = array('security_blanklist', 'cloud&operation=security&anchor=s
 $securitynav[2] = array('security_thread_list', 'cloud&operation=security&anchor=thread', $current['thread']);
 $securitynav[3] = array('security_post_list', 'cloud&operation=security&anchor=post', $current['post']);
 $securitynav[4] = array('security_member_list', 'cloud&operation=security&anchor=member', $current['member']);
+$securitynav[5] = array('security_safe_list', 'cloud&operation=security&anchor=safe', $current['safe']);
 
 if (!$_G['inajax']) {
 	cpheader();
@@ -45,7 +46,7 @@ $datas = $data = $eviluids = $evilPids = $evilTids = $members = $thread = $post 
 
 if ($_GET['anchor'] == 'index') {
 	$utilService = Cloud::loadClass('Service_Util');
-	$signUrl = $utilService->generateSiteSignUrl();
+	$signUrl = $utilService->generateSiteSignUrl(array('v' => 2));
 	$utilService->redirect($cloudDomain.'/security/stats/list/?' . $signUrl);
 } elseif ($_GET['anchor'] == 'setting') {
 
@@ -165,8 +166,31 @@ if ($_GET['anchor'] == 'index') {
 	}
 	showtablefooter();
 
-} elseif($_GET['anchor'] == 'member') {
+} elseif($_GET['anchor'] == 'safe') {
 
+	if(!submitcheck('safesetting')) {
+		showformheader('cloud&operation=security&anchor=safe');
+		showtableheader();
+		showsetting('security_safe_login_open', 'security_safelogin', $_G['setting']['security_safelogin'], 'radio');
+		showsetting('security_qq_login_alone_open', 'security_qqlogin_alone', $_G['setting']['security_qqlogin_alone'], 'radio');
+		showsubmit('safesetting');
+		showtablefooter();
+		showformfooter();
+	} else {
+		$updateData = array(
+			'security_safelogin' => dintval($_POST['security_safelogin']),
+			'security_qqlogin_alone' => dintval($_POST['security_qqlogin_alone']),
+		);
+		C::t('common_setting')->update_batch($updateData);
+		updatecache('setting');
+		cpmsg('setting_update_succeed', 'action=cloud&operation=security&anchor='.$_GET['anchor'], 'succeed');
+	}
+
+} elseif($_GET['anchor'] == 'member') {
+	showtips('security_member_tips');
+	if($_GET['ignoreuid']) {
+		C::t('#security#security_eviluser')->delete(intval($_GET['ignoreuid']));
+	}
 	$memberperpage = $_G['setting']['memberperpage'];
 	$start_limit = ($page - 1) * $memberperpage;
 	$count = C::t('#security#security_eviluser')->count();
@@ -178,7 +202,7 @@ if ($_GET['anchor'] == 'index') {
 	showhiddenfields(array('security' => 1, 'searchsubmit' => 1));
 	echo "\n<input type=\"hidden\" name=\"authors\" id=\"authors\" value=\"\">";
 	showformfooter();
-	showformheader("members&operation=clean", ' target="_blank"');
+	showformheader("members&operation=clean", '');
 	showtableheader();
 	showsubtitle(array('','security_members_name', 'members_edit_info', 'security_thread_member_group', 'security_createtime', '', '', ''));
 
@@ -189,11 +213,12 @@ if ($_GET['anchor'] == 'index') {
 			$username = $lang['security_userdeleted']."(uid:{$value['uid']})";
 		}
 		$del = '<input type="checkbox" name="uidarray[]" value="'.$value['uid'].'"'.($value['adminid'] == 1 ? 'disabled' : '').' class="checkbox">';
-		$optmember = '<a href="' . ADMINSCRIPT . '?action=members&operation=ban&uid='.$value['uid'].'" target="_blank">'.cplang('members_ban').'</a>';
+		$optmember = '<a href="'.ADMINSCRIPT.'?action=members&operation=ban&uid='.$value['uid'].'" target="_blank">'.cplang('members_ban').'</a>';
+		$ignorethis = '<a href="'.ADMINSCRIPT.'?action=cloud&operation=security&anchor=member&ignoreuid='.$value['uid'].'&page='.$page.'">'.cplang('security_member_ignore_this').'</a>';
 		$createtime = date('Y-m-d', $value['createtime']);
 		$evilthreads = '<a href="javascript:void(0);" onclick="searchevilpost_member(\''.$value['username'].'\', 1);return false;">'.cplang('security_thread_list').'</a>';
 		$evilposts = '<a href="javascript:void(0);" onclick="searchevilpost_member(\''.$value['username'].'\', 2);return false;">'.cplang('security_post_list').'</a>';
-		$member = array($del, $username, convertMemberInfo($value), $value['grouptitle'], $createtime, $evilthreads, $evilposts, $optmember);
+		$member = array($del, $username, convertMemberInfo($value), $value['grouptitle'], $createtime, $evilthreads, $evilposts, $optmember, $ignorethis);
 		showtablerow('',array('class="td25"'),$member);
 	}
 	showsubmit('deletesubmit', cplang('delete'), '', '', $multipage);

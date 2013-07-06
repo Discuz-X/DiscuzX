@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_usergroups.php 32082 2012-11-07 08:00:31Z zhengqingpeng $
+ *      $Id: cache_usergroups.php 32967 2013-03-28 10:57:48Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,6 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_usergroups() {
 	global $_G;
-
 
 	$data_uf = C::t('common_usergroup_field')->fetch_all_fields(null, array('groupid', 'readaccess', 'allowgetattach', 'allowgetimage', 'allowmediacode', 'maxsigsize', 'allowbegincode'));
 
@@ -60,21 +59,14 @@ function build_cache_usergroups_single() {
 	$data_ag = C::t('common_admingroup')->range();
 	foreach(C::t('common_usergroup')->range() as $gid => $data) {
 		$data = array_merge($data, (array)$data_uf[$gid], (array)$data_ag[$gid]);
-		$loginreward = $ratearray = array();
+		$ratearray = array();
 		if($data['raterange']) {
 			foreach(explode("\n", $data['raterange']) as $rating) {
 				$rating = explode("\t", $rating);
 				$ratearray[$rating[0]] = array('isself' => $rating[1], 'min' => $rating[2], 'max' => $rating[3], 'mrpd' => $rating[4]);
 			}
 		}
-		if($data['loginreward']) {
-			foreach(explode("\n", $data['loginreward']) as $reward) {
-				$reward = explode("\t", $reward);
-				$loginreward[$reward[0]] = $reward[1];
-			}
-		}
 		$data['raterange'] = $ratearray;
-		$data['loginreward'] = $loginreward;
 		$data['grouptitle'] = $data['color'] ? '<font color="'.$data['color'].'">'.$data['grouptitle'].'</font>' : $data['grouptitle'];
 		$data['grouptype'] = $data['type'];
 		$data['grouppublic'] = $data['system'] != 'private';

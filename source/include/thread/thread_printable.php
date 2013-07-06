@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_printable.php 32319 2012-12-25 02:30:41Z liulanbo $
+ *      $Id: thread_printable.php 33149 2013-04-28 01:53:37Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,10 @@ if(!getstatus($_G['forum_thread']['status'], 2)) {
 }
 $userinfo = $uids = $skipaids = array();
 foreach($posts as $post) {
+
+	if(strpos($post['message'], '[/password]') !== FALSE) {
+		$post['message'] = '';
+	}
 
 	$post['dateline'] = dgmdate($post['dateline'], 'u');
 	if(preg_match("/\[hide\]\s*(.+?)\s*\[\/hide\]/is", $post['message'], $hide)) {

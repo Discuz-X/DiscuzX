@@ -21,8 +21,13 @@ class mobile_api {
 		$limit = !empty($_GET['limit']) ? $_GET['limit'] : 20;
 		$variable['data'] = C::t('forum_newthread')->fetch_all_by_fids(dintval(explode(',', $_GET['fids']), true), $start, $limit);
 		foreach(C::t('forum_thread')->fetch_all_by_tid(array_keys($variable['data']), 0, $limit) as $thread) {
-			$variable['data'][$thread['tid']] = $thread;
+			$thread['dbdateline'] = $thread['dateline'];
+			$thread['dblastpost'] = $thread['lastpost'];
+			$thread['dateline'] = dgmdate($thread['dateline'], 'u');
+			$thread['lastpost'] = dgmdate($thread['lastpost'], 'u');
+			$variable['data'][$thread['tid']] = mobile_core::getvalues($thread, array('tid', 'author', 'authorid', 'subject', 'subject', 'dbdateline', 'dateline', 'dblastpost', 'lastpost', 'lastposter', 'attachment', 'replies', 'readperm', 'views', 'digest'));
 		}
+		$variable['data'] = array_values($variable['data']);
 		mobile_core::result(mobile_core::variable($variable));
 	}
 

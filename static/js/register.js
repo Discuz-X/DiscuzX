@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: register.js 32487 2013-01-28 09:11:34Z zhengqingpeng $
+	$Id: register.js 33432 2013-06-13 07:36:18Z nemohou $
 */
 
 var lastusername = '', lastpassword = '', lastemail = '', lastinvitecode = '', stmp = new Array(), modifypwd = false, profileTips = '如不需要更改密码，此处请留空';
@@ -77,7 +77,7 @@ function checkPwdComplexity(firstObj, secondObj, modify) {
 			}
 			errormessage(firstObj.id, pwmsg);
 		}else{
-			errormessage(firstObj.id, !modifypwd ? 'succeed' : profileTips);
+			errormessage(firstObj.id, !modifypwd ? 'succeed' : '');
 		}
 		checkpassword(firstObj.id, secondObj.id);
 	};
@@ -173,7 +173,7 @@ function trim(str) {
 	return str.replace(/^\s*(.*?)[\s\n]*$/g, '$1');
 }
 
-var emailMenuST = null, emailMenui = 0, emaildomains = ['qq.com', '163.com', 'sina.com', 'sohu.com', 'yahoo.cn', 'gmail.com', 'hotmail.com'];
+var emailMenuST = null, emailMenui = 0, emaildomains = ['qq.com', '163.com', 'sina.com', 'sohu.com', 'yahoo.com', 'gmail.com', 'hotmail.com'];
 function emailMenuOp(op, e, id) {
 	if(op == 3 && BROWSER.ie && BROWSER.ie < 7) {
 		checkemail(id);
@@ -284,7 +284,7 @@ function checkusername(id) {
 	}
 	var x = new Ajax();
 	$('tip_' + id).parentNode.className = $('tip_' + id).parentNode.className.replace(/ p_right/, '');
-	x.get('forum.php?mod=ajax&inajax=yes&infloat=register&handlekey=register&ajaxmenu=1&action=checkusername&username=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(username) : username.replace(/%/g, '%25')), function(s) {
+	x.get('forum.php?mod=ajax&inajax=yes&infloat=register&handlekey=register&ajaxmenu=1&action=checkusername&username=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(username) : username.replace(/%/g, '%25').replace(/#/g, '%23')), function(s) {
 		errormessage(id, s);
 	});
 }
@@ -333,7 +333,7 @@ function checkpassword(id1, id2) {
 	if($(id1).value != $(id2).value) {
 		errormessage(id2, '两次输入的密码不一致');
 	} else {
-		errormessage(id2, !modifypwd ? 'succeed' : profileTips);
+		errormessage(id2, !modifypwd ? 'succeed' : '');
 	}
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 32702 2013-03-01 03:24:37Z monkey $
+ *      $Id: admincp_setting.php 33440 2013-06-17 02:39:05Z nemohou $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -210,8 +210,6 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_follow_base_default_follow_retain_day', 'settingnew[followretainday]', $setting['followretainday'], 'text');
 		showsetting('setting_follow_base_default_view_profile', 'settingnew[allowquickviewprofile]', $setting['allowquickviewprofile'], 'radio');
 		showtablefooter();
-
-
 
 	} elseif($operation == 'home') {
 
@@ -490,7 +488,7 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_access_access_newbiespan', 'settingnew[newbiespan]', $setting['newbiespan'], 'text');
 		showsetting('setting_access_access_ipaccess', 'settingnew[ipaccess]', $setting['ipaccess'], 'textarea');
 		showsetting('setting_access_access_adminipaccess', 'settingnew[adminipaccess]', $setting['adminipaccess'], 'textarea');
-		showsetting('setting_access_access_domainwhitelist', 'settingnew[domainwhitelist]', $setting['domainwhitelist'], 'textarea');
+		showsetting('setting_access_access_domainwhitelist', 'settingnew[domainwhitelist]', '', '<textarea class="tarea" cols="50" id="settingnew[domainwhitelist]" name="settingnew[domainwhitelist]" onkeydown="textareakey(this, event)" onkeyup="textareasize(this, 0)" ondblclick="textareasize(this, 1)" rows="6">'.$setting['domainwhitelist'].'</textarea><br><input class="checkbox" type="checkbox" value="1" name="settingnew[domainwhitelist_affectimg]" '.($setting['domainwhitelist_affectimg'] ?  'checked' : '').'>'.cplang('setting_access_access_domainwhitelist_affectimg'));
 		showtablefooter();
 
 		showtableheader('', 'notop');
@@ -516,6 +514,7 @@ if(!submitcheck('settingsubmit')) {
 		list($setting['zoomstatus'], $setting['imagemaxwidth']) = explode("\t", $setting['zoomstatus']);
 		$setting['imagemaxwidth'] = !empty($setting['imagemaxwidth']) ? $setting['imagemaxwidth'] : 600;
 		$setting['guestviewthumb'] = dunserialize($setting['guestviewthumb']);
+		$setting['guesttipsinthread'] = dunserialize($setting['guesttipsinthread']);
 
 		$stylelist = "<select name=\"settingnew[styleid]\">\n";
 		$query = DB::query("SELECT styleid, name FROM ".DB::table('common_style')."");
@@ -562,7 +561,6 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_styles_index_indexhot_expiration', 'settingnew[indexhot][expiration]', $setting['indexhot']['expiration'], 'text');
 		showsetting('setting_styles_index_indexhot_messagecut', 'settingnew[indexhot][messagecut]', $setting['indexhot']['messagecut'], 'text');
 		showtagfooter('tbody');
-		showsetting('setting_styles_index_showsignin', 'settingnew[showsignin]', $setting['showsignin'], 'radio');
 		showsetting('setting_styles_index_subforumsindex', 'settingnew[subforumsindex]', $setting['subforumsindex'], 'radio');
 		showsetting('setting_styles_index_forumlinkstatus', 'settingnew[forumlinkstatus]', $setting['forumlinkstatus'], 'radio');
 		showsetting('setting_styles_index_forumallowside', 'settingnew[forumallowside]', $setting['forumallowside'], 'radio');
@@ -649,6 +647,20 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_styles_viewthread_guestviewthumb_width', 'settingnew[guestviewthumb][width]', $setting['guestviewthumb']['width'], 'text');
 		showsetting('setting_styles_viewthread_guestviewthumb_height', 'settingnew[guestviewthumb][height]', $setting['guestviewthumb']['height'], 'text');
 		showtagfooter('tbody');
+		showsetting('setting_styles_viewthread_guesttipsinthread', 'settingnew[guesttipsinthread][flag]', !empty($setting['guesttipsinthread']['flag']), 'radio', 0, 1);
+		showsetting('setting_styles_viewthread_guesttipsinthread_text', 'settingnew[guesttipsinthread][text]', $setting['guesttipsinthread']['text'], 'text');
+		showtagfooter('tbody');
+		showsetting('setting_styles_viewthread_imgcontent', 'settingnew[imgcontentwidth]', $setting['imgcontentwidth'], 'text');
+		showsetting('setting_styles_viewthread_fast_reply', 'settingnew[allowfastreply]', $setting['allowfastreply'], 'radio');
+		showsetting('setting_styles_viewthread_allow_replybg', 'settingnew[allowreplybg]', $setting['allowreplybg'], 'radio', 0, 1);
+		$replybghtml = '';
+		if($setting['globalreplybg']) {
+			$replybghtml = '<label><input type="checkbox" class="checkbox" name="delglobalreplybg" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$_G['setting']['attachurl'].'common/'.$setting['globalreplybg'].'" width="200px" />';
+		}
+		if($setting['globalreplybg']) {
+			$replybgurl = parse_url($setting['globalreplybg']);
+		}
+		showsetting('setting_styles_viewthread_global_reply_background', 'globalreplybg', (!$replybgurl['host'] ? str_replace($_G['setting']['attachurl'].'common/', '', $setting['globalreplybg']) : $setting['globalreplybg']), 'filetext', '', 0, $replybghtml);
 		showtablefooter();
 		showtagfooter('div');
 
@@ -664,9 +676,9 @@ if(!submitcheck('settingsubmit')) {
 		echo '<table><tr><td valign="top" width="350">';
 
 		showtableheader('setting_styles_threadprofile_group', 'nobottom');
-		showsubtitle(array('名称', '方案'));
+		showsubtitle(array('setting_styles_threadprofile_name', 'setting_styles_threadprofile_plan'));
 		foreach($_G['cache']['usergroups'] as $gid => $usergroup) {
-			$select = '<select name="threadprofile['.$gid.']"><option value="0">全局</option>';
+			$select = '<select name="threadprofile['.$gid.']"><option value="0">'.$lang['nav_global'].'</option>';
 			foreach($threadprofiles as $id => $threadprofile) {
 				$select .= '<option value="'.$id.'"'.($threadprofile_group[$gid]['tpid'] == $id ? ' selected' : '').'>'.$threadprofile['name'].'</option>';
 			}
@@ -676,7 +688,7 @@ if(!submitcheck('settingsubmit')) {
 		if($_G['setting']['verify']['enabled']) {
 			foreach($_G['setting']['verify'] as $gid => $verify) {
 				if($verify['available']) {
-					$select = '<select name="threadprofile[-'.$gid.']"><option value="0">全局</option>';
+					$select = '<select name="threadprofile[-'.$gid.']"><option value="0">'.$lang['nav_global'].'</option>';
 					foreach($threadprofiles as $id => $threadprofile) {
 						$select .= '<option value="'.$id.'"'.($threadprofile_group[-$gid]['tpid'] == $id ? ' selected' : '').'>'.$threadprofile['name'].'</option>';
 					}
@@ -691,7 +703,7 @@ if(!submitcheck('settingsubmit')) {
 
 		showtableheader('setting_styles_threadprofile_project', 'nobottom');
 		$setting['threadprofile'] = !empty($setting['threadprofile']) ? dunserialize($setting['threadprofile']) : array();
-		showsubtitle(array('名称', '全局', ''));
+		showsubtitle(array('setting_styles_threadprofile_name', 'nav_global', ''));
 		foreach($threadprofiles as $id => $threadprofile) {
 			showtablerow('', array('style="width:200px"', 'style="width:50px"', ''), array(
 				$threadprofile['name'],
@@ -700,7 +712,7 @@ if(!submitcheck('settingsubmit')) {
 				($id > 1 ? '&nbsp;<a href="'.ADMINSCRIPT.'?action=setting&operation=threadprofile&do=delete&id='.$id.'">'.cplang('delete').'</a>' : ''),
 			));
 		}
-		echo '<tr><td colspan="3"><a href="'.ADMINSCRIPT.'?action=setting&operation=threadprofile&do=add" class="addtr">添加新方案</td></tr>';
+		echo '<tr><td colspan="3"><a href="'.ADMINSCRIPT.'?action=setting&operation=threadprofile&do=add" class="addtr">'.$lang['setting_styles_threadprofile_addplan'].'</td></tr>';
 		showtablefooter();
 
 		echo '</td></tr></table>';
@@ -754,12 +766,12 @@ if(!submitcheck('settingsubmit')) {
 
 		$authorinfoitems = array();
 		$authorinfoitems = array(
-			'{numbercard}' => '属性名片',
-			'{groupicon}<p>{*}</p>{/groupicon}' => '用户组图标',
-			'{authortitle}<p><em>{*}</em></p>{/authortitle}' => '用户组名称',
-			'{customstatus}<p class=xg1>{*}</p>{/customstatus}' => '昵称',
-			'{star}<p>{*}</p>{/star}' => '等级图标',
-			'{upgradeprogress}' => '等级进度',
+			'{numbercard}' => $lang['setting_styles_threadprofile_attrcard'],
+			'{groupicon}<p>{*}</p>{/groupicon}' => $lang['setting_styles_threadprofile_groupicon'],
+			'{authortitle}<p><em>{*}</em></p>{/authortitle}' => $lang['setting_styles_threadprofile_groupname'],
+			'{customstatus}<p class=xg1>{*}</p>{/customstatus}' => $lang['members_edit_nickname'],
+			'{star}<p>{*}</p>{/star}' => $lang['group_level_icon'],
+			'{upgradeprogress}' => $lang['setting_styles_threadprofile_groupstep'],
 		);
 		if(!empty($_G['setting']['extcredits'])) {
 			foreach($_G['setting']['extcredits'] as $key => $value) {
@@ -782,8 +794,8 @@ if(!submitcheck('settingsubmit')) {
 			'regtime' => $lang['setting_styles_viewthread_userinfo_regtime'],
 			'lastdate' => $lang['setting_styles_viewthread_userinfo_lastdate'],
 			'oltime' => $lang['setting_styles_viewthread_userinfo_oltime'],
-			'eccredit_seller' => '卖家信用',
-			'eccredit_buyer' => '买家信用',
+			'eccredit_seller' => $lang['setting_styles_threadprofile_eccredit_seller'],
+			'eccredit_buyer' => $lang['setting_styles_threadprofile_eccredit_buyer'],
 			'follower' => $lang['setting_styles_viewthread_userinfo_follower'],
 			'following' => $lang['setting_styles_viewthread_userinfo_following']
 		));
@@ -814,7 +826,7 @@ if(!submitcheck('settingsubmit')) {
 			showtips('setting_threadprofile_tpl_tpls');
 			showtableheader('');
 			showhiddenfields(array('do' => 'add'));
-			showsetting('名称', 'namenew', '', 'text');
+			showsetting('setting_styles_threadprofile_name', 'namenew', '', 'text');
 			showsetting_threadprfile($authorinfoitems);
 			showtagfooter('tbody');
 			showtablefooter();
@@ -828,7 +840,7 @@ if(!submitcheck('settingsubmit')) {
 			showtableheader('');
 			showhiddenfields(array('do' => 'edit', 'id' => $id));
 			$threadprofile['template'] = dunserialize($threadprofile['template']);
-			showsetting('名称', 'namenew', $threadprofile['name'], 'text');
+			showsetting('setting_styles_threadprofile_name', 'namenew', $threadprofile['name'], 'text');
 			showsetting_threadprfile($authorinfoitems, $threadprofile['template']);
 			showtagfooter('tbody');
 			showtablefooter();
@@ -1238,21 +1250,9 @@ EOF;
 		showsetting('setting_functions_other_collectionteamworkernum', 'settingnew[collectionteamworkernum]', $setting['collectionteamworkernum'], 'text');
 		showsetting('setting_functions_other_shortcut', 'settingnew[shortcut]', $setting['shortcut'], 'text');
 		showsetting('setting_functions_other_closeforumorderby', 'settingnew[closeforumorderby]', $setting['closeforumorderby'], 'radio');
+		showsetting('setting_functions_other_disableipnotice', 'settingnew[disableipnotice]', $setting['disableipnotice'], 'radio');
 		showsetting('setting_functions_other_darkroom', 'settingnew[darkroom]', $setting['darkroom'], 'radio');
 		showsetting('setting_functions_other_global_sign', 'settingnew[globalsightml]', $setting['globalsightml'], 'textarea');
-		showsetting('setting_functions_other_imgcontent', 'settingnew[imgcontentwidth]', $setting['imgcontentwidth'], 'text');
-
-		showsetting('setting_functions_other_allow_replybg', 'settingnew[allowreplybg]', $setting['allowreplybg'], 'radio', 0, 1);
-
-		$replybghtml = '';
-		if($setting['globalreplybg']) {
-			$replybghtml = '<label><input type="checkbox" class="checkbox" name="delglobalreplybg" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$_G['setting']['attachurl'].'common/'.$setting['globalreplybg'].'" width="200px" />';
-		}
-		if($setting['globalreplybg']) {
-			$replybgurl = parse_url($setting['globalreplybg']);
-		}
-		showsetting('setting_functions_other_global_reply_background', 'globalreplybg', (!$replybgurl['host'] ? str_replace($_G['setting']['attachurl'].'common/', '', $setting['globalreplybg']) : $setting['globalreplybg']), 'filetext', '', 0, $replybghtml);
-
 		showtablefooter();
 
 		$setting['guide'] = unserialize($setting['guide']);
@@ -2295,10 +2295,7 @@ EOT;
 		showsetting('setting_mobile_seccode', 'settingnew[mobile][mobileseccode]', $setting['mobile']['mobileseccode'], 'radio');
 		showsetting('setting_mobile_hotthread', 'settingnew[mobile][mobilehotthread]', $setting['mobile']['mobilehotthread'], 'radio');
 		showsetting('setting_mobile_displayorder3', 'settingnew[mobile][mobiledisplayorder3]', $setting['mobile']['mobiledisplayorder3'], 'radio');
-		showsetting('setting_mobile_simpletype', array('settingnew[mobile][mobilesimpletype]', array(
-					array(0, cplang('setting_mobile_simpletype_no')),
-					array(1, cplang('setting_mobile_simpletype_yes')),
-				)), $setting['mobile']['mobilesimpletype'] ? $setting['mobile']['mobilesimpletype'] : 0 , 'mradio');
+		showsetting('setting_mobile_simpletype', 'settingnew[mobile][mobilesimpletype]', $setting['mobile']['mobilesimpletype'], 'radio');
 		showsetting('setting_mobile_topicperpage', 'settingnew[mobile][mobiletopicperpage]', $setting['mobile']['mobiletopicperpage'] ? $setting['mobile']['mobiletopicperpage'] : 10, 'text');
 		showsetting('setting_mobile_postperpage', 'settingnew[mobile][mobilepostperpage]', $setting['mobile']['mobilepostperpage'] ? $setting['mobile']['mobilepostperpage'] : 5, 'text');
 		showsetting('setting_mobile_cachetime', 'settingnew[mobile][mobilecachetime]', $setting['mobile']['mobilecachetime'] ? $setting['mobile']['mobilecachetime'] : 0, 'text');
@@ -2361,18 +2358,18 @@ EOT;
 								"<input type=\"checkbox\" class=\"checkbox\" name=\"ips[]\" value=\"$value[ip]\">",
 								"$ip ".convertip($ip),
 								$value['view'],
-								"<a href=\"$mpurl&optype=white&ips[]=$value[ip]&antitheftsubmit=yes\">加入白名单</a> |
-								 <a href=\"$mpurl&optype=black&ips[]=$value[ip]&antitheftsubmit=yes\">加入黑名单</a> |
-								 <a href=\"$mpurl&optype=delete&ips[]=$value[ip]&antitheftsubmit=yes\">删除</a>
+								"<a href=\"$mpurl&optype=white&ips[]=$value[ip]&antitheftsubmit=yes\">$lang[setting_antitheft_addwhitelist]</a> |
+								 <a href=\"$mpurl&optype=black&ips[]=$value[ip]&antitheftsubmit=yes\">$lang[setting_antitheft_addblacklist]</a> |
+								 <a href=\"$mpurl&optype=delete&ips[]=$value[ip]&antitheftsubmit=yes\">$lang[delete]</a>
 								",
 							));
 					}
 					$multipage = multi($count, $perpage, $page, $mpurl);
 				}
 
-				$batchradio = '<input type="radio" name="optype" value="white" id="op_white" class="radio" /><label for="op_white">'.cplang('加入白名单').'</label>&nbsp;&nbsp;';
-				$batchradio .= '<input type="radio" name="optype" value="black" id="op_black" class="radio" /><label for="op_black">'.cplang('加入黑名单').'</label>&nbsp;&nbsp;';
-				$batchradio .= '<input type="radio" name="optype" value="delete" id="op_remove" class="radio" /><label for="op_remove">'.cplang('删除').'</label>&nbsp;&nbsp;<input type="hidden" name="antitheftsubmit" value="yes" />';
+				$batchradio = '<input type="radio" name="optype" value="white" id="op_white" class="radio" /><label for="op_white">'.cplang('setting_antitheft_addwhitelist').'</label>&nbsp;&nbsp;';
+				$batchradio .= '<input type="radio" name="optype" value="black" id="op_black" class="radio" /><label for="op_black">'.cplang('setting_antitheft_addblacklist').'</label>&nbsp;&nbsp;';
+				$batchradio .= '<input type="radio" name="optype" value="delete" id="op_remove" class="radio" /><label for="op_remove">'.cplang('delete').'</label>&nbsp;&nbsp;<input type="hidden" name="antitheftsubmit" value="yes" />';
 				showsubmit('', '', '', '<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'ips\')" /><label for="chkall">'.cplang('select_all').'</label>&nbsp;&nbsp;'
 							.$batchradio.'<input type="submit" class="btn" name="antitheftbutton" value="'.cplang('submit').'" />', $multipage);
 				showtablefooter();
@@ -2671,7 +2668,6 @@ EOT;
 					'allowexchangein' => $value['allowexchangein'],
 					'allowexchangeout' => $value['allowexchangeout'],
 					);
-				$settingnew['initcredits'][$key] = intval($settingnew['initcredits'][$key]);
 			}
 		}
 
@@ -2696,6 +2692,7 @@ EOT;
 
 		$initformula = str_replace('posts', '0', $settingnew['creditsformula']);
 		for($i = 1; $i <= 8; $i++) {
+			$settingnew['initcredits'][$i] = intval($settingnew['initcredits'][$i]);
 			$initformula = str_replace('extcredits'.$i, $settingnew['initcredits'][$i], $initformula);
 		}
 		eval("\$_G['setting']['initcredits'] = round($initformula);");
@@ -2858,6 +2855,9 @@ EOT;
 		}
 	} elseif($operation == 'threadprofile') {
 		$_GET['templatenew'] = serialize($_GET['templatenew']);
+		if(!$_GET['namenew']) {
+			cpmsg('setting_threadprofile_name_empty', '', 'error');
+		}
 		if($_GET['do'] == 'add') {
 			C::t('forum_threadprofile')->insert(array('name' => strip_tags($_GET['namenew']), 'template' => $_GET['templatenew']));
 		} elseif($_GET['do'] == 'edit') {
@@ -3085,6 +3085,9 @@ EOT;
 		$settingnew['guestviewthumb']['width'] = $settingnew['guestviewthumb']['width'] ? $settingnew['guestviewthumb']['width'] : 100;
 		$settingnew['guestviewthumb']['height'] = $settingnew['guestviewthumb']['height'] ? $settingnew['guestviewthumb']['height'] : 100;
 
+		$settingnew['guesttipsinthread']['flag'] = intval($settingnew['guesttipsinthread']['flag']) ? 1 : 0;
+		$settingnew['guesttipsinthread']['text'] = $settingnew['guesttipsinthread']['text'];
+
 
 		if($showinthreadfields) {
 			C::t('common_member_profile_setting')->update($showinthreadfields, array('showinthread' => 1));
@@ -3161,6 +3164,10 @@ EOT;
 		$enabledgroup = true;
 		if(!empty($settingnew['profilegroupnew'])) {
 			foreach($settingnew['profilegroupnew'] as $key => $value) {
+				if(!in_array($key, array('base', 'contact', 'edu', 'work', 'info'))) {
+					unset($profilegroup[$key]);
+					continue;
+				}
 				$temp[$key] = $value['displayorder'];
 				$profilegroup[$key]['available'] = !empty($value['available']) ? 1 : 0;
 				$profilegroup[$key]['displayorder'] = $value['displayorder'];
@@ -3177,6 +3184,10 @@ EOT;
 				$profilegroup[$prokey] = $settingnew['profile'];
 			}
 			foreach($profilegroup as $key => $value) {
+				if(!in_array($key, array('base', 'contact', 'edu', 'work', 'info'))) {
+					unset($profilegroup[$key]);
+					continue;
+				}
 				$temp[$key] = $value['displayorder'];
 				if($enabledgroup && $value['available']) {
 					$enabledgroup = false;
@@ -3196,6 +3207,10 @@ EOT;
 		$settingnew['smcols'] = $settingnew['smcols'] >= 8 && $settingnew['smcols'] <= 12 ? $settingnew['smcols'] : 8;
 	}
 
+	if(isset($settingnew['thumbdisabledmobile'])) {
+		$settingnew['thumbdisabledmobile'] = !$settingnew['thumbdisabledmobile'] ? 1 : 0;
+	}
+
 	if(isset($settingnew['jspath'])) {
 		if(!$settingnew['jspath']) {
 			$settingnew['jspath'] = $settingnew['jspathcustom'];
@@ -3205,6 +3220,10 @@ EOT;
 	if(isset($settingnew['domainwhitelist'])) {
 		$settingnew['domainwhitelist'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['domainwhitelist']));
 	}
+	if(empty($settingnew['domainwhitelist'])) {
+		$settingnew['domainwhitelist_affectimg'] = 0;
+	}
+	$settingnew['domainwhitelist_affectimg'] = intval($settingnew['domainwhitelist_affectimg']);
 
 	if(isset($settingnew['shownewuser']) && !$settingnew['shownewuser']) {
 		$settingnew['newspacenum'] = 0;
@@ -3509,7 +3528,7 @@ function threadprofile_buttons($id, $authorinfoitems) {
 			$buttons .= '<a href="###" onclick="insertunit($(\''.$id.'\'), \''.$code.'\')">'.$name.'</a>';
 			$i++;
 		} else {
-			$buttons .= $name ? '<a href="javascript:;" onclick="display(\''.$id.'more\')" class="light">更多</a><div id="'.$id.'more" style="display:none">' : '<br />';
+			$buttons .= $name ? '<a href="javascript:;" onclick="display(\''.$id.'more\')" class="light">'.cplang('more').'</a><div id="'.$id.'more" style="display:none">' : '<br />';
 			$i = 0;
 		}
 	}
@@ -3520,11 +3539,11 @@ function threadprofile_buttons($id, $authorinfoitems) {
 function showsetting_threadprfile($authorinfoitems, $template = array()) {
 	$template_left = dhtmlspecialchars($template['left']);
 	$buttons = threadprofile_buttons('tleft', $authorinfoitems);
-	echo '<tr><td class="td27" colspan="2">左侧信息模板:</td></tr>
+	echo '<tr><td class="td27" colspan="2">'.cplang('setting_styles_threadprofile_leftinfoprofile').':</td></tr>
 		<tr><td colspan="2"><div class="threadprofilenode">'.$buttons.'</div><textarea name="templatenew[left]" id="tleft" class="marginbot" style="width:80%" rows="10" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.$template_left.'</textarea></td></tr>';
 	$template_top = dhtmlspecialchars($template['top']);
 	$buttons = threadprofile_buttons('ttop', $authorinfoitems);
-	echo '<tr><td class="td27" colspan="2">头像菜单模板:</td></tr>
+	echo '<tr><td class="td27" colspan="2">'.cplang('setting_styles_threadprofile_avatarprofile').':</td></tr>
 		<tr><td colspan="2"><div class="threadprofilenode">'.$buttons.'</div><textarea name="templatenew[top]" id="ttop" class="marginbot" style="width:80%" rows="10" onkeyup="textareasize(this)" onkeydown="textareakey(this, event)">'.$template_top.'</textarea></td></tr>';
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_notification.php 31068 2012-07-12 08:34:53Z liulanbo $
+ *      $Id: helper_notification.php 32743 2013-03-05 09:37:51Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,17 +29,25 @@ class helper_notification {
 		if($category == -1) {
 			$category = 0;
 			$categoryname = '';
-			foreach($_G['notice_structure'] as $key => $val) {
-				if(in_array($type, $val)) {
-					switch ($key) {
-						case 'mypost' : $category = 1; break;
-						case 'interactive' : $category = 2; break;
-						case 'system' : $category = 3; break;
-						case 'manage' : $category = 4; break;
-						default :  $category = 0;
+			if($type == 'follow' || $type == 'follower') {
+				switch ($type) {
+							case 'follow' : $category = 5; break;
+							case 'follower' : $category = 6; break;
+						}
+				$categoryname = $type;
+			} else {
+				foreach($_G['notice_structure'] as $key => $val) {
+					if(in_array($type, $val)) {
+						switch ($key) {
+							case 'mypost' : $category = 1; break;
+							case 'interactive' : $category = 2; break;
+							case 'system' : $category = 3; break;
+							case 'manage' : $category = 4; break;
+							default :  $category = 0;
+						}
+						$categoryname = $key;
+						break;
 					}
-					$categoryname = $key;
-					break;
 				}
 			}
 		} else {
@@ -48,6 +56,8 @@ class helper_notification {
 				case 2 : $categoryname = 'interactive'; break;
 				case 3 : $categoryname = 'system'; break;
 				case 4 : $categoryname = 'manage'; break;
+				case 5 : $categoryname = 'follow'; break;
+				case 6 : $categoryname = 'follower'; break;
 				default :  $categoryname = 'app';
 			}
 		}
@@ -182,17 +192,10 @@ class helper_notification {
 			$tmpprompt = $_G['member']['newprompt_num'];
 			$num = 0;
 			$updateprompt = 0;
-			foreach($tmpprompt as $key => $val) {
-				$num += $val;
-			}
 			if(!empty($tmpprompt[$type])) {
 				unset($tmpprompt[$type]);
 				$updateprompt = true;
-			} elseif(empty($type) && !empty($tmpprompt[$view])) {
-				unset($tmpprompt[$view]);
-				$updateprompt = true;
 			}
-			$num = 0;
 			foreach($tmpprompt as $key => $val) {
 				$num += $val;
 			}

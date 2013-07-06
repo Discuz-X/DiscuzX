@@ -12,23 +12,23 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $lang = "
-<okbtn>纭畾</okbtn>
-<ctnbtn>缁х画</ctnbtn>
-<fileName>鏂囦欢鍚岦/fileName>
-<size>鏂囦欢澶у皬</size>
-<stat>涓婁紶杩涘害</stat>
-<browser>娴忚</browser>
-<delete>鍒犻櫎</delete>
-<return>杩斿洖</return>
-<upload>涓婁紶</upload>
-<okTitle>涓婁紶瀹屾垚</okTitle>
-<okMsg>鏂囦欢涓婁紶瀹屾垚</okMsg>
-<uploadTitle>姝ｅ湪涓婁紶</uploadTitle>
-<uploadMsg1>鎬诲叡鏈堻/uploadMsg1>
-<uploadMsg2>涓枃浠剁瓑寰呬笂浼?姝ｅ湪涓婁紶绗?/uploadMsg2>
-<uploadMsg3>涓枃浠迭/uploadMsg3>
-<bigFile>鏂囦欢杩囧ぇ</bigFile>
-<uploaderror>涓婁紶澶辫触</uploaderror>
+<okbtn>确定</okbtn>
+<ctnbtn>继续</ctnbtn>
+<fileName>文件名</fileName>
+<size>文件大小</size>
+<stat>上传进度</stat>
+<browser>浏览</browser>
+<delete>删除</delete>
+<return>返回</return>
+<upload>上传</upload>
+<okTitle>上传完成</okTitle>
+<okMsg>文件上传完成</okMsg>
+<uploadTitle>正在上传</uploadTitle>
+<uploadMsg1>总共有</uploadMsg1>
+<uploadMsg2>个文件等待上传,正在上传第</uploadMsg2>
+<uploadMsg3>个文件</uploadMsg3>
+<bigFile>文件过大</bigFile>
+<uploaderror>上传失败</uploaderror>
 ";
 
 ?>

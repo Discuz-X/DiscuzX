@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 29887 2012-05-02 07:36:50Z liulanbo $
+ *      $Id: admincp_counter.php 33048 2013-04-12 08:50:27Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -516,7 +516,7 @@ if(submitcheck('forumsubmit', 1)) {
 	));
 	showtablerow('', array('class="td21"'), array(
 		"$lang[counter_thread_cover]:",
-		'<script type="text/javascript" src="static/js/calendar.js"></script><input name="pertask14" type="text" class="txt" value="100" /> '.$lang['counter_forumid'].': <input type="text" class="txt" name="fid" value="" size="10">&nbsp;<input type="checkbox" value="1" name="allthread">'.$lang['counter_have_cover'].'<br><input type="text" onclick="showcalendar(event, this)" value="" name="starttime" class="txt"> -- <input type="text" onclick="showcalendar(event, this)" value="" name="endtime" class="txt">（'.$lang['counter_thread_cover_settime'].'）  &nbsp;&nbsp;<input type="submit" class="btn" name="setthreadcover" onclick="this.form.pertask.value=this.form.pertask14.value" value="'.$lang['submit'].'" />'
+		'<script type="text/javascript" src="static/js/calendar.js"></script><input name="pertask14" type="text" class="txt" value="100" /> '.$lang['counter_forumid'].': <input type="text" class="txt" name="fid" value="" size="10">&nbsp;<input type="checkbox" value="1" name="allthread">'.$lang['counter_have_cover'].'<br><input type="text" onclick="showcalendar(event, this)" value="" name="starttime" class="txt"> -- <input type="text" onclick="showcalendar(event, this)" value="" name="endtime" class="txt">('.$lang['counter_thread_cover_settime'].')  &nbsp;&nbsp;<input type="submit" class="btn" name="setthreadcover" onclick="this.form.pertask.value=this.form.pertask14.value" value="'.$lang['submit'].'" />'
 	));
 	showtablefooter();
 	showformfooter();

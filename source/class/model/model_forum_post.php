@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: model_forum_post.php 32064 2012-11-06 03:21:17Z liulanbo $
+ *      $Id: model_forum_post.php 33429 2013-06-13 03:01:54Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,9 +49,9 @@ class model_forum_post extends discuz_model {
 			'member', 'group', 'forum', 'thread', 'extramessage', 'special',//'nauthorid' 'modnewreplies' 'tid'
 			'message','clientip', 'invisible', 'isanonymous', 'usesig',
 			'htmlon', 'bbcodeoff', 'smileyoff', 'parseurloff', 'pstatus',
-			'noticetrimstr', 'noticeauthor', 'from', 'sechash',
+			'noticetrimstr', 'noticeauthor', 'from', 'sechash', 'geoloc',
 
-			'subject', 'message', 'special', 'sortid', 'typeid', 'isanonymous', 'cronpublish', 'cronpublishdate', 'save',
+			'subject', 'special', 'sortid', 'typeid', 'isanonymous', 'cronpublish', 'cronpublishdate', 'save',
 			'readperm', 'price', 'ordertype', 'hiddenreplies', 'allownoticeauthor', 'audit', 'tags', 'bbcodeoff', 'imgcontent', 'imgcontentwidth',
 			'smileyoff', 'parseurloff', 'usesig', 'htmlon', 'extramessage',
 
@@ -138,13 +138,26 @@ class model_forum_post extends discuz_model {
 			'status' => $status,
 		));
 
-
-		$heatthreadset ? $heatthreadset : array();
+		$this->param['updatethreaddata'] = $heatthreadset ? $heatthreadset : array();
 		$this->param['maxposition'] = C::t('forum_post')->fetch_maxposition_by_tid($this->thread['posttableid'], $this->thread['tid']);
 		$this->param['updatethreaddata'][] = DB::field('maxposition', $this->param['maxposition']);
 
 
 		useractionlog($this->member['uid'], 'pid');
+
+		if($this->param['geoloc'] && IN_MOBILE == 2) {
+			list($mapx, $mapy, $location) = explode('|', $this->param['geoloc']);
+			if($mapx && $mapy && $location) {
+				C::t('forum_post_location')->insert(array(
+					'pid' => $this->pid,
+					'tid' => $this->thread['tid'],
+					'uid' => $this->member['uid'],
+					'mapx' => $mapx,
+					'mapy' => $mapy,
+					'location' => $location,
+				));
+			}
+		}
 
 		$nauthorid = 0;
 		if(!empty($this->param['noticeauthor']) && !$this->param['isanonymous'] && !$this->param['modnewreplies']) {
@@ -340,7 +353,7 @@ class model_forum_post extends discuz_model {
 			}
 		} else {
 			$this->param['threadupdatearr']['author'] = $this->param['isanonymous'] ? '' : $this->post['author'];
-			$anonymousadd = $isanonymous;
+			$anonymousadd = $this->param['isanonymous'];
 		}
 
 		if($isfirstpost) {
@@ -573,7 +586,7 @@ class model_forum_post extends discuz_model {
 			$forumcounter['threads'] = $forumcounter['posts'] = -1;
 			$tablearray = array('forum_relatedthread', 'forum_debate', 'forum_debatepost', 'forum_polloption', 'forum_poll');
 			foreach ($tablearray as $table) {
-				DB::query("DELETE FROM ".DB::table($table)." WHERE tid='".$this->thread['tid']."'", 'UNBUFFERED');
+				C::t($table)->delete_by_tid($this->thread['tid']);
 			}
 			C::t('forum_thread')->delete_by_tid($this->thread['tid']);
 			C::t('common_moderate')->delete($this->thread['tid'], 'tid');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_article.php 32680 2013-02-28 09:32:07Z zhangguosheng $
+ *      $Id: admincp_article.php 33047 2013-04-12 08:46:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -71,8 +71,45 @@ if($operation == 'tag') {
 				$ids[] = intval($value['aid']);
 				$article = dunserialize($value['content']);
 				$catids[] = intval($article['catid']);
-				$article = daddslashes($article);
-				$inserts[] = array('aid' => $article['aid'], 'uid' => $article['uid'], 'username' => $article['username'], 'title' => $article['title'], 'url' => $article['url'], 'pic' => $article['pic'], 'id' => $article['id'], 'idtype' => $article['idtype'], 'contents' => $article['contents'], 'dateline' => $article['dateline'], 'catid' => $article['catid']);
+				$inserts[] = array (
+					'aid' => $article['aid'],
+					'catid' => $article['catid'],
+					'uid' => $article['uid'],
+					'username' => $article['username'],
+					'title' => $article['title'],
+					'url' => $article['url'],
+					'summary' => $article['summary'],
+					'pic' => $article['pic'],
+					'id' => $article['id'],
+					'idtype' => $article['idtype'],
+					'contents' => $article['contents'],
+					'dateline' => $article['dateline'],
+					'thumb' => $article['thumb'],
+					'remote' => $article['remote'],
+					'click1' => $article['click1'],
+					'click2' => $article['click2'],
+					'click3' => $article['click3'],
+					'click4' => $article['click4'],
+					'click5' => $article['click5'],
+					'click6' => $article['click6'],
+					'click7' => $article['click7'],
+					'click8' => $article['click8'],
+					'author' => $article['author'],
+					'from' => $article['from'],
+					'fromurl' => $article['fromurl'],
+					'bid' => $article['bid'],
+					'allowcomment' => $article['allowcomment'],
+					'tag' => $article['tag'],
+					'owncomment' => $article['owncomment'],
+					'status' => $article['status'],
+					'highlight' => $article['highlight'],
+					'showinnernav' => $article['showinnernav'],
+					'preaid' => $article['preaid'],
+					'nextaid' => $article['nextaid'],
+					'htmlmade' => $article['htmlmade'],
+					'htmlname' => $article['htmlname'],
+					'htmldir' => $article['htmldir'],
+				);
 			}
 
 			if($inserts) {
@@ -339,8 +376,7 @@ SEARCH;
 				}
 				$tablerow = array(
 						"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[aid]\">",
-						($makehtmlflag && $value['htmlmade'] ? "[<a href='$htmlname' target='_blank'>HTML</a>]" : '')
-						."<a href=\"portal.php?mod=view&aid=$value[aid]\" target=\"_blank\">$value[title]</a>".($taghtml ? $taghtml : ''),
+						"<a href=\"portal.php?mod=view&aid=$value[aid]\" target=\"_blank\">$value[title]</a>".($taghtml ? $taghtml : ''),
 						'<a href="'.ADMINSCRIPT.'?action=article&operation=list&catid='.$value['catid'].'">'.$category[$value['catid']]['catname'].'</a>',
 						"<a href=\"".ADMINSCRIPT."?action=article&uid=$value[uid]\">$value[username]</a>",
 						dgmdate($value[dateline]),

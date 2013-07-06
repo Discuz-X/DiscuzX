@@ -12,19 +12,14 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function xml2array(&$xml, $isnormal = FALSE) {
-	$encoding_regex = '/^<\?xml[^>]*encoding=(?:\'|")([^\'"]+)(?:\'|")[^>]*\?>/i';
-	if(preg_match($encoding_regex, $xml, $encoding_matches)){
-		$xml_parser = new XMLparse($isnormal, $encoding_matches[1]);
-	} else {
-		$xml_parser = new XMLparse($isnormal);
-	}
+	$xml_parser = new XMLparse($isnormal);
 	$data = $xml_parser->parse($xml);
 	$xml_parser->destruct();
 	return $data;
 }
 
 function array2xml($arr, $htmlon = TRUE, $isnormal = FALSE, $level = 1) {
-	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<root>\r\n" : '';
+	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
 	$space = str_repeat("\t", $level);
 	foreach($arr as $k => $v) {
 		if(!is_array($v)) {
@@ -52,9 +47,9 @@ class XMLparse {
 		$this->XMLparse($isnormal);
 	}
 
-	function XMLparse($isnormal, $encoding = 'ISO-8859-1') {
+	function XMLparse($isnormal) {
 		$this->isnormal = $isnormal;
-		$this->parser = xml_parser_create($encoding);//ISO-8859-1
+		$this->parser = xml_parser_create('ISO-8859-1');
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
 		xml_set_object($this->parser, $this);
 		xml_set_element_handler($this->parser, 'open','close');

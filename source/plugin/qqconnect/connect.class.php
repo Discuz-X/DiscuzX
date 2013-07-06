@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: connect.class.php 32630 2013-02-27 05:46:25Z liulanbo $
+ *		$Id: connect.class.php 32901 2013-03-21 08:54:21Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -385,7 +385,7 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			$needFeedStatus = $needWeiboStatus = false;
 		}
 
-		if (!$_G['member']['conisbind'] && $_G['group']['allowgetimage'] && $_G['thread']['price'] == 0) {
+		if ($_G['group']['allowgetimage'] && $_G['thread']['price'] == 0) {
 			if (trim($_G['forum']['viewperm'])) {
 				$allowViewPermGroupIds = explode("\t", trim($_G['forum']['viewperm']));
 			}

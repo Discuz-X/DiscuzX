@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install.php 32469 2013-01-23 05:52:37Z liulanbo $
+ *      $Id: install.php 33344 2013-05-30 04:37:03Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -114,6 +114,7 @@ if (file_exists(DISCUZ_ROOT . './source/include/cron/cron_security_daily.php')) 
 }
 $updateData = array(
 	'security_usergroups_white_list' => serialize(array(1, 2, 3)),
+	'security_safelogin' => 1,
 );
 
 C::t('common_setting')->update_batch($updateData);

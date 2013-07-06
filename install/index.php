@@ -49,7 +49,7 @@ timezone_set();
 $uchidden = getgpc('uchidden');
 
 if(in_array($method, array('app_reg', 'ext_info'))) {
-	$isHTTPS = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off') ? true : false;
+	$isHTTPS = ($_SERVER['HTTPS'] && strtolower($_SERVER['HTTPS']) != 'off') ? true : false;
 	$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
 	$bbserver = 'http'.($isHTTPS ? 's' : '').'://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 && $_SERVER['SERVER_PORT'] != 443 ? ':'.$_SERVER['SERVER_PORT'] : '');
 	$default_ucapi = $bbserver.'/ucenter';

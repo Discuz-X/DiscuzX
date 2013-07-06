@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 31832 2012-10-15 08:06:12Z zhengqingpeng $
+ *      $Id: spacecp_album.php 32863 2013-03-15 09:48:15Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -307,16 +307,20 @@ if($_GET['op'] == 'edit') {
 	if(submitcheck('savephotosubmit')) {
 		$aid = intval($_GET['aid']);
 		$albumid = intval($_POST['albumid']);
-		if(!$aid || !$albumid) {
+		if(!$aid) {
 			showmessage('parameters_error');
 		}
 		$attach = C::t('forum_attachment_n')->fetch('aid:'.$aid, $aid);
 		if(empty($attach)) {
 			showmessage('parameters_error');
 		}
-		$album = C::t('home_album')->fetch($albumid, $_G['uid']);
-		if(empty($album)) {
-			showmessage('album_does_not_exist');
+		if($albumid) {
+			$album = C::t('home_album')->fetch($albumid, $_G['uid']);
+			if(empty($album)) {
+				showmessage('album_does_not_exist');
+			}
+		} else {
+			$album = array('albumid' => 0);
 		}
 		$picdata = array(
 				'albumid' => $album['albumid'],

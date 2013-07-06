@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_connect.php 29273 2012-03-31 07:58:50Z yexinhao $
+ *      $Id: cloud_connect.php 32986 2013-04-02 02:40:32Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -44,14 +44,12 @@ if($_GET['anchor'] == 'service') {
 
 		include_once libfile('function/forumlist');
 		$forumselect = array();
-		foreach(array('feed', 't') as $k) {
-			$forumselect[$k] = '<select name="connectnew['.$k.'][fids][]" multiple="multiple" size="10">'.forumselect(FALSE, 0, 0, TRUE).'</select>';
-			if($setting['connect'][$k]['fids']) {
-				foreach($setting['connect'][$k]['fids'] as $v) {
-					$forumselect[$k] = str_replace('<option value="'.$v.'">', '<option value="'.$v.'" selected>', $forumselect[$k]);
+			$forumselect['t'] = '<select name="connectnew[t][fids][]" multiple="multiple" size="10">'.forumselect(FALSE, 0, 0, TRUE).'</select>';
+			if($setting['connect']['t']['fids']) {
+				foreach($setting['connect']['t']['fids'] as $v) {
+					$forumselect['t'] = str_replace('<option value="'.$v.'">', '<option value="'.$v.'" selected>', $forumselect['t']);
 				}
 			}
-		}
 
 		$connectrewardcredits = $connectgroup = $connectguestgroup = '';
 		$setting['extcredits'] = dunserialize($setting['extcredits']);
@@ -81,10 +79,6 @@ if($_GET['anchor'] == 'service') {
 		showsetting('setting_access_register_connect_regverify', 'connectnew[register_regverify]', $setting['connect']['register_regverify'], 'radio');
 		showsetting('setting_access_register_connect_invite', 'connectnew[register_invite]', $setting['connect']['register_invite'], 'radio');
 		showsetting('setting_access_register_connect_newbiespan', 'connectnew[newbiespan]', $setting['connect']['newbiespan'], 'text');
-		showtagfooter('tbody');
-		showsetting('connect_setting_feed_allow', 'connectnew[feed][allow]', $setting['connect']['feed']['allow'], 'radio', 0, 1);
-		showsetting('connect_setting_feed_fids', '', '', $forumselect['feed']);
-		showsetting('connect_setting_feed_group', 'connectnew[feed][group]', $setting['connect']['feed']['group'], 'radio');
 		showtagfooter('tbody');
 		showsubmenu('menu_cloud_connect', $connectnav);
 		showsetting('connect_setting_t_allow', 'connectnew[t][allow]', $setting['connect']['t']['allow'], 'radio', 0, 1);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_seo.php 31055 2012-07-12 04:24:12Z liulanbo $
+ *      $Id: helper_seo.php 32836 2013-03-14 08:10:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,10 +35,10 @@ class helper_seo {
 			if($titletext) {
 				$seotitle = helper_seo::strreplace_strip_split($searchs, $replaces, $titletext);
 			}
-			if($descriptiontext && (CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
+			if($descriptiontext && (isset($_G['makehtml']) || CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
 				$seodescription = helper_seo::strreplace_strip_split($searchs, $replaces, $descriptiontext);
 			}
-			if($keywordstext && (CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
+			if($keywordstext && (isset($_G['makehtml']) || CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
 				$seokeywords = helper_seo::strreplace_strip_split($searchs, $replaces, $keywordstext);
 			}
 		}

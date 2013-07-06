@@ -31,7 +31,7 @@ class mobile_api {
 		$variable = array(
 			'forum' => mobile_core::getvalues($_G['forum'], array('fid', 'fup', 'name', 'threads', 'posts', 'rules', 'autoclose', 'password')),
 			'group' => mobile_core::getvalues($_G['group'], array('groupid', 'grouptitle')),
-			'forum_threadlist' => mobile_core::getvalues($_G['forum_threadlist'], array('/^\d+$/'), array('tid', 'author', 'authorid', 'subject', 'subject', 'dbdateline', 'dateline', 'dblastpost', 'lastpost', 'lastposter', 'attachment', 'replies', 'readperm', 'views')),
+			'forum_threadlist' => mobile_core::getvalues($_G['forum_threadlist'], array('/^\d+$/'), array('tid', 'author', 'authorid', 'subject', 'subject', 'dbdateline', 'dateline', 'dblastpost', 'lastpost', 'lastposter', 'attachment', 'replies', 'readperm', 'views', 'digest')),
 			'sublist' => mobile_core::getvalues($GLOBALS['sublist'], array('/^\d+$/'), array('fid', 'name', 'threads', 'todayposts', 'posts')),
 			'tpp' => $_G['tpp'],
 			'page' => $GLOBALS['page'],

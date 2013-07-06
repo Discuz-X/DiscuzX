@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_trade.php 31384 2012-08-22 02:00:13Z zhangjie $
+ *      $Id: extend_thread_trade.php 32760 2013-03-07 03:23:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -238,7 +238,7 @@ class extend_thread_trade extends extend_thread_base {
 					$this->feed['body_template'] = 'feed_thread_goods_message_3';
 				}
 				$this->feed['body_data'] = array(
-					'itemname'=> "<a href=\"forum.php?mod=viewthread&do=tradeinfo&tid=".$this->thread['tid']."&pid=".$this->pid."\">".$_GET['item_name']."</a>",
+					'itemname'=> "<a href=\"forum.php?mod=viewthread&do=tradeinfo&tid=".$this->thread['tid']."&pid=".$this->pid."\">".dhtmlspecialchars($_GET['item_name'])."</a>",
 					'itemprice'=> $_GET['item_price'],
 					'itemcredit'=> $_GET['item_credit'],
 					'creditunit'=> $extcredits[$creditstransextra[5]]['unit'].$extcredits[$creditstransextra[5]]['title'],

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 32006 2012-10-30 09:51:28Z zhengqingpeng $
+ *      $Id: lang_template.php 33048 2013-04-12 08:50:27Z zhangjie $
  *
  *      This file is automatically generate
  */
@@ -1417,10 +1417,10 @@ $lang = array (
   'seek_same_birthday' => '查找同年同月同日生的人',
   'seek_same_city' => '查找同城的人',
   'seek_same_city_people' => '查找老乡',
-  'sex' => '性別',
+  'sex' => '性别',
   'upload_avatar' => '上传头像',
   'uploaded_avatar' => '已经上传头像',
-  'user_id' => '用戶 UID',
+  'user_id' => '用户 UID',
   'year' => '年',
   'activate_mailbox_first' => '您首先需要激活您的邮箱',
   'activate_mailbox_message' => '填写您常用的邮箱，系统会给您的邮箱发送一封含有激活链接的邮件，把激活链接复制到浏览器进行访问就可以激活您的邮箱,然后您就能可以设置邮件提醒 ',
@@ -1537,5 +1537,7 @@ $lang = array (
   'video_certification_audit' => '视频认证审核',
   'connect_fill_profile_to_view' => '<a href="member.php?mod=connect" target="_blank">完善帐号信息</a> <a href="member.php?mod=connect&ac=bind" target="_blank">绑定已有帐号</a>',
   'connect_fill_profile_to_comment' => '您需要<a href="member.php?mod=connect" class="xi2">完善帐号信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">绑定已有帐号</a> 后才可以留言',
+  'save_to_album' => '保存到相册',
+  'usergroup_expired' => '您当前的用户组已经到期，请选择继续续费还是要切换到其他用户组',
 );
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 31958 2012-10-26 05:11:05Z zhangguosheng $
+ *      $Id: lang_template.php 33048 2013-04-12 08:50:27Z zhangjie $
  *
  *      This file is automatically generate
  */
@@ -66,6 +66,7 @@ $lang = array (
   'article_validate_category' => '请选择系统分类',
   'article_validate_has_added' => '该文章已经添加过了',
   'article_validate_noexist' => '没有找到指定的文章',
+  'article_html_existed' => 'HTML静态文件名重名',
   'article_validate_title' => '标题长度(1~80字符)不符合要求',
   'grab' => '获取',
   'ignore' => '忽略',
@@ -313,6 +314,7 @@ $lang = array (
   'pre_article' => '上一篇：',
   'next_article' => '下一篇：',
   'display_order' => '显示位置',
+  'filename' => '文件名',
 );
 
 ?>

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: autoloadpage.js 32592 2013-02-25 01:31:16Z zhangjie $
+	$Id: autoloadpage.js 33246 2013-05-09 02:07:17Z kamichen $
 */
 
 (function() {
@@ -46,7 +46,7 @@
 			return;
 		}
 		if(loadstatus != 2 && curpage + 1 > maxpage) {
-			autopbn.innerHTML = '下一页 &darr;';
+			autopbn.innerHTML = '下一页 &raquo;';
 			if(curpage + 1 > maxpage) {
 				window.onscroll = null;
 			}
@@ -66,6 +66,9 @@
 				var tableobj = $('threadlisttableid');
 				var nexts = s.match(/\<tbody id="normalthread_(\d+)"\>(.+?)\<\/tbody>/g);
 				for(i in nexts) {
+					if(i == 'index' || i == 'lastIndex') {
+						continue;
+					}
 					var insertid = nexts[i].match(/<tbody id="normalthread_(\d+)"\>/);
 					if(!$('normalthread_' + insertid[1])) {
 
@@ -92,7 +95,7 @@
 			if(curpage + 1 > totalpage) {
 				autopbn.style.display = 'none';
 			} else {
-				autopbn.innerHTML = '下一页 &darr;';
+				autopbn.innerHTML = '下一页 &raquo;';
 			}
 			loadstatus = 0;
 		});

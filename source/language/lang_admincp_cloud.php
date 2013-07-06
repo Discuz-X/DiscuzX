@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 32637 2013-02-27 07:27:20Z monkey $
+ *	  $Id: lang_admincp_cloud.php 33387 2013-06-05 03:21:26Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -305,6 +305,8 @@ $extend_lang = array
 	'qqgroup_setting_tips' => '<li>主题查看页的“推送到QQ群”功能，可将帖子即时推送到QQ群聊天框。</li><li><img src="static/image/admincp/cloud/feed.png" align="left"></li>',
 
 	'security_member_list' => '违规用户',
+	'security_member_tips' => '<li>违规用户来自于防水墙识别为垃圾帖的发帖用户，不包含白名单用户。</li><li>“忽略本次”操作将从违规列表中忽略指定用户，如果用户再次违规仍将会被加入违规用户列表。</li>',
+	'security_member_ignore_this' => '忽略本次',
 	'security_thread_list' => '违规主题',
 	'security_post_list' => '违规回帖',
 	'security_members_name' => '用户名',
@@ -364,14 +366,26 @@ $extend_lang = array
 	'security_cron_daily' => '防水墙每日优化',
 	'setting_update_succeed' => '当前设置更新成功',
 	'security_createtime' => '违规日期',
+	'security_safe_list' => '安全设置',
+	'security_safe_login_open' => '开启安全登陆功能',
+	'security_safe_login_open_comment' => '有效防止恶意注册！选择是，用户必须将论坛帐号与QQ帐号绑定后，才能在论坛发帖，回复',
+	'security_qq_login_alone_open' => '开启QQ独立登录',
+	'security_qq_login_alone_open_comment' => '有效防止盗号！开启后只能使用QQ号登录，即便盗取了论坛帐号也无法登录发帖',
 
 	'search_menu_setting' => '设置',
 	'search_menu_service' => '功能配置',
 	'search_setting_allow_hot_topic' => '开启热门话题',
 	'search_setting_allow_forum_recommend' => '开启版块推荐词',
 	'search_setting_allow_thread_related' => '开启主题相关帖',
+	'search_setting_allow_thread_related_comment' => '展示在主题帖下方，根据帖子内容计算出站内相关的帖子，挖掘相似主题，拓展用户阅读深度。',
+	'search_setting_allow_recommend_related' => '开启相关推荐',
+	'search_setting_allow_recommend_related_comment' => '当用户通过搜索引擎点到站内帖子页时，会在页面左下角产生一个浮动的推荐页面，帮助访客发现更多站内相关内容。',
 	'search_setting_allow_forum_related' => '开启版块相关帖',
 	'search_setting_allow_collection_related' => '开启淘帖相关帖',
+	'search_menu_settingsearch' => '搜索设置',
+	'search_menu_basicsetting' => '基本设置',
+	'search_menu_modulesetting' => '模块设置',
+	'search_modulesetting_tips' => '纵横搜索提供的推荐服务，在不占用网站资源的前提下，通过云计算能力为网站用户提升访问深度。',
 );
 
 $GLOBALS['admincp_actions_normal'][] = 'cloud';

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_thread.php 32406 2013-01-14 05:57:34Z monkey $
+ *      $Id: table_forum_thread.php 33147 2013-04-27 09:58:40Z theoliu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -943,7 +943,7 @@ class table_forum_thread extends discuz_table
 		$tids = dintval($tids, true);
 		if($tids) {
 			$wheresql = is_array($tids) && $tids ? 'tid IN(%n)' : 'tid=%d';
-			DB::query("INSERT INTO %t SELECT * FROM %t WHERE $wheresql", array($this->get_table_name($origin), $this->get_table_name($target), $tids));
+			DB::query("INSERT INTO %t SELECT * FROM %t WHERE $wheresql", array($this->get_table_name($target), $this->get_table_name($origin), $tids));
 		}
 	}
 
@@ -1077,7 +1077,7 @@ class table_forum_thread extends discuz_table
 	public function fetch_all_for_guide($type, $limittid, $tids = array(), $heatslimit = 3, $dateline = 0, $start = 0, $limit = 600, $fids = 0) {
 		switch ($type) {
 			case 'hot' :
-				$addsql = ' AND heats>'.intval($heatslimit);
+				$addsql = ' AND heats>='.intval($heatslimit);
 				break;
 			case 'digest' :
 				$addsql = ' AND digest>0';
@@ -1103,9 +1103,12 @@ class table_forum_thread extends discuz_table
 				$addsql .= ' AND dateline > '.intval($dateline);
 			}
 			if($type == 'newthread') {
-				$orderby = 'lastpost';
-			} else {
 				$orderby = 'tid';
+			} elseif($type == 'reply') {
+				$orderby = 'lastpost';
+				$addsql .= ' AND replies > 0';
+			} else {
+				$orderby = 'lastpost';
 			}
 			$addsql .= ' AND displayorder>=0 ORDER BY '.$orderby.' DESC '.DB::limit($start, $limit);
 

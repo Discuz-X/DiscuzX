@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_list.php 31313 2012-08-10 03:51:03Z zhangguosheng $
+ *      $Id: portal_list.php 33245 2013-05-09 02:02:59Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -133,6 +133,9 @@ function category_get_list($cat, $wheresql, $page = 1, $perpage = 0) {
 			} else {
 				$pricount++;
 			}
+		}
+		if(strpos($cat['caturl'], 'portal.php') === false) {
+			$cat['caturl'] .= 'index.php';
 		}
 		$multi = multi($count, $perpage, $page, $cat['caturl'], $cat['maxpages']);
 	}

@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 29362 2012-04-09 02:44:29Z liulanbo $
+ *      $Id: admincp_verify.php 33456 2013-06-19 03:55:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -519,17 +519,16 @@ EOF;
 		showsetting('members_verify_enable', "verify[available]", $verifyarr['available'], 'radio');
 		$verificonhtml = '';
 		if($verifyarr['icon']) {
-			$verificonhtml = '<label><input type="checkbox" class="checkbox" name="deleteicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$verifyarr['icon'].'" />';
-		}
-		if($verifyarr['icon']) {
 			$icon_url = parse_url($verifyarr['icon']);
+			$prefix = !$icon_url['host'] && strpos($verifyarr['icon'], $_G['setting']['attachurl'].'common/') === false ? $_G['setting']['attachurl'].'common/' : '';
+			$verificonhtml = '<label><input type="checkbox" class="checkbox" name="deleteicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$prefix.$verifyarr['icon'].'" />';
 		}
 		$unverifyiconhtml = '';
 		if($verifyarr['unverifyicon']) {
-			$unverifyiconhtml = '<label><input type="checkbox" class="checkbox" name="delunverifyicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$verifyarr['unverifyicon'].'" />';
-		}
-		if($verifyarr['unverifyicon']) {
 			$unverifyiconurl = parse_url($verifyarr['unverifyicon']);
+
+			$prefix = !$unverifyiconurl['host'] && strpos($verifyarr['unverifyicon'], $_G['setting']['attachurl'].'common/') === false ? $_G['setting']['attachurl'].'common/' : '';
+			$unverifyiconhtml = '<label><input type="checkbox" class="checkbox" name="delunverifyicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$prefix.$verifyarr['unverifyicon'].'" />';
 		}
 		showsetting('members_verify_showicon', "verify[showicon]", $verifyarr['showicon'], 'radio', '', 1);
 		showsetting('members_unverify_icon', 'unverifyiconnew', (!$unverifyiconurl['host'] ? str_replace($_G['setting']['attachurl'].'common/', '', $verifyarr['unverifyicon']) : $verifyarr['unverifyicon']), 'filetext', '', 0, $unverifyiconhtml);
@@ -568,6 +567,7 @@ EOF;
 	} else {
 		foreach( $_G['setting']['verify'] AS $key => $value) {
 			$_G['setting']['verify'][$key]['icon'] = str_replace($_G['setting']['attachurl'].'common/', '', $value['icon']);
+			$_G['setting']['verify'][$key]['unverifyicon'] = str_replace($_G['setting']['attachurl'].'common/', '', $value['unverifyicon']);
 		}
 		$verifynew = getgpc('verify');
 		if($vid == 6 || $vid == 7) {
@@ -637,6 +637,10 @@ EOF;
 		showsubtitle(array('members_verify_available', 'members_verify_id', 'members_verify_title', ''), 'header');
 		for($i = 1; $i < 8; $i++) {
 			$readonly = $i == 6 || $i == 7 ? true : false;
+			$url = parse_url($_G['setting']['verify'][$i]['icon']);
+			if(!$url['host'] && $_G['setting']['verify'][$i]['icon'] && strpos($_G['setting']['verify'][$i]['icon'], $_G['setting']['attachurl'].'common/') === false) {
+				$_G['setting']['verify'][$i]['icon'] = $_G['setting']['attachurl'].'common/'.$_G['setting']['verify'][$i]['icon'];
+			}
 			showtablerow('', array('class="td25"', '', '', 'class="td25"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[verify][$i][available]\" value=\"1\" ".($_G['setting']['verify'][$i]['available'] ? 'checked' : '')." />",
 				'verify'.$i,

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_favorite.php 32325 2012-12-25 08:53:33Z zhangjie $
+ *      $Id: spacecp_favorite.php 32896 2013-03-21 06:08:58Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -79,8 +79,12 @@ if($_GET['op'] == 'delete') {
 		case 'forum':
 			$idtype = 'fid';
 			$foruminfo = C::t('forum_forum')->fetch($id);
-			$title = $foruminfo['status'] != 3 ? $foruminfo['name'] : '';
-			$icon = '<img src="static/image/feed/discuz.gif" alt="forum" class="vm" /> ';
+			loadcache('forums');
+			$forum = $_G['cache']['forums'][$id];
+			if(!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) {
+				$title = $foruminfo['status'] != 3 ? $foruminfo['name'] : '';
+				$icon = '<img src="static/image/feed/discuz.gif" alt="forum" class="vm" /> ';
+			}
 			break;
 		case 'blog';
 			$idtype = 'blogid';
@@ -149,7 +153,7 @@ if($_GET['op'] == 'delete') {
 				break;
 			case 'forum':
 				C::t('forum_forum')->update_forum_counter($id, 0, 0, 0, 0, 1);
-				$extrajs = '<script type="text/javascript">$("number_favorite").innerHTML = parseInt($("number_favorite").innerHTML)+1;</script>';
+				$extrajs = '<script type="text/javascript">$("number_favorite_num").innerHTML = parseInt($("number_favorite_num").innerHTML)+1;$("number_favorite").style.display="";</script>';
 				dsetcookie('nofavfid', '', -1);
 				break;
 			case 'blog':

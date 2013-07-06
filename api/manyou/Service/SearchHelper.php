@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: SearchHelper.php 29915 2012-05-03 01:22:40Z zhouxiaobo $
+ *      $Id: SearchHelper.php 33013 2013-04-08 03:31:33Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -748,6 +748,7 @@ class Cloud_Service_SearchHelper {
 					'need_random' => false,
 					'need_num' => $needNum,
 					'version' => $format == 'num' ? 1 : 2, // 1：返回数字下标的结果集、2：返回关联数组形式的结果集
+					'close' => 1,
 				);
 
 				$utilService = Cloud::loadClass('Service_Util');

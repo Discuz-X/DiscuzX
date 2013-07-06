@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ranklist.php 32068 2012-11-06 07:26:19Z chenmengshu $
+ *      $Id: misc_ranklist.php 32807 2013-03-13 08:49:49Z zhengqingpeng $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -167,9 +167,10 @@ function getranklist_pictures_index($num = 20, $dateline = 0, $orderby = 'hot DE
 function getranklist_members($offset = 0, $limit = 20) {
 	require_once libfile('function/forum');
 	$members = array();
-	$query = C::t('home_show')->fetch_all_by_unitprice($offset, $limit, true);
-	foreach($query as $member) {
+	$topusers = C::t('home_show')->fetch_all_by_unitprice($offset, $limit, true);
+	foreach($topusers as $member) {
 		$member['avatar'] = avatar($member['uid'], 'small');
+		$member['note'] = dhtmlspecialchars($member['note']);
 		$members[] = $member;
 	}
 	return $members;

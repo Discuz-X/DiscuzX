@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 31861 2012-10-17 08:36:52Z zhangguosheng $
+ *      $Id: function_portalcp.php 33463 2013-06-20 01:37:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -426,11 +426,11 @@ function checksecurity($str) {
 
 	$filter = array(
 		'/\/\*[\n\r]*(.+?)[\n\r]*\*\//is',
-		'/[^a-z0-9]+/i',
+		'/[^a-z0-9\\\]+/i',
 		'/important/i',
 	);
 	$str = preg_replace($filter, '', $str);
-	if(preg_match("/(expression|import|javascript)/i", $str)) {
+	if(preg_match("/(expression|import|javascript|\\\)/i", $str)) {
 		showmessage('css_contains_elements_of_insecurity');
 	}
 	return true;

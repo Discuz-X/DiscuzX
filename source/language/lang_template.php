@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 32499 2013-01-29 09:05:55Z liulanbo $
+ *      $Id: lang_template.php 33048 2013-04-12 08:50:27Z zhangjie $
  *
  *      This file is automatically generate
  */
@@ -34,7 +34,7 @@ $lang = array (
   'need_money' => '需支付',
   'reg_continue' => '继续注册',
   'trade_type' => '付款方式',
-  'e_fontoptions' => '"宋体", "新宋体", "黑体", "微软雅黑", "Arial", "Verdana", "Mingliu", "Helvetica", "Trebuchet MS", "Tahoma", "Impact", "Times New Roman", "仿宋,仿宋_GB2312", "楷体,楷体_GB2312"',
+  'e_fontoptions' => '"宋体", "新宋体", "黑体", "微软雅黑", "Arial", "Verdana", "simsun", "Helvetica", "Trebuchet MS", "Tahoma", "Impact", "Times New Roman", "仿宋,仿宋_GB2312", "楷体,楷体_GB2312"',
   'editor_increase' => '加大编辑框',
   'editor_narrow' => '缩小编辑框',
   'post_autosave_restore' => '恢复数据',
@@ -411,6 +411,16 @@ $lang = array (
   'ipnoice_lasttime' => '上次登录时间',
   'ipnoice_title' => '安全提醒',
   'ipnoice_link' => '登录地点异常，建议立即更改密码',
+  'recharge_immediately' => '立即充值',
+  'manage_grade' => '管理级别',
+  'manager' => '管理员',
+  'super_forummanager' => '超级版主',
+  'forummanager' => '版主',
+  'buy_usergroup' => '购买用户组',
+  'fastreply' => '快速回复',
+  'return_list' => '返回列表',
+  'return_forum' => '返回版块',
+  'temporarily_to_remind' => '暂不提醒',
 );
 
 ?>

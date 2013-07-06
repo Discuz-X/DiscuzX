@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_filter.php 31273 2012-08-02 07:53:15Z chenmengshu $
+ *      $Id: extend_thread_filter.php 33048 2013-04-12 08:50:27Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,22 +19,23 @@ class extend_thread_filter extends extend_thread_base {
 			return 0;
 		}
 		require_once libfile('function/discuzcode');
+		$langthread = lang('forum/thread');
 		$content = discuzcode($message);
 		$content = strip_tags($content);
-		$content = str_replace(array(',', '.', '?', '!', '？', '！', '。', '，', '~', '…'), '', $content);
+		$content = str_replace(array(',', '.', '?', '!', $langthread['t_question'], $langthread['t_exclamatory'], $langthread['t_period'], $langthread['t_comma'], '~', $langthread['t_suspension']), '', $content);
 		$content = preg_replace('/\s+/', '', $content);
 		$realLength = dstrlen($content);
 
-		$checkQuote = stripos($message, '[quote]');
-		if($checkQuote === false && $realLength >= $length) {
-			return $realLength;
+		$checkQuote = (preg_match("/\s?\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s?/is", $message) > 0) || (preg_match("/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/i", $message) > 0) || (preg_match("/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/i", $message) > 0) || (preg_match("/\[attach\](\d+)\[\/attach\]/i", $message) > 0);
+		if($checkQuote || $realLength >= $length) {
+			return ($realLength <= 0 ? 1 : $realLength) ;
 		} else {
 			return 0;
 		}
 	}
 
 	public function before_newreply($parameters) {
-		$this->curFilterCheck = $this->_check_post_length($parameters['message'], $this->setting['threadfilternum']);
+		$this->curFilterCheck = $this->_check_post_length($parameters['noticetrimstr'].$parameters['message'], $this->setting['threadfilternum']);
 		if($this->curFilterCheck <= 0) {
 			$this->param['modstatus'][11] = 1;
 		}

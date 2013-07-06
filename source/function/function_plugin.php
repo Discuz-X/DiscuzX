@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_plugin.php 32204 2012-11-29 06:07:00Z monkey $
+ *      $Id: function_plugin.php 33236 2013-05-08 06:04:22Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -235,10 +235,10 @@ function cron_create($pluginid, $filename, $name, $weekday, $day, $hour, $minute
 		if(!in_array($filename, array('.', '..')) && preg_match("/^cron\_[\w\.]+$/", $filename)) {
 			$content = file_get_contents($dir.'/'.$filename);
 			preg_match("/cronname\:(.+?)\n/", $content, $r);$name = lang('plugin/'.$pluginid, trim($r[1]));
-			preg_match("/week\:(.+?)\n/", $content, $r);$weekday = $r[1] ? intval($r[1]) : -1;
-			preg_match("/day\:(.+?)\n/", $content, $r);$day = $r[1] ? intval($r[1]) : -1;
-			preg_match("/hour\:(.+?)\n/", $content, $r);$hour = $r[1] ? intval($r[1]) : -1;
-			preg_match("/minute\:(.+?)\n/", $content, $r);$minute = $r[1] ? $r[1] : 0;
+			preg_match("/week\:(.+?)\n/", $content, $r);$weekday = trim($r[1]) ? intval($r[1]) : -1;
+			preg_match("/day\:(.+?)\n/", $content, $r);$day = trim($r[1]) ? intval($r[1]) : -1;
+			preg_match("/hour\:(.+?)\n/", $content, $r);$hour = trim($r[1]) ? intval($r[1]) : -1;
+			preg_match("/minute\:(.+?)\n/", $content, $r);$minute = trim($r[1]) ? trim($r[1]) : 0;
 			$minutenew = explode(',', $minute);
 			foreach($minutenew as $key => $val) {
 				$minutenew[$key] = $val = intval($val);

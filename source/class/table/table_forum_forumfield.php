@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_forumfield.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
+ *      $Id: table_forum_forumfield.php 32916 2013-03-22 08:51:36Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,13 +41,13 @@ class table_forum_forumfield extends discuz_table
 		if(!intval($fid) || !intval($num)) {
 			return false;
 		}
-		DB::query("UPDATE %t SET groupnum=groupnum+%d WHERE fid=%d", array('forum_forumfield', $num, $fid));
+		DB::query("UPDATE %t SET ".DB::field('groupnum', $num, '+')." WHERE fid=%d", array('forum_forumfield', $fid));
 	}
 	public function update_membernum($fid, $num = 1) {
 		if(!intval($fid) || !intval($num)) {
 			return false;
 		}
-		DB::query("UPDATE %t SET membernum=membernum+%d WHERE fid=%d", array('forum_forumfield', $num, $fid));
+		DB::query("UPDATE %t SET ".DB::field('membernum', $num, '+')." WHERE fid=%d", array('forum_forumfield', $fid));
 	}
 	public function fetch_info_for_attach($fid, $uid) {
 		return DB::fetch_first("SELECT f.fid, f.viewperm, f.getattachperm, a.allowgetattach, a.allowgetimage FROM %t f LEFT JOIN %t a ON a.uid=%d AND a.fid=f.fid WHERE f.fid=%d", array('forum_forumfield', 'forum_access', $uid, $fid));

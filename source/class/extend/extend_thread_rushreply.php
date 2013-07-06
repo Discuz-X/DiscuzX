@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_rushreply.php 31503 2012-09-04 02:52:59Z liulanbo $
+ *      $Id: extend_thread_rushreply.php 33048 2013-04-12 08:50:27Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,7 +62,7 @@ class extend_thread_rushreply extends extend_thread_base {
 		if(getstatus($this->thread['status'], 3) && $rushinfo['replylimit'] > 0) {
 			$replycount = C::t('forum_post')->count_by_tid_invisible_authorid($this->thread['tid'], $_G['uid']);
 			if($replycount >= $rushinfo['replylimit']) {
-				showmessage('对不起，你已经达到本主题的回帖上限。');
+				showmessage('noreply_replynum_error');
 			}
 		}
 	}

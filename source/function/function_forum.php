@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 32620 2013-02-27 02:03:46Z zhengqingpeng $
+ *      $Id: function_forum.php 33118 2013-04-26 07:28:50Z theoliu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -425,10 +425,10 @@ function loadforum($fid = null, $tid = null) {
 	}
 	if($_G['setting']['forumpicstyle']) {
 		$_G['setting']['forumpicstyle'] = dunserialize($_G['setting']['forumpicstyle']);
-		empty($_G['setting']['forumpicstyle']['thumbwidth']) && $_G['setting']['forumpicstyle']['thumbwidth'] = 214;
-		empty($_G['setting']['forumpicstyle']['thumbheight']) && $_G['setting']['forumpicstyle']['thumbheight'] = 160;
+		empty($_G['setting']['forumpicstyle']['thumbwidth']) && $_G['setting']['forumpicstyle']['thumbwidth'] = 203;
+		empty($_G['setting']['forumpicstyle']['thumbheight']) && $_G['setting']['forumpicstyle']['thumbheight'] = 999;
 	} else {
-		$_G['setting']['forumpicstyle'] = array('thumbwidth' => 214, 'thumbheight' => 160);
+		$_G['setting']['forumpicstyle'] = array('thumbwidth' => 203, 'thumbheight' => 999);
 	}
 	if($fid) {
 		$fid = is_numeric($fid) ? intval($fid) : (!empty($_G['setting']['forumfids'][$fid]) ? $_G['setting']['forumfids'][$fid] : 0);
@@ -570,6 +570,9 @@ function loadforum($fid = null, $tid = null) {
 	$_G['forum'] = &$forum;
 	$_G['current_grouplevel'] = &$grouplevel;
 
+	if(empty($_G['uid'])) {
+		$_G['group']['allowpostactivity'] = $_G['group']['allowpostpoll'] = $_G['group']['allowvote'] = $_G['group']['allowpostreward'] = $_G['group']['allowposttrade'] = $_G['group']['allowpostdebate'] = $_G['group']['allowpostrushreply'] = 0;
+	}
 	if(!empty($_G['forum']['widthauto'])) {
 		$_G['widthauto'] = $_G['forum']['widthauto'];
 	}

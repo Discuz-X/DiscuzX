@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 32663 2013-02-28 06:57:30Z monkey $
+	$Id: forum_viewthread.js 33277 2013-05-14 06:00:11Z laoguozhang $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -277,6 +277,7 @@ function succeedhandle_postappend(locationhref, message, param) {
 function recommendupdate(n) {
 	if(getcookie('recommend')) {
 		var objv = n > 0 ? $('recommendv_add') : $('recommendv_subtract');
+		objv.style.display = '';
 		objv.innerHTML = parseInt(objv.innerHTML) + 1;
 		setTimeout(function () {
 			$('recommentc').innerHTML = parseInt($('recommentc').innerHTML) + n;
@@ -293,6 +294,7 @@ function postreviewupdate(pid, n) {
 
 function favoriteupdate() {
 	var obj = $('favoritenumber');
+	obj.style.display = '';
 	obj.innerHTML = parseInt(obj.innerHTML) + 1;
 }
 
@@ -385,7 +387,7 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 
 function copyThreadUrl(obj, bbname) {
 	bbname = bbname || SITEURL;
-	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n' + '(出处:'+bbname+')' + '\n', '帖子地址已经复制到剪贴板');
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n' + '(出处: '+bbname+')' + '\n', '帖子地址已经复制到剪贴板');
 	return false;
 }
 
@@ -467,6 +469,7 @@ function lazyload(className) {
 					if(this.getOffset(imgs[j]) > document.documentElement.clientHeight) {
 						lazyload.imgs.push(imgs[j]);
 					} else {
+						imgs[j].onload = function(){thumbImg(this);};
 						imgs[j].setAttribute('src', imgs[j].getAttribute('file'));
 						imgs[j].setAttribute('lazyloaded', 'true');
 					}
@@ -488,7 +491,16 @@ function lazyload(className) {
 				var height = img.getAttribute('height') ? img.getAttribute('height') : 100;
 				dom.innerHTML = '<div style="width: '+width+'px; height: '+height+'px;background: url('+IMGDIR + '/loading.gif) no-repeat center center;"></div>';
 				img.parentNode.insertBefore(dom.childNodes[0], img);
-				img.onload = function () {if(!this.getAttribute('_load')) {this.setAttribute('_load', 1);this.style.width = this.style.height = '';this.parentNode.removeChild(this.previousSibling);}};
+				img.onload = function () {
+					if(!this.getAttribute('_load')) {
+						this.setAttribute('_load', 1);
+						this.style.width = this.style.height = '';
+						this.parentNode.removeChild(this.previousSibling);
+						if(this.getAttribute('lazyloadthumb')) {
+							thumbImg(this);
+						}
+					}
+				};
 				img.style.width = img.style.height = '1px';
 				img.setAttribute('src', img.getAttribute('file') ? img.getAttribute('file') : img.getAttribute('src'));
 				img.setAttribute('lazyloaded', true);
@@ -503,8 +515,10 @@ function lazyload(className) {
 	_attachEvent(window, 'scroll', function(){obj.showImage();});
 }
 function update_collection(){
+	var obj = $('collectionnumber');
 	sum = 1;
-    $('collectionnumber').innerText = parseInt($('collectionnumber').innerText)+sum;
+	obj.style.display = '';
+	obj.innerText = parseInt(obj.innerText)+sum;
 }
 function display_blocked_post() {
 	var movehiddendiv = (!$('hiddenposts').innerHTML) ? true : false;
@@ -514,7 +528,10 @@ function display_blocked_post() {
 		}
 		display("post_"+blockedPIDs[i]);
 	}
+	var postlistreply = $('postlistreply').innerHTML;
+	$('hiddenpoststip').parentNode.removeChild($('postlistreply'));
 	$('hiddenpoststip').parentNode.removeChild($('hiddenpoststip'));
+	$('hiddenposts').innerHTML+='<div id="postlistreply" class="pl">'+postlistreply+'</div>';
 }
 
 function show_threadpage(pid, current, maxpage, ispreview) {
@@ -591,6 +608,9 @@ function fixed_avatar(pids, fixednv) {
 			var pid = pids[i];
 			var posttable = $('pid'+pid);
 			var postavatar = $('favatar'+pid);
+			if(!$('favatar'+pid)) {
+				return;
+			}
 			var nextpost = $('_postposition'+pid);
 			if(!postavatar || !nextpost || posttable.offsetHeight - 100 < postavatar.offsetHeight) {
 				if(postavatar.style.position == 'fixed') {
@@ -724,7 +744,19 @@ function autozoom(w, h, s) {
 	this.autozoomin();
 }
 
-function readmode(title, msg) {
+function readmode(title, pid) {
+
+	var imagelist = '';
+	if(aimgcount[pid]) {
+		for(var i = 0; i < aimgcount[pid].length;i++) {
+			var aimgObj = $('aimg_'+aimgcount[pid][i]);
+			if(aimgObj.parentElement.className!="mbn") {
+				var src = aimgObj.getAttribute('file');
+				imagelist += '<div class="mbn"><img src="' + src + '" width="600" /></div>';
+			}
+		}
+	}
+	msg = $('postmessage_'+pid).innerHTML+imagelist;
 	msg = '<div style="width:800px;max-height:500px; overflow-y:auto; padding: 10px;" class="pcb">'+msg+'</div>';
 	showDialog(msg, 'info', title, null, 1);
 	var coverObj = $('fwin_dialog_cover');
@@ -745,4 +777,8 @@ function changecontentdivid(tid) {
 	$('postlistreply_'+tid).id = 'postlistreply';
 	postnewdiv = $('postlistreply').childNodes;
 	postnewdiv[postnewdiv.length-1].id = 'post_new';
+}
+function showmobilebbs(obj) {
+	var content = '<h3 class="flb" style="cursor:move;"><em>下载掌上论坛</em><span><a href="javascript:;" class="flbc" onclick="hideWindow(\'mobilebbs\')" title="{lang close}">{lang close}</a></span></h3><div class="c"><h4>Andriod版本，扫描二维码可以直接下载到手机</h4><p class="mtm mbm vm"><span class="code_bg"><img src="'+ STATICURL +'image/common/zslt_andriod.png" alt="" /></span><img src="'+ STATICURL +'image/common/andriod.png" alt="适用于装有安卓系统的三星/HTC/小米等手机" /></p><h4>iPhone版本，扫描二维码可以直接下载到手机</h4><p class="mtm mbm vm"><span class="code_bg"><img src="'+ STATICURL +'image/common/zslt_ios.png" alt="" /></span><img src="'+ STATICURL +'image/common/ios.png" alt="适用于苹果手机" /></p></div>';
+	showWindow('mobilebbs', content, 'html');
 }

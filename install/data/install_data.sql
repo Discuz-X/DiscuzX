@@ -60,7 +60,7 @@ INSERT INTO pre_common_cron VALUES ('18','0','system','每日用户表优化','c
 INSERT INTO pre_common_cron VALUES ('19','1','system','统计今日热帖','cron_todayheats_daily.php','1269746623','1269792000','-1','-1','0','0');
 
 INSERT INTO pre_common_friendlink VALUES ('1','0','官方论坛','http://www.discuz.net','提供最新 Discuz! 产品新闻、软件下载与技术交流','static/image/common/logo_88_31.gif','2');
-INSERT INTO pre_common_friendlink VALUES ('2','4','我的领地','http://www.5d6d.com/','','','2');
+INSERT INTO pre_common_friendlink VALUES ('2','4','专用主机','http://www.verydz.com/','','','2');
 INSERT INTO pre_common_friendlink VALUES ('3','2','漫游平台','http://www.manyou.com/','','','2');
 INSERT INTO pre_common_friendlink VALUES ('4','3','Yeswan','http://www.yeswan.com','','','2');
 INSERT INTO pre_common_friendlink VALUES ('5','1','Comsenz','http://www.comsenz.com','','','2');
@@ -393,7 +393,7 @@ INSERT INTO pre_common_setting VALUES ('modratelimit','0');
 INSERT INTO pre_common_setting VALUES ('modreasons','广告/SPAM\r\n恶意灌水\r\n违规内容\r\n文不对题\r\n重复发帖\r\n\r\n我很赞同\r\n精品文章\r\n原创内容');
 INSERT INTO pre_common_setting VALUES ('userreasons','很给力!\r\n神马都是浮云\r\n赞一个!\r\n山寨\r\n淡定');
 INSERT INTO pre_common_setting VALUES ('modworkstatus','1');
-INSERT INTO pre_common_setting VALUES ('msgforward','a:3:{s:11:\"refreshtime\";i:3;s:5:\"quick\";i:1;s:8:\"messages\";a:14:{i:0;s:19:\"thread_poll_succeed\";i:1;s:19:\"thread_rate_succeed\";i:2;s:23:\"usergroups_join_succeed\";i:3;s:23:\"usergroups_exit_succeed\";i:4;s:25:\"usergroups_update_succeed\";i:5;s:20:\"buddy_update_succeed\";i:6;s:17:\"post_edit_succeed\";i:7;s:18:\"post_reply_succeed\";i:8;s:24:\"post_edit_delete_succeed\";i:9;s:22:\"post_newthread_succeed\";i:10;s:13:\"admin_succeed\";i:11;s:17:\"pm_delete_succeed\";i:12;s:15:\"search_redirect\";i:13;s:10:\"do_success\";}}');
+INSERT INTO pre_common_setting VALUES ('msgforward','a:3:{s:11:\"refreshtime\";i:2;s:5:\"quick\";i:1;s:8:\"messages\";a:14:{i:0;s:19:\"thread_poll_succeed\";i:1;s:19:\"thread_rate_succeed\";i:2;s:23:\"usergroups_join_succeed\";i:3;s:23:\"usergroups_exit_succeed\";i:4;s:25:\"usergroups_update_succeed\";i:5;s:20:\"buddy_update_succeed\";i:6;s:17:\"post_edit_succeed\";i:7;s:18:\"post_reply_succeed\";i:8;s:24:\"post_edit_delete_succeed\";i:9;s:22:\"post_newthread_succeed\";i:10;s:13:\"admin_succeed\";i:11;s:17:\"pm_delete_succeed\";i:12;s:15:\"search_redirect\";i:13;s:10:\"do_success\";}}');
 INSERT INTO pre_common_setting VALUES ('msn','');
 INSERT INTO pre_common_setting VALUES ('networkpage','0');
 INSERT INTO pre_common_setting VALUES ('newbiespan','0');
@@ -585,14 +585,16 @@ INSERT INTO pre_common_setting VALUES ('threadblacklist','1');
 INSERT INTO pre_common_setting VALUES ('threadhotreplies','3');
 INSERT INTO pre_common_setting VALUES ('threadfilternum','10');
 INSERT INTO pre_common_setting VALUES ('hidefilteredpost','1');
-INSERT INTO pre_common_setting VALUES ('nofilteredpost','1');
+INSERT INTO pre_common_setting VALUES ('nofilteredpost','0');
 INSERT INTO pre_common_setting VALUES ('filterednovote','1');
 INSERT INTO pre_common_setting VALUES ('numbercard','a:1:{s:3:"row";a:3:{i:1;s:7:"threads";i:2;s:5:"posts";i:3;s:7:"credits";}}');
 INSERT INTO pre_common_setting VALUES ('darkroom','1');
 INSERT INTO pre_common_setting VALUES ('creditspolicymobile','0');
 INSERT INTO pre_common_setting VALUES ('showsignin','1');
 INSERT INTO pre_common_setting VALUES ('showfjump','1');
+INSERT INTO pre_common_setting VALUES ('grid','a:8:{s:8:"showgrid";s:1:"0";s:8:"gridtype";s:1:"0";s:8:"textleng";s:2:"30";s:4:"fids";a:1:{i:0;i:0;}s:9:"highlight";s:1:"1";s:11:"targetblank";s:1:"1";s:8:"showtips";s:1:"1";s:9:"cachelife";s:3:"600";}');
 INSERT INTO pre_common_setting VALUES ('showfollowcollection','8');
+INSERT INTO pre_common_setting VALUES ('allowfastreply','1');
 
 INSERT INTO pre_common_smiley VALUES ('1','1','1','smiley',':)','smile.gif');
 INSERT INTO pre_common_smiley VALUES ('2','1','2','smiley',':(','sad.gif');

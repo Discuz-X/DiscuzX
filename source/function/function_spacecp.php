@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_spacecp.php 31003 2012-07-06 08:42:09Z zhengqingpeng $
+ *      $Id: function_spacecp.php 33068 2013-04-18 01:46:12Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,9 @@ if(!defined('IN_DISCUZ')) {
 function album_creat_by_id($albumid, $catid = 0) {
 	global $_G, $space;
 
+	if(!$_G['uid']) {
+		return 0;
+	}
 	preg_match("/^new\:(.+)$/i", $albumid, $matchs);
 	if(!empty($matchs[1])) {
 		$albumname = dhtmlspecialchars(trim($matchs[1]));

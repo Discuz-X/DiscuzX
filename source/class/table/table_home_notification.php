@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_notification.php 31068 2012-07-12 08:34:53Z liulanbo $
+ *      $Id: table_home_notification.php 32743 2013-03-05 09:37:51Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,11 +25,12 @@ class table_home_notification extends discuz_table
 		$days = TIMESTAMP - intval($days) * 86400;
 		DB::query("DELETE FROM %t WHERE new=%d AND dateline<%d", array($this->_table, $new, $days));
 	}
-	public function delete_by_type($type) {
+	public function delete_by_type($type, $uid = 0) {
 		if(!$type) {
 			return;
 		}
-		return DB::delete($this->_table, DB::field('type', $type));
+		$uid = $uid ? ' AND '.DB::field('uid', $uid) : '';
+		return DB::query("DELETE FROM %t WHERE type=%s %i", array($this->_table, $type, $uid));
 	}
 
 	public function optimize() {
@@ -106,6 +107,8 @@ class table_home_notification extends discuz_table
 						case 'interactive' : $category = 2; break;
 						case 'system' : $category = 3; break;
 						case 'manage' : $category = 4; break;
+						case 'follow' : $category = 5; break;
+						case 'follower' : $category = 6; break;
 						default :  $category = 0;
 					}
 			$category  = ' AND '.DB::field('category', $category);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: model_forum_thread.php 32691 2013-02-28 12:32:19Z zhangguosheng $
+ *      $Id: model_forum_thread.php 32866 2013-03-18 02:45:33Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -206,6 +206,20 @@ class model_forum_thread extends discuz_model
 		include_once libfile('function/stat');
 		updatestat($this->param['isgroup'] ? 'groupthread' : $statarr[$this->param['special']]);
 
+		if($this->param['geoloc'] && IN_MOBILE == 2) {
+			list($mapx, $mapy, $location) = explode('|', $this->param['geoloc']);
+			if($mapx && $mapy && $location) {
+				C::t('forum_post_location')->insert(array(
+					'pid' => $this->pid,
+					'tid' => $this->tid,
+					'uid' => $this->member['uid'],
+					'mapx' => $mapx,
+					'mapy' => $mapy,
+					'location' => $location,
+				));
+			}
+		}
+
 		if($this->param['modnewthreads']) {
 			updatemoderate('tid', $this->tid);
 			C::t('forum_forum')->update_forum_counter($this->forum['fid'], 0, 0, 1);
@@ -259,6 +273,7 @@ class model_forum_thread extends discuz_model
 				);
 
 				$message = !$this->param['price'] && !$this->param['readperm'] ? $this->param['message'] : '';
+				$message = messagesafeclear($message);
 				$this->feed['icon'] = 'thread';
 				$this->feed['title_template'] = 'feed_thread_title';
 				$this->feed['body_template'] = 'feed_thread_message';
@@ -296,7 +311,7 @@ class model_forum_thread extends discuz_model
 			'publishdate', 'digest', 'moderated', 'tstatus', 'isgroup', 'imgcontent', 'imgcontentwidth',
 			'replycredit', 'closed', 'special', 'tags',
 			'message','clientip', 'invisible', 'isanonymous', 'usesig',
-			'htmlon', 'bbcodeoff', 'smileyoff', 'parseurloff', 'pstatus'
+			'htmlon', 'bbcodeoff', 'smileyoff', 'parseurloff', 'pstatus', 'geoloc',
 		);
 		foreach($varname as $name) {
 			if(!isset($this->param[$name]) && isset($parameters[$name])) {

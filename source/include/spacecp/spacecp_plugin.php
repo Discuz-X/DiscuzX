@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_plugin.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: spacecp_plugin.php 33364 2013-06-03 02:30:46Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 $pluginkey = 'spacecp'.($op ? '_'.$op : '');
 $navtitle = $_G['setting']['plugins'][$pluginkey][$_GET['id']]['name'];
-
+$_GET['id'] = $_GET['id'] ? preg_replace("/[^A-Za-z0-9_:]/", '', $_GET['id']) : '';
 include pluginmodule($_GET['id'], $pluginkey);
 if(!$op || $op == 'credit') {
 	include template('home/spacecp_plugin');

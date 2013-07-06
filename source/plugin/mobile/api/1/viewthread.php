@@ -30,6 +30,8 @@ class mobile_api {
 			}
 		}
 
+		$_G['thread']['lastpost'] = dgmdate($_G['thread']['lastpost']);
+
 		$variable = array(
 			'thread' => $_G['thread'],
 			'fid' => $_G['fid'],
@@ -74,7 +76,15 @@ class mobile_api {
 			if($message) {
 				$variable['postlist'][$k]['message'] = $message;
 			}
-			$variable['postlist'][$k]['attachments'] = array_values(mobile_core::getvalues($post['attachments'], array('/^\d+$/'), array('aid', 'tid', 'uid', 'dbdateline', 'dateline', 'filename', 'filesize', 'url', 'attachment', 'remote', 'description', 'readperm', 'price', 'width', 'thumb', 'picid', 'ext', 'imgalt', 'attachsize', 'payed', 'downloads')));
+			if($post['anonymous'] && !$_G['forum']['ismoderator']) {
+				$variable['postlist'][$k]['username'] = $variable['postlist'][$k]['author'] = '';
+				$variable['postlist'][$k]['adminid'] = $variable['postlist'][$k]['groupid'] = $variable['postlist'][$k]['authorid'] = 0;
+			}
+			if(strpos($variable['postlist'][$k]['message'], '[/tthread]') !== FALSE) {
+				$matches = array();
+				preg_match('/\[tthread=(.+?),(.+?)\](.*?)\[\/tthread\]/', $variable['postlist'][$k]['message'], $matches);
+				$variable['postlist'][$k]['message'] = preg_replace('/\[tthread=(.+?)\](.*?)\[\/tthread\]/', lang('plugin/qqconnect', 'connect_tthread_message', array('username' => $matches[1], 'nick' => $matches[2])), $variable['postlist'][$k]['message']);
+			}
 		}
 
 		foreach($GLOBALS['aimgs'] as $pid => $aids) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 32547 2013-02-19 07:28:44Z zhangjie $
+ *      $Id: space_pm.php 33421 2013-06-09 03:30:16Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,10 @@ $plid = empty($_GET['plid'])?0:intval($_GET['plid']);
 $daterange = empty($_GET['daterange'])?0:intval($_GET['daterange']);
 $touid = empty($_GET['touid'])?0:intval($_GET['touid']);
 $opactives['pm'] = 'class="a"';
+
+if(empty($_G['member']['category_num']['manage']) && !in_array($_G['adminid'], array(1,2,3))) {
+	unset($_G['notice_structure']['manage']);
+}
 
 if($_GET['subop'] == 'view') {
 	$type = $_GET['type'];

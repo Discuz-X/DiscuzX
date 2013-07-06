@@ -782,7 +782,7 @@ DROP TABLE IF EXISTS pre_common_member_forum_buylog;
 CREATE TABLE pre_common_member_forum_buylog (
   uid mediumint(8) unsigned NOT NULL,
   fid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  credits tinyint(5) NOT NULL DEFAULT '0',
+  credits int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid,fid),
   KEY fid (fid)
 ) TYPE=MyISAM;

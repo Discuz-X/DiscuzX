@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_postsplit.php 26689 2011-12-20 05:05:58Z zhangguosheng $
+ *      $Id: admincp_postsplit.php 33060 2013-04-16 09:00:06Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -73,7 +73,7 @@ if($operation == 'manage') {
 		$posttable_info = array();
 		foreach($_GET['memo'] as $key => $value) {
 			$key = intval($key);
-			$posttable_info[$key]['memo'] = $value;
+			$posttable_info[$key]['memo'] = dhtmlspecialchars($value);
 		}
 
 		C::t('common_setting')->update('posttable_info', $posttable_info);

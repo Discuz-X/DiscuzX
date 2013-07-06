@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 32679 2013-02-28 08:57:42Z monkey $
+	$Id: bbcode.js 33275 2013-05-14 02:57:45Z nemohou $
 */
 
 var re, DISCUZCODE = [];
@@ -133,10 +133,10 @@ function bbcode2html(str) {
 				}
 				return '<img src="' + $('image_' + $2).src + '" border="0" aid="attachimg_' + $2 + '" width="' + width + '" alt="" />';
 			});
-			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, function ($1, $2, $3, $4) {return '<img' + ($2 > 0 ? ' width="' + $2 + '"' : '') + ($3 > 0 ? ' height="' + $3 + '"' : '') + ' src="' + $4 + '" border="0" alt="" />'});
+			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, function ($1, $2, $3, $4) {return '<img' + ($2 > 0 ? ' width="' + $2 + '"' : '') + ($3 > 0 ? ' _height="' + $3 + '"' : '') + ' src="' + $4 + '" border="0" alt="" />'});
 		} else {
 			str = str.replace(/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, '<a href="$1" target="_blank">$1</a>');
-			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, '<a href="$1" target="_blank">$1</a>');
+			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, '<a href="$3" target="_blank">$3</a>');
 		}
 	}
 
@@ -337,6 +337,10 @@ function html2bbcode(str) {
 
 	str= str.replace(/&((#(32|127|160|173))|shy|nbsp);/ig, ' ');
 
+	if(fetchCheckbox('allowimgurl')) {
+		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
+	}
+
 	if(!fetchCheckbox('parseurloff')) {
 		str = parseurl(str, 'bbcode', false);
 	}
@@ -353,6 +357,7 @@ function html2bbcode(str) {
 
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
 		str = preg_replace([
+			'<table[^>]*float:\\\s*(left|right)[^>]*><tbody><tr><td>\\\s*([\\\s\\\S]+?)\\\s*<\/td><\/tr></tbody><\/table>',
 			'<table([^>]*(width|background|background-color|backcolor)[^>]*)>',
 			'<table[^>]*>',
 			'<tr[^>]*(?:background|background-color|backcolor)[:=]\\\s*(["\']?)([\(\)\\\s%,#\\\w]+)(\\1)[^>]*>',
@@ -363,7 +368,10 @@ function html2bbcode(str) {
 			'<\/t[dh]>',
 			'<\/tr>',
 			'<\/table>',
+			'<h\\\d[^>]*>',
+			'<\/h\\\d>'
 		], [
+			function($1, $2, $3) {return '[float=' + $2 + ']' + $3 + '[/float]';},
 			function($1, $2) {return tabletag($2);},
 			'[table]\n',
 			function($1, $2, $3) {return '[tr=' + $3 + ']';},
@@ -374,6 +382,8 @@ function html2bbcode(str) {
 			'[/td]',
 			'[/tr]\n',
 			'[/table]',
+			'[b]',
+			'[/b]'
 		], str);
 
 		str = str.replace(/<h([0-9]+)[^>]*>([\s\S]*?)<\/h\1>/ig, function($1, $2, $3) {return "[size=" + (7 - $2) + "]" + $3 + "[/size]\n\n";});
@@ -401,10 +411,6 @@ function html2bbcode(str) {
 	}
 
 	str = str.replace(/<[\/\!]*?[^<>]*?>/ig, '');
-
-	if(fetchCheckbox('allowimgurl')) {
-		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
-	}
 
 	for(var i = 0; i <= DISCUZCODE['num']; i++) {
 		str = str.replace("[\tDISCUZ_CODE_" + i + "\t]", DISCUZCODE['html'][i]);

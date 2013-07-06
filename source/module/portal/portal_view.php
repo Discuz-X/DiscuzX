@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 32718 2013-03-04 09:21:06Z zhangguosheng $
+ *      $Id: portal_view.php 33047 2013-04-12 08:46:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ if(!empty($_G['setting']['antitheft']['allow']) && empty($_G['setting']['antithe
 	helper_antitheft::check($aid, 'aid');
 }
 
-if($article['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy']) && empty($article['url'])) {
+if(!empty($_G['setting']['makehtml']['flag']) && $article['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy']) && empty($article['url'])) {
 	dheader('location:'. fetch_article_url($article));
 }
 $article_count = C::t('portal_article_count')->fetch($aid);
@@ -75,7 +75,14 @@ if($article['contents'] && $article['showinnernav']) {
 require_once libfile('function/blog');
 $content['content'] = blog_bbcode($content['content']);
 
-$viewurl = $article['htmlmade'] ? $article['htmldir'].$article['htmlname'].'{page}.'.$_G['setting']['makehtml']['extendname'] : "portal.php?mod=view&aid=$aid";
+if(!empty($_G['setting']['makehtml']['flag']) && $article['htmlmade']) {
+	$_caturl = $_G['cache']['portalcategory'][$cat['topid']]['domain'] ? $_G['cache']['portalcategory'][$cat['topid']]['caturl'] : '';
+	$viewurl = $_caturl.$article['htmldir'].$article['htmlname'].'{page}.'.$_G['setting']['makehtml']['extendname'];
+	unset($_caturl);
+} else {
+	$viewurl = "portal.php?mod=view&aid=$aid";
+}
+
 $multi = multi($article['contents'], 1, $page, $viewurl);
 $org = array();
 if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
@@ -129,7 +136,8 @@ if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 $article['related'] = array();
 if(($relateds = C::t('portal_article_related')->fetch_all_by_aid($aid))) {
 	foreach(C::t('portal_article_title')->fetch_all(array_keys($relateds)) as $raid => $value) {
-		$article['related'][$raid] = $value['title'];
+		$value['uri'] = fetch_article_url($value);
+		$article['related'][$raid] = $value;
 	}
 }
 $article['allowcomment'] = !empty($cat['allowcomment']) && !empty($article['allowcomment']) ? 1 : 0;

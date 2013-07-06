@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Cloud.php 25607 2011-11-16 06:41:15Z yexinhao $
+ *      $Id: Cloud.php 33098 2013-04-25 05:47:05Z theoliu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,9 @@ class Cloud_Service_Client_Cloud extends Cloud_Service_Client_Restful {
 
 		return parent::__construct($debug);
 	}
-
+	public function appOpen() {
+		return $this->_callMethod('site.appOpen', array('sId' => $this->_sId, 'appIdentifier' => 'search'));
+	}
 	public function register() {
 
 		return $this->_callMethod('site.register', array(

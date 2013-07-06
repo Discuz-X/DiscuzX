@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_portal.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: search_portal.php 32974 2013-04-01 02:24:33Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 define('NOROBOT', TRUE);
 
 require_once libfile('function/home');
-
+require_once libfile('function/portal');
 if(!$_G['setting']['search']['portal']['status']) {
 	showmessage('search_portal_closed');
 }

@@ -52,7 +52,13 @@
 	.pr, .pc { vertical-align: middle; margin: 0 5px 1px 0; padding: 0;+margin-right: 2px;_margin-right: 2px; }
 
 /*----- header -----*/
+	.visitclienttip { background:#BDD5E6; height:30px; padding:5px 10px;border-bottom:1px solid #F7F7F7;}
+	.visitclienttip p  { line-height:30px; }
+	.visitclienttip a.btn_download { background:#3D98CF; border-radius:5px; float:right; display:block; width:70px; text-align: center; line-height:24px; color:#E9EFF3; margin-top:3px; box-shadow:1px 2px 2px rgba(0, 0, 0, 0.1); }
+	.visitclienttip a.btn_download:hover {background:#3094CF;}
+	
 	.nav { background: url(./images/header_bg.jpg); height: 32px; text-align:center; font-size:19px; padding:8px 10px 8px 0; }
+	.nav .name {display:inline-block; height:30px; overflow:hidden; white-space:nowrap; width:50%;}
 	
 	.hdc { padding:10px 10px 0; background: url(./images/nav_b_line.png) repeat-x 0 100%; margin-bottom:10px; }
 	.hdc h2 { float: left; padding: 0 20px 8px 10px; }
@@ -74,12 +80,14 @@
 	.nav .icon_edit a:hover { background-position: -84px -28px;}
 	
 	.category { position: relative;}
-	.category .name { padding:0 10px; display: inline-block; width: 98px; color: #333; }
+	.category .name { padding:0 10px; display: inline-block; width: 50%; color: #333; height:30px; overflow:hidden;white-space:nowrap;}
 	.category .name img { margin-left:10px; vertical-align: middle; }
-	.category .subname_list { background:#FFF; border:2px solid #DDD; border-top:0; box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3); width: 118px;position: absolute; font-size:14px; top:35px; left:0; padding:0; z-index:10; line-height:38px; }
+	.category .name .tit {white-space:nowrap; display:inline-block; max-width:90%; overflow:hidden; font-weight:400; }	
+	.category .subname_list {position: absolute; top:35px; left:0; width:100%; z-index:10;}	
+	.category .subname_list ul {background:#FFF; border:2px solid #DDD; border-top:0; box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3); width: 118px; font-size:14px; padding:0; line-height:38px; margin: 0 auto;}
 	.category .subname_list li { border-bottom:1px solid #EEE; }
 	.category .subname_list a:hover { color:#2782BA; }
-	.category .subname_list a { display:block; }
+	.category .subname_list a { display:block; white-space: nowrap; margin: 0 10px; overflow: hidden;}
 
 /*----- forumlist -----*/
 	.wp {}
@@ -134,7 +142,7 @@
 	.plc { border-bottom:1px solid #D9D8D8; overflow:hidden; position:relative; }
 	.plc .avatar { position:absolute; left:10px; top:9px; display:inline; }
 	.plc .avatar img{ border:1px solid #D7D7D7; padding:1px; }
-	.plc .pi { margin-left:55px; margin-right:10px; padding:7px 0; }
+	.plc .pi { margin-left:55px; margin-right:10px; padding:7px 0; position:relative;}
 	.plc .pi .authi{ position:relative; }
 	.plc .pi .authi li em{ float:right; font-style: normal; }	
 	.plc .pi .message{ font-size:15px; }
@@ -249,6 +257,14 @@
 	.pmbox li .time { float:right; }
 	.pmbox li .name { color:#333; }
 	.grey { color:#A5A5A5; }
+	
+/*----- clew con -----*/
+	.clew_con { padding:10px; }
+	.clew_con .tit {line-height:40px; font-size:14px; }
+	.clew_con p { margin:10px 0; }
+	.clew_con  .button {background:#3D98CF; border-radius:5px; display:inline-block; margin-left:6px; margin-top:3px; width:80px; height:26px; text-align: center; line-height:24px; color:#E9EFF3; box-shadow:1px 2px 2px rgba(0, 0, 0, 0.1); cursor: pointer; }
+	.clew_con  .button:hover {background:#3094CF;}
+	
 	
 /*----- footer -----*/
 	.footer { text-align:center; line-height:2em; color:#A5A5A5; padding:10px 0 0 0; }

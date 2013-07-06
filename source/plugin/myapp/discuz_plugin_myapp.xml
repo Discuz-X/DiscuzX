@@ -6,9 +6,9 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[ÂþÓÎÓ¦ÓÃÌûÄÚÕ¹Ê¾]]></item>
+			<item id="name"><![CDATA[æ¼«æ¸¸åº”ç”¨å¸–å†…å±•ç¤º]]></item>
 			<item id="identifier"><![CDATA[myapp]]></item>
-			<item id="description"><![CDATA[ÏÔÊ¾Â¥Ö÷×î½ü°²×°¹ýµÄÓ¦ÓÃ¡£]]></item>
+			<item id="description"><![CDATA[æ˜¾ç¤ºæ¥¼ä¸»æœ€è¿‘å®‰è£…è¿‡çš„åº”ç”¨ã€‚]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[myapp/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
@@ -34,7 +34,7 @@
 		<item id="var">
 			<item id="0">
 				<item id="displayorder"><![CDATA[1]]></item>
-				<item id="title"><![CDATA[ÏÔÊ¾µÄÊýÁ¿]]></item>
+				<item id="title"><![CDATA[æ˜¾ç¤ºçš„æ•°é‡]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[shownum]]></item>
 				<item id="type"><![CDATA[number]]></item>
@@ -43,17 +43,17 @@
 			</item>
 			<item id="1">
 				<item id="displayorder"><![CDATA[0]]></item>
-				<item id="title"><![CDATA[ÏÔÊ¾µÄ±êÌâ]]></item>
+				<item id="title"><![CDATA[æ˜¾ç¤ºçš„æ ‡é¢˜]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[showtitle]]></item>
 				<item id="type"><![CDATA[text]]></item>
-				<item id="value"><![CDATA[<font style="font-weight:700">ÎÒÍæµÄÓ¦ÓÃ:</font><br/>]]></item>
+				<item id="value"><![CDATA[<font style="font-weight:700">æˆ‘çŽ©çš„åº”ç”¨:</font><br/>]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 			<item id="2">
 				<item id="displayorder"><![CDATA[2]]></item>
-				<item id="title"><![CDATA[ÏÔÊ¾ÓÃ»§ÂþÓÎ¶¯Ì¬]]></item>
-				<item id="description"><![CDATA[¿ªÆôºóÌû×ÓÏÂ·½ÏÔÊ¾±¾ÓÃ»§µÄÂþÓÎ¶¯Ì¬]]></item>
+				<item id="title"><![CDATA[æ˜¾ç¤ºç”¨æˆ·æ¼«æ¸¸åŠ¨æ€]]></item>
+				<item id="description"><![CDATA[å¼€å¯åŽå¸–å­ä¸‹æ–¹æ˜¾ç¤ºæœ¬ç”¨æˆ·çš„æ¼«æ¸¸åŠ¨æ€]]></item>
 				<item id="variable"><![CDATA[showmyapp]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[1]]></item>

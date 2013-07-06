@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_json.php 31663 2012-09-19 09:56:03Z zhangguosheng $
+ *      $Id: helper_json.php 32779 2013-03-08 02:57:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ class helper_json {
 			case 'float':
 				return $data;
 			case 'string':
-				return '"' . addslashes($data) . '"';
+				return '"' . addcslashes($data, "\r\n\t\"") . '"';
 			case 'object':
 				$data = get_object_vars($data);
 			case 'array':

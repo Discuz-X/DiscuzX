@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal.php 28297 2012-02-27 08:35:59Z monkey $
+ *      $Id: portal.php 33234 2013-05-08 04:13:19Z andyzheng $
  */
 
 define('APPTYPEID', 4);

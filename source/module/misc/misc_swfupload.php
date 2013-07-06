@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 32612 2013-02-26 09:09:06Z monkey $
+ *      $Id: misc_swfupload.php 33019 2013-04-08 08:28:51Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -68,6 +68,10 @@ if($_GET['operation'] == 'upload') {
 			$thumbimgheight = 300;
 			$attach['thumb'] = $image->Thumb($attach['target'], '', $thumbimgwidth, $thumbimgheight, 2);
 			$image->Watermark($attach['target'], '', 'forum');
+			$imginfo = @getimagesize($attach['target']);
+			if($imginfo !== FALSE) {
+				$attach['width'] = $imginfo[0];
+			}
 		}
 
 		if(getglobal('setting/ftp/on') && ((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['size'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
@@ -93,7 +97,8 @@ if($_GET['operation'] == 'upload') {
 				'filesize' => $attach['size'],
 				'thumb' => $attach['thumb'],
 				'remote' => $attach['remote'],
-				'dateline' => $_G['timestamp']
+				'dateline' => $_G['timestamp'],
+				'width' => $attach['width']
 		);
 		$image = array();
 		if($aid) {

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 32590 2013-02-22 09:42:48Z monkey $
+	$Id: forum_post.js 33179 2013-05-06 03:16:25Z nemohou $
 */
 
 var forum_post_inited = true;
@@ -121,7 +121,7 @@ function validate(theform) {
 	theform.message.value = message;
 	if($('postsubmit').name == 'editsubmit') {
 		postsubmit(theform);
-		return true;
+		return false;
 	} else if(in_array($('postsubmit').name, ['topicsubmit', 'replysubmit'])) {
 		if(seccodecheck || secqaacheck) {
 			var chk = 1, chkv = '';
@@ -469,6 +469,7 @@ function updateImageList(action, aids) {
 }
 
 function updateDownImageList(msg) {
+	hideMenu('fwin_dialog', 'dialog');
 	if(msg == '') {
 		showError('抱歉，暂无远程附件');
 	} else {

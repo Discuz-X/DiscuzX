@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memory_driver_redis.php 27685 2012-02-09 09:10:16Z zhangguosheng $
+ *      $Id: memory_driver_redis.php 33337 2013-05-29 02:23:47Z andyzheng $
  */
 
 class memory_driver_redis
@@ -25,6 +25,9 @@ class memory_driver_redis
 			}
 			$this->enable = $connect ? true : false;
 			if($this->enable) {
+				if($config['requirepass']) {
+					$this->obj->auth($config['requirepass']);
+				}
 				@$this->obj->setOption(Redis::OPT_SERIALIZER, $config['serializer']);
 			}
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_plugin.php 26169 2011-12-05 04:15:45Z yexinhao $
+ *      $Id: install_plugin.php 32877 2013-03-19 03:48:10Z liulanbo $
  */
 
 define('IN_COMSENZ', TRUE);
@@ -23,7 +23,7 @@ if($_GET['key'] !== md5($_G['setting']['authkey'].$_SERVER['REMOTE_ADDR'])) {
 	exit;
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'pcmgr_url_safeguard');
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 31879 2012-10-18 09:27:24Z zhangguosheng $
+ *      $Id: config_global_default.php 33337 2013-05-29 02:23:47Z andyzheng $
  */
 
 $_config = array();
@@ -30,7 +30,7 @@ $_config = array();
 $_config['db'][1]['dbhost']  		= 'localhost';
 $_config['db'][1]['dbuser']  		= 'root';
 $_config['db'][1]['dbpw'] 	 	= 'root';
-$_config['db'][1]['dbcharset'] 		= 'gbk';
+$_config['db'][1]['dbcharset'] 		= 'utf8';
 $_config['db'][1]['pconnect'] 		= 0;
 $_config['db'][1]['dbname']  		= 'ultrax';
 $_config['db'][1]['tablepre'] 		= 'pre_';
@@ -95,6 +95,7 @@ $_config['memory']['redis']['server'] = '';
 $_config['memory']['redis']['port'] = 6379;
 $_config['memory']['redis']['pconnect'] = 1;
 $_config['memory']['redis']['timeout'] = 0;
+$_config['memory']['redis']['requirepass'] = '';
 /**
  * 是否使用 Redis::SERIALIZER_IGBINARY选项,需要igbinary支持,windows下测试时请关闭，否则会出>现错误Reading from client: Connection reset by peer
  * 支持以下选项，默认使用PHP的serializer
@@ -133,7 +134,7 @@ $_config['download']['xsendfile']['dir'] = '/down/';
 $_config['cache']['type'] 			= 'sql';	// 缓存类型 file=文件缓存, sql=数据库缓存
 
 // 页面输出设置
-$_config['output']['charset'] 			= 'gbk';	// 页面字符集
+$_config['output']['charset'] 			= 'utf-8';	// 页面字符集
 $_config['output']['forceheader']		= 1;		// 强制输出页面字符集，用于避免某些环境乱码
 $_config['output']['gzip'] 			= 0;		// 是否采用 Gzip 压缩输出
 $_config['output']['tplrefresh'] 		= 1;		// 模板自动刷新开关 0=关闭, 1=打开
@@ -154,7 +155,7 @@ $_config['security']['attackevasive']		= 0;		// CC 攻击防御 1|2|4|8
 
 $_config['security']['querysafe']['status']	= 1;		// 是否开启SQL安全检测，可自动预防SQL注入攻击
 $_config['security']['querysafe']['dfunction']	= array('load_file','hex','substring','if','ord','char');
-$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall', 'uniondistinct');
+$_config['security']['querysafe']['daction']	= array('@','intooutfile','intodumpfile','unionselect','(select', 'unionall', 'uniondistinct');
 $_config['security']['querysafe']['dnote']	= array('/*','*/','#','--','"');
 $_config['security']['querysafe']['dlikehex']	= 1;
 $_config['security']['querysafe']['afullnote']	= 0;

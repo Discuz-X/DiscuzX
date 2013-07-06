@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 29263 2012-03-31 05:45:08Z yexinhao $
+ *      $Id: Manyou.php 33053 2013-04-12 10:09:51Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,8 @@ if(!defined('IN_DISCUZ')) {
 Cloud::loadFile('Service_Client_RestfulException');
 
 class Cloud_Service_Client_Manyou {
+
+	private $_myurl = 'http://api.manyou.com/uchome.php';
 
 	protected static $_instance;
 
@@ -33,8 +35,39 @@ class Cloud_Service_Client_Manyou {
 	public function sync() {
 		global $_G;
 
+		$this->getResponse('siteRefresh');
+		return true;
+	}
+
+	public function getMenuApps() {
+		$result = $this->getResponse('getMenuApps');
+		if($result) {
+			$result['dateline'] = TIMESTAMP;
+			C::t('common_setting')->update('appmenu', $result['result']);
+		}
+		return $result['errCode'] ? false : $result['result'];
+	}
+
+	private function getResponse($action) {
+		global $_G;
+
+		$response = @dfsockopen($this->_myurl, 0, $this->getGlobalPostString($action), '', false, $_G['setting']['my_ip']);
+		$result = unserialize($response);
+		if(!$response) {
+			throw new Cloud_Service_Client_RestfulException('Empty Response', 111);
+		} elseif(!$result) {
+			throw new Cloud_Service_Client_RestfulException('Error Response: ' . $response, 110);
+		}
+		if($result['errCode']) {
+			throw new Cloud_Service_Client_RestfulException($result['errMessage'], $result['errCode']);
+		}
+		return $result;
+	}
+
+	private function getGlobalPostString($action) {
+		global $_G;
+
 		$setting = $_G['setting'];
-		$my_url = 'http://api.manyou.com/uchome.php';
 
 		$mySiteId = empty($_G['setting']['my_siteid'])?'':$_G['setting']['my_siteid'];
 		$siteName = $_G['setting']['bbname'];
@@ -61,20 +94,8 @@ class Cloud_Service_Client_Manyou {
 		$siteName = urlencode($siteName);
 
 		$register = false;
-		$postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableApp=%s&from=cloud', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableApp);
+		return sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableApp=%s&from=cloud', $action, $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableApp);
 
-		$response = @dfsockopen($my_url, 0, $postString, '', false, $setting['my_ip']);
-		$res = unserialize($response);
-		if (!$response) {
-			throw new Cloud_Service_Client_RestfulException('Empty Response', 111);
-		} elseif(!$res) {
-			throw new Cloud_Service_Client_RestfulException('Error Response: ' . $response, 110);
-		}
-		if($res['errCode']) {
-			throw new Cloud_Service_Client_RestfulException($res['errMessage'], $res['errCode']);
-		}
-
-		return true;
 	}
 
 }

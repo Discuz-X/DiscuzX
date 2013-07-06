@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 31224 2012-07-27 03:54:18Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 32945 2013-03-26 05:01:12Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -328,7 +328,7 @@ SCRIPT;
 					deletearticle($aidarr, '0');
 				}
 			} else {
-				C::t('portal_article_title')->update($delids, array('catid'=>$_POST['tocatid']));
+				C::t('portal_article_title')->update_for_cat($delids, array('catid'=>$_POST['tocatid']));
 				$num = C::t('portal_article_title')->fetch_count_for_cat($_POST['tocatid']);
 				C::t('portal_category')->update($_POST['tocatid'], array('articles'=>dintval($num)));
 			}

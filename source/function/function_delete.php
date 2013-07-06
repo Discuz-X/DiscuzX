@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 32406 2013-01-14 05:57:34Z monkey $
+ *      $Id: function_delete.php 33288 2013-05-22 02:23:20Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -169,6 +169,7 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 			if($idtype == 'pid') {
 				C::t('forum_post')->delete($id, $ids);
 				C::t('forum_postcomment')->delete_by_pid($ids);
+				C::t('forum_postcomment')->delete_by_rpid($ids);
 			} elseif($idtype == 'tid') {
 				C::t('forum_post')->delete_by_tid($id, $ids);
 				C::t('forum_postcomment')->delete_by_tid($ids);
@@ -824,7 +825,7 @@ function deletetrasharticle($aids) {
 		if($article['pic']) {
 			pic_delete($article['pic'], 'portal', $article['thumb'], $article['remote']);
 		}
-		if($article['madehtml'] && $article['htmldir'] && $article['htmlname']) {
+		if($article['htmlmade'] && $article['htmldir'] && $article['htmlname']) {
 			deletehtml(DISCUZ_ROOT.'/'.$article['htmldir'].$article['htmlname'], $article['contents']);
 		}
 	}
@@ -1013,10 +1014,11 @@ function deleterelatedtid($tids, $ctid) {
 }
 
 function deletehtml($htmlname, $count = 1) {
-	@unlink($htmlname.'.html');
+	global $_G;
+	@unlink($htmlname.'.'.$_G['setting']['makehtml']['extendname']);
 	if($count > 1) {
 		for($i = 2; $i <= $count; $i++) {
-			@unlink($htmlname.$i.'.html');
+			@unlink($htmlname.$i.'.'.$_G['setting']['makehtml']['extendname']);
 		}
 	}
 }

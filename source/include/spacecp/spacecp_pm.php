@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_pm.php 31737 2012-09-26 02:53:17Z zhangjie $
+ *      $Id: spacecp_pm.php 33289 2013-05-22 05:44:06Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -77,7 +77,7 @@ if($_GET['op'] == 'checknewpm') {
 		$msguser = $member['username'];
 	}
 	if(!$msgonly) {
-		$online = C::app()->session->fetch_by_uid($touid) !== false ? 1 : 0;
+		$online = C::app()->session->fetch_by_uid($touid) ? 1 : 0;
 		if($_G['member']['newpm']) {
 			$newpm = setstatus(1, 0, $_G['member']['newpm']);
 			C::t('common_member')->update($_G['uid'], array('newpm' => $newpm));

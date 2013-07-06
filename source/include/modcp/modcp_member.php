@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_member.php 32270 2012-12-13 03:00:26Z monkey $
+ *      $Id: modcp_member.php 32999 2013-04-03 07:15:47Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -77,7 +77,7 @@ if($op == 'edit') {
 
 	if($member && submitcheck('bansubmit') && !$error) {
 		$setarr = array();
-		$reason = trim($_GET['reason']);
+		$reason = dhtmlspecialchars(trim($_GET['reason']));
 		if(!$reason && ($_G['group']['reasonpm'] == 1 || $_G['group']['reasonpm'] == 3)) {
 			acpmsg('admin_reason_invalid');
 		}

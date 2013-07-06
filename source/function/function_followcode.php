@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_followcode.php 29566 2012-04-19 03:28:14Z zhengqingpeng $
+ *      $Id: function_followcode.php 33302 2013-05-23 03:17:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,6 +23,10 @@ function fcodedisp($code, $type='codehtml') {
 
 function followcode($message, $tid = 0, $pid = 0, $length = 0, $allowimg = true) {
 	global $_G;
+
+	include_once libfile('function/post');
+	$message = strip_tags($message);
+	$message = messagesafeclear($message);
 
 	if((strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "", $message);
@@ -60,9 +64,9 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0, $allowimg = true)
 		'[list=A]', "\r\n[*]", '[*]', '[/list]', '[indent]', '[/indent]', '[/float]'
 		), '', preg_replace(array(
 		"/\[color=([#\w]+?)\]/i",
-		"/\[color=(rgb\([\d\s,]+?\))\]/i",
+		"/\[color=((rgb|rgba)\([\d\s,]+?\))\]/i",
 		"/\[backcolor=([#\w]+?)\]/i",
-		"/\[backcolor=(rgb\([\d\s,]+?\))\]/i",
+		"/\[backcolor=((rgb|rgba)\([\d\s,]+?\))\]/i",
 		"/\[size=(\d{1,2}?)\]/i",
 		"/\[size=(\d{1,2}(\.\d{1,2}+)?(px|pt)+?)\]/i",
 		"/\[font=([^\[\<]+?)\]/i",

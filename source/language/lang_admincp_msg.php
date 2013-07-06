@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 32011 2012-10-31 02:20:10Z monkey $
+ *      $Id: lang_admincp_msg.php 33164 2013-05-02 08:15:35Z nemohou $
  *
  *      This file is automatically generate
  */
@@ -460,6 +460,7 @@ $lang = array (
   'setting_seccode_ttf_lost' => '验证码缺少显示所需的字体文件，请上传字体文件至 {path} 目录',
   'forum_name_duplicate' => '表单名称设置不能重复，请重新设置',
   'alipay_ratio_invalid' => '您输入的现金/积分兑换比率小于 0',
+  'setting_threadprofile_name_empty' => '方案名称不能为空',
   'ftp_password_short' => 'FTP 密码不得少于 3 位',
   'cachethread_dir_noexists' => '抱歉，您所指定的目录 {cachethreaddir} 不存在或者不可写，请尝试通过 FTP 将其属性改为 777',
   'ranklistcache_update' => '排行榜缓存文件已更新',
@@ -629,6 +630,11 @@ $lang = array (
 
   'cloudaddons_check_url_fopen_error' => '您的服务器无法访问应用中心，这将会导致应用无法安装。请联系您的服务商或者网站技术人员，确保您的服务器能够正常访问 addon.discuz.com 或 addon1.discuz.com',
   'cloudaddons_check_gzuncompress_error' => '您的服务器不支持 Zlib，这将会导致应用无法安装。请联系您的服务商或者网站技术人员。',
-  'cloudaddons_genuine_message' => '对不起，您安装的不是正版应用，安装程序无法继续执行<br /><br /><a href="admin.php?action=cloudaddons&id={addonid}">点击这里安装正版应用</a>',);
+  'cloudaddons_genuine_message' => '对不起，您安装的不是正版应用，安装程序无法继续执行<br /><br /><a href="admin.php?action=cloudaddons&id={addonid}">点击这里安装正版应用</a>',
+
+  'admincp_makehtml_cleanhtml_error' => '对不起，开启生成HTML静态文件时，不能清理HTML文件。',
+  'admincp_makehtml_cleanhtml_succeed' => '清理HTML文件成功。',
+  'admincp_makehtml_cleanhtml_choose_item' => '对不起，请选择需要清理HTML文件。',
+);
 
 ?>

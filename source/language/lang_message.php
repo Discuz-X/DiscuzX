@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 32670 2013-02-28 07:35:00Z zhangguosheng $
+ *      $Id: lang_message.php 33048 2013-04-12 08:50:27Z zhangjie $
  *
  *      This file is automatically generate
  */
@@ -369,8 +369,8 @@ $lang = array (
   'recommend_self_disallow' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />您不能评价自己的帖子',
   'recommend_duplicate' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />您已评价过本主题',
   'recommend_outoftimes' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />今日评价机会已用完',
-  'recommend_daycount_succed' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong> <span id="recommentv" class="xg2 xs0">{recommendv}</span><br />您今天还能评价 {daycount} 次',
-  'recommend_succed' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong> <span id="recommentv" class="xg2 xs0">{recommendv}</span>',
+  'recommend_daycount_succeed' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong> <span id="recommentv" class="xg2 xs0">{recommendv}</span><br />您今天还能评价 {daycount} 次',
+  'recommend_succeed' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong> <span id="recommentv" class="xg2 xs0">{recommendv}</span>',
   'thread_poll_voter_isnull' => '暂时还没有人参与投票，不能添加标签。',
   'thread_activityapply_isnull' => '暂时还没有人参加活动，不能添加标签。',
   'forum_usertag_set_continue' => '共 {count} 个用户，正在设置 {limit} 至 {next} 个用户，请稍候 ',
@@ -1062,6 +1062,10 @@ $lang = array (
   'topicadmin_live_noset_error' => '该主题并没有设置为直播帖',
   'no_privilege_livethread' => '抱歉，您没有权限设置直播帖',
   'portal_category_has_no_folder_name' => '抱歉，文章所属的频道没有设置目录名称',
+  'noreply_replynum_error' => '对不起，你已经达到本主题的回帖上限。',
+  'author_not_uploadpic' => '楼主暂时没有上传图片',
+  'noreply_yourself_error' => '您不能对自己的回帖进行投票',
+  'noreply_voted_error' => '您已经对此回帖投过票了',
 );
 
 ?>

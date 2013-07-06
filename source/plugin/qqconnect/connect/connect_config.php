@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 29265 2012-03-31 06:03:26Z yexinhao $
+ *      $Id: connect_config.php 32901 2013-03-21 08:54:21Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,15 +22,13 @@ if(submitcheck('connectsubmit')) {
 
 	if($op == 'config') { // debug 修改QQ绑定设置
 
-		$ispublishfeed = !empty($_GET['ispublishfeed']) ? 1 : 0;
 		$ispublisht = !empty($_GET['ispublisht']) ? 1 : 0;
 		C::t('#qqconnect#common_member_connect')->update($_G['uid'],
 			array(
-				'conispublishfeed' => $ispublishfeed,
 				'conispublisht' => $ispublisht,
 			)
 		);
-		if (!$ispublishfeed || !$ispublisht) {
+		if (!$ispublisht) {
 			dsetcookie('connect_synpost_tip');
 		}
 		showmessage('qqconnect:connect_config_success', $referer);
@@ -115,7 +113,6 @@ if(submitcheck('connectsubmit')) {
 	if($_G[inajax] && $op == 'synconfig') {
 		C::t('#qqconnect#common_member_connect')->update($_G['uid'],
 			array(
-				'conispublishfeed' => 0,
 				'conispublisht' => 0,
 			)
 		);

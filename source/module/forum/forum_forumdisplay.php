@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 32710 2013-03-04 03:59:17Z zhengqingpeng $
+ *      $Id: forum_forumdisplay.php 33431 2013-06-13 07:05:28Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -142,6 +142,7 @@ if(!$navtitle) {
 } else {
 	$nobbname = true;
 }
+$_GET['typeid'] = intval($_GET['typeid']);
 if(!empty($_GET['typeid']) && !empty($_G['forum']['threadtypes']['types'][$_GET['typeid']])) {
 	$navtitle = strip_tags($_G['forum']['threadtypes']['types'][$_GET['typeid']]).' - '.$navtitle;
 }
@@ -171,7 +172,7 @@ if($_G['forum']['password']) {
 	}
 }
 
-if($_G['forum']['price']) {
+if($_G['forum']['price'] && !$_G['forum']['ismoderator']) {
 	$membercredits = C::t('common_member_forum_buylog')->get_credits($_G['uid'], $_G['fid']);
 	$paycredits = $_G['forum']['price'] - $membercredits;
 	if($paycredits > 0) {
@@ -244,7 +245,7 @@ if(!empty($_G['forum']['threadsorts']['types'])) {
 		$forum_optionlist = getsortedoptionlist();
 	}
 }
-
+$_GET['sortid'] = intval($_GET['sortid']);
 $moderatedby = $_G['forum']['status'] != 3 ? moddisplay($_G['forum']['moderators'], 'forumdisplay') : '';
 $_GET['highlight'] = empty($_GET['highlight']) ? '' : dhtmlspecialchars($_GET['highlight']);
 if($_G['forum']['autoclose']) {
@@ -588,7 +589,7 @@ if($_G['forum']['picstyle']) {
 		if(!empty($_G['setting']['forumpicstyle']['thumbnum'])) {
 			$_G['tpp'] = $_G['setting']['forumpicstyle']['thumbnum'];
 		}
-		$stickycount = 0;
+		$stickycount = $showsticky = 0;
 	}
 }
 
@@ -613,7 +614,7 @@ $_G['forum_threadlist'] = $threadids = array();
 $_G['forum_colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
 
 $filterarr['sticky'] = 4;
-$filterarr['displayorder'] = $showsticky ? (!$filterbool && $stickycount ? array(0, 1) : array(0, 1, 2, 3, 4)) : array(0);
+$filterarr['displayorder'] = !$filterbool && $stickycount ? array(0, 1) : array(0, 1, 2, 3, 4);
 if($filter !== 'hot') {
 	$threadlist = array();
 	$indexadd = '';
@@ -622,7 +623,7 @@ if($filter !== 'hot') {
 		if($filterarr['digest']) {
 			$indexadd = " FORCE INDEX (digest) ";
 		}
-	} else {
+	} elseif($showsticky && $stickytids && is_array($stickytids)) {
 		$filterarr1 = $filterarr;
 		$filterarr1['inforum'] = '';
 		$filterarr1['intids'] = $stickytids;
@@ -637,60 +638,23 @@ if($filter !== 'hot') {
 		updateforumcount($_G['fid']);
 	}
 } else {
-	$today = strtotime(dgmdate(TIMESTAMP, 'Y-m-d'));
-	$hottime = dintval($_GET['hottime']);
+	$hottime = dintval(str_replace('-', '', $_GET['time']));
+	$multipage = '';
 	if($hottime && checkdate(substr($hottime, 4, 2), substr($hottime, 6, 2), substr($hottime, 0, 4))) {
-		$page = abs(floor(($today - strtotime($hottime)) / 86400));
+		$calendartime = abs($hottime);
+		$ctime = sprintf('%04d', substr($hottime, 0, 4)).'-'.sprintf('%02d', substr($hottime, 4, 2)).'-'.sprintf('%02d', substr($hottime, 6, 2));
+	} else {
+		$calendartime = dgmdate(strtotime(dgmdate(TIMESTAMP, 'Y-m-d')) - 86400, 'Ymd');
+		$ctime = dgmdate(strtotime(dgmdate(TIMESTAMP, 'Y-m-d')) - 86400, 'Y-m-d');
 	}
-	$caltimestamp = $today - $page * 86400;
-	$caldata = C::t('forum_threadcalendar')->fetch_by_fid_dateline($_G['fid'], dgmdate($caltimestamp, 'Ymd'));
+	$caldata = C::t('forum_threadcalendar')->fetch_by_fid_dateline($_G['fid'], $calendartime);
+	$_G['forum_threadcount'] = 0;
 	if($caldata) {
 		$hottids = C::t('forum_threadhot')->fetch_all_tid_by_cid($caldata['cid']);
 		$threadlist = C::t('forum_thread')->fetch_all_by_tid($hottids);
+		$_G['forum_threadcount'] = count($threadlist);
 	}
-	$startcal = C::t('forum_threadcalendar')->fetch_by_fid_dateline($_G['fid'], 0, 'dateline', 'ASC');
-	$pagenum = ($today - strtotime($startcal['dateline'])) / 86400;
-	$multiadd[] = 'filter=hot';
-	$multipage = multi($pagenum, 1, $page, "forum.php?mod=forumdisplay&fid=$_G[fid]".($multiadd ? '&'.implode('&', $multiadd) : '')."$multipage_archive", 0);
-	$firstthread = C::t('common_setting')->fetch('firstthread');
-	if(!$firstthread) {
-		$fthread = current(C::t('forum_thread')->fetch_all_new_thread_by_tid(0, 0, 1, 0, '>', 'ASC'));
-		$firstthread = $fthread['dateline'] ? $fthread['dateline'] : TIMESTAMP;
-		C::t('common_setting')->update('firstthread', $firstthread);
-	}
-	$startyear = dgmdate($firstthread, 'Y');
-	$startmonth = dgmdate($firstthread, 'm');
-	$nowyear = dgmdate(TIMESTAMP, 'Y');
-	$nowmonth = dgmdate(TIMESTAMP, 'm');
-	$calendar = array();
-	$ny = dgmdate($caltimestamp, 'Y');
-	$nm = dgmdate($caltimestamp, 'm');
-	$nd = gmdate('d', $caltimestamp + (getglobal('member/timeoffset')*3600));
-	for($year = $nowyear; $startyear <= $year; $year--) {
-		$calendar[$year] = array();
-		$month = 1;
-		$allmonth = 12;
-		if($year == $startyear) {
-			$month = $startmonth;
-		} elseif($year == $nowyear) {
-			$allmonth = $nowmonth;
-		}
-		for(;$month <= $allmonth; $month++) {
-			$month = sprintf('%02d', $month);
-			if($ny == $year && $nm == $month) {
-				$allday = date('t', $caltimestamp);
-				if($nowyear == $ny && $nowmonth == $nm) {
-					$allday = gmdate('d', TIMESTAMP - 86400);
-				}
-				for($day = 1; $day <= $allday; $day++) {
-					$day = sprintf('%02d', $day);
-					$calendar[$year][$month][$day] = $day;
-				}
-			} else {
-				$calendar[$year][$month] = $month;
-			}
-		}
-	}
+
 }
 
 $_G['ppp'] = $_G['forum']['threadcaches'] && !$_G['uid'] ? $_G['setting']['postperpage'] : $_G['ppp'];
@@ -841,8 +805,12 @@ foreach($threadlist as $thread) {
 }
 
 $livethread = array();
-if($_G['forum']['livetid'] && $page == 1 && !$filter) {
+if($_G['forum']['livetid'] && $page == 1 && (!$filter || ($filter == 'sortid' && $_G['forum']['threadsorts']['defaultshow'] == $_GET['sortid']))) {
+	include_once libfile('function/post');
 	$livethread = C::t('forum_thread')->fetch($_G['forum']['livetid']);
+	$livepost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_G['forum']['livetid']);
+	$livemessage = messagecutstr($livepost['message'], 200);
+	$liveallowpostreply = ($_G['forum']['allowreply'] != -1) && (($livethread['isgroup'] || (!$livethread['closed'] && !checkautoclose($livethread))) || $_G['forum']['ismoderator']) && ((!$_G['forum']['replyperm'] && $_G['group']['allowreply']) || ($_G['forum']['replyperm'] && forumperm($_G['forum']['replyperm'])) || $_G['forum']['allowreply']);
 }
 
 if($rushtids) {

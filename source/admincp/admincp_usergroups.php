@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 32082 2012-11-07 08:00:31Z zhengqingpeng $
+ *      $Id: admincp_usergroups.php 33099 2013-04-25 05:49:35Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -731,12 +731,6 @@ EOT;
 			$raterangearray[$range[0]] = array('isself' => $range[1], 'min' => $range[2], 'max' => $range[3], 'mrpd' => $range[4]);
 		}
 
-		$loginrewardarray = array();
-		foreach(explode("\n", $group['loginreward']) as $rewardinfo) {
-			$reward = explode("\t", $rewardinfo);
-			$loginrewardarray[$reward[0]] = $reward[1];
-		}
-
 		if($multiset) {
 			showtagheader('div', 'credit', $anchor == 'credit');
 			showtableheader();
@@ -819,24 +813,6 @@ EOT;
 				echo '</tr>';
 			}
 			echo '<tr><td class="lineheight" colspan="9">'.$lang['usergroups_edit_credit_rate_tips'].'</td></tr>';
-			showtablefooter();
-
-			showtableheader('usergroups_edit_credit_everyday_login', '');
-
-			for($i = 1; $i <= 8; $i++) {
-				if(isset($_G['setting']['extcredits'][$i])) {
-					$everyday[$i] = $_G['setting']['extcredits'][$i]['title'];
-				}
-			}
-
-			showsubtitle($everyday);
-			echo '<tr>';
-			for($i = 1; $i <= 8; $i++) {
-				if(isset($_G['setting']['extcredits'][$i])) {
-					echo '<td class="td28"><input type="text" class="txt" name="loginrewardnew['.$i.']" size="3" value="'.$loginrewardarray[$i].'"></td>';
-				}
-			}
-			echo '</tr>';
 			showtablefooter();
 			showtagfooter('div');
 		}
@@ -984,24 +960,11 @@ EOT;
 			}
 		}
 
-		if(is_array($_GET['loginrewardnew'])) {
-			foreach($_GET['loginrewardnew'] as $key => $reward) {
-				if($key >= 1 && $key <= 8 && $reward) {
-					$reward = intval($reward);
-					$key = intval($key);
-					$_GET['loginrewardnew'][$key] = $key."\t".$reward;
-				} else {
-					unset($_GET['loginrewardnew'][$key]);
-				}
-			}
-		}
-
 		if(in_array($group['groupid'], array(1))) {
 			$_GET['allowvisitnew'] = 2;
 		}
 
 		$raterangenew = $_GET['raterangenew'] ? implode("\n", $_GET['raterangenew']) : '';
-		$loginrewardnew = $_GET['loginrewardnew'] ? implode("\n", $_GET['loginrewardnew']) : '';
 		$maxpricenew = $_GET['maxpricenew'] < 0 ? 0 : intval($_GET['maxpricenew']);
 		$maxpostsperhournew = $_GET['maxpostsperhournew'] > 255 ? 255 : intval($_GET['maxpostsperhournew']);
 		$maxthreadsperhournew = $_GET['maxthreadsperhournew'] > 255 ? 255 : intval($_GET['maxthreadsperhournew']);
@@ -1171,7 +1134,6 @@ EOT;
 			'allowfollowcollection' => intval($_GET['allowfollowcollectionnew']),
 			'exempt' => $exemptnew,
 			'raterange' => $raterangenew,
-			'loginreward' => $loginrewardnew,
 			'ignorecensor' => intval($_GET['ignorecensornew']),
 			'allowsendallpm' => intval($_GET['allowsendallpmnew']),
 			'allowsendpmmaxnum' => intval($_GET['allowsendpmmaxnumnew']),
@@ -1236,7 +1198,9 @@ EOT;
 		$fieldarray = array_merge($fields['usergroups'], $fields['usergroupfields']);
 		$listfields = array_diff($fieldarray, $delfields['usergroups']);
 		foreach($listfields as $field) {
-			$optselect .= '<option value="'.$field.'">'.($lang['project_option_group_'.$field] ? $lang['project_option_group_'.$field] : $field).'</option>';
+			if(isset($lang['project_option_group_'.$field])) {
+				$optselect .= '<option value="'.$field.'">'.$lang['project_option_group_'.$field].'</option>';
+			}
 		}
 		$optselect .= '</select>';
 		shownav('user', 'usergroups_copy');

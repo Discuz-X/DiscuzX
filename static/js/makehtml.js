@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: makehtml.js 32680 2013-02-28 09:32:07Z zhangguosheng $
+	$Id: makehtml.js 33047 2013-04-12 08:46:56Z zhangguosheng $
 */
 
 function make_html(url, obj) {
@@ -15,7 +15,7 @@ function make_html(url, obj) {
 		if(ret && (ret=ret['data']) && ret['status'] == 'html_ok') {
 			if(obj) {
 				obj.style.color = 'blue';
-				obj.innerHTML = '<a href="./'+ret['path']+'" target="_blank">'+title+'生成成功</a>';
+				obj.innerHTML = '<a href="'+ret['path']+'" target="_blank">'+title+'生成成功</a>';
 			}
 			if(ret['nexturl']) {
 				if(obj) {
@@ -99,13 +99,13 @@ make_html_batch.prototype = {
 					makehtml_error.innerHTML = '错误信息';
 					obj.dom.appendChild(makehtml_error);
 				}
-				makehtml_error.innerHTML += '<br>[id]' + id + ':' + ret['message'];
+				makehtml_error.innerHTML += '<br>[id:' + id + ']' + ret['message'];
 				makehtml_error.scrollTop = makehtml_error.scrollHeight;
 			}
 
 			if(obj.single) {
 				child.style.color = 'blue';
-				child.innerHTML = '<div class="mk_msg">'+'<a href="./'+data['path']+'" target="_blank">'+obj.dom.getAttribute('mktitle')+'</a>生成成功'+'</div>';
+				child.innerHTML = '<div class="mk_msg">'+'<a href="'+data['path']+'" target="_blank">'+obj.dom.getAttribute('mktitle')+'</a>生成完成'+'</div>';
 				if(obj.callback) {
 					setTimeout(function(){(obj.callback)();}, 2000);
 				}
@@ -118,7 +118,7 @@ make_html_batch.prototype = {
 					child.innerHTML = str+'正在生成第'+current+'个，已经完成'+cent+'%';
 				} else {
 					child.style.color = 'blue';
-					child.innerHTML = str+obj.dom.getAttribute('mktitle')+'生成成功';
+					child.innerHTML = str+obj.dom.getAttribute('mktitle')+'生成完成';
 				}
 				if(id) {
 					obj.make(id, child);

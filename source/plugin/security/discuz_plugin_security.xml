@@ -6,13 +6,13 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[·ÀË®Ç½]]></item>
+			<item id="name"><![CDATA[é˜²æ°´å¢™]]></item>
 			<item id="identifier"><![CDATA[security]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[security/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.10]]></item>
+			<item id="version"><![CDATA[1.11]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[security]]></item>
@@ -45,18 +45,21 @@
 		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
 		<item id="language">
 			<item id="scriptlang">
-				<item id="banuser_tips_qq"><![CDATA[±§Ç¸£¬ÄúµÄÕÊºÅ±»ÏµÍ³½ûÑÔ£¬Äú¿ÉÒÔ°ó¶¨QQ½â³ý½ûÑÔ×´Ì¬¡£<a href="connect.php?mod=login&op=init">°ó¶¨QQ</a>]]></item>
-				<item id="banuser_tips_seccode"><![CDATA[±§Ç¸£¬ÄúµÄÕÊºÅ±»ÏµÍ³½ûÑÔ£¬Äú¿ÉÒÔµã»÷<a href="#" onclick="showWindow('security','plugin.php?id=security:unlock')">ÕâÀï</a>½â³ý½ûÑÔ²Ù×÷¡£]]></item>
-				<item id="unlock_success"><![CDATA[½â½û³É¹¦£¡]]></item>
-				<item id="wrongcode"><![CDATA[ÑéÖ¤ÂëÑéÖ¤Ê§°Ü£¬ÎÞ·¨½â½û¡£]]></item>
-				<item id="title"><![CDATA[·ÀË®Ç½±£ÎÀÍøÕ¾Ô¶ÀëÇÖº¦]]></item>
+				<item id="banuser_tips_qq"><![CDATA[æŠ±æ­‰ï¼Œæ‚¨çš„å¸å·è¢«ç³»ç»Ÿç¦è¨€ï¼Œæ‚¨å¯ä»¥ç»‘å®šQQè§£é™¤ç¦è¨€çŠ¶æ€ã€‚<a href="connect.php?mod=login&op=init">ç»‘å®šQQ</a>]]></item>
+				<item id="banuser_tips_seccode"><![CDATA[æŠ±æ­‰ï¼Œæ‚¨çš„å¸å·è¢«ç³»ç»Ÿç¦è¨€ï¼Œæ‚¨å¯ä»¥ç‚¹å‡»<a href="#" onclick="showWindow('security','plugin.php?id=security:unlock')">è¿™é‡Œ</a>è§£é™¤ç¦è¨€æ“ä½œã€‚]]></item>
+				<item id="unlock_success"><![CDATA[è§£ç¦æˆåŠŸï¼]]></item>
+				<item id="wrongcode"><![CDATA[éªŒè¯ç éªŒè¯å¤±è´¥ï¼Œæ— æ³•è§£ç¦ã€‚]]></item>
+				<item id="title"><![CDATA[é˜²æ°´å¢™ä¿å«ç½‘ç«™è¿œç¦»ä¾µå®³]]></item>
+				<item id="safelogintips"><![CDATA[ä¸ºé¿å…æ‚¨çš„å¸å·è¢«ç›—ç”¨ï¼Œè¯·æ‚¨ç»‘å®šQQå¸å·åŽå‘å¸–ï¼Œç»‘å®šåŽè¯·ä½¿ç”¨QQå¸å·ç™»å½•]]></item>
+				<item id="qqloginaloneopened"><![CDATA[å·²å¼€å¯QQç‹¬ç«‹ç™»å½•è®¾ç½®]]></item>
+				<item id="quicklogin"><![CDATA[å¿«æ·ç™»å½•]]></item>
 			</item>
 			<item id="templatelang">
-				<item id="unlock_title"><![CDATA[ÇëÊäÈëÑéÖ¤Âë£¬½â³ý½ûÑÔ×´Ì¬]]></item>
-				<item id="unlock"><![CDATA[½â½û]]></item>
+				<item id="unlock_title"><![CDATA[è¯·è¾“å…¥éªŒè¯ç ï¼Œè§£é™¤ç¦è¨€çŠ¶æ€]]></item>
+				<item id="unlock"><![CDATA[è§£ç¦]]></item>
 			</item>
 			<item id="installlang">
-				<item id="cron"><![CDATA[·ÀË®Ç½Ã¿ÈÕ¼Æ»®ÈÎÎñ]]></item>
+				<item id="cron"><![CDATA[é˜²æ°´å¢™æ¯æ—¥è®¡åˆ’ä»»åŠ¡]]></item>
 			</item>
 		</item>
 	</item>

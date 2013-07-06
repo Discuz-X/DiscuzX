@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 32028 2012-10-31 10:12:22Z zhangjie $
+ *      $Id: lang_template.php 32915 2013-03-22 08:25:34Z zhangjie $
  *
  *      This file is automatically generate
  */
@@ -210,6 +210,9 @@ $lang = array (
   'group_live_fastreply_notice' => '#在这里快速回复#',
   'group_live_post' => '发表',
   'group_live_nocontent_error' => '抱歉，您尚未输入内容',
+  'login_to_reply' => '您需要登录后才可以回帖',
+  'no_permission_to_post' => '您现在无权发帖。',
+  'click_to_show_reason' => '点击查看原因',
 );
 
 ?>

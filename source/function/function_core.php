@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 32577 2013-02-22 01:50:27Z zhangguosheng $
+ *      $Id: function_core.php 33364 2013-06-03 02:30:46Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -583,7 +583,9 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	$filebak = $file;
 
 	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT') && strpos($file, $_G['mobiletpl'][IN_MOBILE].'/') === false || (isset($_G['forcemobilemessage']) && $_G['forcemobilemessage'])) {
-		$oldfile .= !empty($_G['inajax']) && ($oldfile == 'common/header' || $oldfile == 'common/footer') ? '_ajax' : '';
+		if(IN_MOBILE == 2) {
+			$oldfile .= !empty($_G['inajax']) && ($oldfile == 'common/header' || $oldfile == 'common/footer') ? '_ajax' : '';
+		}
 		$file = $_G['mobiletpl'][IN_MOBILE].'/'.$oldfile;
 	}
 
@@ -633,12 +635,11 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 }
 
 function dsign($str, $length = 16){
-	return substr(md5(getglobal('uid').$str.getglobal('authkey')), 0, ($length ? max(8, $length) : 16));
+	return substr(md5($str.getglobal('security/authkey')), 0, ($length ? max(8, $length) : 16));
 }
 
 function modauthkey($id) {
-	global $_G;
-	return md5($_G['username'].$_G['uid'].$_G['authkey'].substr(TIMESTAMP, 0, -7).$id);
+	return md5(getglobal('username').getglobal('uid').getglobal('authkey').substr(TIMESTAMP, 0, -7).$id);
 }
 
 function getcurrentnav() {
@@ -729,29 +730,36 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		$time = TIMESTAMP + $timeoffset * 3600 - $timestamp;
 		if($timestamp >= $todaytimestamp) {
 			if($time > 3600) {
-				return '<span title="'.$s.'">'.intval($time / 3600).'&nbsp;'.$lang['hour'].$lang['before'].'</span>';
+				$return = intval($time / 3600).'&nbsp;'.$lang['hour'].$lang['before'];
 			} elseif($time > 1800) {
-				return '<span title="'.$s.'">'.$lang['half'].$lang['hour'].$lang['before'].'</span>';
+				$return = $lang['half'].$lang['hour'].$lang['before'];
 			} elseif($time > 60) {
-				return '<span title="'.$s.'">'.intval($time / 60).'&nbsp;'.$lang['min'].$lang['before'].'</span>';
+				$return = intval($time / 60).'&nbsp;'.$lang['min'].$lang['before'];
 			} elseif($time > 0) {
-				return '<span title="'.$s.'">'.$time.'&nbsp;'.$lang['sec'].$lang['before'].'</span>';
+				$return = $time.'&nbsp;'.$lang['sec'].$lang['before'];
 			} elseif($time == 0) {
-				return '<span title="'.$s.'">'.$lang['now'].'</span>';
+				$return = $lang['now'];
 			} else {
-				return $s;
+				$return = $s;
+			}
+			if($time >=0 && !defined('IN_MOBILE')) {
+				$return = '<span title="'.$s.'">'.$return.'</span>';
 			}
 		} elseif(($days = intval(($todaytimestamp - $timestamp) / 86400)) >= 0 && $days < 7) {
 			if($days == 0) {
-				return '<span title="'.$s.'">'.$lang['yday'].'&nbsp;'.gmdate($tformat, $timestamp).'</span>';
+				$return = $lang['yday'].'&nbsp;'.gmdate($tformat, $timestamp);
 			} elseif($days == 1) {
-				return '<span title="'.$s.'">'.$lang['byday'].'&nbsp;'.gmdate($tformat, $timestamp).'</span>';
+				$return = $lang['byday'].'&nbsp;'.gmdate($tformat, $timestamp);
 			} else {
-				return '<span title="'.$s.'">'.($days + 1).'&nbsp;'.$lang['day'].$lang['before'].'</span>';
+				$return = ($days + 1).'&nbsp;'.$lang['day'].$lang['before'];
+			}
+			if(!defined('IN_MOBILE')) {
+				$return = '<span title="'.$s.'">'.$return.'</span>';
 			}
 		} else {
-			return $s;
+			$return = $s;
 		}
+		return $return;
 	} else {
 		return gmdate($format, $timestamp);
 	}
@@ -869,8 +877,13 @@ function cutstr($string, $length, $dot = ' ...') {
 		$strcut = substr($string, 0, $n);
 
 	} else {
+		$_length = $length - 1;
 		for($i = 0; $i < $length; $i++) {
-			$strcut .= ord($string[$i]) > 127 ? $string[$i].$string[++$i] : $string[$i];
+			if(ord($string[$i]) <= 127) {
+				$strcut .= $string[$i];
+			} else if($i < $_length) {
+				$strcut .= $string[$i].$string[++$i];
+			}
 		}
 	}
 
@@ -1189,6 +1202,7 @@ function hookscriptoutput($tplfile) {
 
 function pluginmodule($pluginid, $type) {
 	global $_G;
+	$pluginid = $pluginid ? preg_replace("/[^A-Za-z0-9_:]/", '', $pluginid) : '';
 	if(!isset($_G['cache']['plugin'])) {
 		loadcache('plugin');
 	}

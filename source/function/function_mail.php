@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_mail.php 28969 2012-03-21 04:07:45Z zhangguosheng $
+ *      $Id: function_mail.php 33434 2013-06-14 02:01:30Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,7 +31,7 @@ function sendmail($toemail, $subject, $message, $from = '') {
 			$_G['setting']['mail']['auth_password'] = $smtp['auth_password'];
 		}
 	}
-	$message = preg_replace("/href\=\"(?!http\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\1"', $message);
+	$message = preg_replace("/href\=\"(?!(http|https)\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\2"', $message);
 
 $message = <<<EOT
 <html>
@@ -194,7 +194,7 @@ function sendmail_cron($toemail, $subject, $message) {
 	} else {
 		$cid = C::t('common_mailcron')->insert(array('email' => $toemail), true);
 	}
-	$message = preg_replace("/href\=\"(?!http\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\1"', $message);
+	$message = preg_replace("/href\=\"(?!(http|https)\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\1"', $message);
 	$setarr = array(
 		'cid' => $cid,
 		'subject' => $subject,
@@ -238,7 +238,7 @@ function sendmail_touser($touid, $subject, $message, $mailtype='') {
 				'sendtime' => $sendtime,
 			), true);
 		}
-		$message = preg_replace("/href\=\"(?!http\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\1"', $message);
+		$message = preg_replace("/href\=\"(?!(http|https)\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\1"', $message);
 		$setarr = array(
 			'cid' => $cid,
 			'subject' => $subject,

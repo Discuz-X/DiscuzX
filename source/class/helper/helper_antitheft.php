@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_antitheft.php 32598 2013-02-26 02:30:32Z zhangguosheng $
+ *      $Id: helper_antitheft.php 32740 2013-03-05 08:32:47Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,9 @@ class helper_antitheft {
 		global $_G;
 		$ip = ip2long($_G['clientip']);
 		if(!$ip || $ip == -1) return false;
+		if($ip < 0) {
+			$ip = sprintf('%u', $ip);
+		}
 		loadcache('antitheft');
 		$antitheft = $_G['cache']['antitheft'];
 

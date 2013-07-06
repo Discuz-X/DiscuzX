@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_group.php 32153 2012-11-16 05:44:57Z zhangjie $
+ *      $Id: admincp_group.php 33340 2013-05-29 05:37:43Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -442,8 +442,8 @@ var rowtypedata = [
 				$targetid = $targetgroup;
 			}
 			if($targetid) {
-				$targetgroup = C::t('forum_forum')->fetch($targetid);
-				$targetname = $targetgroup['name'];
+				$targetname = C::t('forum_forum')->fetch($targetid);
+				$targetname = $targetname['name'];
 				if(empty($targetname)) {
 					cpmsg('group_targetid_error');
 				}

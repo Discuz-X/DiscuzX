@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_page.php 32515 2013-02-04 07:12:18Z zhangguosheng $
+ *      $Id: helper_page.php 33126 2013-04-26 09:56:46Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -122,7 +122,15 @@ class helper_page {
 		if(strpos($mpurl, '{page}') !== false) {
 			return trim(str_replace('{page}', ($page == 1 ? '' : $page), $mpurl), '?');
 		} else {
-			return $mpurl.$pagevar.$page;
+			$separator = '';
+			if($pagevar[0] !== '&' && $pagevar[0] !== '?') {
+				if(strpos($mpurl, '?') !== FALSE) {
+					$separator = '';
+				} else {
+					$separator = '?';
+				}
+			}
+			return $mpurl.$separator.$pagevar.$page;
 		}
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 32554 2013-02-19 10:33:44Z monkey $
+ *      $Id: forum_ajax.php 33457 2013-06-19 04:15:44Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -284,6 +284,10 @@ if($_GET['action'] == 'checkusername') {
 		$forum_field = daddslashes($forum_field);
 		$todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
 		foreach(C::t('forum_thread')->fetch_all_by_fid_lastpost($fid, $time, TIMESTAMP) as $thread) {
+			$thread['icontid'] = $thread['forumstick'] || !$thread['moved'] && $thread['isgroup'] != 1 ? $thread['tid'] : $thread['closed'];
+			if(!$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])) {
+				$thread['icontid'] = $thread['closed'] > 1 ? $thread['closed'] : $thread['tid'];
+			}
 			list($thread['subject'], $thread['author'], $thread['lastposter']) = daddslashes(array($thread['subject'], $thread['author'], $thread['lastposter']));
 			$thread['dateline'] = $thread['dateline'] > $todaytime ? "<span class=\"xi1\">".dgmdate($thread['dateline'], 'd')."</span>" : "<span>".dgmdate($thread['dateline'], 'd')."</span>";
 			$thread['lastpost'] = dgmdate($thread['lastpost']);
@@ -315,9 +319,9 @@ if($_GET['action'] == 'checkusername') {
 			}
 			$target = $thread['isgroup'] == 1 || $thread['forumstick'] ? ' target="_blank"' : ' onclick="atarget(this)"';
 			if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
-				$thread['threadurl'] = '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '').'"'.$thread['highlight'].$target.'class="s xst z">'.$thread['subject'].'</a>';
+				$thread['threadurl'] = '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '').'"'.$thread['highlight'].$target.'class="s xst">'.$thread['subject'].'</a>';
 			} else {
-				$thread['threadurl'] = '<a href="forum.php?mod=viewthread&amp;tid='.$thread['tid'].'"'.$thread['highlight'].$target.'class="s xst z">'.$thread['subject'].'</a>';
+				$thread['threadurl'] = '<a href="forum.php?mod=viewthread&amp;tid='.$thread['tid'].'"'.$thread['highlight'].$target.'class="s xst">'.$thread['subject'].'</a>';
 			}
 			if(in_array($thread['displayorder'], array(1, 2, 3, 4))) {
 				$thread['id'] = 'stickthread_'.$thread['tid'];
@@ -454,9 +458,8 @@ if($_GET['action'] == 'checkusername') {
 			require_once libfile('function/post');
 		}
 		$_GET['message'] = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $_GET['message']);
-		$_GET['message'] = addcslashes($_GET['message'], '/"');
-
 	}
+	$_GET['message'] = addcslashes($_GET['message'], '/"\'');
 	print <<<EOF
 		<script type="text/javascript">
 			parent.ATTACHORIMAGE = 1;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_topic.php 32718 2013-03-04 09:21:06Z zhangguosheng $
+ *      $Id: portal_topic.php 32789 2013-03-12 02:51:00Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,7 +37,7 @@ if($_GET['diy'] == 'yes' && $topic['uid'] != $_G['uid'] && !$_G['group']['allowm
 	showmessage('topic_edit_nopermission');
 }
 
-if($topic['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy'])) {
+if(!empty($_G['setting']['makehtml']['flag']) && $topic['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy'])) {
 	dheader('location:'.fetch_topic_url($topic));
 }
 

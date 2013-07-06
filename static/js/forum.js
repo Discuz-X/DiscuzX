@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum.js 32719 2013-03-04 09:54:46Z monkey $
+	$Id: forum.js 33082 2013-04-18 11:13:53Z zhengqingpeng $
 */
 
 function saveData(ignoreempty) {
@@ -540,7 +540,7 @@ function fixed_top_nv(eleid, disbind) {
 					this.nv.style.top = '0';
 					this.nv.style.left = this.nvdata.left + 'px';
 					this.nv.style.position = 'fixed';
-					this.nv.style.zIndex = '200';
+					this.nv.style.zIndex = '199';
 					this.nv.style.opacity = 0.85;
 				}
 			} else {
@@ -677,7 +677,10 @@ function hideStickThread(tid) {
 		}
 	}
 }
-
+function viewhot() {
+	var obj = $('hottime');
+	window.location.href = "forum.php?mod=forumdisplay&filter=hot&fid="+obj.getAttribute('fid')+"&time="+obj.value;
+}
 function clearStickThread () {
 	saveUserdata('sticktids', '[]');
 	location.reload();

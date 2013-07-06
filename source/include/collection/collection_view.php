@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_view.php 31387 2012-08-23 02:15:12Z chenmengshu $
+ *      $Id: collection_view.php 33065 2013-04-16 10:06:07Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,9 +28,7 @@ $navtitle = $_G['collection']['name'].' - '.lang('core', 'title_collection');
 
 $permission = checkcollectionperm($_G['collection'], $_G['uid']);
 $avgrate = number_format($_G['collection']['rate'], 1);
-require_once libfile('function/discuzcode');
 
-$_G['collection']['desc'] = discuzcode($_G['collection']['desc']);
 $start = ($page-1)*$tpp;
 
 $collectionfollowdata = C::t('forum_collectionfollow')->fetch_by_ctid_uid($ctid, $_G['uid']);
@@ -86,12 +84,10 @@ if(!$op || $op == 'related') {
 	}
 
 	if($_G['collection']['commentnum'] > 0) {
-		require_once libfile('function/discuzcode');
-
 		$commentlist = C::t('forum_collectioncomment')->fetch_all_by_ctid($_G['collection']['ctid'], 0, 5);
 		foreach($commentlist as &$curvalue) {
 			$curvalue['dateline'] = dgmdate($curvalue['dateline'], 'u', '9999', getglobal('setting/dateformat'));
-			$curvalue['message'] = cutstr(strip_tags(discuzcode($curvalue['message'])), 50);
+			$curvalue['message'] = cutstr($curvalue['message'], 50);
 			$curvalue['rateimg'] = imgdisplayrate($curvalue['rate']);
 		}
 
@@ -103,14 +99,11 @@ if(!$op || $op == 'related') {
 } elseif($op == 'comment') {
 	$navtitle = lang('core', 'title_collection_comment_list').' - '.$navtitle;
 	if($_G['collection']['commentnum'] > 0) {
-		require_once libfile('function/discuzcode');
-
 		$start = ($page-1)*$_G['setting']['postperpage'];
 
 		$commentlist = C::t('forum_collectioncomment')->fetch_all_by_ctid($_G['collection']['ctid'], $start, $_G['setting']['postperpage']);
 		foreach($commentlist as &$curvalue) {
 			$curvalue['dateline'] = dgmdate($curvalue['dateline'], 'u', '9999', getglobal('setting/dateformat'));
-			$curvalue['message'] = discuzcode($curvalue['message']);
 			$curvalue['rateimg'] = imgdisplayrate($curvalue['rate']);
 		}
 
