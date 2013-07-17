@@ -134,6 +134,16 @@ Desktop.ini
 
 /config/config_global.php
 /config/config_ucenter.php
-/data/
+/data/addonmd5
+/data/attachment
+/data/avatar
+/data/backup*
+/data/cache
+/data/download
+/data/ipdata
+/data/log
+/data/plugindata
+/data/template
+/data/threadcache
 /source/plugin/
 /template/
