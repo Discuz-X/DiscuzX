@@ -145,5 +145,8 @@ Desktop.ini
 /data/plugindata
 /data/template
 /data/threadcache
+/data/update*
+/data/sysdata
+/data/diy
 /source/plugin/
 /template/
