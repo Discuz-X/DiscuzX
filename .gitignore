@@ -148,5 +148,6 @@ Desktop.ini
 /data/update*
 /data/sysdata
 /data/diy
+/data/_debug*
 /source/plugin/
 /template/
