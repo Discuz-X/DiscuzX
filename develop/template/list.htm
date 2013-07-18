@@ -1,0 +1,34 @@
+<!--{if $plugin_list}-->
+	<div class="bm">
+		<div class="bm_c">
+			<table class="dt mbm">
+				<!--{loop $plugin_list $pluginid $plugin}-->
+				<tr>
+					<td class="m avt"><a href="develop.php?mod=plugin&action=edit&pluginid=$plugin[pluginid]"><img width="40" height="40" src="{if $plugin['imgsrc']}$plugin['imgsrc']{else}static/image/admincp/plugin_logo.png{/if}"></a></td>
+					<td class="o">
+						<h5><a href="develop.php?mod=plugin&action=edit&pluginid=$plugin[pluginid]">$plugin['name'] <span class="xw0">$plugin['version']</span></a></h5>
+						<p>作者: $plugin['copyright']</p>
+					</td>
+					<td>
+						<p>$plugin['description']</p>
+						<p>$plugin['submenuitem']</p>
+					</td>
+					<td class="add">
+						<!--{if $_G['cache']['plugin'][$plugin['identifier']]}-->
+							<a href="{ADMINSCRIPT}?action=plugins&operation=config&do=$plugin['pluginid']"  target="_blank">$devlang['config']</a>
+							<span class="pipe">|</span>
+						<!--{/if}-->
+						<a href="develop.php?mod=plugin&action=edit&pluginid=$plugin[pluginid]">$devlang[plugins_editlink]</a>
+					</td>
+				</tr>
+				<!--{/loop}-->
+			</table>
+		</div>
+	</div>
+<!--{else}-->
+	<div class="bm bmn">
+		<div class="bm_c hm">
+			<p style="margin-top: 150px;"><a href="develop.php?mod=plugin&action=create" hidefocus="true" class="pn pnc pnc2 pncb xs3" style="display: inline-block;"><strong>创建新插件</strong></a></p>
+		</div>
+	</div>
+<!--{/if}-->

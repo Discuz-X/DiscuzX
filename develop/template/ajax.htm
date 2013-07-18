@@ -1,0 +1,26 @@
+<!--{template common/header_ajax}-->
+<!--{if $_GET['operation'] == 'gethook'}-->
+<select name="sort" id="sort" onchange="showhooklist()" class="ps">
+	<option value="0">钩子分类</option>
+	<!--{loop $hooklist $key $pages}-->
+	<option value="$key"{if $key == $sort} selected="selected"{/if}>$pages['lang']</option>
+	<!--{/loop}-->
+</select>
+<!--{/if}-->
+<!--{if $pagelist}-->
+	<select name="page" id="page" onchange="showhooklist()" class="ps">
+	<option value="0">钩子页面</option>
+	<!--{loop $pagelist $key $pval}-->
+	<option value="$key"{if $key == $page} selected="selected"{/if}>$pval</option>
+	<!--{/loop}-->
+</select>
+<!--{/if}-->
+<!--{if $hooks}-->
+<ul class="mtm">
+	<!--{loop $hooks $key $hval}-->
+		<li class="pbn"><label><input type="checkbox" name="newhook[$key]" class="pc" value="$key" />($hval[return]) $key{if $hval[version]} <span class="cv">$hval[version]</span>{/if}</label></li>
+		<li class="pbn"><label><input type="checkbox" name="newhook[{$key}_output]" class="pc" value="{$key}_output" />($hval[return]) {$key}_output{if $hval[version]} <span class="cv">$hval[version]</span>{/if}</label></li>
+	<!--{/loop}-->
+</ul>
+<!--{/if}-->
+<!--{template common/footer_ajax}-->

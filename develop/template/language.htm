@@ -1,0 +1,100 @@
+<div class="bm">
+	<!--{if $action == 'edit'}-->
+		<div class="bm_h">
+			<h2>设计 $plugin['name']</h2><!--{if $plugin['version']}-->&nbsp;$plugin['version']<!--{/if}-->
+		</div>
+	<!--{/if}-->
+	<div class="bm_c cl">
+
+		<!--{eval include template('nav', 0, 'develop/template');}-->
+
+		<script type="text/JavaScript">
+		var rowtypedata = [
+			[
+				[1,'<input type="text" name="languagenew_key[]" class="px" value="" />'],
+				[1,'<input type="text" name="languagenew_val[]" class="px" value="" size="50" />']
+			],
+			[
+				[1,'<input name="scriptlangnew_key[]" value="" type="text" class="px" />'],
+				[1,'<input type="text" name="scriptlangnew_val[]" class="px" value="" size="50" />']
+			],
+			[
+				[1,'<input name="installlangnew_key[]" value="" type="text" class="px" />'],
+				[1,'<input type="text" name="installlangnew_val[]" class="px" value="" size="50" />']
+			]
+		]
+		function showlang(id) {
+			var langarr = Array('templatelang','scriptlang','installlang');
+			for(i in langarr) {
+				if(langarr[i] == id) {
+					$(id).style.display = '';
+					$(id + '_ctrl').className = 'a';
+				} else {
+					$(langarr[i]).style.display = 'none';
+					$(langarr[i] + '_ctrl').className = '';
+				}
+			}
+		}
+		</script>
+		<form name="createform" method="post" autocomplete="off" action="develop.php?mod=plugin&action=$action&operation=$operation&pluginid=$pluginid">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="pluginsubmit" value="true" />
+			<input type="hidden" name="pluginid" value="$pluginid" />
+			<ul class="tbmu bbda">
+				<li class="pbn">当您需要发布支持多编码的插件包时，您应该将插件与模板中的语言都提取出来</li>
+				<li class="pbn">PHP 代码中使用方式：lang('plugin/唯一标识符(identifier)', '语言包变量名称')</li>
+				<li>模板代码中使用方式：$tpllang</li>
+			</ul>
+			<p class="tbmu mtm"><a href="javascript:void(0)" id="templatelang_ctrl" class="a" onclick="showlang('templatelang');">模板语言包</a><span class="pipe">|</span><a href="javascript:void(0)" id="scriptlang_ctrl" onclick="showlang('scriptlang');">程序语言包</a><span class="pipe">|</span><a href="javascript:void(0)" id="installlang_ctrl" onclick="showlang('installlang');">安装程序语言包</a></p>
+			<table class="dt mbw" id="templatelang">
+				<tr><th class="o">变量名称</th><th>中文内容</th></tr>
+				<!--{loop $templatelang[$plugin['identifier']] $key $val}-->
+				<tr>
+					<td>
+						<input type="text" name="languagenew_key[]" class="px" value="$key" />
+					</td>
+					<td>
+						<input type="text" name="languagenew_val[]" class="px" value="$val" size="50" />
+					</td>
+				</tr>
+				<!--{/loop}-->
+				<tr><td><a class="addtr" onclick="addrow(this, 0)" href="javascript:;">增加</a></td><td></td></tr>
+			</table>
+			<table class="dt mbw" id="scriptlang" style="display: none">
+				<tr><th class="o">变量名称</th><th>中文内容</th></tr>
+				<!--{loop $scriptlang[$plugin['identifier']] $key $val}-->
+				<tr>
+					<td>
+						<input type="text" name="scriptlangnew_key[]" class="px" value="$key" />
+					</td>
+					<td>
+						<input type="text" name="scriptlangnew_val[]" class="px" value="$val" size="50" />
+					</td>
+				</tr>
+				<!--{/loop}-->
+				<tr><td><a class="addtr" onclick="addrow(this, 1)" href="javascript:;">增加</a></td><td></td></tr>
+			</table>
+			<table class="dt mbw" id="installlang" style="display: none">
+				<tr><th class="o">变量名称</th><th>中文内容</th></tr>
+				<!--{loop $installlang[$plugin['identifier']] $key $val}-->
+				<tr>
+					<td>
+						<input type="text" name="installlangnew_key[]" class="px" value="$key" />
+					</td>
+					<td>
+						<input type="text" name="installlangnew_val[]" class="px" value="$val" size="50" />
+					</td>
+				</tr>
+				<!--{/loop}-->
+				<tr><td><a class="addtr" onclick="addrow(this, 2)" href="javascript:;">增加</a></td><td></td></tr>
+			</table>
+			<div class="pbm">
+				<button value="true" class="pn pnc" name="pluginsbt" type="submit"><strong><!--{if $action == 'edit'}-->提 交<!--{else}-->下一步<!--{/if}--></strong></button>
+				<!--{if $action == 'create'}-->
+					&nbsp;<a href="develop.php?mod=plugins&action=create&operation=style&pluginid=$pluginid">跳过</a>
+				<!--{/if}-->
+			</div>
+		</form>
+
+	</div>
+</div>

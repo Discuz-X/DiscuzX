@@ -1,0 +1,194 @@
+<div class="bm">
+	<!--{if $action == 'edit'}-->
+		<div class="bm_h">
+			<h2>设计 $plugin['name']</h2><!--{if $plugin['version']}-->&nbsp;$plugin['version']<!--{/if}-->
+		</div>
+	<!--{/if}-->
+
+	<div class="bm_c cl">
+
+		<!--{eval include template('nav', 0, 'develop/template');}-->
+
+		<!--{if $action == 'create' || $action == 'edit'}-->
+			<form name="createform" method="post" autocomplete="off" action="develop.php?mod=plugin&action=$action&operation=$operation&pluginid=$pluginid">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="pluginsubmit" value="true" />
+				<input type="hidden" name="pluginid" value="$plugin['pluginid']" />
+				<input type="hidden" name="operation" value="$operation" />
+				<!--{if $operation == 'regplugin'}-->
+					<table class="tfm mbm">
+						<tr>
+							<th>唯一标识符(identifier)</th>
+							<td>
+								<input type="text" name="identifiernew" id="identifiernew" class="px" value="$plugin['identifier']" />
+								<p class="mtm"><a class="pn z" onclick="check_identifier('identifiernew', 'identifier_checking');" href="#"><strong>检 测</strong></a>&nbsp;<span id="identifier_checking">检测插件 ID 是否在 <a href="http://open.discuz.net/" target="_blank">应用中心</a> 已被占用</span></p>
+							</td>
+							<td class="xg1">插件的唯一英文标识，不能够与现有插件标识重复。可使用字母、数字、下划线命名，不能包含其他符号或特殊字符，最大 40 个字节</td>
+						</tr>
+						<tr>
+							<th>插件名称(name)</th>
+							<td><input name="namenew" value="$plugin['name']" type="text" class="px" /></td>
+							<td class="xg1">此插件的名称，中英文均可，最多 40 个字节</td>
+						</tr>
+						<tr>
+							<th>插件版本号(version)</th>
+							<td><input name="versionnew" value="$plugin['version']" type="text" class="px" /></td>
+							<td class="xg1">此插件的版本，中英文均可，最多 20 个字节。版本号高于旧版本号时，安装给用户时将会提示更新</td>
+						</tr>
+						<tr>
+							<th>兼容 Discuz! X 版本号</th>
+							<td><input name="dzversionnew" value="$plugin['modules']['extra']['version']" type="text" class="px" /></td>
+							<td class="xg1">此插件兼容 Discuz! X 的版本，例如：X1.5, X2, X2.5</td>
+						</tr>
+						<tr>
+							<th>插件描述(description):</th>
+							<td><textarea class="pt" cols="60" rows="5" name="descriptionnew">$plugin['description']</textarea></td>
+							<td class="xg1">插件的简单描述，最多 100 个字节，可选填</td>
+						</tr>
+						<tr>
+							<th>版权信息(copyright):</th>
+							<td><input name="copyrightnew" value="$plugin['copyright']" type="text" class="px"/></td>
+							<td class="xg1"></td>
+						</tr>
+						<tr class="bw0_all">
+							<th></th>
+							<td class="ptm"><button value="true" class="pn pnc" name="pluginsbt" type="submit"><strong><!--{if $action == 'edit'}-->提 交<!--{else}-->下一步<!--{/if}--></strong></button></td>
+						</tr>
+					</table>
+				<!--{elseif $operation == 'script'}-->
+					<!--{eval include template('script', 0, 'develop/template');}-->
+				<!--{elseif $operation == 'setting'}-->
+					<!--{if $editvar}-->
+						<input type="hidden" name="pluginvarid" value="$pluginvar['pluginvarid']" />
+						<table class="tfm mbm">
+							<caption><h2 class="xw0 mbm">插件变量设置 - $pluginvar[title]</h2></caption>
+							<tr>
+								<th>配置名称</th>
+								<td><input name="titlenew" value="$pluginvar[title]" type="text" class="px" /></td>
+								<td class="xg1">中英文均可，用于显示在插件配置的菜单中，最多 100 个字节。此处支持语言定义，例如：lang_admincp.php 定义了 'myaction'=>'我的操作' ，则此处填写 myaction 即可，这样有利于多语言版本插件的制作</td>
+							</tr>
+							<tr>
+								<th>配置说明</th>
+								<td><textarea rows="6" name="descriptionnew" id="descriptionnew" cols="50" class="px" >$pluginvar[description]</textarea></td>
+								<td class="xg1">描述此项配置的用途和取值范围，详细的描述有利于插件使用者了解这个设置的作用，最多 255 个字节。此处和配置名称类似，也支持语言定义<br />双击输入框可扩大/缩小</td>
+							</tr>
+							<tr>
+								<th>配置类型</th>
+								<td>
+									<!--{eval echo getVarTypeList('vartype', $pluginvar[type], true);}-->
+								</td>
+								<td class="xg1">设置此配置的数据类型，用于程序中检查和过滤相应配置值</td>
+							</tr>
+							<tr>
+								<th>配置变量名</th>
+								<td><input name="variablenew" value="$pluginvar[variable]" type="text" class="px" /></td>
+								<td class="xg1">设置配置项目的变量名，用于插件程序中调用，可包含英文、数字和下划线，在同一个插件中需要保持变量名的唯一性，最多 40 个字节</td>
+							</tr>
+							<tbody id="extra" {if $pluginvar['type'] != 'select' && $pluginvar['type'] != 'selects'}style="display: none"{/if}>
+								<tr>
+									<th>扩充设置</th>
+									<td><textarea rows="6" name="extranew" id="extranew" cols="50" class="tarea" >$pluginvar[extra]</textarea></td>
+									<td class="xg1">只在配置类型为“选择(select)”时有效，用于设定选项值。等号前面为选项索引(建议用数字)，后面为内容，例如: <br /><i>1 = 光电鼠标<br />2 = 机械鼠标<br />3 = 没有鼠标</i><br />注意: 选项确定后请勿修改索引和内容的对应关系，但仍可以新增选项。如需调换显示顺序，可以通过移动整行的上下位置来实现<br />双击输入框可扩大/缩小</td>
+								</tr>
+							</tbody>
+							<tr>
+								<th></th>
+								<td><button type="submit" name="varsubmit" id="submit_varsubmit" class="pn pnc" title="按 Enter 键可随时提交您的修改"><strong>提交</strong></button></td>
+								<td></td>
+							</tr>
+						</table>
+					<!--{else}-->
+						<table class="dt mbm">
+							<tr>
+								<th class="m">&nbsp;</th>
+								<th class="num">显示顺序</th>
+								<th>配置名称(必填)</th>
+								<th>配置变量名(必填)</th>
+								<th>配置类型</th>
+								<th class="details add"><a href="javascript:;" onclick="addTableRow('var');">+{eval echo $devlang['plugins_script_add'];}</a></th>
+							</tr>
+							<!--{loop $variables $varid $var}-->
+								<tr>
+									<td class="m"><input type="checkbox" name="delete[]" class="pc" value="$varid" /></td>
+									<td class="num"><input type="text" name="displayordernew[$varid]" class="px" value="$var[displayorder]" size="2" /></td>
+									<td>$var[title]</td>
+									<td>$var[variable]</td>
+									<td>$var[type]</td>
+									<td class="details add"><a href="develop.php?mod=plugin&amp;action=edit&amp;operation=setting&amp;pluginid=$pluginid&amp;pluginvarid=$varid">详情</a></td>
+								</tr>
+							<!--{/loop}-->
+							<tbody id="varbox">
+							<tr id="varrow" style="display: none;">
+								<td class="m">新增</td>
+								<td class="num"><input type="text" name="newdisplayorder[]" class="px" value="0" size="2" /></td>
+								<td><input type="text" name="newtitle[]" class="px" size="15" /></td>
+								<td><input type="text" name="newvariable[]" class="px" size="15" /></td>
+								<td>
+									<!--{eval echo getVarTypeList('newtype[]', 'text');}-->
+								</td>
+								<td class="details add">
+									<a href="javascript:;" onclick="removeTableRow('var', this);">{eval echo $devlang['plugins_script_delete'];}</a>
+								</td>
+							</tr>
+							</tbody>
+							<tr class="bw0_all">
+								<td class="m"><input type="checkbox" onclick="checkAll(this.form, 'delete', 'chkall')" class="pc vm" id="chkallr2bs" name="chkall" /><label for="chkallr2bs">删?</label></td>
+								<td colspan="5">
+									<button value="true" class="pn pnc" name="editsubmit" type="submit"><strong><!--{if $action == 'edit'}-->提 交<!--{else}-->下一步<!--{/if}--></strong></button>
+									<!--{if $action == 'create'}-->
+										&nbsp;<a href="develop.php?mod=plugins&action=create&operation=language&pluginid=$pluginid">跳过</a>
+									<!--{/if}-->
+								</td>
+							</tr>
+						</table>
+						<script type="text/javascript">
+							function addTableRow(type) {
+								var newNode;
+								newNode = $(type+'row').cloneNode(true);
+								newNode.removeAttribute('id');
+								newNode.removeAttribute('style');
+								$(type+'box').appendChild(newNode);
+							}
+							function removeTableRow(type, obj) {
+								$(type+'box').removeChild(obj.parentNode.parentNode);
+							}
+							<!--{if empty($variables)}-->
+							addTableRow('var');
+							<!--{/if}-->
+						</script>
+					<!--{/if}-->
+				<!--{elseif $operation == 'language'}-->
+				<!--{elseif $operation == 'style'}-->
+					<table class="tfm mbm">
+						<tr>
+							<th>扩展 CSS</th>
+							<td><textarea class="pt" cols="60" rows="5" name="extrastylenew">$extrastyle</textarea></td>
+							<td class="xg1">插件的扩展 CSS</td>
+						</tr>
+						<tr class="bw0_all">
+							<th></th>
+							<td>
+								<button value="true" class="pn pnc" name="pluginsbt" type="submit"><strong><!--{if $action == 'edit'}-->提 交<!--{else}-->下一步<!--{/if}--></strong></button>
+								<!--{if $action == 'create'}-->
+									&nbsp;<a href="develop.php?mod=plugins&action=edit&operation=export&pluginid=$pluginid">跳过</a>
+								<!--{/if}-->
+							</td>
+						</tr>
+					</table>
+				<!--{elseif $operation == 'export'}-->
+					<ul class="tbmu bbda">
+						<li class="pbn">插件程序包中包括您设置过的脚本、插件配置XML文件</li>
+						<li class="pbn">下载插件包后您可以解压到"source\plugin\$plugin['identifier']"目录下进行开发</li>
+						<li class="pbn">插件XML是在您开发过程中，不断修改插件配置时要用到的，为了方便您省去从插件程序包在解压出这个XML而增加的，XML文件需要导到“source\plugin\$plugin['identifier']”</li>
+						<li>插件钩子添加后，您可以导出插件包与您正在开发的"source\plugin\$plugin['identifier']"进行对比，把您需要的代码合并过去</li>
+					</ul>
+					<div class="mtw pbw cl">
+						<a href="develop.php?mod=plugins&action=edit&operation=export&pluginid=$pluginid&down=zip" class="z pn pnc pncb xs3" style="margin-right: 10px;"><strong>导出插件程序包</strong></a>
+						<a href="develop.php?mod=plugins&action=edit&operation=export&pluginid=$pluginid&down=xml" class="z pn pnc pnc2 pncb xs3"><strong>导出插件 XML</strong></a>
+					</div>
+				<!--{/if}-->
+			</form>
+		<!--{/if}-->
+
+	</div>
+</div>
