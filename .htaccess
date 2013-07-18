@@ -1,0 +1,59 @@
+# 将 RewriteEngine 模式打开
+RewriteEngine On
+
+# 修改以下语句中的 /discuz 为您的论坛目录地址，如果程序放在根目录中，请将 /discuz 修改为 /
+RewriteBase /bbs
+
+#400	错误的请求
+#401	认证失败
+#402	需要付费
+#403	禁止访问(Forbidden)
+ErrorDocument 403 "Sorry can't allow you access today(Forbidden)"
+
+#404	未找到(Not Found)
+#新建一个404.html报错页面上传到网站根目录
+ErrorDocument 404 /404.html
+
+#405	方法不允许
+ErrorDocument 405 "方法不允许"
+
+#406	不可接受
+#407	需要代理认证
+#408	请求超时
+#409	请求冲突
+#410	失败
+#411	需要长度
+#412	条件失败
+#413	请求实体太长
+#414	请求URI太长
+#500	服务器内部错误
+ErrorDocument 500 "服务器内部错误"
+
+#501	未实现
+#502	错误的网关
+#503	服务不可用
+#504	网关超时
+#505	HTTP版本不支持
+
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
+
+# Rewrite 系统规则请勿修改
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^topic-(.+)\.html$ portal.php?mod=topic&topic=$1&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^article-([0-9]+)-([0-9]+)\.html$ portal.php?mod=view&aid=$1&page=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^forum-(\w+)-([0-9]+)\.html$ forum.php?mod=forumdisplay&fid=$1&page=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^thread-([0-9]+)-([0-9]+)-([0-9]+)\.html$ forum.php?mod=viewthread&tid=$1&extra=page\%3D$3&page=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^group-([0-9]+)-([0-9]+)\.html$ forum.php?mod=group&fid=$1&page=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^space-(username|uid)-(.+)\.html$ home.php?mod=space&$1=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^blog-([0-9]+)-([0-9]+)\.html$ home.php?mod=space&uid=$1&do=blog&id=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^archiver/(fid|tid)-([0-9]+)\.html$ archiver/index.php?action=$1&value=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^plugin-([a-z]+[a-z0-9_]*)-([a-z0-9_\-]+)\.html$ plugin.php?id=$1:$2&%1
