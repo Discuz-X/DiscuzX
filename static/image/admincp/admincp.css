@@ -51,7 +51,7 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 
 /* mainbox */
 .mainhd{ position:relative; overflow:hidden; text-align:left; height:90px; line-height:88px; background:url(bg_repx.gif) repeat-x; }
-	.logo{ display: block; text-indent:-9999px; width:135px; height:80px; background:url(logo.gif) no-repeat 15px 13px; }
+	.logo{ display: block; text-indent:-9999px; width:135px; height:80px; background:url(logo.gif) no-repeat 15px 13px; margin-left: 25px; }
 		.logo:hover{ background-image:url(logo_hover.gif); }
 	.uinfo{ position:absolute; z-index:4; line-height:32px; top:10px; right:15px; }
 		.uinfo a{ color:#666; }
@@ -59,8 +59,8 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 			.uinfo em a{ text-decoration:underline; }
 		.uinfo p{ float:left; }
 			.btnlink a{ display:block; margin-left:10px; width:63px; height:32px; text-align:center; background:url(bg_repno.gif) no-repeat -50px -150px; }
-	.navbg{ position:absolute; z-index:1; top:52px; left:153px; width:6px; height:37px; background:#F7FAFD; }
-	.nav{ position:absolute; z-index:2; top:14px; left:159px; width:100%; height:75px; }
+	.navbg{ position:absolute; z-index:1; top:52px; left:213px; width:6px; height:37px; background:#F7FAFD; }
+	.nav{ position:absolute; z-index:2; top:14px; left:219px; width:100%; height:75px; }
 		.nav ul{ overflow:hidden; position:relative; z-index:4; font-size:14px; }
 			.nav li{ float:left; height:43px; line-height:43px; background:url(btn_block.gif) right -115px no-repeat; }
 				.nav li em{ display:block; }
@@ -75,7 +75,7 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 		.navbd { overflow:hidden; clear:both; position:absolute; z-index:3; top:38px; width:100%; height:5px; background:#09C; }
 	.currentloca{ clear:both; height:32px; border-left:1px solid #B5CFD9; }
 		.currentloca p{ padding-left:10px; line-height:25px; border-top:5px solid #FFF; border-bottom:2px solid #FFF; border-left:1px solid #FFF; background:#F2F9FD; }
-		.sitemapbtn{ position:absolute; right:175px; *right:170px; top:50px; line-height:100%; }
+		.sitemapbtn{ position:absolute; right:230px; *right:170px; top:50px; line-height:100%; }
 			.sitemapbtn span{ margin-right:3px; }
 
 a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px; }
@@ -98,9 +98,9 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 		.popupmenu_dropmenu em { margin-left:3px; background:url(bg_repno.gif) no-repeat 0 -145px; }
 
 .menutd{ background:#F2F9FD url(bg_repx_h.gif) right top no-repeat; }
-.menu{ position:relative; z-index:20; width:160px; }
-	.menu ul{ position:absolute; top:10px; right:7px; list-style:none; width:153px; background:#F2F9FD url(bg_repx_h.gif) no-repeat 5px -20px; }
-		.menu li { margin: 3px 0; *margin: 0; width: 153px; height: auto !important; height: 25px; overflow: hidden; }
+.menu{ position:relative; z-index:20; width:220px; }
+	.menu ul{ position:absolute; top:10px; right:7px; list-style:none; width:203px; background:#F2F9FD url(bg_repx_h.gif) no-repeat 5px -20px; }
+		.menu li { margin: 3px 0; *margin: 0; width: 203px; height: auto !important; height: 25px; overflow: hidden; }
 			.menu li.s { height: auto; }
 		.menu li.a { margin-top:0; }
 		.menu li a { display: block; padding: 4px 0 3px 30px; *padding: 5px 0 3px 30px; background: url(bg_repno.gif) no-repeat 15px -43px; color: #666; white-space: nowrap; }
@@ -141,7 +141,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 #scrolllink{ position: absolute; z-index: 21; bottom: 40px; *bottom: 39px; left: 0; padding: 2px 0; width: 154px; background-color: #F2F9FD; }
 	#scrolllink span { cursor: pointer; }
 	#scrolllink img { margin-left: 2px; }
-.copyright{ position:absolute; z-index:10; left:5px; bottom:3px; padding-top:3px; border-top:1px dashed #DDD; text-align:left; line-height:150%; font-family:Tahoma; font-size:11px; -webkit-text-size-adjust: none; }
+.copyright{ position:absolute; z-index:10; left:5px; bottom:3px; padding-top:3px; border-top:1px dashed #DDD; text-align:center; line-height:150%; font-family:Tahoma; font-size:11px; -webkit-text-size-adjust: none; width:213px; }
 .logintb{ text-align:left; margin:120px auto 0; width:600px; }
 .login{ padding-right:30px; width:310px; height:150px; background:url(bg_login.gif) right 50% no-repeat; }
 	.login h1{ text-indent:-9999px; margin-bottom:10px; width:262px; height:26px; background:url(login_title.gif) no-repeat; }
@@ -156,7 +156,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .logintips{ line-height:160%; margin-left:25px; }
 	.logintips a{ margin:0 5px; text-decoration:underline; }
 .footer{}
-	.footer .copyright{ position:static; margin-top:120px; border:none; text-align:center; font-size:12px; }
+	.footer .copyright{ position:static; margin-top:120px; border:none; text-align:center; font-size:12px; width: auto; }
 	.footer p{ display:inline; }
 
 .container{ padding:9px 20px 20px; text-align:left; }
@@ -556,3 +556,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .pbg { position: relative; margin: 10px 0; width: 200px; height: 16px; background: url(bg_progressbar.png) 0 0 repeat-x; border-radius: 5px; }
 	.pbr { height: 16px; width: 200px; background-image: url(bg_progressbar.png); background-color: #5AAF4A; background-position: 0 -16px; background-repeat: repeat-x; border-radius: 5px; }
 	.pbg .xs0 { position: absolute; top: 0; right: 8px; }
+
+/* 模板预览图 */
+.stylepreview { width: 110px; height: 120px; }
+	.tb.tb2 input[type="radio"] { margin: 0 2px 2px 5px }
