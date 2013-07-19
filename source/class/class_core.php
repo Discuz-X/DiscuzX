@@ -9,11 +9,11 @@
 
 error_reporting(E_ALL);
 
-define('IN_DISCUZ', true);
+define('IN_DISCUZ', TRUE);
 define('DISCUZ_ROOT', substr(dirname(__FILE__), 0, -12));
-define('DISCUZ_CORE_DEBUG', false);
+define('DISCUZ_CORE_DEBUG', TRUE);
 define('DISCUZ_TABLE_EXTENDABLE', TRUE);
-
+include_once(DISCUZ_ROOT.'./source/kohana/include.php');
 set_exception_handler(array('core', 'handleException'));
 
 if(DISCUZ_CORE_DEBUG) {
@@ -123,17 +123,21 @@ class core
 	}
 
 	public static function handleException($exception) {
+		return vizto_exception::Exception_Handler($exception);
 		discuz_error::exception_error($exception);
 	}
 
 
 	public static function handleError($errno, $errstr, $errfile, $errline) {
+		$args = func_get_args();
+		return call_user_func_array(array('vizto_exception', 'Error_Handler'), $args);//vizto_exception::Error_Handler($errno, $errstr, $errfile, $errline);
 		if($errno & DISCUZ_CORE_DEBUG) {
 			discuz_error::system_error($errstr, false, true, false);
 		}
 	}
 
 	public static function handleShutdown() {
+		return vizto_exception::Shutdown_Handler();
 		if(($error = error_get_last()) && $error['type'] & DISCUZ_CORE_DEBUG) {
 			discuz_error::system_error($error['message'], false, true, false);
 		}
