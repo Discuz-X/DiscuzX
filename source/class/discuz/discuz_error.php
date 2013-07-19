@@ -63,14 +63,14 @@ class discuz_error
 		$debug_backtrace = debug_backtrace();
 		krsort($debug_backtrace);
 		foreach ($debug_backtrace as $k => $error) {
-			$file = str_replace(DISCUZ_ROOT, '', $error['file']);
+			$file = isset($error['file']) ? str_replace(DISCUZ_ROOT, '', $error['file']) : '';
 			$func = isset($error['class']) ? $error['class'] : '';
 			$func .= isset($error['type']) ? $error['type'] : '';
 			$func .= isset($error['function']) ? $error['function'] : '';
 			if(in_array($func, $skipfunc)) {
 				break;
 			}
-			$error[line] = sprintf('%04d', $error['line']);
+			$error['line'] = isset($error['line']) ? sprintf('%04d', $error['line']) : '';
 
 			$show .= "<li>[Line: $error[line]]".$file."($func)</li>";
 			$log .= !empty($log) ? ' -> ' : '';$file.':'.$error['line'];
