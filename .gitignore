@@ -151,3 +151,4 @@ Desktop.ini
 /data/_debug*
 /source/plugin/
 /template/
+*.iml
