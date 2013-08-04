@@ -20,6 +20,9 @@ class table_forum_filter_post extends discuz_table {
 	}
 
 	public function fetch_all_by_tid_postlength_limit($tid, $limit = 10) {
+		if($limit <= 0) {
+			return array();
+		}
 		return DB::fetch_all('SELECT * FROM %t WHERE tid=%d ORDER BY postlength DESC LIMIT %d', array($this->_table, $tid, $limit), 'pid');
 	}
 

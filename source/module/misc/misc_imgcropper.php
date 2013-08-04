@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_imgcropper.php 30074 2012-05-09 03:04:37Z zhengqingpeng $
+ *      $Id: misc_imgcropper.php 33562 2013-07-08 06:52:29Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,8 +18,8 @@ if(!submitcheck('imgcroppersubmit')) {
 
 		$cbgboxwidth = $cboxwidth + 300;
 		$cbgboxheight = $cboxheight + 300;
-		$dragpt = ($cbgboxwidth - $cboxwidth)/2;
-		$dragpl = ($cbgboxheight - $cboxheight)/2;
+		$dragpl = ($cbgboxwidth - $cboxwidth)/2;
+		$dragpt = ($cbgboxheight - $cboxheight)/2;
 	} else {
 		$prefix = $_GET['picflag'] == 2 ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
 	}

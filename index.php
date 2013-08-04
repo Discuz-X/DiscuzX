@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 33454 2013-06-19 03:08:34Z jeffjzhang $
+ *      $Id: index.php 33630 2013-07-22 08:24:23Z nemohou $
  */
 
 if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
@@ -27,8 +27,8 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 			$_ENV['curapp'] = array_search($_SERVER['HTTP_HOST'], $_ENV['domain']['app']);
 			if($_ENV['curapp'] == 'mobile') {
 				$_ENV['curapp'] = 'forum';
-				if(!isset($_GET['mobile'])) {
-					@$_GET['mobile'] = '2';
+				if(@$_GET['mobile'] != 'no') {
+					@$_GET['mobile'] = 'yes';
 				}
 			}
 			if($_ENV['curapp'] == 'default' || !isset($_ENV['defaultapp'][$_ENV['curapp'].'.php'])) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_patch.php 31207 2012-07-26 02:50:10Z zhangjie $
+ *      $Id: discuz_patch.php 33628 2013-07-22 03:48:48Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,13 +69,16 @@ class discuz_patch {
 		$checkurl = $patchdir.'md5sums';
 		$patchlist = dfsockopen($checkurl);
 
+		if(defined('DISCUZ_FIXBUG')) {
+			C::t('common_patch')->update_status_by_serial(1, DISCUZ_FIXBUG, '<=');
+		}
+
 		if($patchlist) {
 			$serial_md5s = explode("\r\n", $patchlist);
 			$bound = intval(substr($serial_md5s[count($serial_md5s)-2], 0, 8));
 			$maxpatch = intval(C::t('common_patch')->fetch_max_serial());
 			if(defined('DISCUZ_FIXBUG')) {
 				$maxpatch = $maxpatch < DISCUZ_FIXBUG ? DISCUZ_FIXBUG : $maxpatch;
-				C::t('common_patch')->update_status_by_serial(1, DISCUZ_FIXBUG, '<=');
 			}
 			if($bound > $maxpatch) {
 				$insertarrlist = array();
@@ -326,12 +329,17 @@ class discuz_patch {
 		foreach($rules as $rule) {
 			$filename = DISCUZ_ROOT.$rule['filename'];
 			$search = base64_decode($rule['search']);
+			$replace = base64_decode($rule['replace']);
 			$count = $rule['count'];
 			$nums = $rule['nums'];
 
 			$str = file_get_contents($filename);
 			$findcount = substr_count($str, $search);
 			if($findcount != $count) {
+				return true;
+			}
+			$replacefindcount = substr_count($str, $replace);
+			if($replacefindcount == $count) {
 				return true;
 			}
 		}

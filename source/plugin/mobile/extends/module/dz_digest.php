@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dz_digest.php 31963 2012-10-26 07:27:05Z zhangjie $
+ *      $Id: dz_digest.php 33586 2013-07-12 06:34:05Z andyzheng $
  */
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 class dz_digest extends extends_data {
 	function __construct() {
 		parent::__construct();

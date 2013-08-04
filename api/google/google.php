@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: google.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: google.php 33592 2013-07-12 06:43:47Z andyzheng $
  */
 
 @define('IN_API', true);
@@ -99,11 +99,10 @@ class GoogleAPI
 		$msg = getgpc('msg') ? true : false;
 		$xmlcontent .= "<threadsdata>\n";
 		if(is_array($tids) && !empty($tids)) {
-			$ftid = $mark = '';
+			$ftid = array();
 			foreach ($tids as $tid) {
 				if(is_numeric($tid)) {
-					$ftid .= $mark."'$tid'";
-					$mark = ',';
+					$ftid[] = $tid;
 				}
 			}
 			if($ftid) {

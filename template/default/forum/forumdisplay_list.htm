@@ -145,12 +145,14 @@
 										<!--{if in_array($thread['displayorder'], array(1, 2, 3, 4))}-->
 										<a href="javascript:void(0);" onclick="hideStickThread('$thread[tid]')" class="showhide y" title="{lang hidedisplayorder}">{lang hidedisplayorder}</a></em>
 										<!--{/if}-->
-										<!--{if !$_G['setting']['forumdisplaythreadpreview'] && !($thread['readperm'] && $thread['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $thread['authorid'] != $_G['uid'])}-->
-											<a class="tdpre y" href="javascript:void(0);" onclick="previewThread('$thread[tid]', '$thread[id]');">{lang preview}</a>
-										<!--{/if}-->																				<!--{hook/forumdisplay_thread $key}-->
 										<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
 												<!--{eval $thread[tid]=$thread[closed];}-->
 										<!--{/if}-->
+										<!--{if !$_G['setting']['forumdisplaythreadpreview'] && !($thread['readperm'] && $thread['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $thread['authorid'] != $_G['uid'])}-->
+											<!--{if !(!empty($_G['setting']['antitheft']['allow']) && empty($_G['setting']['antitheft']['disable']['thread']) && empty($_G['forum']['noantitheft']))}-->
+												<a class="tdpre y" href="javascript:void(0);" onclick="previewThread('$thread[tid]', '$thread[id]');">{lang preview}</a>
+											<!--{/if}-->
+										<!--{/if}-->																				<!--{hook/forumdisplay_thread $key}-->
 										$thread[typehtml] $thread[sorthtml]
 										<!--{if $thread['moved']}-->
 											{lang thread_moved}:<!--{eval $thread[tid]=$thread[closed];}-->

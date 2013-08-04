@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 33440 2013-06-17 02:39:05Z nemohou $
+ *      $Id: lang_admincp.php 33494 2013-06-26 05:26:25Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -2527,7 +2527,7 @@ $lang = array
 	'unwind' => '展开',
 
 	'setting_antitheft' => '防采集设置',
-	'setting_antitheft_tips' => '<li>防采集功能不影响正常用户浏览检验。</li><li>可防止本站主题、文章和日志被非法采集。</li><li><font style="color:red">当IP同时存在于黑/白名单时，白名单优先。</font></li>',
+	'setting_antitheft_tips' => '<li>防采集功能不影响正常用户浏览检验。</li><li>可防止本站主题、文章和日志被非法采集。</li><li><font style="color:red">当IP同时存在于黑/白名单时，白名单优先。</font></li><li>开启防采集功能后帖子列表页面的帖子预览功能将不可使用。</li>',
 	'setting_antitheft_status' => '防采集全局设置',
 	'setting_antitheft_allow' => '是否开启防采集',
 	'setting_antitheft_black' => '黑名单防采集过滤IP',

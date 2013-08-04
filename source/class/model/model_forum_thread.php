@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: model_forum_thread.php 32866 2013-03-18 02:45:33Z zhangjie $
+ *      $Id: model_forum_thread.php 33619 2013-07-17 06:18:28Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -205,6 +205,8 @@ class model_forum_thread extends discuz_model
 		$statarr = array(0 => 'thread', 1 => 'poll', 2 => 'trade', 3 => 'reward', 4 => 'activity', 5 => 'debate', 127 => 'thread');
 		include_once libfile('function/stat');
 		updatestat($this->param['isgroup'] ? 'groupthread' : $statarr[$this->param['special']]);
+
+		C::t('common_remote_port')->insert(array('id'=>$this->pid,'idtype'=>'post','useip'=>getglobal('clientip'),'port'=>getglobal('remoteport')), false, true);
 
 		if($this->param['geoloc'] && IN_MOBILE == 2) {
 			list($mapx, $mapy, $location) = explode('|', $this->param['geoloc']);

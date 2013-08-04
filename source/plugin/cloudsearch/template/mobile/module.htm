@@ -4,7 +4,7 @@ function tpl_global_header_mobile($searchparams, $srchotquery) {
 global $_G;
 }
 <!--{block return}-->
-	<!--{if 1}-->
+	<!--{if !empty($searchparams[url])}-->
 	<div id="scbar" class="{if $_G['setting']['srchhotkeywords'] && count($_G['setting']['srchhotkeywords']) > 5}scbar_narrow {/if}cl">
 		<form id="scbar_form" method="get" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="$searchparams[url]" target="_blank">
 			<input type="hidden" name="mod" id="scbar_mod" value="search" />

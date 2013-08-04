@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_antitheft.php 32740 2013-03-05 08:32:47Z zhangguosheng $
+ *      $Id: helper_antitheft.php 33494 2013-06-26 05:26:25Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 class helper_antitheft {
 
-	public function check($id, $idtype) {
+	public static function check($id, $idtype) {
 		if((!isset($_GET['_dsign']) || $_GET['_dsign'] !== ($_dsign = dsign($id.$idtype, 8))) && !self::check_allow($id, $idtype)) {
 			if(!isset($_dsign)) {
 				$_dsign = dsign($id.$idtype, 8);
@@ -22,7 +22,11 @@ class helper_antitheft {
 		}
 	}
 
-	protected function check_allow($id, $idtype) {
+	public static function get_sign($id, $idtype) {
+		return !self::check_allow($id, $idtype) ? dsign($id.$idtype, 8) : '';
+	}
+
+	protected static function check_allow($id, $idtype) {
 		global $_G;
 		$ip = ip2long($_G['clientip']);
 		if(!$ip || $ip == -1) return false;
@@ -64,7 +68,7 @@ class helper_antitheft {
 
 	}
 
-	protected function make_content($id, $idtype, $dsign) {
+	protected static function make_content($id, $idtype, $dsign) {
 		$url = '';
 		$urls = parse_url($_SERVER['REQUEST_URI']);
 		$addstr = $urls['query'] ? $urls['query'].'&' : '';
@@ -73,7 +77,7 @@ class helper_antitheft {
 		return self::make_js($url);
 	}
 
-	protected function make_js($url){
+	protected static function make_js($url){
 		$js = '<script type="text/javascript">';
 		$varname = array();
 		$codes = array();

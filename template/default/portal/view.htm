@@ -79,7 +79,7 @@
 					<ul class="xl xl2 cl">
 						<!--{loop $contents $key $value}-->
 						<!--{eval $curpage = $key+1;}-->
-						<!--{eval $inner_view_url = helper_page::mpurl($viewurl, 'page=', $curpage);}-->
+						<!--{eval $inner_view_url = helper_page::mpurl($viewurl, '&page=', $curpage);}-->
 						<li>&bull; <a href="$inner_view_url"{if $key === $start} class="xi1"{/if}>{lang article_inner_page_pre} {$curpage} {lang article_inner_page} $value[title]</a></li>
 						<!--{/loop}-->
 					</ul>
