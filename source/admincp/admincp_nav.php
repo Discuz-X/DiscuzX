@@ -293,9 +293,13 @@ EOT;
 				array(8, '<span style="color: Gray;">Gray</span>'),
 			)), $string[1], 'mradio2');
 			showsetting('misc_customnav_url_open', array('targetnew', array(
-				array(0, cplang('misc_customnav_url_open_default')),
-				array(1, cplang('misc_customnav_url_open_blank'))
-			), TRUE), $nav['target'], 'mradio');
+				array(0, cplang('misc_customnav_url_open_default'), array('targetcustom'=>'none')),
+				array(1, cplang('misc_customnav_url_open_blank'), array('targetcustom'=>'none')),
+				array(2, cplang('misc_customnav_url_open_custom'), array('targetcustom'=>'')),
+			), TRUE), $nav['target'], 'mradio2');
+			showtagheader('tbody', 'targetcustom', $nav['target']==2, 'sub');
+			showsetting('misc_customnav_url_open_custom', 'targetcustomnew', $nav['targetcustom'], 'text');
+			showtagfooter('tbody');
 			if(!$nav['parentid']) {
 				showsetting('misc_customnav_logo', 'logonew', $nav['logo'], 'filetext', '', 0, cplang('misc_customnav_logo_comment').$logohtml);
 				showsetting('misc_customnav_level', array('levelnew', array(
@@ -329,7 +333,8 @@ EOT;
 				$stylebin .= empty($_GET['stylenew'][$i]) ? '0' : '1';
 			}
 			$stylenew = bindec($stylebin);
-			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$targetnew       = in_array(intval($_GET['targetnew']), array(0, 1, 2)) ? (int)$_GET['targetnew'] : 0;
+			$targetcustomnew = isset($_GET['targetcustomnew']) ? (string)$_GET['targetcustomnew'] : '';
 			$levelnew = intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0 ;
 
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='".$urlnew."'" : '';
@@ -359,6 +364,7 @@ EOT;
 					'title' => $titlenew,
 					'highlight' => "$stylenew$colornew",
 					'target' => $targetnew,
+					'targetcustom' => $targetcustomnew,
 					'level' => $levelnew,
 					'subtype' => $subtypenew,
 					'subcols' => intval($_GET['subcolsnew']),
@@ -502,9 +508,13 @@ EOT;
 				array(8, '<span style="color: Gray;">Gray</span>'),
 			)), $string[1], 'mradio2');
 			showsetting('misc_customnav_url_open', array('targetnew', array(
-				array(0, cplang('misc_customnav_url_open_default')),
-				array(1, cplang('misc_customnav_url_open_blank'))
-			), TRUE), $nav['target'], 'mradio');
+				array(0, cplang('misc_customnav_url_open_default'), array('targetcustom'=>'none')),
+				array(1, cplang('misc_customnav_url_open_blank'), array('targetcustom'=>'none')),
+				array(2, cplang('misc_customnav_url_open_custom'), array('targetcustom'=>'')),
+			), TRUE), $nav['target'], 'mradio2');
+			showtagheader('tbody', 'targetcustom', $nav['target']==2, 'sub');
+			showsetting('misc_customnav_url_open_custom', 'targetcustomnew', $nav['targetcustom'], 'text');
+			showtagfooter('tbody');
 			if($nav['type']) {
 				showsetting('misc_customnav_level', array('levelnew', array(
 					array(0, cplang('nolimit')),
@@ -529,7 +539,8 @@ EOT;
 				$stylebin .= empty($_GET['stylenew'][$i]) ? '0' : '1';
 			}
 			$stylenew = bindec($stylebin);
-			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$targetnew       = in_array(intval($_GET['targetnew']), array(0, 1, 2)) ? (int)$_GET['targetnew'] : 0;
+			$targetcustomnew = isset($_GET['targetcustomnew']) ? (string)$_GET['targetcustomnew'] : '';
 			$levelnew = $nav['type'] ? (intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0) : 0;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='".$urlnew."'" : '';
 
@@ -538,6 +549,7 @@ EOT;
 					'title' => $titlenew,
 					'highlight' => "$stylenew$colornew",
 					'target' => $targetnew,
+					'targetcustom' => $targetcustomnew,
 					'level' => $levelnew
 				);
 			if($nav['type'] != '0' && $urlnew) {
@@ -693,9 +705,13 @@ EOT;
 			showsetting('misc_customnav_suburl', 'suburlnew', $nav['suburl'], 'text', $nav['type'] == '0');
 			showtagfooter('tbody');
 			showsetting('misc_customnav_url_open', array('targetnew', array(
-				array(0, cplang('misc_customnav_url_open_default')),
-				array(1, cplang('misc_customnav_url_open_blank'))
-			), TRUE), $nav['target'], 'mradio');
+				array(0, cplang('misc_customnav_url_open_default'), array('targetcustom'=>'none')),
+				array(1, cplang('misc_customnav_url_open_blank'), array('targetcustom'=>'none')),
+				array(2, cplang('misc_customnav_url_open_custom'), array('targetcustom'=>'')),
+			), TRUE), $nav['target'], 'mradio2');
+			showtagheader('tbody', 'targetcustom', $nav['target']==2, 'sub');
+			showsetting('misc_customnav_url_open_custom', 'targetcustomnew', $nav['targetcustom'], 'text');
+			showtagfooter('tbody');
 			showsetting('misc_customnav_level', array('levelnew', array(
 				array(0, cplang('nolimit')),
 				array(1, cplang('member')),
@@ -714,7 +730,8 @@ EOT;
 			$subnamenew = trim(dhtmlspecialchars($_GET['subnamenew']));
 			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
 			$suburlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['suburlnew']));
-			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$targetnew       = in_array(intval($_GET['targetnew']), array(0, 1, 2)) ? (int)$_GET['targetnew'] : 0;
+			$targetcustomnew = isset($_GET['targetcustomnew']) ? (string)$_GET['targetcustomnew'] : '';
 			$levelnew = intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0 ;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='$urlnew'" : '';
 			$urladd .= $nav['type'] != '0' && $suburlnew ? ", suburl='$suburlnew'" : '';
@@ -745,6 +762,7 @@ EOT;
 					'subname' => $subnamenew,
 					'title' => $titlenew,
 					'target' => $targetnew,
+					'targetcustom' => $targetcustomnew,
 					'level' => $levelnew,
 					'icon' => $iconnew
 				);
@@ -897,9 +915,13 @@ EOT;
 			showsetting('misc_customnav_url', 'urlnew', $nav['url'], 'text', $nav['type'] == '0');
 			showsetting('misc_customnav_icon', 'iconnew', $nav['icon'], 'filetext', '', 0, cplang('misc_mynav_icon_comment').$naviconhtml);
 			showsetting('misc_customnav_url_open', array('targetnew', array(
-				array(0, cplang('misc_customnav_url_open_default')),
-				array(1, cplang('misc_customnav_url_open_blank'))
-			), TRUE), $nav['target'], 'mradio');
+				array(0, cplang('misc_customnav_url_open_default'), array('targetcustom'=>'none')),
+				array(1, cplang('misc_customnav_url_open_blank'), array('targetcustom'=>'none')),
+				array(2, cplang('misc_customnav_url_open_custom'), array('targetcustom'=>'')),
+			), TRUE), $nav['target'], 'mradio2');
+			showtagheader('tbody', 'targetcustom', $nav['target']==2, 'sub');
+			showsetting('misc_customnav_url_open_custom', 'targetcustomnew', $nav['targetcustom'], 'text');
+			showtagfooter('tbody');
 			showsetting('misc_customnav_level', array('levelnew', array(
 				array(0, cplang('nolimit')),
 				array(1, cplang('member')),
@@ -916,7 +938,8 @@ EOT;
 			$namenew = trim(dhtmlspecialchars($_GET['namenew']));
 			$titlenew = trim(dhtmlspecialchars($_GET['titlenew']));
 			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
-			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$targetnew       = in_array(intval($_GET['targetnew']), array(0, 1, 2)) ? (int)$_GET['targetnew'] : 0;
+			$targetcustomnew = isset($_GET['targetcustomnew']) ? (string)$_GET['targetcustomnew'] : '';
 			$levelnew = intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0 ;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='$urlnew'" : '';
 
@@ -942,6 +965,7 @@ EOT;
 					'name' => $namenew,
 					'title' => $titlenew,
 					'target' => $targetnew,
+					'targetcustom' => $targetcustomnew,
 					'level' => $levelnew,
 					'icon' => $iconnew
 				);
@@ -1095,9 +1119,13 @@ EOT;
 				array(8, '<span style="color: Gray;">Gray</span>'),
 			)), $string[1], 'mradio2');
 			showsetting('misc_customnav_url_open', array('targetnew', array(
-				array(0, cplang('misc_customnav_url_open_default')),
-				array(1, cplang('misc_customnav_url_open_blank'))
-			), TRUE), $nav['target'], 'mradio');
+				array(0, cplang('misc_customnav_url_open_default'), array('targetcustom'=>'none')),
+				array(1, cplang('misc_customnav_url_open_blank'), array('targetcustom'=>'none')),
+				array(2, cplang('misc_customnav_url_open_custom'), array('targetcustom'=>'')),
+			), TRUE), $nav['target'], 'mradio2');
+			showtagheader('tbody', 'targetcustom', $nav['target']==2, 'sub');
+			showsetting('misc_customnav_url_open_custom', 'targetcustomnew', $nav['targetcustom'], 'text');
+			showtagfooter('tbody');
 			if($nav['type']) {
 				showsetting('misc_customnav_level', array('levelnew', array(
 					array(0, cplang('nolimit')),
@@ -1123,7 +1151,8 @@ EOT;
 				$stylebin .= empty($_GET['stylenew'][$i]) ? '0' : '1';
 			}
 			$stylenew = bindec($stylebin);
-			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$targetnew       = in_array(intval($_GET['targetnew']), array(0, 1, 2)) ? (int)$_GET['targetnew'] : 0;
+			$targetcustomnew = isset($_GET['targetcustomnew']) ? (string)$_GET['targetcustomnew'] : '';
 			$levelnew = $nav['type'] ? (intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0) : 0;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='".$urlnew."'" : '';
 
@@ -1132,6 +1161,7 @@ EOT;
 					'title' => $titlenew,
 					'highlight' => "$stylenew$colornew",
 					'target' => $targetnew,
+					'targetcustom' => $targetcustomnew,
 					'level' => $levelnew,
 					'subtype' => $subtypenew
 				);

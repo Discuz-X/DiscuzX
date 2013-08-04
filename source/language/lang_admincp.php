@@ -3099,6 +3099,7 @@ $lang = array
 	'misc_customnav_level_comment' => '设置哪些用户组的用户才可看到此导航',
 	'misc_customnav_url_open_default' => '在本窗口打开',
 	'misc_customnav_url_open_blank' => '在新窗口打开',
+	'misc_customnav_url_open_custom' => '在特定窗口打开',
 	'misc_customnav_subcols' => '横排一行显示的条目数',
 	'misc_customnav_subcols_comment' => '设置横排一行显示的条目数，留空表示不限制，文字超出自动换行',
 	'misc_customnav_logo' => '自定义 Logo',
