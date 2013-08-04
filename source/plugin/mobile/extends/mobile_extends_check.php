@@ -4,9 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile_extends_check.php 32489 2013-01-29 03:57:16Z monkey $
+ *      $Id: mobile_extends_check.php 33586 2013-07-12 06:34:05Z andyzheng $
  */
-
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 class mobile_api {
 
 	var $variable = array();

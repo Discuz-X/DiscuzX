@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dz_newpic.php 32016 2012-10-31 05:53:25Z zhangjie $
+ *      $Id: dz_newpic.php 33586 2013-07-12 06:34:05Z andyzheng $
  */
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 class dz_newpic extends extends_data {
 	function __construct() {
 		parent::__construct();

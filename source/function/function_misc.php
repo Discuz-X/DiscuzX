@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 30988 2012-07-06 02:24:35Z chenmengshu $
+ *      $Id: function_misc.php 33487 2013-06-21 08:00:39Z kamichen $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -505,6 +505,21 @@ function recyclebinpostundelete($undeletepids, $posttableid = false) {
 	}
 
 	return count($undeletepids);
+}
+
+function process_ipnotice($ipconverted) {
+	if(!$ipconverted) {
+		return '';
+	}
+
+	$ipconverted = substr($ipconverted, 1);
+	if(strpos($ipconverted, '-') !== false) {
+		$ipconverted = substr($ipconverted, 0, strpos($ipconverted, '-'));
+	}
+
+	$ipconverted = trim($ipconverted);
+
+	return '- '.$ipconverted ;
 }
 
 ?>

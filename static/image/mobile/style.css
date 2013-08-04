@@ -146,6 +146,7 @@
 	.plc .pi .authi{ position:relative; }
 	.plc .pi .authi li em{ float:right; font-style: normal; }	
 	.plc .pi .message{ font-size:15px; }
+	.plc .pi .message .jammer{ font-size:10px; color:#F0F0F0; }
 	.plc .pi .message img,.plc .pi .img_one img { margin:0px 4px 0px 0; max-width:140px; max-height:140px; }
 	.plc .pi .message .quote{ padding:10px 10px 7px 11px; margin:5px 0; border:1px dashed #D7D7D7; font-size:12px; }
 	.plc .pi .img_list { margin:4px auto; }	

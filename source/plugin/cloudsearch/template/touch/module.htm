@@ -4,6 +4,7 @@ function tpl_global_header_mobile($searchparams, $srchotquery) {
 global $_G;
 }
 <!--{block return}-->
+	<!--{if !empty($searchparams[url])}-->
 	<style>
 		.keyword {padding:0 10px;margin-bottom: 100px;}
 		.keyword a{ background:#FFF;border: 1px solid #DDDDDD; color: #336699; display: inline-block; margin-bottom: 10px; margin-right: 10px; padding: 3px 10px; white-space: nowrap;}
@@ -47,6 +48,7 @@ global $_G;
 			}
 		});
 	</script>
+	<!--{/if}-->
 
 <!--{/block}-->
 <!--{eval return $return;}-->

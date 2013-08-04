@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_advertisement.php 27751 2012-02-14 02:26:11Z monkey $
+ *      $Id: table_common_advertisement.php 33658 2013-07-29 06:25:15Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,7 +34,9 @@ class table_common_advertisement extends discuz_table
 	}
 
 	public function close_endtime() {
+		$return = DB::result_first("SELECT COUNT(*) FROM %t WHERE endtime>0 AND endtime<='".TIMESTAMP."'", array($this->_table));
 		DB::update($this->_table, array('available' => 0), "endtime>0 AND endtime<='".TIMESTAMP."'", 'UNBUFFERED');
+		return $return;
 	}
 
 	public function fetch_all_endtime($endtime) {

@@ -200,7 +200,7 @@
 				}
 			};
 
-			if(typeof FileReader != null && typeof FileReader != undefined && this.files) {//note 支持html5上传新特性
+			if(typeof FileReader != 'undefined' && this.files[0]) {//note 支持html5上传新特性
 				
 				$.buildfileupload({
 					uploadurl:'misc.php?mod=swfupload&operation=upload&type=image&inajax=yes&infloat=yes&simple=2',

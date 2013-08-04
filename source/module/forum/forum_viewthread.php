@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 33371 2013-06-03 05:58:41Z nemohou $
+ *      $Id: forum_viewthread.php 33587 2013-07-12 06:34:29Z hypowang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,6 +23,7 @@ if(!$_G['forum_thread'] || !$_G['forum']) {
 }
 
 $page = max(1, $_G['page']);
+$_GET['stand'] = isset($_GET['stand']) && in_array($_GET['stand'], array('0', '1', '2')) ? $_GET['stand'] : null;
 
 if($page === 1 && !empty($_G['setting']['antitheft']['allow']) && empty($_G['setting']['antitheft']['disable']['thread']) && empty($_G['forum']['noantitheft'])) {
 	helper_antitheft::check($_G['forum_thread']['tid'], 'tid');

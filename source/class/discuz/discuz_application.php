@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 33454 2013-06-19 03:08:34Z jeffjzhang $
+ *      $Id: discuz_application.php 33619 2013-07-17 06:18:28Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -119,6 +119,7 @@ class discuz_application extends discuz_base{
 			'timestamp' => TIMESTAMP,
 			'starttime' => microtime(true),
 			'clientip' => $this->_get_client_ip(),
+			'remoteport' => $_SERVER['REMOTE_PORT'],
 			'referer' => '',
 			'charset' => '',
 			'gzipcompress' => '',
@@ -734,7 +735,7 @@ class discuz_application extends discuz_base{
 		if($mobile === '3' && empty($this->var['setting']['mobile']['wml'])) {
 			return false;
 		}
-		define('IN_MOBILE', $mobileflag ? $mobile : '2');
+		define('IN_MOBILE', isset($this->var['mobiletpl'][$mobile]) ? $mobile : '2');
 		setglobal('gzipcompress', 0);
 
 		$arr = array();

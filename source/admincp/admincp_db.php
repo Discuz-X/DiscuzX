@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 31634 2012-09-17 06:43:39Z monkey $
+ *      $Id: admincp_db.php 33605 2013-07-16 03:36:20Z hypowang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -126,7 +126,7 @@ if($operation == 'export') {
 
 		DB::query('SET SQL_QUOTE_SHOW_CREATE=0', 'SILENT');
 
-		if(!$_GET['filename'] || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $_GET['filename'])) {
+		if(!$_GET['filename'] || !preg_match('/^[\w\_]+$/', $_GET['filename'])) {
 			cpmsg('database_export_filename_invalid', '', 'error');
 		}
 
@@ -301,7 +301,7 @@ if($operation == 'export') {
 			list($dbhost, $dbport) = explode(':', $dbhost);
 
 			$query = DB::query("SHOW VARIABLES LIKE 'basedir'");
-			list(, $mysql_base) = DB::fetch($query, MYSQL_NUM);
+			list(, $mysql_base) = DB::fetch($query, DB::$drivertype == 'mysqli' ? MYSQLI_NUM : MYSQL_NUM);
 
 			$dumpfile = addslashes(dirname(dirname(__FILE__))).'/'.$backupfilename.'.sql';
 			@unlink($dumpfile);

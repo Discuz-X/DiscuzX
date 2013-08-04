@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_trade.php 32760 2013-03-07 03:23:43Z monkey $
+ *      $Id: extend_thread_trade.php 33509 2013-06-27 04:18:27Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,7 +50,7 @@ class extend_thread_trade extends extend_thread_base {
 		}
 
 		$this->trademessage = $parameters['message'];
-		$parameters['message'] = '';
+		$this->param['message'] = '';
 	}
 
 	public function after_newthread() {
@@ -79,8 +79,6 @@ class extend_thread_trade extends extend_thread_base {
 			'tags' => $this->param['tagstr'],
 			'status' => (defined('IN_MOBILE') ? 8 : 0)
 		));
-
-		$this->param['message'] = $this->trademessage;
 
 		($this->group['allowpostattach'] || $this->group['allowpostimage']) && ($_GET['attachnew'] || $_GET['tradeaid']) && updateattach($this->param['displayorder'] == -4 || $this->param['modnewthreads'], $this->tid, $pid, $_GET['attachnew']);
 		require_once libfile('function/trade');

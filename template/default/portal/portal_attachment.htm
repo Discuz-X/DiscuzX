@@ -22,7 +22,7 @@
 		<img src="{if $smallimg}$smallimg{else}$bigimg{/if}" onclick="insertImage('$bigimg');" class="cur1" />
 	</a>
 	<label for="setconver$attach['attachid']" class="cur1 xi2">
-		<input type="radio" name="setconver" id="setconver$attach['attachid']" class="pr" value="1" onclick="setConver('$coverstr')">{lang portal_attachment_set_cover}
+		<input type="radio" name="setconver" id="setconver$attach['attachid']" class="pr" value="1" onclick="setConver(this.getAttribute('coverstr'))" coverstr='$coverstr'>{lang portal_attachment_set_cover}
 	</label>
 	<span class="pipe">|</span>
 	<span class="cur1 xi2" onclick="deleteAttach('$attach['attachid']', 'portal.php?mod=attachment&id=$attach['attachid']&op=delete');">{lang delete}</span>

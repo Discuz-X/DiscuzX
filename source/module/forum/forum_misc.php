@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 33347 2013-05-30 08:24:40Z jeffjzhang $
+ *      $Id: forum_misc.php 33491 2013-06-24 07:13:17Z kamichen $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1202,6 +1202,9 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 					loadcache('profilesetting');
 					$data = '';
 					foreach($activity['ufield']['userfield'] as $fieldid) {
+						if($fieldid == 'qq') {
+							$fieldid = 'qqnumber';
+						}
 						$data = profile_show($fieldid, $activityapplies['ufielddata']['userfield']);
 						$ufielddata .= '<li>'.$_G['cache']['profilesetting'][$fieldid]['title'].'&nbsp;&nbsp;:&nbsp;&nbsp;';
 						if(empty($data)) {
@@ -1349,6 +1352,9 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				require_once libfile('function/profile');
 				loadcache('profilesetting');
 				foreach($activity['ufield']['userfield'] as $fieldid) {
+					if($fieldid == 'qq') {
+						$fieldid = 'qqnumber';
+					}
 					$data = profile_show($fieldid, $apply['ufielddata']['userfield']);
 					if(strlen($data) > 11 && is_numeric($data)) {
 						$data = '['.$data.']';

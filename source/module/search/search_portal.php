@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_portal.php 32974 2013-04-01 02:24:33Z liulanbo $
+ *      $Id: search_portal.php 33522 2013-06-28 02:58:15Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,7 +65,7 @@ if(!submitcheck('searchsubmit', 1)) {
 		$query = C::t('portal_article_title')->fetch_all_for_search(explode(',', $index['ids']), $orderby, $ascdesc, $start_limit, $_G['tpp']);
 		foreach($query as $article) {
 			$article['dateline'] = dgmdate($article['dateline']);
-			$article['pic'] = pic_get($article['pic'], 'portal', $article['thumb'], $article['remote']);
+			$article['pic'] = $article['pic'] ? pic_get($article['pic'], '', $article['thumb'], $article['remote'], 1, 1) : '';
 			$article['title'] = bat_highlight($article['title'], $keyword);
 			$article['summary'] = bat_highlight($article['summary'], $keyword);
 			$articlelist[] = $article;

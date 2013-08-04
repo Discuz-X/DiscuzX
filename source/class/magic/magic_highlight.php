@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_highlight.php 29373 2012-04-09 07:55:30Z chenmengshu $
+ *      $Id: magic_highlight.php 33516 2013-06-27 08:58:10Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -74,13 +74,13 @@ class magic_highlight {
 			$expiration = TIMESTAMP + $this->parameters['expiration'] * 3600;
 			updatemagicthreadlog($_GET['id'], $this->magic['magicid'], $expiration > 0 ? 'EHL' : 'HLT', $expiration);
 			if($info['authorid'] != $_G['uid']) {
-				notification_add($info['authorid'], 'magic', lang('magic/stick', 'highlight_notification'), array('tid' => $_GET['id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
+				notification_add($info['authorid'], 'magic', lang('magic/highlight', 'highlight_notification'), array('tid' => $_GET['id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
 			}
 		} elseif($idtype == 'blogid') {
 			$info = getpostinfo($_GET['id'], $idtype, array('uid', 'subject'));
 			C::t('home_blogfield')->update($_GET['id'], array('magiccolor' => $_GET['highlight_color']));
 			if($info['uid'] != $_G['uid']) {
-				notification_add($info['uid'], 'magic', lang('magic/stick', 'highlight_notification_blogid'), array('blogid' => $_GET['id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
+				notification_add($info['uid'], 'magic', lang('magic/highlight', 'highlight_notification_blogid'), array('blogid' => $_GET['id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
 			}
 		}
 

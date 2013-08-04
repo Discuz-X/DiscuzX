@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 33364 2013-06-03 02:30:46Z andyzheng $
+ *      $Id: function_core.php 33508 2013-06-27 03:58:47Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -311,13 +311,14 @@ function checkrobot($useragent = '') {
 function checkmobile() {
 	global $_G;
 	$mobile = array();
-	static $mobilebrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
+	static $touchbrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
 				'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
 				'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
 				'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
 				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
 				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
 				'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
+	static $mobilebrowser_list =array('windows phone');
 	static $wmlbrowser_list = array('cect', 'compal', 'ctl', 'lg', 'nec', 'tcl', 'alcatel', 'ericsson', 'bird', 'daxian', 'dbtel', 'eastcom',
 			'pantech', 'dopod', 'philips', 'haier', 'konka', 'kejian', 'lenovo', 'benq', 'mot', 'soutec', 'nokia', 'sagem', 'sgh',
 			'sed', 'capitel', 'panasonic', 'sonyericsson', 'sharp', 'amoi', 'panda', 'zte');
@@ -330,6 +331,10 @@ function checkmobile() {
 		return false;
 	}
 	if(($v = dstrpos($useragent, $mobilebrowser_list, true))){
+		$_G['mobile'] = $v;
+		return '1';
+	}
+	if(($v = dstrpos($useragent, $touchbrowser_list, true))){
 		$_G['mobile'] = $v;
 		return '2';
 	}

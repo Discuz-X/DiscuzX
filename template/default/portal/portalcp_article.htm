@@ -126,7 +126,7 @@ make_html('portal.php?mod=view&aid={$aid}', $('makehtml_'));
 			<form method="post" autocomplete="off" id="articleform" action="portal.php?mod=portalcp&ac=article{if $_GET[modarticlekey]}&modarticlekey=$_GET[modarticlekey]{/if}" enctype="multipart/form-data">
 				<!--{hook/portalcp_top}-->
 				<div class="dopt cl">
-					<span class="z mtn">{lang article_title}:&nbsp;</span>
+					<span class="z mtn" style="width: 80px;">{lang article_title}:&nbsp;</span>
 					<input type="text" name="title" id="title" class="px" value="$article[title]" size="80" />
 					<input type="button" id="color_style" class="pn colorwd" title="{lang select_color}" fwin="eleStyle" onclick="change_title_color(this.id);" style="background-color:$stylecheck[0]" />
 					<input type="hidden" id="highlight_style_0" name="highlight_style[0]" value="$stylecheck[0]" />
@@ -138,13 +138,13 @@ make_html('portal.php?mod=view&aid={$aid}', $('makehtml_'));
 					<a href="javascript:;" id="highlight_op_3" onclick="switchhl(this, 3)" class="dopt_l{if $stylecheck[3]} cnt{/if}" style="text-decoration:underline" title="{lang e_underline}">U</a>
 				</div>
 				<div id="htmlname_" class="dopt mtn cl"{if !$htmlstatus} style="display: none"{/if}>
-					<span class="z mtn">HTML{lang filename}:</span>
+					<span class="z mtn" style="width: 80px;">HTML{lang filename}:</span>
 					<input type="text" name="htmlname" id="htmlname" class="px" value="$article[htmlname]" size="80" onblur="check_htmlname_exists(this)"/>.{$_G['setting']['makehtml']['extendname']}
 					<strong id="checkhtmlnamemsg"></strong>
 					<input type="hidden" name="oldhtmlname" id="oldhtmlname" value="$article[htmlname]" />
 				</div>
 				<div id="pagetitle_" class="dopt mtn cl"{if $article[contents] < 2} style="display: none"{/if}>
-					<span class="z mtn">{lang page_title}:&nbsp;</span>
+					<span class="z mtn" style="width: 80px;">{lang page_title}:&nbsp;</span>
 					<input type="text" name="pagetitle" id="pagetitle" class="px" value="$article_content[title]" size="80" />
 				</div>
 

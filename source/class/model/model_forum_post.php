@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: model_forum_post.php 33429 2013-06-13 03:01:54Z laoguozhang $
+ *      $Id: model_forum_post.php 33619 2013-07-17 06:18:28Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -203,6 +203,8 @@ class model_forum_post extends discuz_model {
 
 		include_once libfile('function/stat');
 		updatestat($this->thread['isgroup'] ? 'grouppost' : 'post');
+
+		C::t('common_remote_port')->insert(array('id'=>$this->pid,'idtype'=>'post','useip'=>getglobal('clientip'),'port'=>getglobal('remoteport')), false, true);
 
 		$this->param['showmsgparam']['fid'] = $this->forum['fid'];
 		$this->param['showmsgparam']['tid'] = $this->thread['tid'];
@@ -508,6 +510,8 @@ class model_forum_post extends discuz_model {
 			$setarr['invisible'] = $pinvisible;
 		}
 		C::t('forum_post')->update('tid:'.$this->thread['tid'], $this->post['pid'], $setarr);
+
+		C::t('common_remote_port')->insert(array('id'=>$this->post['pid'],'idtype'=>'post','useip'=>getglobal('clientip'),'port'=>getglobal('remoteport')), false, true);
 
 
 		$this->forum['lastpost'] = explode("\t", $this->forum['lastpost']);

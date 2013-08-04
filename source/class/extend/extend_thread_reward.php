@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_reward.php 32417 2013-01-15 04:26:17Z monkey $
+ *      $Id: extend_thread_reward.php 33640 2013-07-24 03:47:34Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,7 +87,7 @@ class extend_thread_reward extends extend_thread_base {
 						showmessage('reward_credits_fall');
 					} elseif($rewardprice < $this->group['minrewardprice'] || ($this->group['maxrewardprice'] > 0 && $rewardprice > $this->group['maxrewardprice'])) {
 						showmessage('reward_credits_between', '', array('minrewardprice' => $this->group['minrewardprice'], 'maxrewardprice' => $this->group['maxrewardprice']));
-					} elseif($addprice > getuserprofile('extcredits'.$_G['setting']['creditstransextra'][2])) {
+					} elseif($addprice > getuserprofile('extcredits'.$this->setting['creditstransextra'][2])) {
 						showmessage('reward_credits_shortage');
 					}
 					$realprice = ceil($this->thread['price'] + $this->thread['price'] * $this->setting['creditstax']);

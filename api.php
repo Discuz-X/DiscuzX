@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: api.php 23508 2011-07-21 06:34:40Z cnteacher $
+ *      $Id: api.php 33589 2013-07-12 06:38:40Z andyzheng $
  */
 
 define('IN_API', true);
@@ -13,7 +13,7 @@ define('CURSCRIPT', 'api');
 $modarray = array('js' => 'javascript/javascript', 'ad' => 'javascript/advertisement');
 
 $mod = !empty($_GET['mod']) ? $_GET['mod'] : '';
-if(empty($mod) || !array_key_exists($mod, $modarray)) {
+if(empty($mod) || !in_array($mod, array('js', 'ad'))) {
 	exit('Access Denied');
 }
 

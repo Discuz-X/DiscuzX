@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_page.php 33126 2013-04-26 09:56:46Z nemohou $
+ *      $Id: helper_page.php 33587 2013-07-12 06:34:29Z hypowang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,9 @@ class helper_page {
 		$ajaxtarget = !empty($_GET['ajaxtarget']) ? " ajaxtarget=\"".dhtmlspecialchars($_GET['ajaxtarget'])."\" " : '';
 
 		$a_name = '';
+
+                $mpurl = str_replace(array("'", '"', "\\"), array('%27', '%22', '%5c'), $mpurl);
+
 		if(strpos($mpurl, '#') !== FALSE) {
 			$a_strs = explode('#', $mpurl);
 			$mpurl = $a_strs[0];
