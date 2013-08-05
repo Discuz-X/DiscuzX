@@ -715,7 +715,7 @@ function get_cachedata_mainnav() {
 		$subnavs = '';
 		if(!($nav['identifier'] == 5 && $nav['type'] == 0)) {
 			foreach(C::t('common_nav')->fetch_all_subnav($nav['id']) as $subnav) {
-				$item = "<a href=\"$subnav[url]\" hidefocus=\"true\" ".($subnav['title'] ? "title=\"$subnav[title]\" " : '').($subnav['target'] == 1 ? "target=\"_blank\" " : '').parsehighlight($subnav['highlight']).">$subnav[name]</a>";
+				$item = "<a href=\"$subnav[url]\" hidefocus=\"true\" ".($subnav['title'] ? "title=\"$subnav[title]\" " : '').'target="'.($subnav['target'] == 0 ? '_self' : ($subnav['target'] == 1 ? '_blank' : ($subnav['target'] == 2 ? $subnav['targetcustom'] : ''))).'" '.parsehighlight($subnav['highlight']).">$subnav[name]</a>";
 				$liparam = !$nav['subtype'] || !$nav['subcols'] ? '' : ' style="width:'.sprintf('%1.1f', (1 / $nav['subcols']) * 100).'%"';
 				$subnavs .= '<li'.$liparam.'>'.$item.'</li>';
 			}
@@ -786,7 +786,7 @@ function get_cachedata_mainnav() {
 
 		$data['navs'][$id]['navid'] = $navid;
 		$data['navs'][$id]['level'] = $nav['level'];
-		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]".($nav['identifier'] == 5 && $nav['type'] == 0 ? '<b class="icon_down"></b>' : '')."</a";
+		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').'target="'.($nav['target'] == 0 ? '_self' : ($nav['target'] == 1 ? '_blank' : ($nav['target'] == 2 ? $nav['targetcustom'] : ''))).'" '." $nav[style]>$nav[name]".($nav['identifier'] == 5 && $nav['type'] == 0 ? '<b class="icon_down"></b>' : '')."</a";
 	}
 	$data['menunavs'] = implode('', $data['menunavs']);
 
@@ -813,7 +813,7 @@ function get_cachedata_footernav() {
 				}
 			}
 		}
-		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
+		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').' target="'.($nav['target'] == 0 ? '_self' : ($nav['target'] == 1 ? '_blank' : ($nav['target'] == 2 ? $nav['targetcustom'] : ''))).'"'.' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
 		$data['footernavs'][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'type' => $nav['type'], 'level' => $nav['level'], 'id' => $nav['identifier']);
 	}
@@ -889,7 +889,7 @@ function get_cachedata_spacenavs() {
 			if(in_array($nav['name'], array('{userpanelarea1}', '{userpanelarea2}'))) {
 				$nav['code'] = str_replace(array('{', '}'), '', $nav['name']);
 			} else {
-				$nav['code'] = '<li>'.$nav['subcode'].'<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').'>'.$nav['icon'].$nav['name'].'</a></li>';
+				$nav['code'] = '<li>'.$nav['subcode'].'<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').' target="'.($nav['target'] == 0 ? '_self' : ($nav['target'] == 1 ? '_blank' : ($nav['target'] == 2 ? $nav['targetcustom'] : ''))).'"'.'>'.$nav['icon'].$nav['name'].'</a></li>';
 			}
 		} else {
 			$nav['code'] = '</ul><hr class="da" /><ul>';
@@ -916,7 +916,7 @@ function get_cachedata_mynavs() {
 			$navicon = preg_match('/^http:\/\//i', $navicon) ? $navicon : $_G['siteurl'].$navicon;
 			$nav['icon'] = ' style="background-image:url('.$navicon.') !important"';
 		}
-		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').$nav['icon'].'>'.$nav['name'].'</a>';
+		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').' target="'.($nav['target'] == 0 ? '_self' : ($nav['target'] == 1 ? '_blank' : ($nav['target'] == 2 ? $nav['targetcustom'] : ''))).'"'.$nav['icon'].'>'.$nav['name'].'</a>';
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
 		$data['mynavs'][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'level' => $nav['level']);
 	}
@@ -938,7 +938,7 @@ function get_cachedata_topnav() {
 				$nav['extra'] = ' onclick="addFavorite(this.href, \''.addslashes($_G['setting']['bbname']).'\');return false;"';
 			}
 		}
-		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
+		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').' target="'.($nav['target'] == 0 ? '_self' : ($nav['target'] == 1 ? '_blank' : ($nav['target'] == 2 ? $nav['targetcustom'] : ''))).'"'.' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
 		$data['topnavs'][$nav['subtype']][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'type' => $nav['type'], 'level' => $nav['level'], 'id' => $nav['identifier']);
 	}
