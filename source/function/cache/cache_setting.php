@@ -813,7 +813,7 @@ function get_cachedata_footernav() {
 				}
 			}
 		}
-		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').' target="'.($nav['target'] == 0 ? '_self' : ($nav['target'] == 1 ? '_blank' : ($nav['target'] == 2 ? $nav['targetcustom'] : ''))).'"'.' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
+		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').' target="'.vtarget($nav['target']).'"'.' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
 		$data['footernavs'][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'type' => $nav['type'], 'level' => $nav['level'], 'id' => $nav['identifier']);
 	}
