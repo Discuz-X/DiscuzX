@@ -10,6 +10,10 @@ define('APPTYPEID', 128);
 define('CURSCRIPT', 'plugindevelop');
 require_once './source/class/class_core.php';
 
+if(checkrobot()) {
+	exit(header("HTTP/1.1 403 Forbidden"));
+}
+
 $discuz = C::app();
 
 //核心类
