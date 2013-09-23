@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: google.php 33592 2013-07-12 06:43:47Z andyzheng $
+ *      $Id: google.php 33593 2013-07-12 06:44:40Z andyzheng $
  */
 
 @define('IN_API', true);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_plugin.php 33364 2013-06-03 02:30:46Z andyzheng $
+ *      $Id: spacecp_plugin.php 33362 2013-05-31 09:31:22Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {

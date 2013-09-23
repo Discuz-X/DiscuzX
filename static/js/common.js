@@ -2,13 +2,13 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 33674 2013-07-31 08:32:24Z laoguozhang $
+	$Id: common.js 33794 2013-08-14 07:49:32Z nemohou $
 */
 
 var BROWSER = {};
 var USERAGENT = navigator.userAgent.toLowerCase();
 browserVersion({'ie':'msie','firefox':'','chrome':'','opera':'','safari':'','mozilla':'','webkit':'','maxthon':'','qq':'qqbrowser','rv':'rv'});
-if(BROWSER.safari) {
+if(BROWSER.safari || BROWSER.rv) {
 	BROWSER.firefox = true;
 }
 BROWSER.opera = BROWSER.opera ? opera.version() : 0;
@@ -908,6 +908,9 @@ function showMenu(v) {
 	var zindex = isUndefined(v['zindex']) ? JSMENU['zIndex']['menu'] : v['zindex'];
 	var ctrlclass = isUndefined(v['ctrlclass']) ? '' : v['ctrlclass'];
 	var winhandlekey = isUndefined(v['win']) ? '' : v['win'];
+	if(winhandlekey && ctrlObj && !ctrlObj.getAttribute('fwin')) {
+		ctrlObj.setAttribute('fwin', winhandlekey);
+	}
 	zindex = cover ? zindex + 500 : zindex;
 	if(typeof JSMENU['active'][layer] == 'undefined') {
 		JSMENU['active'][layer] = [];
@@ -1126,9 +1129,8 @@ function dragMenu(menuObj, e, op) {
 			return;
 		}
 		JSMENU['drag'] = [e.clientX, e.clientY];
-		var sxy = fetchOffset(menuObj);
-		JSMENU['drag'][2] = parseInt(sxy['left']) || 0;
-		JSMENU['drag'][3] = parseInt(sxy['top']) || 0;
+		JSMENU['drag'][2] = parseInt(menuObj.style.left);
+		JSMENU['drag'][3] = parseInt(menuObj.style.top);
 		document.onmousemove = function(e) {try{dragMenu(menuObj, e, 2);}catch(err){}};
 		document.onmouseup = function(e) {try{dragMenu(menuObj, e, 3);}catch(err){}};
 		doane(e);
@@ -1979,7 +1981,7 @@ function updatesecqaa(idhash) {
 	$F('_updatesecqaa', arguments);
 }
 
-function updateseccode(idhash, play) {
+function updateseccode(idhash) {
 	$F('_updateseccode', arguments);
 }
 

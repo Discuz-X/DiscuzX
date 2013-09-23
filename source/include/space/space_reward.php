@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_reward.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
+ *      $Id: space_reward.php 33848 2013-08-21 06:24:53Z hypowang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,8 @@ $_GET['fuid'] = empty($_GET['fuid']) ? 0 : intval($_GET['fuid']);
 $opactives['reward'] = 'class="a"';
 
 $_GET['view'] = in_array($_GET['view'], array('we', 'me', 'all')) ? $_GET['view'] : 'we';
+
+$_GET['order'] = preg_replace("/[^\[A-Za-z0-9_\]]/", '', $_GET['order']);
 
 $perpage = 20;
 $perpage = mob_perpage($perpage);

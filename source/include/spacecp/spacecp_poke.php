@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_poke.php 27023 2011-12-30 06:39:45Z svn_project_zhangjie $
+ *      $Id: spacecp_poke.php 33889 2013-08-27 08:35:04Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,8 +42,7 @@ if($op == 'send' || $op == 'reply') {
 			showmessage('space_does_not_exist');
 		}
 
-		$notetext = getstr($_POST['note'], 150);
-		$notetext = censor($notetext);
+		$notetext = censor(htmlspecialchars(cutstr($_POST['note'], strtolower(CHARSET) == 'utf-8' ? 30 : 20, '')));
 		$setarr = array(
 			'pokeuid' => $uid+$_G['uid'],
 			'uid' => $uid,
@@ -58,7 +57,7 @@ if($op == 'send' || $op == 'reply') {
 			'uid' => $uid,
 			'fromuid' => $_G['uid'],
 			'fromusername' => $_G['username'],
-			'note' => getstr($_POST['note'], 150),
+			'note' => $notetext,
 			'dateline' => $_G['timestamp'],
 			'iconid' => intval($_POST['iconid'])
 		);

@@ -152,7 +152,7 @@
 		<li><em>{lang last_visit}</em>$space[lastvisit]</li>
 		<!--{if $_G[uid] == $space[uid] || $_G[group][allowviewip]}-->
 		<li><em>{lang register_ip}</em>$space[regip] - $space[regip_loc]</li>
-		<li><em>{lang last_visit_ip}</em>$space[lastip] - $space[lastip_loc]</li>
+		<li><em>{lang last_visit_ip}</em>$space[lastip]:$space[port] - $space[lastip_loc]</li>
 		<!--{/if}-->
 		<!--{if $space[lastactivity]}--><li><em>{lang last_activity_time}</em>$space[lastactivity]</li><!--{/if}-->
 		<!--{if $space[lastpost]}--><li><em>{lang last_post_time}</em>$space[lastpost]</li><!--{/if}-->

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 33179 2013-05-06 03:16:25Z nemohou $
+	$Id: forum_post.js 33695 2013-08-03 04:39:22Z nemohou $
 */
 
 var forum_post_inited = true;
@@ -79,8 +79,6 @@ function validate(theform) {
 		showError('您的标题超过 80 个字符的限制');
 		return false;
 	}
-	if(ispicstyleforum == 1 && ATTACHORIMAGE == 0 && isfirstpost) {
-	}
 	if(in_array($('postsubmit').name, ['topicsubmit', 'editsubmit'])) {
 		if(theform.typeid && (theform.typeid.options && theform.typeid.options[theform.typeid.selectedIndex].value == 0) && typerequired) {
 			showError('请选择主题对应的分类');
@@ -120,13 +118,13 @@ function validate(theform) {
 	}
 	theform.message.value = message;
 	if($('postsubmit').name == 'editsubmit') {
-		postsubmit(theform);
+		checkpostrule_post(theform);
 		return false;
 	} else if(in_array($('postsubmit').name, ['topicsubmit', 'replysubmit'])) {
 		if(seccodecheck || secqaacheck) {
 			var chk = 1, chkv = '';
 			if(secqaacheck) {
-				chkv = $('checksecqaaverify_' + theform.sechash.value).innerHTML;
+				chkv = $('checksecqaaverify_' + theform.secqaahash.value).innerHTML;
 				if(chkv.indexOf('loading') != -1) {
 					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
@@ -136,7 +134,7 @@ function validate(theform) {
 				}
 			}
 			if(seccodecheck) {
-				chkv = $('checkseccodeverify_' + theform.sechash.value).innerHTML;
+				chkv = $('checkseccodeverify_' + theform.seccodehash.value).innerHTML;
 				if(chkv.indexOf('loading') !== -1) {
 					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
@@ -146,12 +144,29 @@ function validate(theform) {
 				}
 			}
 			if(chk) {
-				postsubmit(theform);
+				checkpostrule_post(theform);
 			}
 		} else {
-			postsubmit(theform);
+			checkpostrule_post(theform);
 		}
 		return false;
+	}
+}
+
+function checkpostrule_post(theform) {
+	if(!seccodecheck && !secqaacheck && !theform.sechash) {
+		var x = new Ajax();
+		x.get('forum.php?mod=ajax&action=checkpostrule&ac=' + postaction + '&inajax=yes', function(s) {
+			if(s) {
+				ajaxinnerhtml($('seccheck'), s);
+				evalscript(s);
+				seccodecheck = true;
+			} else {
+				postsubmit(theform);
+			}
+		});
+	} else {
+		postsubmit(theform);
 	}
 }
 

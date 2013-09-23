@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_comment.php 31470 2012-08-31 03:29:50Z zhangguosheng $
+ *      $Id: portal_comment.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,8 +54,7 @@ if($csubject['commentnum']) {
 }
 
 $multi = multi($csubject['commentnum'], $perpage, $page, "portal.php?mod=comment&id=$id&idtype=$idtype");
-$seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
-$secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 include_once template("diy:portal/comment");
 
 ?>

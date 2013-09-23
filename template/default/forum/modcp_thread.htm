@@ -137,6 +137,7 @@
 							</td>
 							<th class="$thread[folder]">
 								<span id="thread_$thread[tid]"><a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" $thread['highlight']>$thread[subject]</a></span>
+								<!--{if $_G['setting']['threadhidethreshold'] && $thread['hidden'] >= $_G['setting']['threadhidethreshold']}--><span class="xg1">{lang hidden}</span>&nbsp;<!--{/if}-->
 								<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 								<!--{if $thread['price'] > 0}-->
 									<!--{if $thread['special'] == '3'}-->

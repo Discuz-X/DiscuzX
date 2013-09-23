@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cache.php 31691 2012-09-21 05:35:18Z monkey $
+ *      $Id: function_cache.php 33604 2013-07-16 03:20:08Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,7 +47,7 @@ function updatecache($cachename = '') {
 				call_user_func('build_cache_'.$entry);
 			} else {
 				@include_once libfile('cache/'.$entrys[1], 'plugin/'.$entrys[0]);
-				call_user_func('build_cache_'.$entrys[1]);
+				call_user_func('build_cache_plugin_'.$entrys[1]);
 			}
 		}
 	}

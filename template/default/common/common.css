@@ -1086,6 +1086,7 @@ CSS 写作注意事项：
 			.ignore_notice { background: url({IMGDIR}/close.gif) no-repeat 0 0; position:absolute; right:0; top:0; width:12px; height:12px; overflow:hidden; }
 			.p_pop .ignore_noticeli a,.p_pop .ignore_noticeli a:hover,.p_pop .ignore_noticeli a.a { background:none; border-bottom:0; }
 			.p_pop .notice_interactive, .p_pop .notice_system, .p_pop .notice_manage, .p_pop .notice_app, .p_pop .notice_mypost { margin: 3px 2px 5px 0;}
+			.ie6 .ignore_notice { display: none; }
 
 		/* .blk -> block 内容较为复杂的弹出层使用 .blk 的 class，内部的 a 标签重新定义 */
 		.blk a, .inlinelist a { display: inline; padding: 0; border: none; }

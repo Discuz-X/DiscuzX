@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 32367 2013-01-07 02:30:12Z liulanbo $
+ *      $Id: forum_post.php 33848 2013-08-21 06:24:53Z hypowang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,9 @@ $pid = intval(getgpc('pid'));
 $sortid = intval(getgpc('sortid'));
 $typeid = intval(getgpc('typeid'));
 $special = intval(getgpc('special'));
+
+parse_str($_GET['extra'], $_GET['extra']);
+$_GET['extra'] = http_build_query($_GET['extra']);
 
 $postinfo = array('subject' => '');
 $thread = array('readperm' => '', 'pricedisplay' => '', 'hiddenreplies' => '');
@@ -210,8 +213,7 @@ if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && pr
 
 $urloffcheck = $usesigcheck = $smileyoffcheck = $codeoffcheck = $htmloncheck = $emailcheck = '';
 
-$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
-$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+list($seccodecheck, $secqaacheck) = seccheck('post', $_GET['action']);
 
 $_G['group']['allowpostpoll'] = $_G['group']['allowpost'] && $_G['group']['allowpostpoll'] && ($_G['forum']['allowpostspecial'] & 1);
 $_G['group']['allowposttrade'] = $_G['group']['allowpost'] && $_G['group']['allowposttrade'] && ($_G['forum']['allowpostspecial'] & 2);

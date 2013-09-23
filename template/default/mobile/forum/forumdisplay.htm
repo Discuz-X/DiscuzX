@@ -8,7 +8,7 @@
 
 <div class="box flif">
 	<!--{if !$subforumonly}-->
-    	{lang index_today}$_G[forum][todayposts]<span class="pipe">|</span>{lang index_threads}$_G[forum][threads]</span><!--{/if}--><!--{if $_G[uid]}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=favorite&type=forum&id={$_G[fid]}" title="{lang forum_favorite}" >{lang forum_favorite}</a><!--{/if}-->
+    	{lang index_today}$_G[forum][todayposts]<span class="pipe">|</span>{lang index_threads}$_G[forum][threads]</span><!--{/if}--><!--{if $_G[uid]}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=favorite&type=forum&id={$_G[fid]}&formhash={FORMHASH}" title="{lang forum_favorite}" >{lang forum_favorite}</a><!--{/if}-->
 </div>
 
 

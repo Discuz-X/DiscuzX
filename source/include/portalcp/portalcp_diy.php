@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_diy.php 30999 2012-07-06 07:54:34Z zhangguosheng $
+ *      $Id: portalcp_diy.php 33949 2013-09-05 02:16:25Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -440,7 +440,7 @@ function getportalarticletplname($catid, $primaltplname = ''){
 		}
 		if(empty($primaltplname)) {
 			$primaltplname = getglobal('cache/style_default/tpldir').':portal/view';
-			C::t('portal_category')-update($catid, array('articleprimaltplname' => $primaltplname));
+			C::t('portal_category')->update($catid, array('articleprimaltplname' => $primaltplname));
 		}
 	}
 	return $primaltplname;

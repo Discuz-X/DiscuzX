@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_getip.php 33619 2013-07-17 06:18:28Z andyzheng $
+ *      $Id: topicadmin_getip.php 33709 2013-08-06 09:06:56Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,7 +29,6 @@ if(!$member) {
 }
 
 $member['iplocation'] = convertip($member['useip']);
-$portdata = C::t('common_remote_port')->fetch_by_id_idtype($pid, 'post');
 
 include template('forum/topicadmin_getip');
 

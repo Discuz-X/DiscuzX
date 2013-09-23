@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 30333 2012-05-23 07:16:05Z monkey $
+ *      $Id: admincp_adv.php 33968 2013-09-10 08:01:23Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -51,17 +51,19 @@ if($operation == 'ad') {
 		shownav('extended', 'adv_admin');
 		$type = $_GET['type'];
 		$target = $_GET['target'];
-		$typeadd = '';
+		$typeadd = $advfile = '';
 		if($type) {
 			$etype = explode(':', $type);
 			if(count($etype) > 1) {
-				$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
-				$advclass = 'adv_'.$etype[1];
+				if(ispluginkey($etype[0]) && preg_match('/^\w$/', $etype[1])) {
+					$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+					$advclass = 'adv_'.$etype[1];
+				}
 			} else {
 				$advfile = libfile('adv/'.$type, 'class');
 				$advclass = 'adv_'.$type;
 			}
-			if(file_exists($advfile)) {
+			if($advfile && file_exists($advfile)) {
 				require_once $advfile;
 				$advclassv = new $advclass();
 				if(class_exists($advclass)) {
@@ -102,15 +104,18 @@ if($operation == 'ad') {
 		$typenames = array();
 		foreach(C::t('common_advertisement')->fetch_all_search($title, $starttime, $endtime, $type, $target, $orderby, $start_limit, $advppp) as $adv) {
 			if(!$type) {
+				$advfile = '';
 				$etype = explode(':', $adv['type']);
 				if(count($etype) > 1) {
-					$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
-					$advclass = 'adv_'.$etype[1];
+					if(ispluginkey($etype[0]) && preg_match('/^\w$/', $etype[1])) {
+						$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+						$advclass = 'adv_'.$etype[1];
+					}
 				} else {
 					$advfile = libfile('adv/'.$adv['type'], 'class');
 					$advclass = 'adv_'.$adv['type'];
 				}
-				if(!file_exists($advfile)) {
+				if(!$advfile || !file_exists($advfile)) {
 					continue;
 				}
 				if(!isset($typenames[$adv['type']])) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_favorite.php 32896 2013-03-21 06:08:58Z chenmengshu $
+ *      $Id: spacecp_favorite.php 33786 2013-08-13 05:56:56Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -130,7 +130,7 @@ if($_GET['op'] == 'delete') {
 	$description_show = nl2br($description);
 
 	$fav_count = C::t('home_favorite')->count_by_id_idtype($id, $idtype);
-	if(submitcheck('favoritesubmit') || $type == 'forum' || $type == 'group') {
+	if(submitcheck('favoritesubmit') || ($type == 'forum' || $type == 'group' || $type == 'thread') && $_GET['formhash'] == FORMHASH) {
 		$arr = array(
 			'uid' => intval($_G['uid']),
 			'idtype' => $idtype,

@@ -254,7 +254,7 @@ make_html('portal.php?mod=view&aid={$aid}', $('makehtml_'));
 
 				<!--{hook/portalcp_bottom}-->
 
-				<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+				<!--{if $secqaacheck || $seccodecheck}-->
 					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 					<div class="exfm pns"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->

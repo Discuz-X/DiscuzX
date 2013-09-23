@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_error.php 32496 2013-01-29 08:43:01Z chenmengshu $
+ *      $Id: discuz_error.php 33361 2013-05-31 08:59:06Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -254,8 +254,8 @@ EOT;
 			echo '<div class="info">';
 			echo '<p><strong>PHP Debug</strong></p>';
 			echo '<table cellpadding="5" cellspacing="1" width="100%" class="table">';
-			echo '<tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
 			if(is_array($phpmsg)) {
+				echo '<tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
 				foreach($phpmsg as $k => $msg) {
 					$k++;
 					echo '<tr class="bg1">';

@@ -31,7 +31,15 @@
 	<!--{else}-->
 		<!--{if $operation == 'password'}-->
 			<script type="text/javascript" src="{$_G[setting][jspath]}register.js?{VERHASH}"></script>
-			<p class="bbda pbm mbm"><!--{if !$_G['setting']['connect']['allow'] || !$conisregister}-->{lang old_password_comment}<!--{else}-->{lang connect_config_newpassword_comment}<!--{/if}--></p>
+			<p class="bbda pbm mbm">
+				<!--{if !$_G['member']['freeze']}-->
+					<!--{if !$_G['setting']['connect']['allow'] || !$conisregister}-->{lang old_password_comment}<!--{else}-->{lang connect_config_newpassword_comment}<!--{/if}-->
+				<!--{elseif $_G['member']['freeze'] == 1}-->
+					<strong class="xi1">{lang freeze_pw_tips}</strong>
+				<!--{elseif $_G['member']['freeze'] == 2}-->
+					<strong class="xi1">{lang freeze_email_tips}</strong>
+				<!--{/if}-->
+			</p>
 			<form action="home.php?mod=spacecp&ac=profile" method="post" autocomplete="off">
 				<input type="hidden" value="{FORMHASH}" name="formhash" />
 				<table summary="{lang memcp_profile}" cellspacing="0" cellpadding="0" class="tfm">
@@ -66,9 +74,19 @@
 									$acitvemessage
 								<!--{/if}-->
 							</p>
-							<!--{if $_G['setting']['regverify'] == 1 && (($_G['group']['grouptype'] == 'member' && $_G['adminid'] == 0) || $_G['groupid'] == 8)}--><p class="d">{lang memcp_profile_email_comment}</p><!--{/if}-->
+							<!--{if $_G['setting']['regverify'] == 1 && (($_G['group']['grouptype'] == 'member' && $_G['adminid'] == 0) || $_G['groupid'] == 8) || $_G['member']['freeze']}--><p class="d">{lang memcp_profile_email_comment}</p><!--{/if}-->
 						</td>
 					</tr>
+					
+					<!--{if $_G['member']['freeze'] == 2}-->
+					<tr>
+						<th>{lang freeze_reason}</th>
+						<td>
+							<textarea rows="3" cols="80" name="freezereson" class="pt">$space[freezereson]</textarea>
+							<p class="d" id="chk_newpassword2">{lang freeze_reason_comment}</p>
+						</td>
+					</tr>
+					<!--{/if}-->
 
 					<tr>
 						<th>{lang security_question}</th>
@@ -94,11 +112,13 @@
 							<input type="text" name="answernew" id="answernew" class="px" />
 							<p class="d">{lang memcp_profile_security_answer_comment}</p>
 						</td>
-					</tr>
-					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-					<!--{eval $sectpl = '<tr><th><sec></th><td><sec><p class="d"><sec></p></td>';}-->
-					<!--{subtemplate common/seccheck}-->
-					<!--{/if}-->
+					</tr>					
+					<!--{if $secqaacheck || $seccodecheck}-->
+					</table>
+						<!--{eval $sectpl = '<table cellspacing="0" cellpadding="0" class="tfm"><tr><th><sec></th><td><sec><p class="d"><sec></p></td></tr></table>';}-->
+						<!--{subtemplate common/seccheck}-->
+					<table summary="{lang memcp_profile}" cellspacing="0" cellpadding="0" class="tfm">
+					<!--{/if}-->					
 					<tr>
 						<th>&nbsp;</th>
 						<td><button type="submit" name="pwdsubmit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>

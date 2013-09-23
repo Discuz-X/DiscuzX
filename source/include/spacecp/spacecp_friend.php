@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_friend.php 32284 2012-12-18 08:12:53Z zhengqingpeng $
+ *      $Id: spacecp_friend.php 33696 2013-08-03 04:53:42Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -88,7 +88,7 @@ if($op == 'add') {
 		if(submitcheck('addsubmit')) {
 
 			$_POST['gid'] = intval($_POST['gid']);
-			$_POST['note'] = censor(htmlspecialchars($_POST['note']));
+			$_POST['note'] = censor(htmlspecialchars(cutstr($_POST['note'], strtolower(CHARSET) == 'utf-8' ? 30 : 20, '')));
 			friend_add($uid, $_POST['gid'], $_POST['note']);
 
 			$note = array(

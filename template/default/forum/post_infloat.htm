@@ -93,10 +93,11 @@
 				<textarea rows="7" cols="80" name="message" id="postmessage" onKeyDown="seditor_ctlent(event, '$(\'postsubmit\').click();')" tabindex="22" class="pt">$message</textarea>
 				</div>
 			</div>
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-				<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-				<div class="mtm"><!--{subtemplate common/seccheck}--></div>
-			<!--{/if}-->
+			<div id="seccheck_$_GET[action]">
+				<!--{if $secqaacheck || $seccodecheck}-->
+					<!--{subtemplate forum/seccheck_post}-->					
+				<!--{/if}-->
+			</div>
 		</div>
 	</div>
 	<!--{hook/post_infloat_middle}-->
@@ -105,7 +106,7 @@
 			<a href="javascript:;" id="custominfo" class="y" style="margin-left:5px"><img src="{IMGDIR}/info_small.gif" alt="{lang faq}" /></a>
 		<!--{/if}-->
 		<a href="home.php?mod=spacecp&ac=credit&op=rule&fid=$_G[fid]" class="y" target="_blank">{lang post_credits_rule}</a>
-		<button type="submit" id="postsubmit" class="pn pnc z" value="true" name="{if $_GET[action] == 'newthread'}topicsubmit{elseif $_GET[action] == 'reply'}replysubmit{/if}" tabindex="23"><span><!--{if $_GET[action] == 'newthread'}-->{lang post_newthread}<!--{elseif $_GET[action] == 'reply'}-->{lang join_thread}<!--{/if}--></span></button>
+		<button type="submit" id="postsubmit" class="pn pnc z" value="true"{if !$seccodecheck} onmouseover="checkpostrule('seccheck_$_GET[action]', 'ac=$_GET[action]&infloat=yes&handlekey=$_GET[handlekey]');this.onmouseover=null"{/if} name="{if $_GET[action] == 'newthread'}topicsubmit{elseif $_GET[action] == 'reply'}replysubmit{/if}" tabindex="23"><span><!--{if $_GET[action] == 'newthread'}-->{lang post_newthread}<!--{elseif $_GET[action] == 'reply'}-->{lang join_thread}<!--{/if}--></span></button>
 		<!--{hook/post_infloat_btn_extra}-->
 	</div>
 </form>

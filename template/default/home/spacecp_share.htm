@@ -70,7 +70,7 @@
 			<!--{if $type == 'thread'}-->
 				<p><a href="javascript:;" onclick="setCopy($('share_general').value + '\n ' + $('share_link').value, '{lang share_copylink}')" />{lang share_im}</a></p>
 			<!--{/if}-->
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+			<!--{if $secqaacheck || $seccodecheck}-->
 				<!--{block sectpl}--><sec> <span id="sec<hash>" class="secq" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 				<div class="sec"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->
@@ -102,7 +102,7 @@
 				{lang share_description}:
 			</p>
 			<textarea id="general_{$id}" name="general" cols="50" rows="5" class="pt mtn" style="width: 400px;" onkeydown="ctrlEnter(event, 'sharesubmit_btn')" onkeyup="showPreview(this.value, 'quote_{$id}')"></textarea>
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+			<!--{if $secqaacheck || $seccodecheck}-->
 			<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 			<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->

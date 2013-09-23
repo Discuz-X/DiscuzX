@@ -13,7 +13,7 @@
 			<span id="face_{$feedid}" title="{lang insert_emoticons}" onclick="showFace(this.id, 'feedmessage_{$feedid}');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
 			<span id="note_{$feedid}"></span>
 			<textarea id="feedmessage_{$feedid}" name="message" rows="2" class="pt"  onkeydown="return ctrlEnter(event, 'feedbutton');"></textarea>
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+			<!--{if $secqaacheck || $seccodecheck}-->
 				<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 				<div class="mtm mbm sec"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->
@@ -30,7 +30,7 @@
 		function succeedhandle_$_GET['handlekey'] (url, message, values) {
 			feedcomment_add(values['cid'], $feedid);
 			hideWindow('$_GET['handlekey']');
-			<!--{if checkperm('seccode') && $sechash}-->
+			<!--{if $sechash}-->
 				<!--{if $secqaacheck}-->
 				updatesecqaa('$sechash');
 				<!--{/if}-->

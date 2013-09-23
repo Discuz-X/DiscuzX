@@ -6,6 +6,9 @@
 		<form method="post" action="member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=yes" onsubmit="{if $_G['setting']['pwdsafety']}pwmd5('password3_$loginhash');{/if}" >
 		<input type="hidden" name="formhash" id="formhash" value='{FORMHASH}' />
 		<input type="hidden" name="referer" id="referer" value="<!--{if dreferer()}-->{echo dreferer()}<!--{else}-->forum.php?mobile=yes<!--{/if}-->" />
+		<!--{if $auth}-->
+			<input type="hidden" name="auth" value="$auth" />
+		<!--{/if}-->
 	<div class="bm_c">
 	<p>
 		<select name="fastloginfield" id="fastloginfield_{$loginhash}" >
@@ -21,8 +24,8 @@
 		{lang password}:<input type="password" name="password" id="password3_$loginhash" class="txt" value='' />
 	</p>
 	<p>
-		<!--{if $secqaacheck || $seccodecheck}-->
-		<!--{subtemplate common/seccheck}-->
+		<!--{if $seccodecheck}-->
+			<!--{subtemplate common/seccheck}-->
 		<!--{/if}-->
 	</p>
 	<p>

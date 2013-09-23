@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 29881 2012-05-02 07:19:30Z liulanbo $
+ *      $Id: lang_template.php 33692 2013-08-02 10:26:20Z nemohou $
  *
  *      This file is automatically generate
  */
@@ -25,6 +25,7 @@ $lang = array (
   'login' => '登录',
   'login_clearcookies' => '清除痕迹',
   'login_guestmessage' => '您需要先登录才能继续本操作',
+  'login_seccheck2' => '请输入验证码后继续登录',
   'login_member' => '用户登录',
   'login_method' => '快捷登录',
   'login_permanent' => '自动登录',

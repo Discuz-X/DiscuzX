@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 33619 2013-07-17 06:18:28Z andyzheng $
+ *      $Id: post_newreply.php 33709 2013-08-06 09:06:56Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -90,9 +90,9 @@ if($_G['setting']['commentnumber'] && !empty($_GET['comment'])) {
 		'comment' => $comment,
 		'score' => $commentscore ? 1 : 0,
 		'useip' => $_G['clientip'],
+		'port'=> $_G['remoteport']
 	), true);
 	C::t('forum_post')->update('tid:'.$_G['tid'], $_GET['pid'], array('comment' => 1));
-	C::t('common_remote_port')->insert(array('id'=>$pcid, 'idtype'=>'postcomment','useip'=>getglobal('clientip'),'port'=>getglobal('remoteport')), false, true);
 
 	$comments = $thread['comments'] ? $thread['comments'] + 1 : C::t('forum_postcomment')->count_by_tid($_G['tid']);
 	C::t('forum_thread')->update($_G['tid'], array('comments' => $comments));
@@ -160,7 +160,11 @@ if(getstatus($thread['status'], 3)) {
 	}
 
 }
+
 if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
+
+	$st_p = $_G['uid'].'|'.TIMESTAMP;
+	dsetcookie('st_p', $st_p.'|'.md5($st_p.$_G['config']['security']['authkey']));
 
 	if($thread['special'] == 2 && ((!isset($_GET['addtrade']) || $thread['authorid'] != $_G['uid']) && !$tradenum = C::t('forum_trade')->fetch_counter_thread_goods($_G['tid']))) {
 		showmessage('trade_newreply_nopermission', NULL);

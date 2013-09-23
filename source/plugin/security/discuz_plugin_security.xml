@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
-	<item id="Version"><![CDATA[X2.5]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
@@ -12,7 +11,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[security/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.11]]></item>
+			<item id="version"><![CDATA[1.11.1]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[security]]></item>
@@ -40,9 +39,11 @@
 				</item>
 			</item>
 		</item>
-		<item id="version"><![CDATA[X3]]></item>
+		<item id="version"><![CDATA[X3.1]]></item>
 		<item id="installfile"><![CDATA[install.php]]></item>
 		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
+		<item id="enablefile"><![CDATA[switch.php]]></item>
+		<item id="disablefile"><![CDATA[switch.php]]></item>
 		<item id="language">
 			<item id="scriptlang">
 				<item id="banuser_tips_qq"><![CDATA[抱歉，您的帐号被系统禁言，您可以绑定QQ解除禁言状态。<a href="connect.php?mod=login&op=init">绑定QQ</a>]]></item>
@@ -53,6 +54,10 @@
 				<item id="safelogintips"><![CDATA[为避免您的帐号被盗用，请您绑定QQ帐号后发帖，绑定后请使用QQ帐号登录]]></item>
 				<item id="qqloginaloneopened"><![CDATA[已开启QQ独立登录设置]]></item>
 				<item id="quicklogin"><![CDATA[快捷登录]]></item>
+				<item id="notice_title"><![CDATA[防水墙提醒您]]></item>
+				<item id="notice_memo"><![CDATA[昨日防水墙识别 {count} 个违规用户，请马上处理</p>]]></item>
+				<item id="notice_close"><![CDATA[关闭]]></item>
+				<item id="notice_link"><![CDATA[点击进入防水墙]]></item>
 			</item>
 			<item id="templatelang">
 				<item id="unlock_title"><![CDATA[请输入验证码，解除禁言状态]]></item>

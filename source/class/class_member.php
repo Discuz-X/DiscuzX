@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 33436 2013-06-14 02:28:25Z nemohou $
+ *      $Id: class_member.php 33958 2013-09-06 04:26:39Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,12 +18,12 @@ class logging_ctl {
 		loaducenter();
 	}
 
-	function logging_more($questionexist) {
+	function logging_more($questionexist, $secchecklogin2 = 0) {
 		global $_G;
 		if(empty($_GET['lssubmit'])) {
 			return;
 		}
-		$auth = authcode($_GET['username']."\t".$_GET['password']."\t".($questionexist ? 1 : 0), 'ENCODE');
+		$auth = authcode($_GET['username']."\t".$_GET['password']."\t".($questionexist ? 1 : 0), 'ENCODE', $_G['config']['security']['authkey']);
 		$js = '<script type="text/javascript">showWindow(\'login\', \'member.php?mod=logging&action=login&auth='.rawurlencode($auth).'&referer='.rawurlencode(dreferer()).(!empty($_GET['cookietime']) ? '&cookietime=1' : '').'\')</script>';
 		showmessage('location_login', '', array('type' => 1), array('extrajs' => $js));
 	}
@@ -37,8 +37,14 @@ class logging_ctl {
 			showmessage('login_succeed', $referer ? $referer : './', $param, array('showdialog' => 1, 'locationtime' => true, 'extrajs' => $ucsynlogin));
 		}
 
-		$from_connect = $this->setting['connect']['allow'] && !empty($_GET['from']) ? 1 : 0;
-		$seccodecheck = $from_connect ? false : $this->setting['seccodestatus'] & 2;
+		list($seccodecheck) = seccheck('login');
+		if(!empty($_GET['auth'])) {
+			$dauth = authcode($_GET['auth'], 'DECODE', $_G['config']['security']['authkey']);
+			list(,,,$secchecklogin2) = explode("\t", $dauth);
+			if($secchecklogin2) {
+				$seccodecheck = true;
+			}
+		}
 		$seccodestatus = !empty($_GET['lssubmit']) ? false : $seccodecheck;
 		$invite = getinvite();
 
@@ -48,7 +54,7 @@ class logging_ctl {
 			$username = !empty($_G['cookie']['loginuser']) ? dhtmlspecialchars($_G['cookie']['loginuser']) : '';
 
 			if(!empty($_GET['auth'])) {
-				list($username, $password, $questionexist) = explode("\t", authcode($_GET['auth'], 'DECODE'));
+				list($username, $password, $questionexist) = explode("\t", authcode($_GET['auth'], 'DECODE', $_G['config']['security']['authkey']));
 				$username = dhtmlspecialchars($username);
 				$auth = dhtmlspecialchars($_GET['auth']);
 			}
@@ -69,10 +75,13 @@ class logging_ctl {
 		} else {
 
 			if(!empty($_GET['auth'])) {
-				list($_GET['username'], $_GET['password']) = daddslashes(explode("\t", authcode($_GET['auth'], 'DECODE')));
+				list($_GET['username'], $_GET['password']) = daddslashes(explode("\t", authcode($_GET['auth'], 'DECODE', $_G['config']['security']['authkey'])));
 			}
 
+			$loginhash = !empty($_GET['loginhash']) && preg_match('/^\w+$/', $_GET['loginhash']) ? $_GET['loginhash'] : '';
+
 			if(!($_G['member_loginperm'] = logincheck($_GET['username']))) {
+				captcha::report($_G['clientip']);
 				showmessage('login_strike');
 			}
 			if($_GET['fastloginfield']) {
@@ -113,12 +122,97 @@ class logging_ctl {
 
 				setloginstatus($result['member'], $_GET['cookietime'] ? 2592000 : 0);
 				checkfollowfeed();
+				if($_G['group']['forcelogin']) {
+					if($_G['group']['forcelogin'] == 1) {
+						clearcookies();
+						showmessage('location_login_force_qq');
+					} elseif($_G['group']['forcelogin'] == 2 && $_GET['loginfield'] != 'email') {
+						clearcookies();
+						showmessage('location_login_force_mail');
+					}
+				}
 
 				if($_G['member']['lastip'] && $_G['member']['lastvisit']) {
 					dsetcookie('lip', $_G['member']['lastip'].','.$_G['member']['lastvisit']);
 				}
-				C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'lastvisit' =>TIMESTAMP, 'lastactivity' => TIMESTAMP));
+				C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'port' => $_G['remoteport'], 'lastvisit' =>TIMESTAMP, 'lastactivity' => TIMESTAMP));
 				$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
+
+				$pwold = false;
+				if($this->setting['strongpw'] && !$this->setting['pwdsafety']) {
+					if(in_array(1, $this->setting['strongpw']) && !preg_match("/\d+/", $_GET['password'])) {
+						$pwold = true;
+					}
+					if(in_array(2, $this->setting['strongpw']) && !preg_match("/[a-z]+/", $_GET['password'])) {
+						$pwold = true;
+					}
+					if(in_array(3, $this->setting['strongpw']) && !preg_match("/[A-Z]+/", $_GET['password'])) {
+						$pwold = true;
+					}
+					if(in_array(4, $this->setting['strongpw']) && !preg_match("/[^a-zA-z0-9]+/", $_GET['password'])) {
+						$pwold = true;
+					}
+				}
+
+				if($_G['member']['adminid'] != 1) {
+					if($this->setting['accountguard']['loginoutofdate'] && $_G['member']['lastvisit'] && TIMESTAMP - $_G['member']['lastvisit'] > 90 * 86400) {
+						C::t('common_member')->update($_G['uid'], array('freeze' => 2));
+						C::t('common_member_validate')->insert(array(
+							'uid' => $_G['uid'],
+							'submitdate' => TIMESTAMP,
+							'moddate' => 0,
+							'admin' => '',
+							'submittimes' => 1,
+							'status' => 0,
+							'message' => '',
+							'remark' => '',
+						), false, true);
+						manage_addnotify('verifyuser');
+						showmessage('location_login_outofdate', 'home.php?mod=spacecp&ac=profile&op=password&resend=1', array('type' => 1), array('showdialog' => true, 'striptags' => false, 'locationtime' => true));
+					}
+
+					if($this->setting['accountguard']['loginpwcheck'] && $pwold) {
+						$freeze = $pwold;
+						if($this->setting['accountguard']['loginpwcheck'] == 2 && $freeze) {
+							C::t('common_member')->update($_G['uid'], array('freeze' => 1));
+						}
+					}
+				}
+
+				$seccheckrule = & $_G['setting']['seccodedata']['rule']['login'];
+				if($seccheckrule['allow'] == 2) {
+					if($seccheckrule['nolocal']) {
+						require_once libfile('function/misc');
+						$lastipConvert = process_ipnotice(convertip($_G['member']['lastip']));
+						$nowipConvert = process_ipnotice(convertip($_G['clientip']));
+						if($lastipConvert != $nowipConvert && stripos($lastipConvert, $nowipConvert) == false && stripos($nowipConvert, $lastipConvert) == false) {
+							$seccodecheck = true;
+						}
+					}
+					if(!$seccodecheck && $seccheckrule['pwsimple'] && $pwold) {
+						$seccodecheck = true;
+					}
+					if(!$seccodecheck && $seccheckrule['outofday'] && $_G['member']['lastvisit'] && TIMESTAMP - $_G['member']['lastvisit'] > $seccheckrule['outofday'] * 86400) {
+						$seccodecheck = true;
+					}
+					if(!$seccodecheck && $_G['member_loginperm'] < 4) {
+						$seccodecheck = true;
+					}
+					if(!$seccodecheck && $seccheckrule['numiptry']) {
+						$seccodecheck = failedipcheck($seccheckrule['numiptry'], $seccheckrule['timeiptry']);
+					}
+					if($seccodecheck && !$secchecklogin2) {
+						clearcookies();
+						$auth = authcode($_GET['username']."\t".$_GET['password']."\t".($result['ucresult']['uid'] == -3 ? 1 : 0)."\t1", 'ENCODE', $_G['config']['security']['authkey']);
+						$location = 'member.php?mod=logging&action=login&auth='.rawurlencode($auth).'&referer='.rawurlencode(dreferer()).(!empty($_GET['cookietime']) ? '&cookietime=1' : '');
+						if(defined('IN_MOBILE')) {
+							showmessage('login_seccheck2', $location);
+						} else {
+							$js = '<script type="text/javascript">location.href=\''.$location.'\'</script>';
+							showmessage('login_seccheck2', '', array('type' => 1), array('extrajs' => $js));
+						}
+					}
+				}
 
 				if($invite['id']) {
 					$result = C::t('common_invite')->count_by_uid_fuid($invite['uid'], $uid);
@@ -152,12 +246,17 @@ class logging_ctl {
 					'extrajs' => $ucsynlogin
 				);
 
-				$loginmessage = $_G['groupid'] == 8 ? 'login_succeed_inactive_member' : 'login_succeed';
-
-				$location = $invite || $_G['groupid'] == 8 ? 'home.php?mod=space&do=home' : dreferer();
+				if(!$freeze || !$this->setting['accountguard']['loginpwcheck']) {
+					$loginmessage = $_G['groupid'] == 8 ? 'login_succeed_inactive_member' : 'login_succeed';
+					$location = $invite || $_G['groupid'] == 8 ? 'home.php?mod=space&do=home' : dreferer();
+				} else {
+					$loginmessage = 'login_succeed_password_change';
+					$location = 'home.php?mod=spacecp&ac=profile&op=password';
+					$_GET['lssubmit'] = 0;
+				}
 				if(empty($_GET['handlekey']) || !empty($_GET['lssubmit'])) {
 					if(defined('IN_MOBILE')) {
-						showmessage('location_login_succeed_mobile', $location, array('username' => $result['ucresult']['username']), array('location' => true));
+						showmessage($loginmessage, $location, $param, array('location' => true));
 					} else {
 						if(!empty($_GET['lssubmit'])) {
 							if(!$ucsynlogin) {
@@ -194,6 +293,7 @@ class logging_ctl {
 					$_G['clientip']);
 				writelog('illegallog', $errorlog);
 				loginfailed($_GET['username']);
+				failedip();
 				$fmsg = $result['ucresult']['uid'] == '-3' ? (empty($_GET['questionid']) || $answer == '' ? 'login_question_empty' : 'login_question_invalid') : 'login_invalid';
 				if($_G['member_loginperm'] > 1) {
 					showmessage($fmsg, '', array('loginperm' => $_G['member_loginperm'] - 1));
@@ -214,7 +314,7 @@ class logging_ctl {
 		$ucsynlogout = $this->setting['allowsynlogin'] ? uc_user_synlogout() : '';
 
 		if($_GET['formhash'] != $_G['formhash']) {
-			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout));
+			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout, 'referer' => dreferer()));
 		}
 
 		clearcookies();
@@ -224,9 +324,9 @@ class logging_ctl {
 		$_G['setting']['styleid'] = $this->setting['styleid'];
 
 		if(defined('IN_MOBILE')) {
-			showmessage('location_logout_succeed_mobile', dreferer(), array('formhash' => FORMHASH));
+			showmessage('location_logout_succeed_mobile', dreferer(), array('formhash' => FORMHASH, 'referer' => dreferer()));
 		} else {
-			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout));
+			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout, 'referer' => dreferer()));
 		}
 	}
 
@@ -347,8 +447,7 @@ class register_ctl {
 			$groupinfo['groupid'] = $this->setting['newusergroupid'];
 		}
 
-		$seccodecheck = $this->setting['seccodestatus'] & 1;
-		$secqaacheck = $this->setting['secqaa']['status'] & 1;
+		list($seccodecheck, $secqaacheck) = seccheck('register');
 		$fromuid = !empty($_G['cookie']['promotion']) && $this->setting['creditspolicy']['promotion_register'] ? intval($_G['cookie']['promotion']) : 0;
 		$username = isset($_GET['username']) ? $_GET['username'] : '';
 		$bbrulehash = $bbrules ? substr(md5(FORMHASH), 0, 8) : '';
@@ -360,7 +459,7 @@ class register_ctl {
 		$sendurl = $this->setting['sendregisterurl'] ? true : false;
 		if($sendurl) {
 			if(!empty($_GET['hash'])) {
-				$_GET['hash'] = preg_replace("/[^\[A-Za-z0-9_\]%]/", '', $_GET['hash']);
+				$_GET['hash'] = preg_replace("/[^\[A-Za-z0-9_\]%\s+-\/=]/", '', $_GET['hash']);
 				$hash = explode("\t", authcode($_GET['hash'], 'DECODE', $_G['config']['security']['authkey']));
 				if(is_array($hash) && isemail($hash[0]) && TIMESTAMP - $hash[1] < 259200) {
 					$sendurl = false;

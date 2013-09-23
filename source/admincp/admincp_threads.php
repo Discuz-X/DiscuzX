@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threads.php 26864 2011-12-26 09:20:38Z chenmengshu $
+ *      $Id: admincp_threads.php 33828 2013-08-20 02:29:32Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -140,6 +140,9 @@ EOT;
 		array(2, cplang('threads_search_include_no')),
 	), TRUE), $_GET['highlight'], 'mradio');
 	showsetting('threads_save', 'savethread', $_GET['savethread'], 'radio');
+	if($operation != 'group') {
+		showsetting('threads_hide', 'hidethread', $_GET['hidethread'], 'radio');
+	}
 	showtagfooter('tbody');
 
 	showsubmit('searchsubmit', 'submit', '', 'more_options');
@@ -166,6 +169,9 @@ EOT;
 		if(!empty($_GET['savethread'])) {
 			$conditions['sticky'] = 4;
 			$conditions['displayorder'] = -4;
+		}
+		if(!empty($_GET['hidethread'])) {
+			$conditions['hidden'] = 1;
 		}
 
 		if(trim($_GET['keywords'])) {

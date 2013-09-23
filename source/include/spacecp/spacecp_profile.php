@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 33639 2013-07-24 03:44:18Z nemohou $
+ *      $Id: spacecp_profile.php 33688 2013-08-02 03:00:15Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,9 +23,8 @@ $operation = in_array($_GET['op'], array('base', 'contact', 'edu', 'work', 'info
 $space = getuserbyuid($_G['uid']);
 space_merge($space, 'field_home');
 space_merge($space, 'profile');
-$seccodecheck = $_G['setting']['seccodestatus'] & 8;
-$secqaacheck = $_G['setting']['secqaa']['status'] & 4;
-$_G['group']['seccode'] = 1;
+
+list($seccodecheck, $secqaacheck) = seccheck('password');
 @include_once DISCUZ_ROOT.'./data/cache/cache_domain.php';
 $spacedomain = isset($rootdomain['home']) && $rootdomain['home'] ? $rootdomain['home'] : array();
 $_GET['id'] = $_GET['id'] ? preg_replace("/[^A-Za-z0-9_:]/", '', $_GET['id']) : '';
@@ -362,7 +361,13 @@ if(submitcheck('profilesubmit')) {
 		dsetcookie('newemail', "$space[uid]\t$emailnew\t$_G[timestamp]", 31536000);
 	}
 	if($setarr) {
+		if($_G['member']['freeze'] == 1) {
+			$setarr['freeze'] = 0;
+		}
 		C::t('common_member')->update($_G['uid'], $setarr);
+	}
+	if($_G['member']['freeze'] == 2) {
+		C::t('common_member_validate')->update($_G['uid'], array('message' => dhtmlspecialchars($_G['gp_freezereson'])));
 	}
 
 	if($authstr) {
@@ -380,12 +385,13 @@ if($operation == 'password') {
 	$space['newemail'] = !$space['emailstatus'] ? $space['email'] : '';
 	if(!empty($newemail)) {
 		$mailinfo = explode("\t", $newemail);
-		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : '';
+		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) ? $mailinfo[1] : '';
 	}
 
 	if($_GET['resend'] && $resend) {
 		$toemail = $space['newemail'] ? $space['newemail'] : $space['email'];
 		emailcheck_send($space['uid'], $toemail);
+		dsetcookie('newemail', "$space[uid]\t$toemail\t$_G[timestamp]", 31536000);
 		dsetcookie('resendemail', TIMESTAMP);
 		showmessage('send_activate_mail_succeed', "home.php?mod=spacecp&ac=profile&op=password");
 	} elseif ($_GET['resend']) {
@@ -396,6 +402,10 @@ if($operation == 'password') {
 	}
 	$actives = array('password' =>' class="a"');
 	$navtitle = lang('core', 'title_password_security');
+	if($_G['member']['freeze'] == 2) {
+		$fzvalidate = C::t('common_member_validate')->fetch($space['uid']);
+		$space['freezereson'] = $fzvalidate['message'];
+	}
 
 } else {
 

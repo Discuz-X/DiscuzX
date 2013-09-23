@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 33047 2013-04-12 08:46:56Z zhangguosheng $
+ *      $Id: portal_view.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -258,8 +258,7 @@ if(empty($metadescription)) {
 	$metadescription = $article['summary'] ? $article['summary'] : $article['title'];
 }
 
-$seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
-$secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 
 $catid = $article['catid'];
 if(!$_G['setting']['relatedlinkstatus']) {

@@ -16,7 +16,7 @@
 		</li>
 		<!--{/if}-->
 		<li><input type="text" value="{lang send_reply_fast_tip}" class="input grey" color="gray" name="message" id="fastpostmessage"></li>
-		<li id="fastpostsubmitline" style="display:none;"><!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}--><!--{subtemplate common/seccheck}--><!--{/if}--><input type="button" value="{lang reply}" class="button2" name="replysubmit" id="fastpostsubmit"><a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&reppost=$_G[forum_firstpid]&page=$page" class="y" style="height:30px;width:30px;margin-top:7px;background:url({STATICURL}image/mobile/images/icon_photo.png) no-repeat"><span class="none">{lang reply}</span></a></li>
+		<li id="fastpostsubmitline" style="display:none;"><!--{if $secqaacheck || $seccodecheck}--><!--{subtemplate common/seccheck}--><!--{/if}--><input type="button" value="{lang reply}" class="button2" name="replysubmit" id="fastpostsubmit"><a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&reppost=$_G[forum_firstpid]&page=$page" class="y" style="height:30px;width:30px;margin-top:7px;background:url({STATICURL}image/mobile/images/icon_photo.png) no-repeat"><span class="none">{lang reply}</span></a><!--{hook/viewthread_fastpost_button_mobile}--></li>
 		</ul>
 	</div>
     </form>

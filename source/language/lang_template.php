@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 33048 2013-04-12 08:50:27Z zhangjie $
+ *      $Id: lang_template.php 33835 2013-08-20 07:16:13Z nemohou $
  *
  *      This file is automatically generate
  */
@@ -83,6 +83,7 @@ $lang = array (
   'portal_manage' => '门户管理',
   'remind' => '提醒',
   'setup' => '设置',
+  'freeze' => '已冻结',
   'switch_narrow' => '切换到窄版',
   'switch_wide' => '切换到宽版',
   'switch_blind' => '开启辅助访问',
@@ -152,7 +153,9 @@ $lang = array (
   'input_message1' => '还可输入',
   'input_message2' => '个字符',
   'report' => '举报',
-  'report_reason' => '可选举报理由',
+  'report_reason' => '请点击举报理由',
+  'report_reason_message' => "['广告垃圾','违规内容','恶意灌水','重复发帖','其他']",
+  'report_reason_other' => '请填写举报内容',
   'seccode' => '验证码',
   'seccode_change' => '换一个',
   'secqaa' => '验证问答',
@@ -421,6 +424,8 @@ $lang = array (
   'return_list' => '返回列表',
   'return_forum' => '返回版块',
   'temporarily_to_remind' => '暂不提醒',
+  'myitem' => '我的',
+  'mypost' => '帖子',
 );
 
 ?>

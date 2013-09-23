@@ -4,12 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_threadexpiry_hourly.php 25106 2011-10-26 03:09:55Z zhengqingpeng $
+ *      $Id: cron_threadexpiry_hourly.php 33625 2013-07-19 06:03:49Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
+C::t('common_seccheck')->delete_expiration();
 
 $actionarray = array();
 foreach(C::t('forum_threadmod')->fetch_all_by_expiration_status($_G['timestamp']) as $expiry) {

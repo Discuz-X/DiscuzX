@@ -113,6 +113,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 				.menu .lsub div { padding: 4px 0 3px 30px; font-weight: 700; }
 				.menu .desc { background: url(desc.gif) no-repeat 12px 5px; }
 				.menu .lsub ol { list-style: none; padding: 0 0 0 30px; margin: 2px 0 0 -30px; }
+	.menu .sp { width: 160px; height: 1px; line-height: 1px; float: left; border-bottom: 1px dotted #DEEFFA ;  }
 
 .mask{ padding-top:9px; background:url(bg_repx_hb.gif) repeat-x; }
 .team a { float: left; width: 33%; }

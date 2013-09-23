@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: upgrade.php 31305 2012-08-09 06:36:16Z liudongdong $
+ *      $Id: upgrade.php 33545 2013-07-04 07:06:27Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS pre_common_connect_guest (
   `conuin` char(40) NOT NULL default '',
   `conuinsecret` char(16) NOT NULL default '',
   `conqqnick` char(100) NOT NULL default '',
+  `conuintoken` char(32) NOT NULL DEFAULT '',
   PRIMARY KEY (conopenid)
 ) TYPE=MyISAM;
 
@@ -77,19 +78,29 @@ $query = DB::query("SHOW COLUMNS FROM ".DB::table('common_member_connect'));
 while($temp = DB::fetch($query)) {
 	if($temp['Field'] == 'conisqqshow') {
 		$columnexisted = true;
-		break;
+		continue;
+	}
+	if($temp['Field'] == 'conuintoken') {
+		$uintokenexisted = true;
+		continue;
 	}
 }
 $sql .= !$columnexisted ? "ALTER TABLE ".DB::table('common_member_connect')." ADD COLUMN conisqqshow tinyint(1) unsigned NOT NULL default '0';\n" : '';
+$sql .= !$uintokenexisted ? "ALTER TABLE ".DB::table('common_member_connect')." ADD COLUMN conuintoken char(32) NOT NULL DEFAULT '';\n" : '';
 
 $query = DB::query("SHOW COLUMNS FROM ".DB::table('common_connect_guest'));
 while($row = DB::fetch($query)) {
 	if($row['Field'] == 'conqqnick') {
 		$qqnickexisted = true;
-		break;
+		continue;
+	}
+	if($row['Field'] == 'conuintoken') {
+		$guintokenexisted = true;
+		continue;
 	}
 }
 $sql .= !$qqnickexisted ? "ALTER TABLE ".DB::table('common_connect_guest')." ADD COLUMN conqqnick char(100) NOT NULL default '';\n" : '';
+$sql .= !$guintokenexisted ? "ALTER TABLE ".DB::table('common_connect_guest')." ADD COLUMN conuintoken char(32) NOT NULL DEFAULT '';\n" : '';
 
 if($sql) {
 	runquery($sql);
@@ -136,9 +147,11 @@ if ($needCreateGroup) {
 	);
 	C::t('common_usergroup_field')->insert($dataField);
 
-	$newConnect = array('guest_groupid' => $newGroupId);
-	updatecache('usergroups');
+	$newConnect['guest_groupid'] = $newGroupId;
 }
+
+$https = json_decode(dfsockopen('https://graph.qq.com/user/get_user_info'));
+$newConnect['oauth2'] = $https->ret == -1 ? 1 : 0;
 
 $updateData = array_merge($connect, $newConnect);
 C::t('common_setting')->update('connect', serialize($updateData));

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: optimizer_setting.php 31754 2012-10-08 02:29:22Z zhangjie $
+ *      $Id: optimizer_setting.php 33488 2013-06-24 01:48:20Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -109,7 +109,7 @@ class optimizer_setting {
 
 	public function optimizer() {
 		$adminfile = defined(ADMINSCRIPT) ? ADMINSCRIPT : 'admin.php';
-		dheader('Location: '.$_G['siteurl'].$adminfile.'?action=optimizer&operation=setting_optimizer&type=optimizer_setting');
+		dheader('Location: '.$_G['siteurl'].$adminfile.'?action=optimizer&operation=setting_optimizer&type=optimizer_setting&anchor=performance');
 	}
 
 	public function option_optimizer($options) {

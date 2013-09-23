@@ -42,7 +42,7 @@
 				<!--{loop $list $k $value}-->
 				<li id="fav_$k" class="bbda ptm pbm">
 					<a class="y" id="a_delete_$k" href="home.php?mod=spacecp&ac=favorite&op=delete&favid=$k" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
-					<input type="checkbox" name="favorite[]" class="pc" value="$k" />
+					<input type="checkbox" name="favorite[]" class="pc" value="$k" vid="$value[id]" />
 					<!--{if $_GET['type'] == 'all'}--><span>$value[icon]</span><!--{/if}-->
 					<a href="$value[url]" target="_blank">$value[title]</a> <span class="xg1"><!--{date($value[dateline], 'u')}--></span>
 					<!--{if $value[description]}-->
@@ -56,6 +56,9 @@
 			<p class="mtm pns">
 				<label for="chkall" onclick="checkall(this.form, 'favorite')"><input type="checkbox" name="chkall" id="chkall" class="pc vm" />{lang select_all}</label>
 				<button type="submit" name="delsubmit" value="true" class="pn vm"><em>{lang del_favorite}</em></button>
+				<!--{if $_GET[type] == "thread"}-->
+					<button type="button" name="collectionsubmit" value="true" class="pnc vm" onclick="collection_favorite()"><em>{lang collection_favorite}</em></button>
+				<!--{/if}-->
 			</p>
 			</form>
 			<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
@@ -99,5 +102,22 @@
 			el.style.display = "none";
 		}
 	}
+	<!--{if $_GET[type] == "thread"}-->
+	function collection_favorite() {
+		var form = $('delform');
+		var prefix = '^favorite';
+		var tids = '';
+		for(var i = 0; i < form.elements.length; i++) {
+			var e = form.elements[i];		
+			if(e.name.match(prefix) && e.checked) {
+				tids += 'tids[]=' + e.getAttribute('vid') + '&';
+			}
+		}
+		if(tids) {
+			showWindow(null, 'forum.php?mod=collection&action=edit&op=addthread&' + tids);
+		}
+	}
+	function update_collection() {}
+	<!--{/if}-->
 </script>
 <!--{template common/footer}-->

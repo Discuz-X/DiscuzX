@@ -65,10 +65,11 @@ var fid = parseInt('$_G[fid]');
 						</div>
 					</div>
 				</div>
-				<!--{if $fastpost && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-					<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
-				<!--{/if}-->
+				<div id="seccheck_fastpost">
+					<!--{if $fastpost && ($secqaacheck || $seccodecheck)}-->
+						<!--{subtemplate forum/seccheck_post}-->
+					<!--{/if}-->
+				</div>
 
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="usesig" value="$usesigcheck" />
@@ -148,7 +149,7 @@ var fid = parseInt('$_G[fid]');
 
 			<p class="ptm pnpost">
 				<a href="home.php?mod=spacecp&ac=credit&op=rule&fid=$_G[fid]" class="y" target="_blank">{lang post_credits_rule}</a>
-				<button {if $fastpost}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit" id="fastpostsubmit" value="topicsubmit" tabindex="13" class="pn pnc"><strong>{lang post_newthread}</strong></button>
+				<button {if $fastpost}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}{if !$seccodecheck}onmouseover="checkpostrule('seccheck_fastpost', 'ac=newthread');this.onmouseover=null" {/if}name="topicsubmit" id="fastpostsubmit" value="topicsubmit" tabindex="13" class="pn pnc"><strong>{lang post_newthread}</strong></button>
 				<!--{hook/forumdisplay_fastpost_btn_extra}-->
 				<!--{if !empty($_G['setting']['pluginhooks']['forumdisplay_fastpost_sync_method'])}-->
 					<span>

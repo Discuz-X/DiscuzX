@@ -105,7 +105,6 @@ class extend_thread_replycredit extends extend_thread_base {
 							showmessage('post_edit_thread_replaycredit_nocredit');
 						}
 					}
-
 					if($replycredit_diff) {
 						updatemembercount($this->thread['authorid'], array($replycredit_rule['extcreditstype'] => ($replycredit_diff > 0 ? -$replycredit_diff : abs($replycredit_diff))), 1, ($replycredit_diff > 0 ? 'RCT' : 'RCB'), $this->thread['tid']);
 					}

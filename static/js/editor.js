@@ -1308,7 +1308,9 @@ function showEditorMenu(tag, params) {
 			case 'vid':
 				var mediaUrl = $(ctrlid + '_param_1').value;
 				var auto = '';
-				var ext = mediaUrl.lastIndexOf('.') == -1 ? '' : mediaUrl.substr(mediaUrl.lastIndexOf('.') + 1, mb_strlen(mediaUrl)).toLowerCase();
+				var posque = mediaUrl.lastIndexOf('?');
+				posque = posque === -1 ? mb_strlen(mediaUrl) : posque;
+				var ext = mediaUrl.lastIndexOf('.') === -1 ? '' : mediaUrl.substring(mediaUrl.lastIndexOf('.') + 1, posque).toLowerCase();
 				ext = in_array(ext, ['mp3', 'wma', 'ra', 'rm', 'ram', 'mid', 'asx', 'wmv', 'avi', 'mpg', 'mpeg', 'rmvb', 'asf', 'mov', 'flv', 'swf']) ? ext : 'x';
 				if(ext == 'x') {
 					if(/^mms:\/\//.test(mediaUrl)) {

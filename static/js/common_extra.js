@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 33043 2013-04-12 03:31:00Z monkey $
+	$Id: common_extra.js 33993 2013-09-17 01:39:13Z nemohou $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -55,46 +55,56 @@ function _relatedlinks(rlinkmsgid) {
 	$(rlinkmsgid).innerHTML = msg;
 }
 
-function _updatesecqaa(idhash) {
+var seccheck_tpl = new Array();
+
+function _updatesecqaa(idhash, tpl) {
 	if($('secqaa_' + idhash)) {
-		$('secqaaverify_' + idhash).value = '';
-		if(secST['qaa_' + idhash]) {
-			clearTimeout(secST['qaa_' + idhash]);
+		if(tpl) {
+			seccheck_tpl[idhash] = tpl;
 		}
-		$('checksecqaaverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
-		ajaxget('misc.php?mod=secqaa&action=update&idhash=' + idhash, 'secqaa_' + idhash, null, '', '', function() {
-			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updatesecqaa(\''+idhash+'\')">刷新验证问答</span>';}, 180000);
-		});
+		var id = 'seqaajs_' + idhash;
+		var src = 'misc.php?mod=secqaa&action=update&idhash=' + idhash + '&' + Math.random();
+		if($(id)) {
+			document.getElementsByTagName('head')[0].appendChild($(id));
+		}
+		var scriptNode = document.createElement("script");
+		scriptNode.type = "text/javascript";
+		scriptNode.id = id;
+		scriptNode.src = src;
+		document.getElementsByTagName('head')[0].appendChild(scriptNode);
 	}
 }
 
-function _updateseccode(idhash, play) {
-	if(isUndefined(play)) {
-		if($('seccode_' + idhash)) {
-			$('seccodeverify_' + idhash).value = '';
-			if(secST['code_' + idhash]) {
-				clearTimeout(secST['code_' + idhash]);
-			}
-			$('checkseccodeverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
-			ajaxget('misc.php?mod=seccode&action=update&idhash=' + idhash, 'seccode_' + idhash, null, '', '', function() {
-				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updateseccode(\''+idhash+'\')">刷新验证码</span>';}, 180000);
-			});
-		}
-	} else {
-		eval('window.document.seccodeplayer_' + idhash + '.SetVariable("isPlay", "1")');
+function _updateseccode(idhash, tpl, modid) {
+	if(!$('seccode_' + idhash)) {
+		return;
 	}
+	if(tpl) {
+		seccheck_tpl[idhash] = tpl;
+	}
+	var id = 'seccodejs_' + idhash;
+	var src = 'misc.php?mod=seccode&action=update&idhash=' + idhash + '&' + Math.random() + '&modid=' + modid;
+	if($(id)) {
+		document.getElementsByTagName('head')[0].appendChild($(id));
+	}
+	var scriptNode = document.createElement("script");
+	scriptNode.type = "text/javascript";
+	scriptNode.id = id;
+	scriptNode.src = src;
+	document.getElementsByTagName('head')[0].appendChild(scriptNode);
 }
 
-function _checksec(type, idhash, showmsg, recall) {
+function _checksec(type, idhash, showmsg, recall, modid) {
 	var showmsg = !showmsg ? 0 : showmsg;
 	var secverify = $('sec' + type + 'verify_' + idhash).value;
 	if(!secverify) {
 		return;
 	}
+	var modid = !modid ? '' : modid;
 	var x = new Ajax('XML', 'checksec' + type + 'verify_' + idhash);
 	x.loading = '';
 	$('checksec' + type + 'verify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" />';
-	x.get('misc.php?mod=sec' + type + '&action=check&inajax=1&&idhash=' + idhash + '&secverify=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(secverify) : secverify), function(s){
+	x.get('misc.php?mod=sec' + type + '&action=check&inajax=1&modid=' + modid + '&idhash=' + idhash + '&secverify=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(secverify) : secverify), function(s){
 		var obj = $('checksec' + type + 'verify_' + idhash);
 		obj.style.display = '';
 		if(s.substr(0, 7) == 'succeed') {

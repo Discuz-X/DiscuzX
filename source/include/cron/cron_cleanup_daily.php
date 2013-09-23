@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 32406 2013-01-14 05:57:34Z monkey $
+ *      $Id: cron_cleanup_daily.php 33675 2013-08-01 02:09:09Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,6 +25,7 @@ C::t('forum_forumrecommend')->delete_old();
 C::t('home_visitor')->delete_by_dateline($_G['timestamp']-7776000);
 C::t('forum_postcache')->delete_by_dateline(TIMESTAMP-86400);
 C::t('forum_newthread')->delete_by_dateline(TIMESTAMP-1296000);
+C::t('common_seccheck')->truncate();
 
 if($settingnew['heatthread']['type'] == 2 && $settingnew['heatthread']['period']) {
 	$partakeperoid = 86400 * $settingnew['heatthread']['period'];
@@ -116,6 +117,10 @@ if($count) {
 C::t('common_member_action_log')->delete_by_dateline($_G['timestamp'] - 86400);
 
 C::t('forum_collectioninvite')->delete_by_dateline($_G['timestamp'] - 86400*7);
+
+loadcache('seccodedata', true);
+$_G['cache']['seccodedata']['register']['show'] = 0;
+savecache('seccodedata', $_G['cache']['seccodedata']);
 
 function removedir($dirname, $keepdir = FALSE) {
 	$dirname = str_replace(array( "\n", "\r", '..'), array('', '', ''), $dirname);

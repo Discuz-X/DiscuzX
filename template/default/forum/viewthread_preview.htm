@@ -45,7 +45,7 @@
 			<!--{/if}-->
 			</div>
 
-			<!--{if $_G['setting']['fastpost'] && $allowpostreply && !$_G['forum_thread']['archiveid'] && !(checkperm('seccode') && ($secqaacheck || $seccodecheck))}-->
+			<!--{if $_G['setting']['fastpost'] && $allowpostreply && !$_G['forum_thread']['archiveid'] && !$secqaacheck && !$seccodecheck}-->
 			<div class="previewvfastpost" id="vfastpost">
 				<form method="post" autocomplete="off" id="vfastpostform_{$_G['tid']}" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&fromvf=1&extra=$_G[gp_extra]&replysubmit=yes{if $_G['gp_ordertype'] != 1}&infloat=yes&handlekey=vfastpost_{$_G['tid']}{/if}{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onsubmit="this.message.value = parseurl(this.message.value);changecontentdivid({$_G['tid']});ajaxpost('vfastpostform_{$_G['tid']}', 'return_reply', 'return_reply', 'onerror');return false;">
 					<input type="hidden" name="formhash" value="{FORMHASH}" />

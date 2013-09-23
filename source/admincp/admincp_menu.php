@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
+ *      $Id: admincp_menu.php 33989 2013-09-13 10:11:27Z nemohou $
  */
 
 global $_G;
@@ -25,6 +25,7 @@ $topmenu = array (
 	'portal' => '',
 	'forum' => '',
 	'group' => '',
+	'safe' => '',
 	'extended' => '',
 	'plugin' => $isfounder ? 'plugins' : '',
 	'tools' => '',
@@ -49,7 +50,6 @@ $menu['global'] = array(
 	array('menu_setting_home', 'setting_home'),
 	array('menu_setting_user', 'setting_permissions'),
 	array('menu_setting_credits', 'setting_credits'),
-	array('menu_setting_sec', 'setting_sec'),
 	array('menu_setting_datetime', 'setting_datetime'),
 	array('menu_setting_attachments', 'setting_attach'),
 	array('menu_setting_imgwater', 'setting_imgwater'),
@@ -165,6 +165,14 @@ $menu['group'] = array(
 	array('menu_group_mod', 'group_mod'),
 );
 
+$menu['safe'] = array(
+	array('menu_safe_setting', 'setting_sec'),
+	array('menu_safe_security', 'cloud_security'),
+	array('menu_safe_seccheck', 'setting_seccheck'),
+	array('menu_security', 'optimizer_security'),
+	array('menu_safe_accountguard', 'setting_accountguard'),
+);
+
 $menu['extended'] = array(
 	array('menu_misc_announce', 'announce'),
 	array('menu_adv_custom', 'adv'),
@@ -210,7 +218,10 @@ if($isfounder) {
 loadcache('adminmenu');
 if(is_array($_G['cache']['adminmenu'])) {
 	foreach($_G['cache']['adminmenu'] as $row) {
-		$menu['plugin'][] = array($row['name'], $row['action']);
+		if($row['name'] == 'plugins_system') {
+			$row['name'] = cplang('plugins_system');
+		}
+		$menu['plugin'][] = array($row['name'], $row['action'], $row['sub']);
 	}
 }
 if(!$menu['plugin']) {
@@ -225,6 +236,7 @@ $menu['tools'] = array(
 	$isfounder ? array('menu_tools_fileperms', 'tools_fileperms') : null,
 	$isfounder ? array('menu_tools_filecheck', 'checktools_filecheck') : null,
 	$isfounder ? array('menu_tools_hookcheck', 'checktools_hookcheck') : null,
+	$isfounder ? array('menu_cloud_doctor', 'cloud_doctor') : null,
 );
 if($isfounder) {
 	$topmenu['founder'] = '';
@@ -239,7 +251,7 @@ if($isfounder) {
 		array('menu_postsplit', 'postsplit_manage'),
 		array('menu_threadsplit', 'threadsplit_manage'),
 		array('menu_upgrade', 'upgrade'),
-		array('menu_optimizer', 'optimizer'),
+		array('menu_optimizer', 'optimizer_performance'),
 	);
 
 	$menu['uc'] = array();

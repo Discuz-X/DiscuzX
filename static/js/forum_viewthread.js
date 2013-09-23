@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 33277 2013-05-14 06:00:11Z laoguozhang $
+	$Id: forum_viewthread.js 33862 2013-08-22 09:19:30Z nemohou $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -214,15 +214,13 @@ function fastpostappendreply() {
 	} else {
 		editdoc.body.innerHTML = BROWSER.firefox ? '<br />' : '';
 	}
-	if($('secanswer3')) {
-		$('checksecanswer3').innerHTML = '<img src="' + STATICURL + 'image/common/none.gif" width="17" height="17">';
-		$('secanswer3').value = '';
-		secclick3['secanswer3'] = 0;
+	if($('fastpostform').seccodehash){
+		updateseccode($('fastpostform').seccodehash.value);
+		$('fastpostform').seccodeverify.value = '';
 	}
-	if($('seccodeverify3')) {
-		$('checkseccodeverify3').innerHTML = '<img src="' + STATICURL + 'image/common/none.gif" width="17" height="17">';
-		$('seccodeverify3').value = '';
-		secclick3['seccodeverify3'] = 0;
+	if($('fastpostform').secqaahash){
+		updatesecqaa($('fastpostform').secqaahash.value);
+		$('fastpostform').secanswer.value = '';
 	}
 	showCreditPrompt();
 }
@@ -778,7 +776,43 @@ function changecontentdivid(tid) {
 	postnewdiv = $('postlistreply').childNodes;
 	postnewdiv[postnewdiv.length-1].id = 'post_new';
 }
+
 function showmobilebbs(obj) {
 	var content = '<h3 class="flb" style="cursor:move;"><em>下载掌上论坛</em><span><a href="javascript:;" class="flbc" onclick="hideWindow(\'mobilebbs\')" title="{lang close}">{lang close}</a></span></h3><div class="c"><h4>Andriod版本，扫描二维码可以直接下载到手机</h4><p class="mtm mbm vm"><span class="code_bg"><img src="'+ STATICURL +'image/common/zslt_andriod.png" alt="" /></span><img src="'+ STATICURL +'image/common/andriod.png" alt="适用于装有安卓系统的三星/HTC/小米等手机" /></p><h4>iPhone版本，扫描二维码可以直接下载到手机</h4><p class="mtm mbm vm"><span class="code_bg"><img src="'+ STATICURL +'image/common/zslt_ios.png" alt="" /></span><img src="'+ STATICURL +'image/common/ios.png" alt="适用于苹果手机" /></p></div>';
 	showWindow('mobilebbs', content, 'html');
+}
+
+function succeedhandle_vfastpost(url, message, param) {
+	$('vmessage').value = '';
+	succeedhandle_fastpost(url, message, param);
+	showCreditPrompt();
+}
+
+function vmessage() {
+	var vf_tips = '#在这里快速回复#';
+	$('vmessage').value = vf_tips;
+	$('vmessage').style.color = '#CDCDCD';
+	$('vmessage').onclick = function() {
+		if($('vmessage').value==vf_tips) {
+			$('vmessage').value='';
+			$('vmessage').style.color="#000";
+		}
+	};
+	$('vmessage').onblur = function() {
+		if(!$('vmessage').value) {
+			$('vmessage').value=vf_tips;
+			$('vmessage').style.color="#CDCDCD";
+		}
+	};
+	$('vreplysubmit').onclick = function() {
+		if($('vmessage').value == vf_tips) {
+			return false;
+		}
+	};
+	$('vreplysubmit').onmouseover = function() {
+		if($('vmessage').value != vf_tips) {
+			ajaxget('forum.php?mod=ajax&action=checkpostrule&ac=reply', 'vfastpostseccheck');
+			$('vreplysubmit').onmouseover = null;
+		}
+	};
 }

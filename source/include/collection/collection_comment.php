@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_comment.php 33063 2013-04-16 09:42:48Z zhengqingpeng $
+ *      $Id: collection_comment.php 33715 2013-08-07 01:59:25Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -58,7 +58,8 @@ if(empty($op) || $op == 'add') {
 	    'username' => $_G['username'],
 		'message' => dhtmlspecialchars(censor($_GET['message'])),
 	    'dateline' => $_G['timestamp'],
-		'useip' => $_G['clientip']
+		'useip' => $_G['clientip'],
+		'port' => $_G['remoteport']
 	);
 
 	if(!$memberrate) {

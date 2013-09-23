@@ -5,6 +5,7 @@ template/default/common/footer.htm *<!--{hook/global_footerlink}-->
 template/default/common/header.htm *<!--{hook/global_cpnav_top}-->
 template/default/common/header.htm *<!--{hook/global_cpnav_extra1}-->
 template/default/common/header.htm *<!--{hook/global_cpnav_extra2}-->
+template/default/common/header.htm *<!--{hook/global_myitem_extra}-->
 template/default/common/header.htm *<!--{hook/global_nav_extra}-->
 template/default/common/header.htm *<!--{hook/global_header}-->
 template/default/common/header_qmenu.htm *<!--{hook/global_qmenu_top}-->
@@ -332,10 +333,13 @@ template/default/touch/forum/discuz.htm *<!--{hook/index_middle_mobile}-->
 template/default/touch/forum/forumdisplay.htm *<!--{hook/forumdisplay_top_mobile}-->
 template/default/touch/forum/forumdisplay.htm *<!--{hook/forumdisplay_thread_mobile $key}-->
 template/default/touch/forum/forumdisplay.htm *<!--{hook/forumdisplay_bottom_mobile}-->
+template/default/touch/forum/forumdisplay_fastpost.htm *<!--{hook/viewthread_fastpost_button_mobile}-->
+template/default/touch/forum/post.htm *<!--{hook/post_bottom_mobile}-->
 template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_top_mobile}-->
 template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_posttop_mobile $postcount}-->
 template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_postbottom_mobile $postcount}-->
 template/default/touch/forum/viewthread.htm *<!--{hook/viewthread_bottom_mobile}-->
+template/default/touch/member/login.htm *<!--{hook/logging_bottom_mobile}-->
 template/default/userapp/userapp_app.htm *<!--{hook/userapp_app_top}-->
 template/default/userapp/userapp_app.htm *<!--{hook/userapp_app_bottom}-->
 template/default/userapp/userapp_menu_list.htm *<!--{hook/userapp_menu_top}-->

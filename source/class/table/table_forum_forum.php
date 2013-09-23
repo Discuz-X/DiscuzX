@@ -101,6 +101,9 @@ class table_forum_forum extends discuz_table
 	public function fetch_threadcacheon_num() {
 		return DB::result_first("SELECT COUNT(*) FROM ".DB::table($this->_table)." WHERE status='1' AND threadcaches>0");
 	}
+	public function fetch_all_by_recyclebin($recyclebin) {
+		return DB::fetch_all('SELECT fid, name FROM %t WHERE status<3 AND type IN (\'forum\', \'sub\') AND recyclebin=%d', array($this->_table, $recyclebin));
+	}
 	public function update_threadcaches($threadcache, $fids) {
 		if(empty($fids)) {
 			return false;

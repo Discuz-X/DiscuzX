@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum.php 31999 2012-10-30 07:19:49Z cnteacher $
+ *      $Id: forum.php 33828 2013-08-20 02:29:32Z nemohou $
  */
 
 
@@ -67,7 +67,7 @@ runhooks();
 
 
 $navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
-
+$_G['setting']['threadhidethreshold'] = 1;
 require DISCUZ_ROOT.'./source/module/forum/forum_'.$mod.'.php';
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: optimizer_dbbackup.php 31344 2012-08-15 04:01:32Z zhangjie $
+ *      $Id: optimizer_dbbackup.php 33488 2013-06-24 01:48:20Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {

@@ -19,7 +19,11 @@
 					<!--{hook/logging_side_top}-->
 					<a href="member.php?mod={$_G[setting][regname]}" class="xi2">{lang login_guest}</a>
 				</span>
-				<h3 class="xs2">{lang login}</h3>
+				<!--{if !$secchecklogin2}-->
+					<h3 class="xs2">{lang login}</h3>
+				<!--{else}-->
+					<h3 class="xs2">{lang login_seccheck2}</h3>
+				<!--{/if}-->
 			</div>
 		<div>
 <!--{/if}-->
@@ -40,7 +44,7 @@
 				<!--{if $auth}-->
 					<input type="hidden" name="auth" value="$auth" />
 				<!--{/if}-->
-
+				
 				<!--{if $invite}-->
 				<div class="rfm">
 					<table>
@@ -113,7 +117,7 @@
 				</div>
 				<!--{/if}-->
 
-				<!--{if $secqaacheck || $seccodecheck}-->
+				<!--{if $seccodecheck}-->
 					<!--{block sectpl}--><div class="rfm"><table><tr><th><sec>: </th><td><sec><br /><sec></td></tr></table></div><!--{/block}-->
 					<!--{subtemplate common/seccheck}-->
 				<!--{/if}-->
@@ -225,6 +229,10 @@
 			<!--{if !$this->setting['autoidselect']}-->
 				simulateSelect('loginfield_$loginhash');
 			<!--{/if}-->
+		<!--{elseif $seccodecheck}-->
+			if($('loginform_$loginhash')) {
+				safescript('seccodefocus', function() {$('loginform_$loginhash').seccodeverify.focus()}, 500, 10);
+			}			
 		<!--{/if}-->
 	}
 	initinput_login();

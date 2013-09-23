@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 33387 2013-06-05 03:21:26Z jeffjzhang $
+ *	  $Id: lang_admincp_cloud.php 33991 2013-09-16 07:25:00Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,7 +20,7 @@ $extend_lang = array
 	'menu_cloud_upgrade' => '开通Discuz!云平台',
 	'menu_cloud_applist' => '平台首页',
 	'menu_cloud_siteinfo' => '站点信息',
-	'menu_cloud_doctor' => '诊断工具',
+	'menu_cloud_doctor' => '云平台诊断工具',
 
 	'menu_setting_manyou' => '漫游应用设置',
 	'menu_setting_qqconnect' => 'QQ互联设置',
@@ -78,7 +78,7 @@ $extend_lang = array
 	'cloud_connect_api_ip' => 'QQ互联接口IP',
 	'cloud_connect_api_ip_comment' => '若站点服务器由于DNS解析问题无法连接到QQ互联接口，请填写openapi.qzone.qq.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">诊断工具</a>检测，<a href="http://cp.discuz.qq.com/faq?fId=1322796393&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看帮助</a>',
 	'cloud_ipsetting_success' => '云平台接口IP设置成功 ',
-	'cloud_open_first' => '请先开通Discuz!云平台',
+	'cloud_open_first' => '请先开启相关应用',
 	'cloud_sync' => '同步站点信息',
 	'cloud_sync_success' => '站点信息同步成功 ',
 	'cloud_sync_failure' => '站点信息同步失败，原因：<br />{errorMessage} (ERRCODE:{errorCode})<br /><br />如有疑问，请访问<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方论坛</a>寻求帮助',
@@ -146,7 +146,6 @@ $extend_lang = array
 
 	'cloud_doctor_title_plugin' => '系统插件检测',
 	'cloud_doctor_system_plugin_status' => '系统插件状态',
-	'cloud_doctor_system_plugin_list' => '<a href="admin.php?action=plugins&system=1">查看插件列表和版本</a>',
 	'cloud_doctor_system_plugin_status_false' => ' 系统插件未初始化 <a href="misc.php?mod=initsys&formhash={formhash}" target="_doctor_initframe" onClick="$(\'_doctor_initframe\').onload = function () {self.location.reload();};">点击修复</a><iframe id="_doctor_initframe" name="_doctor_initframe" src="" width="0" height="0" style="display:none;"></iframe>',
 	'cloud_doctor_plugin_module_error' => 'common_plugin表modules字段值不正确',
 
@@ -156,7 +155,7 @@ $extend_lang = array
 	'cloud_doctor_connect_app_key' => 'QQ互联appkey',
 	'cloud_doctor_connect_reopen' => '当前站点appid/appkey丢失，请<a href="admin.php?action=cloud&operation=applist">重新开通</a>QQ互联',
 
-	'cloud_application_close' => '您的站点未开启此项云服务，请到Discuz!后台云平台标签下开启',
+	'cloud_application_close' => '您的站点未开启此项云服务，请开启相应插件',
 	'cloud_application_disable' => '您的站点已被禁止使用此项云服务，如果有疑问请访问<a href="http://www.discuz.net/forum.php?gid=3923" target="_blank">官方论坛</a>寻求帮助',
 
 	'cloud_search_tips' => '<li>开启漫游搜索功能后，用户可以使用基于漫游的搜索功能。</li>',
@@ -177,6 +176,9 @@ $extend_lang = array
 	'cloud_smilies_status' => '启用SOSO 表情',
 	'cloud_storage' => '旋风存储',
 	'cloud_storage_tips' => '<li>为网站节省空间带宽，让用户享受超大文件的高速存储，上传下载尽在云端。</li><li>体验高速上传下载，支持单个文件高达2GB的附件上传，附件永久有效，为论坛降低成本。</li>',
+
+	'cloud_change_info' => '变更信息',
+	'cloud_change_qq' => '更换绑定QQ',
 
 	'setting_manyou' => '漫游应用设置',
 	'setting_manyou_tips' => '<li>开启漫游应用功能后，用户可以自由选择各种不同的应用(诸如德克萨斯扑克、弹弹堂、十年一剑......)在站内进行使用。</li><li>漫游应用功能由 <a target="_blank" href="http://www.manyou.com/www/">MYOP开放平台</a> 提供， Manyou Open Platform(Manyou开放平台/MYOP)服务是由 Comsenz 公司为应用开发者提供的开放平台，启用漫游服务前，<a href="http://wiki.developer.manyou.com/wiki/index.php?title=MYOP%E7%BD%91%E7%AB%99%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE&printable=yes" target="_blank">请先阅读MYOP网站服务协议</a></li>',
@@ -340,6 +342,7 @@ $extend_lang = array
 	'security_modreason' => '防水墙自动处理',
 	'security_restore_user' => '恢复该用户',
 	'security_change_usergroup' => '更改用户组',
+	'security_reopen' => '您的站点未成功开通防水墙，请<a href="'.ADMINSCRIPT.'?action=cloud&operation=security&anchor=reopen">再次开通</a>',
 
 	'recyclebin_search_security_thread' => '仅包含防水墙处理的主题',
 	'recyclebin_search_security_post' => '仅包含防水墙处理的回帖',
@@ -349,6 +352,7 @@ $extend_lang = array
 	'security_setting' => '白名单设置',
 	'security_blanklist' => '白名单设置',
 	'security_setting_list' => '白名单设置',
+	'security_reopen_list' => '再次开通',
 	'security_tips' => '小技巧',
 	'security_tips_1' => '<li><p>系统识别到违规主题和违规回帖后，自动将主题和回帖放入<a href="admin.php?action=recyclebin" style="text-decoration:none; color:#0000FF;">回收站</a></p></li>',
 	'security_white_list_setting' => '白名单设置',
@@ -367,7 +371,7 @@ $extend_lang = array
 	'setting_update_succeed' => '当前设置更新成功',
 	'security_createtime' => '违规日期',
 	'security_safe_list' => '安全设置',
-	'security_safe_login_open' => '开启安全登陆功能',
+	'security_safe_login_open' => '开启安全登录功能',
 	'security_safe_login_open_comment' => '有效防止恶意注册！选择是，用户必须将论坛帐号与QQ帐号绑定后，才能在论坛发帖，回复',
 	'security_qq_login_alone_open' => '开启QQ独立登录',
 	'security_qq_login_alone_open_comment' => '有效防止盗号！开启后只能使用QQ号登录，即便盗取了论坛帐号也无法登录发帖',

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 33230 2013-05-08 02:14:26Z jeffjzhang $
+ *      $Id: mobile.class.php 33995 2013-09-17 02:57:59Z nemohou $
  */
 
 define("MOBILE_PLUGIN_VERSION", "2");
@@ -15,6 +15,7 @@ class mobile_core {
 		global $_G;
 		ob_end_clean();
 		function_exists('ob_gzhandler') ? ob_start('ob_gzhandler') : ob_start();
+		header("Content-type: application/json");
 		$result = mobile_core::format($result);
 		echo mobile_core::json($result);
 		exit;
@@ -72,6 +73,9 @@ class mobile_core {
 
 	function variable($variables = array()) {
 		global $_G;
+		if(in_array('mobileoem', $_G['setting']['plugins']['available'])) {
+			$check = C::t('#mobileoem#mobileoem_member')->fetch($_G['uid']);
+		}
 		$globals = array(
 			'cookiepre' => $_G['config']['cookie']['cookiepre'],
 			'auth' => $_G['cookie']['auth'],
@@ -82,6 +86,12 @@ class mobile_core {
 			'formhash' => FORMHASH,
 			'ismoderator' => $_G['forum']['ismoderator'],
 			'readaccess' => $_G['group']['readaccess'],
+			'notice' => array(
+				'newpush' => $check['newpush'] ? 1 : 0,
+				'newpm' => dintval($_G['member']['newpm']),
+				'newprompt' => dintval(($_G['member']['newprompt'] - $_G['member']['category_num']['mypost']) >= 0 ? ($_G['member']['newprompt'] - $_G['member']['category_num']['mypost']) : 0),
+				'newmypost' => dintval($_G['member']['category_num']['mypost']),
+			)
 		);
 		if(!empty($_GET['submodule']) == 'checkpost') {
 			$apifile = 'source/plugin/mobile/api/'.$_GET['version'].'/sub_checkpost.php';
@@ -211,6 +221,9 @@ class base_plugin_mobile_misc extends base_plugin_mobile {
 	function mobile() {
 		global $_G;
 		if(empty($_GET['view']) && !defined('MOBILE_API_OUTPUT')) {
+			if(in_array('mobileoem', $_G['setting']['plugins']['available'])) {
+				loadcache('mobileoem_data');
+			}
 			$_G['setting']['pluginhooks'] = array();
 			$qrfile = DISCUZ_ROOT.'./data/cache/mobile_siteqrcode.png';
 			if(!file_exists($qrfile) || $_G['adminid'] == 1) {
@@ -232,6 +245,12 @@ class plugin_mobile_forum extends base_plugin_mobile_forum {}
 class plugin_mobile_misc extends base_plugin_mobile_misc {}
 class mobileplugin_mobile extends base_plugin_mobile {
 	function global_header_mobile() {
+		if(in_array('mobileoem', $_G['setting']['plugins']['available'])) {
+			loadcache('mobileoem_data');
+			if($_G['cache']['mobileoem_data']['iframeUrl']) {
+				return;
+			}
+		}
 		if(IN_MOBILE === '1' || IN_MOBILE === 'yes' || IN_MOBILE === true) {
 			$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 			if(strpos($useragent, 'iphone') !== false || strpos($useragent, 'ios') !== false) {

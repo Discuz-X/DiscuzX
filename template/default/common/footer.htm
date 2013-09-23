@@ -89,7 +89,7 @@
 	</div>
 <!--{/if}-->
 
-<!--{if !$_G['setting']['bbclosed']}-->
+<!--{if !$_G['setting']['bbclosed'] && !$_G['member']['freeze'] && !$_G['member']['groupexpiry']}-->
 	<!--{if $_G[uid] && !isset($_G['cookie']['checkpm'])}-->
 	<script type="text/javascript" src="home.php?mod=spacecp&ac=pm&op=checknewpm&rand=$_G[timestamp]"></script>
 	<!--{/if}-->
@@ -105,7 +105,6 @@
 	<!--{if $_G[uid] && $_G['member']['allowadmincp'] == 1 && !isset($_G['cookie']['checkpatch'])}-->
 	<script type="text/javascript" src="misc.php?mod=patch&action=checkpatch&rand=$_G[timestamp]"></script>
 	<!--{/if}-->
-
 <!--{/if}-->
 
 <!--{if $_GET['diy'] == 'yes'}-->
@@ -125,7 +124,7 @@
 	<div class="focus plugin" id="plugin_notice"></div>
 	<script type="text/javascript">pluginNotice();</script>
 <!--{/if}-->
-<!--{if !$_G['setting']['bbclosed'] && $_G['setting']['disableipnotice'] != 1 && $_G['uid'] && !empty($_G['cookie']['lip'])}-->
+<!--{if !$_G['setting']['bbclosed'] && !$_G['member']['freeze'] && !$_G['member']['groupexpiry'] && $_G['setting']['disableipnotice'] != 1 && $_G['uid'] && !empty($_G['cookie']['lip'])}-->
 	<div class="focus plugin" id="ip_notice"></div>
 	<script type="text/javascript">ipNotice();</script>
 <!--{/if}-->

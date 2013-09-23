@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 33048 2013-04-12 08:50:27Z zhangjie $
+ *      $Id: lang_message.php 33958 2013-09-06 04:26:39Z nemohou $
  *
  *      This file is automatically generate
  */
@@ -36,6 +36,9 @@ $lang = array (
   'thread_nonexistence' => '抱歉，指定的主题不存在或已被删除或正在被审核',
   'parameters_error' => '参数错误',
   'thread_poll_succeed' => '投票成功 ',
+  'thread_hidden_error' => '抱歉，指定的主题不能隐藏 ',
+  'thread_hidden_success' => '隐藏成功 ',
+  'thread_hiderecover_success' => '主题已从隐藏状态恢复 ',
   'thread_rate_range_invalid' => '请输入正确的分值',
   'rate_post_error' => '帖子不存在或不能被推送',
   'thread_rate_log_nonexistence' => '抱歉，指定帖子在近一年内没有评分记录',
@@ -142,6 +145,7 @@ $lang = array (
   'post_newthread_succeed' => '非常感谢，您的主题已发布，现在将转入主题页，请稍候……<br /><a id="forward_a" href="forum.php?mod=forumdisplay&fid={fid}">[ 点击这里转入主题列表 ]</a>{coverimg}',
   'submitcheck_error' => '抱歉，您的提交有误',
   'post_forum_newthread_nopermission' => '抱歉，本版块只有特定用户组可以发新主题',
+  'postperm_qqonly_nopermission' => '为避免您的帐号被盗用，请您绑定QQ帐号后发帖，绑定后请使用QQ帐号登录<br /><a href="connect.php?mod=config"><img src="'.STATICURL.'image/common/qq_bind_small.gif" /></a>',
   'thread_flood_ctrl_threads_per_hour' => '抱歉，您所在的用户组每小时限制发主题 {threads_per_hour} 个，请稍候再发表',
   'search_forum_invalid' => '抱歉，您尚未指定搜索论坛的范围',
   'search_invalid' => '抱歉，您尚未指定要搜索的关键字或用户名',
@@ -216,10 +220,11 @@ $lang = array (
   'no_privilege_avatar' => '抱歉，您需要设置自己的头像后才能进行本操作，<a href="home.php?mod=spacecp&ac=avatar">点击这里设置</a>',
   'no_privilege_email' => '抱歉，您需要验证激活自己的邮箱后才能进行本操作，<a href="home.php?mod=spacecp&ac=profile&op=password">点击这里激活邮箱</a>',
   'no_privilege_friendnum' => '抱歉，您需要添加 {friendnum} 个好友之后才能进行本操作，<a href="home.php?mod=spacecp&ac=friend&op=find">点击这里添加好友</a>',
+  'login_seccheck2' => '请输入验证码后继续登录',
   'login_succeed' => '欢迎您回来，{usergroup} {username}，现在将转入登录前页面',
   'login_strike' => '密码错误次数过多，请 15 分钟后重新登录',
-  'logout_succeed' => '您已退出站点，现在将以游客身份转入退出前页面，请稍候…… <br /><a href="member.php?mod=clearcookies&formhash={formhash}">[ 清除痕迹 ]</a> {ucsynlogout} ',
-  'location_logout_succeed_mobile' => '您已退出站点，现在将以游客身份转入退出前页面，请稍候…… <br /><a href="member.php?mod=clearcookies&formhash={formhash}">[ 清除痕迹 ]</a>',
+  'logout_succeed' => '您已退出站点，现在将以游客身份转入退出前页面，请稍候…… <br /><a href="member.php?mod=clearcookies&formhash={formhash}&referer={referer}">[ 清除痕迹 ]</a> {ucsynlogout} ',
+  'location_logout_succeed_mobile' => '您已退出站点，现在将以游客身份转入退出前页面，请稍候…… <br /><a href="member.php?mod=clearcookies&formhash={formhash}&referer={referer}">[ 清除痕迹 ]</a>',
   'register_activation_invalid' => '抱歉，激活失败，请重新登录验证需要激活的用户',
   'profile_username_tooshort' => '抱歉，您输入的用户名小于 3 个字符，请输入一个较长的用户名',
   'profile_username_toolong' => '抱歉，您的用户名超过 15 个字符，请输入一个较短的用户名',
@@ -486,8 +491,6 @@ $lang = array (
 
   'report_parameters_invalid' => '页面参数错误，暂不能举报',
   'report_succeed' => '举报成功 ',
-
-  'seccode_player' => '<span style="padding:2px">{flashcode}<img border="0" style="vertical-align:middle" src="static/image/common/seccodeplayer.gif" /> <a  href="javascript:;" onclick="updateseccode(\'{idhash}\', 1)">播放验证码</a></span>',
 
   'tag_closed' => '抱歉，管理员锁定了此标签',
 
@@ -1004,10 +1007,14 @@ $lang = array (
   'threadtype_unchangeable_invalid' => '抱歉，资料不得修改，请检查{typetitle}选项',
 
   'location_login' => '',
+  'location_login_force_qq' => '您所在的用户组必须使用QQ帐号登录',
+  'location_login_force_mail' => '您所在的用户组必须使用邮箱登录',
+  'location_login_outofdate' => '您当前的帐号已经太长时间未登录网站已经被冻结，必须验证邮箱后才能解除冻结状态',
   'location_login_succeed_mobile' => '欢迎您回来，{username}。点击进入登录前页面',
   'location_login_succeed' => '',
   'location_activation' => '您的帐号处于未激活状态，点击进行激活',
   'login_succeed_inactive_member' => '欢迎您回来，{usergroup} {username}。您的帐号处于非激活状态，现在将转入控制面板',
+  'login_succeed_password_change' => '您的账户存在安全隐患，建议立即修改密码',
   'login_question_empty' => '请选择安全提问以及填写正确的答案',
   'login_question_invalid' => '抱歉，安全提问答案填写错误',
   'login_invalid' => '登录失败，您还可以尝试 {loginperm} 次',

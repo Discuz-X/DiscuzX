@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_patch.php 33490 2013-06-24 03:44:06Z kamichen $
+ *      $Id: misc_patch.php 33690 2013-08-02 09:07:22Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -109,4 +109,7 @@ if($_GET['action'] == 'checkpatch') {
 	include template('common/footer_ajax');
 	exit;
 }
+
+
+
 ?>

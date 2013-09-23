@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_mysql.php 6758 2010-03-25 09:05:10Z cnteacher $
+ *      $Id: install_mysql.php 33334 2013-05-28 09:51:11Z kamichen $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -127,6 +127,10 @@ class dbstuff {
 
 	function version() {
 		return mysql_get_server_info($this->link);
+	}
+
+	function escape_string($str) {
+		return mysql_escape_string($str);
 	}
 
 	function close() {

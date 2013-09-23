@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_topic.php 32789 2013-03-12 02:51:00Z zhangguosheng $
+ *      $Id: portal_topic.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,9 +51,7 @@ $metakeywords =  empty($topic['keyword']) ? $topic['title'] : $topic['keyword'];
 
 $attachtags = $aimgs = array();
 
-$seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
-$secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
-
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 
 if(isset($_G['makehtml'])) {
 	helper_makehtml::portal_topic($topic);

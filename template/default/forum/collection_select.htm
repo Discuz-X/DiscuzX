@@ -65,7 +65,7 @@ function checkreasonlen() {
 	return true;
 }
 </script>
-<form action="forum.php?mod=collection&action=edit&op=addthread&tid={$tid}" method="post" onsubmit="update_collection();ajaxpost(this.id, 'form_addcollectionthread');" id="form_addcollectionthread" name="form_addcollectionthread">
+<form action="forum.php?mod=collection&action=edit&op=addthread" method="post" onsubmit="update_collection();ajaxpost(this.id, 'form_addcollectionthread');" id="form_addcollectionthread" name="form_addcollectionthread">
 	<div class="c">
 		<div id="collectionlist" {if $reamincreatenum > 0 && count($allowcollections) <= 0}style="display:none;"{/if}>
 		<p>{lang collection_select}</p>
@@ -91,6 +91,13 @@ function checkreasonlen() {
 	</div>
 	<div class="o pns">
 		<a href="forum.php?mod=collection&op=my" target="_blank" class="z xi2">{lang collection_view_mine}</a>
+		<!--{if $tid}-->
+			<input type="hidden" name="tids[]" value="$tid">
+		<!--{elseif is_array($_GET['tids'])}-->
+			<!--{loop $_GET['tids'] $tid}-->
+				<input type="hidden" name="tids[]" value="$tid">
+			<!--{/if}-->
+		<!--{/if}-->
 		<input type="hidden" name="inajax" value="1">
 		<input type="hidden" name="handlekey" value="$_GET['handlekey']">
 		<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />

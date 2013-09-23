@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum.js 33082 2013-04-18 11:13:53Z zhengqingpeng $
+	$Id: forum.js 33824 2013-08-19 08:26:11Z nemohou $
 */
 
 function saveData(ignoreempty) {
@@ -236,6 +236,13 @@ function fastpostvalidate(theform, noajaxpost) {
 	}
 }
 
+function checkpostrule(showid, extra) {
+	var x = new Ajax();
+	x.get('forum.php?mod=ajax&action=checkpostrule&inajax=yes&' + extra, function(s) {
+		ajaxinnerhtml($(showid), s);evalscript(s);
+	});
+}
+
 function updatefastpostattach(aid, url) {
 	ajaxget('forum.php?mod=ajax&action=attachlist&posttime=' + $('posttime').value + (!fid ? '' : '&fid=' + fid), 'attachlist');
 	$('attach_tblheader').style.display = '';
@@ -396,7 +403,23 @@ function checkForumnew_btn(fid) {
 	lasttime = parseInt(Date.parse(new Date()) / 1000);
 }
 
-function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
+function display_blocked_thread() {
+	var table = $('threadlisttableid');
+	if(!table) {
+		return;
+	}
+	var tbodys = table.getElementsByTagName('tbody');
+	for(i = 0;i < tbodys.length;i++) {
+		var tbody = tbodys[i];
+		if(tbody.style.display == 'none') {
+			table.appendChild(tbody);
+			tbody.style.display = '';
+		}
+	}
+	$('hiddenthread').style.display = 'none';
+}
+
+function addtbodyrow(table, insertID, changename, separatorid, jsonval) {
 	if(isUndefined(table) || isUndefined(insertID[0])) {
 		return;
 	}

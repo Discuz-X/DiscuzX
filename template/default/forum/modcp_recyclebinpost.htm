@@ -96,7 +96,7 @@
 									<!--{/if}-->
 								</td>
 								<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowviewip']}-->
-									<td class="num">$post[useip]</td>
+									<td class="num">$post[useip]{if $post[port]}:$post[port]{/if}</td>
 								<!--{/if}-->
 								<td class="by">
 									<!--{if $post[htmlon]}-->{lang yes}<!--{else}-->{lang no}<!--{/if}-->

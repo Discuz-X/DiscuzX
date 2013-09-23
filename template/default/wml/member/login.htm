@@ -16,7 +16,7 @@
 	{lang password}:<br/><input type="password" name="password" id="password3_$loginhash" class="txt" value='' />
 </p>
 <p>
-	<!--{if $secqaacheck || $seccodecheck}-->
+	<!--{if $seccodecheck}-->
 	<!--{subtemplate common/seccheck}-->
 	<!--{/if}-->
 </p>
@@ -44,11 +44,11 @@
 	<postfield name="loginsubmit" value="1" />
 	<postfield name="answer" value="$(answer)" />
 	<postfield name="referer" id="referer" value="<!--{if dreferer()}-->{echo dreferer()}<!--{else}-->forum.php?mobile=3<!--{/if}-->" />
-	<!--{if ($secqaacheck || $seccodecheck)}-->
+	<!--{if $seccodecheck}-->
 	<postfield name="sechash" value="$(sechash)" />
 	<postfield name="secanswer" value="$(secanswer)" />
 	<postfield name="seccodeverify" value="$(seccodeverify)" />
-	<!--{/if}-->
+	<!--{/if}-->	
 	</go>
 </anchor>
 

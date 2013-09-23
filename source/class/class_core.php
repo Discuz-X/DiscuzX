@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 31312 2012-08-10 03:33:54Z zhangguosheng $
+ *      $Id: class_core.php 33982 2013-09-12 06:36:35Z hypowang $
  */
 
 error_reporting(E_ALL);
@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 define('IN_DISCUZ', true);
 define('DISCUZ_ROOT', substr(dirname(__FILE__), 0, -12));
 define('DISCUZ_CORE_DEBUG', false);
-define('DISCUZ_TABLE_EXTENDABLE', TRUE);
+define('DISCUZ_TABLE_EXTENDABLE', false);
 
 set_exception_handler(array('core', 'handleException'));
 
@@ -62,7 +62,7 @@ class core
 		return self::_make_obj($name, 'model', true, $args);
 	}
 
-	protected static function _make_obj($name, $type, $extendable = true, $p = array()) {
+	protected static function _make_obj($name, $type, $extendable = false, $p = array()) {
 		$pluginid = null;
 		if($name[0] === '#') {
 			list(, $pluginid, $name) = explode('#', $name);
@@ -110,9 +110,10 @@ class core
 			}
 
 			if(is_file($path.'/'.$filename)) {
+				include $path.'/'.$filename;
 				self::$_imports[$key] = true;
-				$rt = include $path.'/'.$filename;
-				return $rt;
+
+				return true;
 			} elseif(!$force) {
 				return false;
 			} else {

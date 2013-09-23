@@ -12,7 +12,7 @@
 			<!--{/if}-->
 		</tr>
 	</table>
-	<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+	<!--{if $secqaacheck || $seccodecheck}-->
 		<!--{block sectpl}--><ul><li><em class="d"><sec></em><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></li></ul><!--{/block}-->
 		<div class="mtm"><!--{subtemplate common/seccheck}--></div>
 	<!--{/if}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_doctor.php 29521 2012-04-17 09:24:42Z songlixin $
+ *      $Id: cloud_doctor.php 33991 2013-09-16 07:25:00Z nemohou $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -119,18 +119,20 @@ if(submitcheck('setidkeysubmit')) {
 	$doctorService = Cloud::loadClass('Service_Doctor');
 	require_once DISCUZ_ROOT.'./source/discuz_version.php';
 
-	shownav('navcloud', 'menu_cloud_doctor');
+	shownav('tools', 'menu_cloud_doctor');
 	showsubmenu('menu_cloud_doctor');
 	showtips('cloud_doctor_tips');
 	echo '<script type="text/javascript">var disallowfloat = "";</script>';
 
 	showtableheader();
-
+	showformheader('cloud');
+	showhiddenfields(array('operation' => 'siteinfo'));
 	showtagheader('tbody', '', true);
 	showtitle('cloud_doctor_title_status');
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_site_url').'</strong>',
-		$_G['siteurl']
+		$_G['siteurl'].
+		(isfounder() ? ' &nbsp; <input type="submit" class="btn" id="submit_syncsubmit" name="syncsubmit" value="'.$lang['cloud_sync'].'" />&nbsp; ' : '')
 	));
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_site_id').'</strong>',
@@ -143,7 +145,8 @@ if(submitcheck('setidkeysubmit')) {
 
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_site_status').'</strong>',
-		isfounder() ? $doctorService->showCloudStatus($_G['setting']['cloud_status']).' <a href="javascript:;" onClick="showWindow(\'cloudApiIpWin\', \''.ADMINSCRIPT.'?action=cloud&operation=doctor&op=setidkey\'); return false;">'.$lang['cloud_doctor_modify_siteidkey'].'</a>' : $doctorService->showCloudStatus($_G['setting']['cloud_status'])
+		(isfounder() ? $doctorService->showCloudStatus($_G['setting']['cloud_status']).' <a href="javascript:;" onClick="showWindow(\'cloudApiIpWin\', \''.ADMINSCRIPT.'?action=cloud&operation=doctor&op=setidkey\'); return false;">'.$lang['cloud_doctor_modify_siteidkey'].'</a>' : $doctorService->showCloudStatus($_G['setting']['cloud_status'])).
+		(isfounder() ? ' &nbsp; <input type="submit" class="btn" id="submit_resetsubmit" name="resetsubmit" value="'.$lang['cloud_resetkey'].'" />' : '')
 	));
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('setting_basic_bbclosed').'</strong>',
@@ -153,7 +156,14 @@ if(submitcheck('setidkeysubmit')) {
 		'<strong>'.cplang('cloud_site_version').'</strong>',
 		DISCUZ_VERSION.' '.DISCUZ_RELEASE
 	));
+	if(isfounder()) {
+		showtablerow('', array('class="td24"'), array(
+			'<strong>'.cplang('cloud_change_info').'</strong>',
+			'<a href="'.$doctorService->changeQQUrl().'" target="_blank">'.cplang('cloud_change_qq').'</a>',
+		));
+	}
 	showtagfooter('tbody');
+	showformfooter();
 
 	showtagheader('tbody', '', true);
 	showtitle('cloud_doctor_title_result');
