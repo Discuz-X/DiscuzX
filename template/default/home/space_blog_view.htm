@@ -123,7 +123,7 @@
 							<!--{/if}-->
 		
 							<!--{if checkperm('manageblog')}-->
-							IP: $blog[postip]<span class="pipe">|</span>
+							IP: $blog[postip]{if $blog[port]}:$blog[port]{/if}<span class="pipe">|</span>
 							<a href="home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]&op=edithot&handlekey=bloghothk_{$blog[blogid]}" id="blog_hot_$blog[blogid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang hot}</a><span class="pipe">|</span>
 							<!--{/if}-->
 							<!--{if helper_access::check_module('portal')}-->
@@ -205,7 +205,7 @@
 									<!--{/if}-->
 								</div>
 							</div>
-							<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+							<!--{if $secqaacheck || $seccodecheck}-->
 								<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 								<div class="mtm mbm sec"><!--{subtemplate common/seccheck}--></div>
 							<!--{/if}-->
@@ -228,7 +228,7 @@
 								} else {
 									$('return_qcblog_{$id}').innerHTML = msg;
 								}
-								<!--{if checkperm('seccode') && $sechash}-->
+								<!--{if $sechash}-->
 									<!--{if $secqaacheck}-->
 									updatesecqaa('$sechash');
 									<!--{/if}-->

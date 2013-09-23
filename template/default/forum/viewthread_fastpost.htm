@@ -67,10 +67,11 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 			</div>
 		</div>
 	</div>
-	<!--{if $allowpostreply && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-		<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-		<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
-	<!--{/if}-->
+	<div id="seccheck_fastpost">
+		<!--{if $allowpostreply && ($secqaacheck || $seccodecheck)}-->
+			<!--{subtemplate forum/seccheck_post}-->
+		<!--{/if}-->
+	</div>
 
 	<!--{if $allowpostattach && $_GET['from'] != 'preview'}-->
 		<script type="text/javascript">
@@ -149,7 +150,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 	<input type="hidden" name="subject" value="  " />
 	<p class="ptm pnpost">
 		<a href="home.php?mod=spacecp&ac=credit&op=rule&fid=$_G[fid]" class="y" target="_blank">{lang post_credits_rule}</a>
-		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
+		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}{if !$seccodecheck}onmouseover="checkpostrule('seccheck_fastpost', 'ac=reply');this.onmouseover=null" {/if}name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
 		<!--{hook/viewthread_fastpost_btn_extra}-->
 		<!--{if helper_access::check_module('follow')}-->
 		<label class="lb"><input type="checkbox" name="adddynamic" class="pc" value="1" />{lang post_reply_relay}</label>

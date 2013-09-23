@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_member.php 33266 2013-05-13 01:25:28Z kamichen $
+ *      $Id: function_member.php 33692 2013-08-02 10:26:20Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -135,6 +135,23 @@ function loginfailed($username) {
 		return;
 	}
 	C::t('common_failedlogin')->update_failed($_G['clientip']);
+}
+
+function failedipcheck($numiptry, $timeiptry) {
+	global $_G;
+	if(!$numiptry) {
+		return false;
+	}
+	list($ip1, $ip2) = explode('.', $_G['clientip']);
+	$ip = $ip1.'.'.$ip2;
+	return $numiptry <= C::t('common_failedip')->get_ip_count($ip, TIMESTAMP - $timeiptry);
+}
+
+function failedip() {
+	global $_G;
+	list($ip1, $ip2) = explode('.', $_G['clientip']);
+	$ip = $ip1.'.'.$ip2;
+	C::t('common_failedip')->insert_ip($ip);
 }
 
 function getinvite() {

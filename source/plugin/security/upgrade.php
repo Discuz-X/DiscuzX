@@ -116,4 +116,7 @@ if(!C::t('common_setting')->skey_exists('security_safelogin')) {
 	updatecache('setting');
 }
 
+$cloudClient = & Cloud::loadClass('Service_Client_Cloud', array(true));
+$cloudClient->sync();
+
 $finish = true;

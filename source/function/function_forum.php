@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 33118 2013-04-26 07:28:50Z theoliu $
+ *      $Id: function_forum.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1123,4 +1123,5 @@ function getreplybg($replybg = '') {
 	}
 	return $style;
 }
+
 ?>

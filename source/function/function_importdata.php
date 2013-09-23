@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_importdata.php 32104 2012-11-12 02:22:38Z monkey $
+ *      $Id: function_importdata.php 33985 2013-09-13 05:45:27Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -67,7 +67,7 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 	}
 
 	foreach($stylearrays as $stylearray) {
-		if(empty($ignoreversion) && strip_tags($stylearray['version']) != strip_tags($_G['setting']['version'])) {
+		if(empty($ignoreversion) && !versioncompatible($stylearray['version'])) {
 			cpmsg('styles_import_version_invalid', 'action=styles', 'error', array('cur_version' => $stylearray['version'], 'set_version' => $_G['setting']['version']));
 		}
 
@@ -111,6 +111,7 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 
 	if($dir) {
 		cloudaddons_installlog($dir.'.template');
+		cloudaddons_clear('template', $dir);
 	}
 
 	if($updatecache) {
@@ -152,7 +153,7 @@ function import_block($xmlurl, $clientid, $xmlkey = '', $signtype = '', $ignorev
 	if(empty($blockarrays['name']) || empty($blockarrays['fields']) || empty($blockarrays['getsetting'])) {
 		cpmsg(cplang('import_data_typeinvalid').cplang($importtxt), '', 'error');
 	}
-	if(empty($ignoreversion) && strip_tags($blockarrays['version']) != strip_tags($_G['setting']['version'])) {
+	if(empty($ignoreversion) && !versioncompatible($blockarrays['version'])) {
 		cpmsg(cplang('blockxml_import_version_invalid'), '', 'error', array('cur_version' => $blockarrays['version'], 'set_version' => $_G['setting']['version']));
 	}
 	$data = array(

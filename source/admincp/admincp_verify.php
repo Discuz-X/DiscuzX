@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 33456 2013-06-19 03:55:26Z andyzheng $
+ *      $Id: admincp_verify.php 33455 2013-06-19 03:52:01Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_plugin.php 32708 2013-03-01 09:51:30Z monkey $
+ *      $Id: cache_plugin.php 33987 2013-09-13 06:48:25Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,13 +18,15 @@ function build_cache_plugin() {
 		$dir = substr($plugin['directory'], 0, -1);
 		$plugin['modules'] = unserialize($plugin['modules']);
 		if($plugin['modules']['extra']['langexists']) {
-			require_once libfile('function/plugin');
-			require_once libfile('function/admincp');
 			$file = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($plugin['modules']['extra']['installtype'] ? '_'.$plugin['modules']['extra']['installtype'] : '').'.xml';
-			$importtxt = @implode('', file($file));
-			$pluginarray = getimportdata('Discuz! Plugin', 0, 1);
-			if($pluginarray) {
-				updatepluginlanguage($pluginarray);
+			if(file_exists($file)) {
+				require_once libfile('function/plugin');
+				require_once libfile('function/admincp');
+				$importtxt = @implode('', file($file));
+				$pluginarray = getimportdata('Discuz! Plugin', 0, 1);
+				if($pluginarray) {
+					updatepluginlanguage($pluginarray);
+				}
 			}
 		}
 

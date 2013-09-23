@@ -79,7 +79,7 @@
 					<!--{/if}-->
 				</p>
 				<textarea id="message_pop_{$comment[cid]}" name="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');" rows="8" cols="70" class="pt mtn"></textarea>
-				<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+				<!--{if $secqaacheck || $seccodecheck}-->
 					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'});"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 					<div class="mtm mbm"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->

@@ -23,8 +23,20 @@ class mobile_api {
 
 	function output() {
 		global $_G;
+		$list = array_values($GLOBALS['list']);
+		$tids = array();
+		foreach($list as $key=>$value) {
+			$tids[] = $value['id'];
+		}
+		if($tids) {
+			$threadinfo = C::t('forum_thread')->fetch_all($tids);
+		}
+		foreach($list as $key=>$value) {
+			$list[$key]['replies'] = $threadinfo[$value['id']]['replies'];
+			$list[$key]['author'] = $threadinfo[$value['id']]['author'];
+		}
 		$variable = array(
-			'list' => array_values($GLOBALS['list']),
+			'list' => $list,
 			'perpage' => $GLOBALS['perpage'],
 			'count' => $GLOBALS['count'],
 		);

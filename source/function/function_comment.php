@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_comment.php 30866 2012-06-27 06:00:03Z liulanbo $
+ *      $Id: function_comment.php 33714 2013-08-07 01:42:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -203,6 +203,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 		'dateline' => $_G['timestamp'],
 		'message' => $message,
 		'ip' => $_G['clientip'],
+		'port' => $_G['remoteport'],
 		'status' => $comment_status,
 	);
 	$cid = C::t('home_comment')->insert($setarr, true);

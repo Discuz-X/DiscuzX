@@ -108,7 +108,7 @@ $postshowavatars = !($_G['setting']['bannedmessages'] & 2 && ($post['memberstatu
 			<!--{else}-->
 				<div class="pi">
 				<!--{if !$post['authorid']}-->
-					<a href="javascript:;">$_G[setting][anonymoustext] <em>$post[useip]</em></a>
+					<a href="javascript:;">$_G[setting][anonymoustext] <em>$post[useip]{if $post[port]}:$post[port]{/if}</em></a>
 				<!--{elseif $post['authorid'] && $post['username'] && $post['anonymous']}-->
 					<!--{if $_G['forum']['ismoderator']}--><a href="home.php?mod=space&uid=$post[authorid]" target="_blank">$_G[setting][anonymoustext]</a><!--{else}-->$_G[setting][anonymoustext]<!--{/if}-->
 				<!--{else}-->
@@ -253,11 +253,9 @@ $postshowavatars = !($_G['setting']['bannedmessages'] & 2 && ($post['memberstatu
 
 		<div class="pct">
 			<!--{ad/thread/a_pt/2/$postcount}-->
-			<!--{if !$_G['inajax']}-->
-				<!--{if empty($ad_a_pr_css)}-->
-					<style type="text/css">.pcb{margin-right:0}</style>
-					<!--{eval $ad_a_pr_css=1;}-->
-				<!--{/if}-->
+			<!--{if empty($ad_a_pr_css)}-->
+				<style type="text/css">.pcb{margin-right:0}</style>
+				<!--{eval $ad_a_pr_css=1;}-->
 			<!--{/if}-->
 
 			<!--{if !$post['first'] && $post['replycredit'] > 0}-->
@@ -321,7 +319,7 @@ $postshowavatars = !($_G['setting']['bannedmessages'] & 2 && ($post['memberstatu
 						</div>
 					<!--{/if}-->
 
-					<a href="home.php?mod=spacecp&ac=favorite&type=thread&id=$_G[tid]" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' {lang activity_member_unit}{lang thread_favorite}'" title="{lang fav_thread}"><i><img src="{IMGDIR}/fav.gif" alt="{lang thread_favorite}" />{lang thread_favorite}<span id="favoritenumber"{if !$_G['forum_thread']['favtimes']} style="display:none"{/if}>{$_G['forum_thread']['favtimes']}</span></i></a>
+					<a href="home.php?mod=spacecp&ac=favorite&type=thread&id=$_G[tid]&formhash={FORMHASH}" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' {lang activity_member_unit}{lang thread_favorite}'" title="{lang fav_thread}"><i><img src="{IMGDIR}/fav.gif" alt="{lang thread_favorite}" />{lang thread_favorite}<span id="favoritenumber"{if !$_G['forum_thread']['favtimes']} style="display:none"{/if}>{$_G['forum_thread']['favtimes']}</span></i></a>
 					<!--{if $_G['group']['raterange'] && $post['authorid']}-->
 						<a href="javascript:;" id="ak_rate" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;" title="{lang rate_position}"><i><img src="{IMGDIR}/agree.gif" alt="{lang rate}" />{lang rate}</i></a>
 					<!--{/if}-->

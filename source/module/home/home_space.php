@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_space.php 32383 2013-01-07 11:00:48Z zhangguosheng $
+ *      $Id: home_space.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -109,8 +109,7 @@ if(empty($space)) {
 
 $diymode = 0;
 
-$seccodecheck = $_G['setting']['seccodestatus'] & 4;
-$secqaacheck = $_G['setting']['secqaa']['status'] & 2;
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 if($do != 'index') {
 	$_G['disabledwidthauto'] = 0;
 }

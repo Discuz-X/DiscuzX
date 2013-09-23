@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 33463 2013-06-20 01:37:26Z andyzheng $
+ *      $Id: function_portalcp.php 33715 2013-08-07 01:59:25Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -429,8 +429,11 @@ function checksecurity($str) {
 		'/[^a-z0-9\\\]+/i',
 		'/important/i',
 	);
+	if(preg_match("/[^a-z0-9:;'\(\)!\.#\-_\s\{\}\/\,\"\?\>\=\?\%]+/i", $str)) {
+		showmessage('css_contains_elements_of_insecurity');
+	}
 	$str = preg_replace($filter, '', $str);
-	if(preg_match("/(expression|import|javascript|\\\)/i", $str)) {
+	if(preg_match("/(expression|import|javascript)/i", $str)) {
 		showmessage('css_contains_elements_of_insecurity');
 	}
 	return true;
@@ -1027,6 +1030,7 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 		'id' => $id,
 		'idtype' => $idtype,
 		'postip' => $_G['clientip'],
+		'port' => $_G['remoteport'],
 		'dateline' => $_G['timestamp'],
 		'status' => $comment_status,
 		'message' => $message

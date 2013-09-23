@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_cloud.php 28702 2012-03-08 06:43:58Z yexinhao $
+ *      $Id: class_cloud.php 34000 2013-09-17 08:52:48Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -40,7 +40,7 @@ class Cloud {
 			return true;
 		}
 
-		$file = DISCUZ_ROOT . '/api/manyou/' . implode('/', $items) . '.php';
+		$file = DISCUZ_ROOT . '/source/plugin/manyou/' . implode('/', $items) . '.php';
 
 		if (!is_file($file)) {
 			throw new Cloud_Exception('Cloud file not exists!', 50001);

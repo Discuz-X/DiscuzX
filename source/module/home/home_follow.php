@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 32743 2013-03-05 09:37:51Z liulanbo $
+ *      $Id: home_follow.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -150,8 +150,7 @@ if($do == 'feed') {
 	$navactives = array('feed' => ' class="a"');
 	$actives = array($view => ' class="a"');
 
-	$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
-	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+	list($seccodecheck, $secqaacheck) = seccheck('publish');
 
 } elseif($do == 'view') {
 	$list = getfollowfeed($uid, 'self', false, $start, $perpage);

@@ -88,9 +88,10 @@
 		</ul>
 		<ul id="imglist" class="post_imglist cl bl_line">
 		</ul>
-		<!--{if $_GET[action] != 'edit' && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+		<!--{if $_GET[action] != 'edit' && ($secqaacheck || $seccodecheck)}-->
 		<!--{subtemplate common/seccheck}-->
 		<!--{/if}-->
+		<!--{hook/post_bottom_mobile}-->
 	</div>
 </div>
 <!-- main postbox start -->

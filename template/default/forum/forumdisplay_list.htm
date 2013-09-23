@@ -80,7 +80,7 @@
 				<!--{/if}-->
 				<!--{if $_G['forum_threadcount']}-->
 					<!--{if empty($_G['forum']['picstyle']) || $_G['cookie']['forumdefstyle']}-->
-						<!--{loop $_G['forum_threadlist'] $key $thread}-->
+						<!--{loop $_G['forum_threadlist'] $key $thread}-->							
 							<!--{if $_G[setting][forumseparator] == 1 && $separatepos == $key + 1}-->
 								<tbody id="separatorline">
 									<tr class="ts">
@@ -94,7 +94,7 @@
 							<!--{if $separatepos <= $key + 1}-->
 								<!--{ad/threadlist}-->
 							<!--{/if}-->
-							<tbody id="$thread[id]">
+							<tbody id="$thread[id]"{if $_G['hiddenexists'] && $thread['hidden']} style='display:none'{/if}>
 								<tr>
 									<td class="icn">
 										<a href="forum.php?mod=viewthread&tid=$thread[icontid]&{if $_GET['archiveid']}archiveid={$_GET['archiveid']}&{/if}extra=$extra" title="{if $thread['displayorder'] == 1}{lang thread_type1} - {/if}
@@ -142,22 +142,25 @@
 									</td>
 									<!--{/if}-->
 									<th class="$thread[folder]">
+										<a href="javascript:;" id="content_$thread[tid]" class="showcontent y" title="{lang content_actions}" onclick="CONTENT_TID='$thread[tid]';CONTENT_ID='$thread[id]';showMenu({'ctrlid':this.id,'menuid':'content_menu'})"></a>
 										<!--{if in_array($thread['displayorder'], array(1, 2, 3, 4))}-->
-										<a href="javascript:void(0);" onclick="hideStickThread('$thread[tid]')" class="showhide y" title="{lang hidedisplayorder}">{lang hidedisplayorder}</a></em>
+											<a href="javascript:void(0);" onclick="hideStickThread('$thread[tid]')" class="showhide y" title="{lang hidedisplayorder}">{lang hidedisplayorder}</a></em>
 										<!--{/if}-->
 										<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
 												<!--{eval $thread[tid]=$thread[closed];}-->
 										<!--{/if}-->
 										<!--{if !$_G['setting']['forumdisplaythreadpreview'] && !($thread['readperm'] && $thread['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $thread['authorid'] != $_G['uid'])}-->
 											<!--{if !(!empty($_G['setting']['antitheft']['allow']) && empty($_G['setting']['antitheft']['disable']['thread']) && empty($_G['forum']['noantitheft']))}-->
-												<a class="tdpre y" href="javascript:void(0);" onclick="previewThread('$thread[tid]', '$thread[id]');">{lang preview}</a>
+												<a class="tdpre y" href="javascript:void(0);" onclick="previewThread('{echo $thread['moved'] ? $thread[closed] : $thread[tid]}', '$thread[id]');">{lang preview}</a>
 											<!--{/if}-->
-										<!--{/if}-->																				<!--{hook/forumdisplay_thread $key}-->
+										<!--{/if}-->
+										<!--{hook/forumdisplay_thread $key}-->
 										$thread[typehtml] $thread[sorthtml]
 										<!--{if $thread['moved']}-->
 											{lang thread_moved}:<!--{eval $thread[tid]=$thread[closed];}-->
 										<!--{/if}-->
 										<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_GET['archiveid']}archiveid={$_GET['archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} class="s xst">$thread[subject]</a>
+										<!--{if $_G['setting']['threadhidethreshold'] && $thread['hidden'] >= $_G['setting']['threadhidethreshold']}--><span class="xg1">{lang hidden}</span>&nbsp;<!--{/if}-->
 										<!--{if $thread[icon] >= 0}-->
 											<img src="{STATICURL}image/stamp/{$_G[cache][stamps][$thread[icon]][url]}" alt="{$_G[cache][stamps][$thread[icon]][text]}" align="absmiddle" />
 										<!--{/if}-->
@@ -244,17 +247,23 @@
 							</tbody>
 						<!--{/loop}-->
 						</table><!-- end of table "forum_G[fid]" branch 1/3 -->
+						<!--{if $_G['hiddenexists']}-->							
+							<div id="hiddenthread"{if $thread['hidden']} class="last"{/if}><a href="javascript:;" onclick="display_blocked_thread()">{lang other_reply_hide}</a></div>
+						<!--{/if}-->
 					<!--{else}-->
 						</table><!-- end of table "forum_G[fid]" branch 2/3 -->
 						<ul id="waterfall" class="ml waterfall cl">
 							<!--{loop $_G['forum_threadlist'] $key $thread}-->
+							<!--{if $_G['hiddenexists'] && $thread['hidden']}-->
+								<!--{eval continue;}-->
+							<!--{/if}-->
 							<!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
 								<!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
 									<!--{eval $thread[tid]=$thread[closed];}-->
 								<!--{/if}-->
 							<!--{/if}-->
 							<!--{eval $waterfallwidth = $_G[setting][forumpicstyle][thumbwidth] + 24; }-->
-							<li style="width:{$waterfallwidth}px;">
+							<li style="width:{$waterfallwidth}px">
 								<!--{if !$_GET['archiveid'] && $_G['forum']['ismoderator']}-->
 									<div style="position:absolute;margin:1px;padding:2px;background:#FFF">
 									<!--{if $thread['fid'] == $_G[fid]}-->
@@ -451,7 +460,7 @@
 			<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=reply&orderby=views$forumdisplayadd[view]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">{lang views}</a></li>
 			<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=lastpost&orderby=lastpost$forumdisplayadd[lastpost]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">{lang lastpost}</a></li>
 			<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=heat&orderby=heats$forumdisplayadd[heat]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">{lang order_heats}</a></li>
-		<ul>
+		</ul>
 	</div>
 	<!--{/if}-->
 <!--{/if}-->

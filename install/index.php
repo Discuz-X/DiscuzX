@@ -17,7 +17,11 @@ define('ROOT_PATH', dirname(__FILE__).'/../');
 
 require ROOT_PATH.'./source/discuz_version.php';
 require ROOT_PATH.'./install/include/install_var.php';
-require ROOT_PATH.'./install/include/install_mysql.php';
+if(function_exists('mysql_connect')) {
+	require ROOT_PATH.'./install/include/install_mysql.php';
+} else {
+	require ROOT_PATH.'./install/include/install_mysqli.php';
+}
 require ROOT_PATH.'./install/include/install_function.php';
 require ROOT_PATH.'./install/include/install_lang.php';
 
@@ -273,10 +277,11 @@ if($method == 'show_license') {
 		if(empty($dbname)) {
 			show_msg('dbname_invalid', $dbname, 0);
 		} else {
-			$link = @mysql_connect($dbhost, $dbuser, $dbpw);
+			$mysqlmode = function_exists("mysql_connect") ? 'mysql' : 'mysqli';
+			$link = ($mysqlmode == 'mysql') ? @mysql_connect($dbhost, $dbuser, $dbpw) : new mysqli($dbhost, $dbuser, $dbpw);
 			if(!$link) {
-				$errno = mysql_errno($link);
-				$error = mysql_error($link);
+				$errno = ($mysqlmode == 'mysql') ? mysql_errno($link) : $link->errno;
+				$error = ($mysqlmode == 'mysql') ? mysql_error($link) : $link->error;
 				if($errno == 1045) {
 					show_msg('database_errno_1045', $error, 0);
 				} elseif($errno == 2003) {
@@ -285,17 +290,29 @@ if($method == 'show_license') {
 					show_msg('database_connect_error', $error, 0);
 				}
 			}
-
-			if(mysql_get_server_info() > '4.1') {
-				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET ".DBCHARSET, $link);
+			$mysql_version = ($mysqlmode == 'mysql') ? mysql_get_server_info() : $link->server_info;
+			if($mysql_version > '4.1') {
+				if($mysqlmode == 'mysql') {
+					mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET ".DBCHARSET, $link);
+				} else {
+					$link->query("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET ".DBCHARSET);
+				}
 			} else {
-				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname`", $link);
+				if($mysqlmode == 'mysql') {
+					mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname`", $link);
+				} else {
+					$link->query("CREATE DATABASE IF NOT EXISTS `$dbname`");
+				}
 			}
 
-			if(mysql_errno()) {
-				show_msg('database_errno_1044', mysql_error(), 0);
+			if(($mysqlmode == 'mysql') ? mysql_errno($link) : $link->errno) {
+				show_msg('database_errno_1044', ($mysqlmode == 'mysql') ? mysql_error($link) : $link->error, 0);
 			}
-			mysql_close($link);
+			if($mysqlmode == 'mysql') {
+				mysql_close($link);
+			} else {
+				$link->close();
+			}
 		}
 
 		if(strpos($tablepre, '.') !== false || intval($tablepre{0})) {
@@ -385,6 +402,9 @@ if($method == 'show_license') {
 
 		$db->query("REPLACE INTO {$tablepre}common_member (uid, username, password, adminid, groupid, email, regdate) VALUES ('$uid', '$username', '$password', '1', '1', '$email', '".time()."');");
 
+		$notifyusers = addslashes('a:1:{i:1;a:2:{s:8:"username";s:'.strlen($username).':"'.$username.'";s:5:"types";s:20:"11111111111111111111";}}');
+		$db->query("REPLACE INTO {$tablepre}common_setting (skey, svalue) VALUES ('notifyusers', '$notifyusers')");
+
 		$db->query("UPDATE {$tablepre}common_cron SET lastrun='0', nextrun='".($timestamp + 3600)."'");
 
 		install_data($username, $uid);
@@ -458,8 +478,8 @@ if($method == 'show_license') {
 	} else {
 		show_header();
 		echo '</div><div class="main" style="margin-top: -123px;padding-left:30px"><span id="platformIntro"></span>';
-		echo '<script type="text/javascript" src="http://cp.discuz.qq.com/cloud/platformIntroJS?siteurl='.urlencode($default_appurl).'&version='.DISCUZ_VERSION.'" charset="utf-8"></script>';
 		echo '<iframe frameborder="0" width="700" height="550" allowTransparency="true" src="http://addon.discuz.com/api/outer.php?id=installed&siteurl='.urlencode($default_appurl).'&version='.DISCUZ_VERSION.'"></iframe>';
+		echo '<p align="right"><a href="'.$default_appurl.'">'.$lang['install_finish'].'</a></p><br />';
 		echo '</div>';
 		show_footer();
 	}

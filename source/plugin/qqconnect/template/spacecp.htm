@@ -2,12 +2,10 @@
 
 <!--{template common/header}-->
 
-	<!--{if $_GET['sh_type'] == 1 || $_GET['sh_type'] == 3}-->
+	<!--{if $_GET['sh_type'] == 3}-->
 	<h3 class="flb">
-		<!--{if $_GET['sh_type'] == 1}-->
-		<em id="return_$_GET[handlekey]">{lang qqconnect:connect_spacecp_qzone_to}</em>
-		<!--{elseif $_GET['sh_type'] == 3}-->
-		<em id="return_$_GET[handlekey]">{lang qqconnect:connect_spacecp_pengyou_to}</em>
+		<!--{if $_GET['sh_type'] == 3}-->
+			<em id="return_$_GET[handlekey]">{lang qqconnect:connect_spacecp_qzone_to}</em>
 		<!--{/if}-->
 		<!--{if $_G[inajax]}-->
 		<span><a href="javascript:void(0);" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>

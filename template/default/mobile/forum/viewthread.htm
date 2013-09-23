@@ -57,7 +57,7 @@
         	<!--{eval $needhiddenreply = ($hiddenreplies && $_G['uid'] != $post['authorid'] && $_G['uid'] != $_G['forum_thread']['authorid'] && !$post['first'] && !$_G['forum']['ismoderator']);}-->
         	<!--{hook/viewthread_posttop_mobile $postcount}-->
             <div id="post_$post[pid]" class="bm_c bm_c_bg">
-            	<div class="bm_user">
+            	<div class="bm_user" id="pid$post[pid]">
                 	<!--{if !IS_ROBOT}-->
                         <!--{if !empty($postno[$post[number]])}-->$postno[$post[number]]<!--{else}--><em>{$post[number]}</em>{$postno[0]}<!--{/if}-->
                     <!--{/if}-->
@@ -69,7 +69,7 @@
 				<!--{if $_G['group']['allowbanuser']}--><a href="forum.php?mod=modcp&action=member&op=ban&uid={$post[authorid]}" class="xg1">{lang ban_member}</a><!--{/if}-->
                     <!--{else}-->
                     	<!--{if !$post['authorid']}-->
-                            <a href="javascript:;">{lang guest} <em>$post[useip]</em></a>
+                            <a href="javascript:;">{lang guest} <em>$post[useip]{if $post[port]}:$post[port]{/if}</em></a>
                         <!--{elseif $post['authorid'] && $post['username'] && $post['anonymous']}-->
                             <!--{if $_G['forum']['ismoderator']}--><a href="home.php?mod=space&uid=$post[authorid]" target="_blank">{lang anonymous}</a><!--{else}-->{lang anonymous}<!--{/if}-->
                         <!--{else}-->

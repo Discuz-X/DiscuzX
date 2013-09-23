@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: cloud_security.php 33344 2013-05-30 04:37:03Z jeffjzhang $
+ *		$Id: cloud_security.php 33861 2013-08-22 09:16:38Z nemohou $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -12,16 +12,16 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 $op = trim($_GET['op']);
 
-$_GET['anchor'] = in_array($_GET['anchor'], array('index', 'setting', 'thread', 'post', 'member', 'safe', 'reportOperation')) ? $_GET['anchor'] : 'index';
+$_GET['anchor'] = in_array($_GET['anchor'], array('index', 'setting', 'thread', 'post', 'member', 'reportOperation', 'reopen')) ? $_GET['anchor'] : 'index';
 $pt = in_array($_GET['anchor'], array('thread', 'post')) ? $_GET['anchor'] : 'thread';
 
 $current = array($_GET['anchor'] => 1);
 
 $operateresultmap = array(
-						'0' => 1,
-						'-1' => 0,
-						'-5' => 0
-						);
+	'0' => 1,
+	'-1' => 0,
+	'-5' => 0
+);
 
 $securitynav = array();
 
@@ -30,11 +30,10 @@ $securitynav[1] = array('security_blanklist', 'cloud&operation=security&anchor=s
 $securitynav[2] = array('security_thread_list', 'cloud&operation=security&anchor=thread', $current['thread']);
 $securitynav[3] = array('security_post_list', 'cloud&operation=security&anchor=post', $current['post']);
 $securitynav[4] = array('security_member_list', 'cloud&operation=security&anchor=member', $current['member']);
-$securitynav[5] = array('security_safe_list', 'cloud&operation=security&anchor=safe', $current['safe']);
 
 if (!$_G['inajax']) {
 	cpheader();
-	shownav('navcloud', 'menu_cloud_security', 'security_'.$_GET['anchor'].'_list');
+	shownav('safe', 'menu_cloud_security', 'security_'.$_GET['anchor'].'_list');
 	showsubmenu('menu_cloud_security', $securitynav);
 }
 
@@ -43,6 +42,13 @@ $start_limit = ($page - 1) * $tpp;
 require_once libfile('function/discuzcode');
 require_once libfile('function/core');
 $datas = $data = $eviluids = $evilPids = $evilTids = $members = $thread = $post = '';
+
+if($_GET['anchor'] != 'reopen') {
+	$apps = $appService->getCloudApps();
+	if(empty($apps) || empty($apps[$operation]) || $apps[$operation]['status'] == 'close') {
+		cpmsg('security_reopen', '', 'succeed');
+	}
+}
 
 if ($_GET['anchor'] == 'index') {
 	$utilService = Cloud::loadClass('Service_Util');
@@ -57,7 +63,7 @@ if ($_GET['anchor'] == 'index') {
 		$evilposts = C::t('common_setting')->fetch('cloud_security_stats_post');
 		$evilmembers = C::t('common_setting')->fetch('cloud_security_stats_member');
 
-		$usergroupswhitelist = unserialize($_G['setting']['security_usergroups_white_list']);
+		$usergroupswhitelist = $_G['setting']['security_usergroups_white_list'];
 		$groupselect = array();
 
 		foreach (C::t('common_usergroup')->fetch_all_not(array('6','7')) as $group) {
@@ -70,7 +76,7 @@ if ($_GET['anchor'] == 'index') {
 			($groupselect['specialadmin'] ? '<optgroup label="'.$lang['usergroups_specialadmin'].'">'.$groupselect['specialadmin'].'</optgroup>' : '').
 			'<optgroup label="'.$lang['usergroups_system'].'">'.$groupselect['system'].'</optgroup>';
 
-		$forumswhitelist = unserialize($_G['setting']['security_forums_white_list']);
+		$forumswhitelist = $_G['setting']['security_forums_white_list'];
 		require_once libfile('function/forumlist');
 		loadcache('forums');
 		$forumselect = str_replace('%', '%%', forumselect(FALSE, 0, $forumswhitelist, TRUE));
@@ -166,26 +172,6 @@ if ($_GET['anchor'] == 'index') {
 	}
 	showtablefooter();
 
-} elseif($_GET['anchor'] == 'safe') {
-
-	if(!submitcheck('safesetting')) {
-		showformheader('cloud&operation=security&anchor=safe');
-		showtableheader();
-		showsetting('security_safe_login_open', 'security_safelogin', $_G['setting']['security_safelogin'], 'radio');
-		showsetting('security_qq_login_alone_open', 'security_qqlogin_alone', $_G['setting']['security_qqlogin_alone'], 'radio');
-		showsubmit('safesetting');
-		showtablefooter();
-		showformfooter();
-	} else {
-		$updateData = array(
-			'security_safelogin' => dintval($_POST['security_safelogin']),
-			'security_qqlogin_alone' => dintval($_POST['security_qqlogin_alone']),
-		);
-		C::t('common_setting')->update_batch($updateData);
-		updatecache('setting');
-		cpmsg('setting_update_succeed', 'action=cloud&operation=security&anchor='.$_GET['anchor'], 'succeed');
-	}
-
 } elseif($_GET['anchor'] == 'member') {
 	showtips('security_member_tips');
 	if($_GET['ignoreuid']) {
@@ -225,6 +211,15 @@ if ($_GET['anchor'] == 'index') {
 
 	showtablefooter();
 	showformfooter();
+} elseif($_GET['anchor'] == 'reopen') {
+	Cloud::loadFile('Service_Client_Cloud');
+	$Cloud_Service_Client_Cloud = new Cloud_Service_Client_Cloud;
+	$return = $Cloud_Service_Client_Cloud->appOpenWithRegister('security');
+	if($return['errCode']) {
+		cpmsg($return['errMessage'], 'action=cloud&operation=security&anchor=index', 'error');
+	} else {
+		dheader('location: '.ADMINSCRIPT.'?action=cloud&operation=security&anchor=index');
+	}
 }
 echo "
 		<script type='text/javascript'>

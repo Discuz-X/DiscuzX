@@ -22,6 +22,10 @@ class mobile_api {
 
 	function output() {
 		global $_G;
+
+		foreach($GLOBALS['data']['hot']['threadlist'] as $tid=>$thread) {
+			$GLOBALS['data']['hot']['threadlist'][$tid]['avatar'] = avatar($thread['authorid'], 'big', true);
+		}
 		$variable = array(
 			'data' => array_values($GLOBALS['data']['hot']['threadlist']),
 			'perpage' => $GLOBALS['perpage'],

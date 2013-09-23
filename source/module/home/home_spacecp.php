@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_spacecp.php 31078 2012-07-13 06:56:52Z zhengqingpeng $
+ *      $Id: home_spacecp.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,8 +48,7 @@ if($ac != 'comment' || !$_G['group']['allowcomment']) {
 }
 $actives = array($ac => ' class="a"');
 
-$seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
-$secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 
 $navtitle = lang('core', 'title_setup');
 if(lang('core', 'title_memcp_'.$ac)) {

@@ -59,14 +59,15 @@
 				$('commentmessage').focus();
 				</script>
 			</div>
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-				<!--{block sectpl}--><sec>: <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-				<div class="mtm"><!--{subtemplate common/seccheck}--></div>
-			<!--{/if}-->
+			<div id="seccheck_comment">
+				<!--{if $secqaacheck || $seccodecheck}-->
+					<!--{subtemplate forum/seccheck_post}-->
+				<!--{/if}-->
+			</div>
 		</div>
 	</div>
 	<div class="o pns cl{if empty($_GET['infloat'])} mtm{/if}">
-		<button type="submit" id="commentsubmit" class="pn pnc z" value="true" name="commentsubmit" tabindex="3"><span>{lang publish}</span></button>
+		<button type="submit" id="commentsubmit" class="pn pnc z" value="true" name="commentsubmit" tabindex="3"{if !$seccodecheck} onmouseover="checkpostrule('seccheck_comment', 'ac=reply&infloat=yes&handlekey=$_GET[handlekey]');this.onmouseover=null"{/if}><span>{lang publish}</span></button>
 		<span class="y">{lang comment_message1} <strong id="checklen">200</strong> {lang comment_message2}</span>
 	</div>
 </form>

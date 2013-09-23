@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_form.php 30757 2012-06-18 06:23:23Z chenmengshu $
+ *      $Id: helper_form.php 33993 2013-09-17 01:39:13Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,10 +22,10 @@ class helper_form {
 			if($allowget || ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_GET['formhash']) && $_GET['formhash'] == formhash() && empty($_SERVER['HTTP_X_FLASH_VERSION']) && (empty($_SERVER['HTTP_REFERER']) ||
 			preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST'])))) {
 				if(checkperm('seccode')) {
-					if($secqaacheck && !check_secqaa($_GET['secanswer'], $_GET['sechash'])) {
+					if($secqaacheck && !check_secqaa($_GET['secanswer'], $_GET['secqaahash'])) {
 						showmessage('submit_secqaa_invalid');
 					}
-					if($seccodecheck && !check_seccode($_GET['seccodeverify'], $_GET['sechash'])) {
+					if($seccodecheck && !check_seccode($_GET['seccodeverify'], $_GET['seccodehash'], 0, $_GET['seccodemodid'])) {
 						showmessage('submit_seccode_invalid');
 					}
 				}
@@ -105,54 +105,6 @@ class helper_form {
 		$censor->check($message);
 		return $censor->modmoderated();
 	}
-
-
-	public static function check_seccode($value, $idhash) {
-		global $_G;
-		if(!$_G['setting']['seccodestatus']) {
-			return true;
-		}
-		if(!is_numeric($_G['setting']['seccodedata']['type'])) {
-			$etype = explode(':', $_G['setting']['seccodedata']['type']);
-			if(count($etype) > 1) {
-				$codefile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/seccode/seccode_'.$etype[1].'.php';
-				$class = $etype[1];
-			} else {
-				$codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class');
-				$class = $_G['setting']['seccodedata']['type'];
-			}
-			if(file_exists($codefile)) {
-				@include_once $codefile;
-				$class = 'seccode_'.$class;
-				if(class_exists($class)) {
-					$code = new $class();
-					if(method_exists($code, 'check')) {
-						return $code->check($value, $idhash);
-					}
-				}
-			}
-			return false;
-		}
-		if(!isset($_G['cookie']['seccode'.$idhash])) {
-			return false;
-		}
-		list($checkvalue, $checktime, $checkidhash, $checkformhash) = explode("\t", authcode($_G['cookie']['seccode'.$idhash], 'DECODE', $_G['config']['security']['authkey']));
-		return $checkvalue == strtoupper($value) && TIMESTAMP - 180 > $checktime && $checkidhash == $idhash && FORMHASH == $checkformhash;
-	}
-
-	public static function check_secqaa($value, $idhash) {
-		global $_G;
-		if(!$_G['setting']['secqaa']) {
-			return true;
-		}
-		if(!isset($_G['cookie']['secqaa'.$idhash])) {
-			return false;
-		}
-		loadcache('secqaa');
-		list($checkvalue, $checktime, $checkidhash, $checkformhash) = explode("\t", authcode($_G['cookie']['secqaa'.$idhash], 'DECODE', $_G['config']['security']['authkey']));
-		return $checkvalue == md5($value) && TIMESTAMP - 180 > $checktime && $checkidhash == $idhash && FORMHASH == $checkformhash;
-	}
-
 
 	public static function get_url_list($message) {
 		$return = array();

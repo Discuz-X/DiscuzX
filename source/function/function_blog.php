@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_blog.php 33424 2013-06-09 06:57:08Z andyzheng $
+ *      $Id: function_blog.php 33714 2013-08-07 01:42:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -215,6 +215,7 @@ function blog_post($POST, $olds=array()) {
 	$fieldarr = array(
 		'message' => $message,
 		'postip' => $_G['clientip'],
+		'port' => $_G['remoteport'],
 		'target_ids' => $POST['target_ids'],
 		'tag' => $POST['tag']
 	);

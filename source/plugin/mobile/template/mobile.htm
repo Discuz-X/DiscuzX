@@ -9,6 +9,9 @@
 </script>
 <!--{/if}-->
 <div id="ct" class="wp cl ptw pbw">
+<!--{if $_G['cache']['mobileoem_data']['iframeUrl']}-->
+	<iframe frameborder="0" width="100%" scrolling="no" height="810" src="{$_G['cache']['mobileoem_data']['iframeUrl']}"></iframe>
+<!--{else}-->
 <!--{if $_G['adminid'] == 1 && !$_G[cookie][mobiletips]}-->
   <div class="wrap">
 	<div id="admintips" class="tips"><span class="y"><a href="javascript:hiddentips();" class="close">{lang close}</a></span>{lang mobile:admin_tips}</div>
@@ -41,6 +44,7 @@
 			</div>
 		</div>
 	</div>
+<!--{/if}-->
 </div>
 </div>
 <!--{subtemplate common/footer}-->

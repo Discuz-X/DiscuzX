@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_connect.php 32986 2013-04-02 02:40:32Z liulanbo $
+ *      $Id: cloud_connect.php 33756 2013-08-10 06:32:48Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {

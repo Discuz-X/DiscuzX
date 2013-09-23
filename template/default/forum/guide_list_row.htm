@@ -42,7 +42,7 @@
 										<!--{if $thread['moved']}-->
 											{lang thread_moved}:<!--{eval $thread[tid]=$thread[closed];}-->
 										<!--{/if}-->
-										<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_GET['archiveid']}archiveid={$_GET['archiveid']}&{/if}extra=$extra" target="_blank" class="xst" >$thread[subject]</a><!--{if $view == 'hot'}-->&nbsp;<span class="xi1">$thread['heats']{lang guide_attend}</span><!--{/if}-->
+										<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_GET['archiveid']}archiveid={$_GET['archiveid']}&{/if}extra=$extra" target="_blank" class="xst" >$thread[subject]</a><!--{if $_G['setting']['threadhidethreshold'] && $thread['hidden'] >= $_G['setting']['threadhidethreshold']}-->&nbsp;<span class="xg1">{lang hidden}</span>&nbsp;<!--{/if}--><!--{if $view == 'hot'}-->&nbsp;<span class="xi1">$thread['heats']{lang guide_attend}</span>&nbsp;<!--{/if}-->
 										<!--{if $thread[icon] >= 0}-->
 											<img src="{STATICURL}image/stamp/{$_G[cache][stamps][$thread[icon]][url]}" alt="{$_G[cache][stamps][$thread[icon]][text]}" align="absmiddle" />
 										<!--{/if}-->

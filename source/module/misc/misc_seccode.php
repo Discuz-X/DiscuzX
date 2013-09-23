@@ -4,73 +4,86 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_seccode.php 30388 2012-05-25 06:45:40Z monkey $
+ *      $Id: misc_seccode.php 33997 2013-09-17 06:46:37Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-require_once libfile('function/seccode');
+$idhash = isset($_GET['idhash']) && preg_match('/^\w+$/', $_GET['idhash']) ? $_GET['idhash'] : '';
+$modid = isset($_GET['modid']) && preg_match('/^[\w:]+$/', $_GET['modid']) ? $_GET['modid'] : '';
 
 if($_GET['action'] == 'update') {
 
 	$message = '';
-	if($_G['setting']['seccodestatus']) {
-		$rand = random(5, 1);
-		$flashcode = '';
-		$idhash = isset($_GET['idhash']) && preg_match('/^\w+$/', $_GET['idhash']) ? $_GET['idhash'] : '';
-		$ani = $_G['setting']['seccodedata']['animator'] ? '_ani' : '';
-		if($_G['setting']['seccodedata']['type'] == 2) {
-			$message = '<span id="seccodeswf_'.$idhash.'"></span>'.(extension_loaded('ming') ? "<script type=\"text/javascript\" reload=\"1\">\n$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent(
-				'width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', 'misc.php?mod=seccode&update=$rand&idhash=$idhash',
-				'quality', 'high', 'wmode', 'transparent', 'bgcolor', '#ffffff',
-				'align', 'middle', 'menu', 'false', 'allowScriptAccess', 'sameDomain');\n</script>" :
-				"<script type=\"text/javascript\" reload=\"1\">\n$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent(
-				'width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', '$_G[siteurl]static/image/seccode/flash/flash2.swf',
-				'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');\n</script>");
-		} elseif($_G['setting']['seccodedata']['type'] == 3) {
-			$flashcode = "<span id=\"seccodeswf_$idhash\"></span><script type=\"text/javascript\" reload=\"1\">\n$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_sound_tips')."' + AC_FL_RunContent(
-				'id', 'seccodeplayer_$idhash', 'name', 'seccodeplayer_$idhash', 'width', '0', 'height', '0', 'src', '$_G[siteurl]static/image/seccode/flash/flash1.swf',
-				'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');\n</script>";
-			$message = 'seccode_player';
-		} else {
-			if(!is_numeric($_G['setting']['seccodedata']['type'])) {
-				$etype = explode(':', $_G['setting']['seccodedata']['type']);
-				if(count($etype) > 1) {
-					$codefile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/seccode/seccode_'.$etype[1].'.php';
-					$class = $etype[1];
-				} else {
-					$codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class');
-					$class = $_G['setting']['seccodedata']['type'];
-				}
-				if(file_exists($codefile)) {
-					@include_once $codefile;
-					$class = 'seccode_'.$class;
-					if(class_exists($class)) {
-						$code = new $class();
-						if(method_exists($code, 'make')) {
-							include template('common/header_ajax');
-							$code->make($_GET['idhash']);
-							include template('common/footer_ajax');
-							exit;
-						}
+	$showid = 'seccode_'.$idhash;
+	$rand = random(5, 1);
+	$htmlcode = '';
+	$ani = $_G['setting']['seccodedata']['animator'] ? '_ani' : '';
+	if($_G['setting']['seccodedata']['type'] == 2) {
+		$htmlcode = extension_loaded('ming') ?
+			"$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent('width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', 'misc.php?mod=seccode&update=$rand&idhash=$idhash','quality', 'high', 'wmode', 'transparent', 'bgcolor', '#ffffff','align', 'middle', 'menu', 'false', 'allowScriptAccess', 'sameDomain');" :
+			"$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent('width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', '$_G[siteurl]static/image/seccode/flash/flash2.swf', 'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');";
+		$message = '<span id="seccodeswf_'.$idhash.'"></span>';
+	} elseif($_G['setting']['seccodedata']['type'] == 3) {
+		$htmlcode = "$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_sound_tips')."' + AC_FL_RunContent('id', 'seccodeplayer_$idhash', 'name', 'seccodeplayer_$idhash', 'width', '0', 'height', '0', 'src', '$_G[siteurl]static/image/seccode/flash/flash1.swf', 'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');";
+		$message = '<span id="seccodeswf_'.$idhash.'"></span>'.lang('forum/misc', 'seccode_player', array('idhash' => $idhash));
+	} else {
+		if(!is_numeric($_G['setting']['seccodedata']['type'])) {
+			$etype = explode(':', $_G['setting']['seccodedata']['type']);
+			if(count($etype) > 1) {
+				$codefile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/seccode/seccode_'.$etype[1].'.php';
+				$class = $etype[1];
+			} else {
+				$codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class');
+				$class = $_G['setting']['seccodedata']['type'];
+			}
+			if(file_exists($codefile)) {
+				@include_once $codefile;
+				$class = 'seccode_'.$class;
+				if(class_exists($class)) {
+					$code = new $class();
+					if(method_exists($code, 'make')) {
+						ob_start();
+						$seccode = $code->make($idhash, $modid);
+						make_seccode($seccode);
+						$message = preg_replace("/\r|\n/", '', ob_get_contents());
+						ob_end_clean();
 					}
 				}
-				exit;
-			} else {
-				$message = lang('core', 'seccode_image'.$ani.'_tips').'<img onclick="updateseccode(\''.$idhash.'\')" width="'.$_G['setting']['seccodedata']['width'].'" height="'.$_G['setting']['seccodedata']['height'].'" src="misc.php?mod=seccode&update='.$rand.'&idhash='.$idhash.'" class="vm" alt="" />';
 			}
+		} else {
+			$message = lang('core', 'seccode_image'.$ani.'_tips').'<img onclick="updateseccode(\''.$idhash.'\')" width="'.$_G['setting']['seccodedata']['width'].'" height="'.$_G['setting']['seccodedata']['height'].'" src="misc.php?mod=seccode&update='.$rand.'&idhash='.$idhash.'" class="vm" alt="" />';
 		}
 	}
-	include template('common/header_ajax');
-	echo lang('message', $message, array('flashcode' => $flashcode, 'idhash' => $idhash));
-	include template('common/footer_ajax');
+	$imemode = $_G['setting']['seccodedata']['type'] != 1 ? 'ime-mode:disabled;' : '';
+	$message = str_replace("'", "\'", $message);
+	$seclang = lang('forum/misc');
+echo <<<EOF
+if($('$showid')) {
+	if(!$('v$showid')) {
+		var sectpl = seccheck_tpl['$idhash'] != '' ? seccheck_tpl['$idhash'].replace(/<hash>/g, 'code$idhash') : '';
+		var sectplcode = sectpl != '' ? sectpl.split('<sec>') : Array('<br />',': ','<br />','');
+		var string = '<input name="seccodehash" type="hidden" value="$idhash" /><input name="seccodemodid" type="hidden" value="$modid" />' + sectplcode[0] + '$seclang[seccode]' + sectplcode[1] + '<input name="seccodeverify" id="seccodeverify_$idhash" type="text" autocomplete="off" style="{$imemode}width:100px" class="txt px vm" onblur="checksec(\'code\', \'$idhash\', 0, null, \'$modid\')" />' +
+			' <a href="javascript:;" onclick="updateseccode(\'$idhash\');doane(event);" class="xi2">$seclang[seccode_update]</a>' +
+			'<span id="checkseccodeverify_$idhash"><img src="' + STATICURL + 'image/common/none.gif" width="16" height="16" class="vm" /></span>' +
+			sectplcode[2] + '<span id="v$showid">$message</span>' + sectplcode[3];
+		evalscript(string);
+		$('$showid').innerHTML = string;
+	} else {
+		var string = '$message';
+		evalscript(string);
+		$('v$showid').innerHTML = string;
+	}
+	$htmlcode
+}
+EOF;
 
 } elseif($_GET['action'] == 'check') {
 
 	include template('common/header_ajax');
-	echo check_seccode($_GET['secverify'], $_GET['idhash']) ? 'succeed' : 'invalid';
+	echo check_seccode($_GET['secverify'], $_GET['idhash'], 1, $modid) ? 'succeed' : 'invalid';
 	include template('common/footer_ajax');
 
 } else {
@@ -78,11 +91,11 @@ if($_GET['action'] == 'update') {
 	$refererhost = parse_url($_SERVER['HTTP_REFERER']);
 	$refererhost['host'] .= !empty($refererhost['port']) ? (':'.$refererhost['port']) : '';
 
-	if($_G['setting']['seccodedata']['type'] < 2 && ($refererhost['host'] != $_SERVER['HTTP_HOST'] || !$_G['setting']['seccodestatus']) || $_G['setting']['seccodedata']['type'] == 2 && !extension_loaded('ming') && $_POST['fromFlash'] != 1 || $_G['setting']['seccodedata']['type'] == 3 && $_GET['fromFlash'] != 1) {
+	if($_G['setting']['seccodedata']['type'] < 2 && ($refererhost['host'] != $_SERVER['HTTP_HOST']) || $_G['setting']['seccodedata']['type'] == 2 && !extension_loaded('ming') && $_POST['fromFlash'] != 1 || $_G['setting']['seccodedata']['type'] == 3 && $_GET['fromFlash'] != 1) {
 		exit('Access Denied');
 	}
 
-	$seccode = make_seccode($_GET['idhash']);
+	$seccode = make_seccode();
 
 	if(!$_G['setting']['nocacheheaders']) {
 		@header("Expires: -1");

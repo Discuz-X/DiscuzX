@@ -133,8 +133,8 @@
 				<!--{elseif in_array($option['type'], array('textarea'))}-->
 					<textarea name="typeoption[{$option[identifier]}]" tabindex="1" id="typeoption_$option[identifier]" rows="$option[rowsize]" cols="$option[colsize]" onBlur="checkoption('$option[identifier]', '$option[required]', '$option[type]', 0, 0{if $option[maxlength]}, '$option[maxlength]'{/if})" $option[unchangeable] class="pt">$option[value]</textarea>
 				<!--{/if}-->
-				</div>
-				 $option[unit]
+				$option[unit]
+				</div>				 
 				<!--{if $option['maxnum'] || $option['minnum'] || $option['maxlength'] || $option['unchangeable'] || $option[description]}-->
 					<div class="d">
 					<!--{if $option['maxnum']}-->

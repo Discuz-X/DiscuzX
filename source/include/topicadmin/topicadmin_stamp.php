@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_stamp.php 30872 2012-06-27 10:11:44Z liulanbo $
+ *      $Id: topicadmin_stamp.php 33825 2013-08-19 08:32:40Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,9 +30,12 @@ if(!submitcheck('modsubmit')) {
 	C::t('forum_thread')->update($_G['tid'], array('moderated'=>1, 'stamp'=>$_GET['stamp']));
 	if($modaction == 'SPA' && $_G['cache']['stamps'][$_GET['stamp']]['icon']) {
 		C::t('forum_thread')->update($_G['tid'], array('icon'=>$_G['cache']['stamps'][$_GET['stamp']]['icon']));
+		C::t('forum_threadhidelog')->delete_by_tid($_G['tid']);
 	} elseif($modaction == 'SPD' && $_G['cache']['stamps'][$thread['stamp']]['icon'] == $thread['icon']) {
 		C::t('forum_thread')->update($_G['tid'], array('icon'=>-1));
 	}
+
+	C::t('common_member_secwhite')->add($thread['authorid']);
 
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=viewthread&tid=$_G[tid]&page=$page",

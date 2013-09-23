@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 33374 2013-06-03 08:40:01Z nemohou $
+ *      $Id: post_newthread.php 33695 2013-08-03 04:39:22Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,10 @@ if(empty($_G['forum']['fid']) || $_G['forum']['type'] == 'group') {
 
 if(($special == 1 && !$_G['group']['allowpostpoll']) || ($special == 2 && !$_G['group']['allowposttrade']) || ($special == 3 && !$_G['group']['allowpostreward']) || ($special == 4 && !$_G['group']['allowpostactivity']) || ($special == 5 && !$_G['group']['allowpostdebate'])) {
 	showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
+}
+
+if($_G['setting']['connect']['allow'] && $_G['setting']['accountguard']['postqqonly'] && !$_G['member']['conisbind']) {
+	showmessage('postperm_qqonly_nopermission');
 }
 
 if(!$_G['uid'] && !((!$_G['forum']['postperm'] && $_G['group']['allowpost']) || ($_G['forum']['postperm'] && forumperm($_G['forum']['postperm'])))) {
@@ -42,6 +46,10 @@ if(!$_G['uid'] && ($_G['setting']['need_avatar'] || $_G['setting']['need_email']
 checklowerlimit('post', 0, 1, $_G['forum']['fid']);
 
 if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
+
+	$st_t = $_G['uid'].'|'.TIMESTAMP;
+	dsetcookie('st_t', $st_t.'|'.md5($st_t.$_G['config']['security']['authkey']));
+
 	if(helper_access::check_module('group')) {
 		$mygroups = $groupids = array();
 		$groupids = C::t('forum_groupuser')->fetch_all_fid_by_uids($_G['uid']);

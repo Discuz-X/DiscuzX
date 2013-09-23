@@ -84,8 +84,8 @@ global $_G;
 		//var _syn_qq = {if intval($_G['cookie']['connect_not_sync_feed'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if}{/if};
 		var _syn_t = {if intval($_G['cookie']['connect_not_sync_t'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublisht']}true{else}false{/if}{/if};
 		var _is_oauth_user = {if $_G['member']['conisbind']}true{else}false{/if};
-		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
-		var _is_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
+		var _is_feed_auth = {if ($_G['member']['conuinsecret'] || $_G['member']['conuintoken']) && $_G['member']['is_feed']}true{else}false{/if};
+		var _is_token_outofdate = {if $_G['member']['conuinsecret'] || $_G['member']['conuintoken']}false{else}true{/if};
 		function connect_post_init() {
 //			if (_allow_qq && _syn_qq) {
 //				if (_is_feed_auth && !_is_token_outofdate) {
@@ -218,8 +218,8 @@ global $_G;
 		//var _syn_qq_infloat = {if intval($_G['cookie']['connect_not_sync_feed'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if}{/if};
 		var _syn_t_infloat = {if intval($_G['cookie']['connect_not_sync_t'])}false{else}{if $_G['member']['conisbind'] && $_G['member']['conispublisht']}true{else}false{/if}{/if};
 		var _is_oauth_user_infloat = {if $_G['member']['conisbind']}true{else}false{/if};
-		var _is_feed_auth_infloat = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
-		var _is_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
+		var _is_feed_auth_infloat = {if ($_G['member']['conuinsecret'] || $_G['member']['conuintoken']) && $_G['member']['is_feed']}true{else}false{/if};
+		var _is_token_outofdate = {if $_G['member']['conuinsecret'] || $_G['member']['conuintoken']}false{else}true{/if};
 		function connect_post_init_infloat() {
 //			if (_allow_qq_infloat && _syn_qq_infloat) {
 //				if (_is_feed_auth_infloat && !_is_token_outofdate) {
@@ -333,16 +333,14 @@ if (!$_G['setting']['connect']['allow']) return;
 $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 }
 <!--{block return}-->
-	<!--{if $_G['member']['conisbind'] && $_G['member']['conuinsecret']}-->
+	<!--{if $_G['member']['conisbind'] && ($_G['member']['conuinsecret'] || $_G['member']['conuintoken'])}-->
 		<a href="{$_G[connect][qq_share_url]}" id="k_share_to_qq" title="{lang qqconnect:connect_viewthread_share_to_qq}" target="_blank"><i><img src="{IMGDIR}/qq_share.png" alt="{lang qqconnect:connect_viewthread_share_to_qq}" />{lang qqconnect:connect_viewthread_share_to_qq}</i></a>
-		<a href="javascript:void(0);" id="k_qqshare" onclick="postToQzone();" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][weibo_share_url]}" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
-		<a href="javascript:void(0);" ref="{$_G[connect][pengyou_share_url]}" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
+		<a href="javascript:void(0);" ref="{$_G[connect][pengyou_share_url]}" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
 		<script type="text/javascript">
-		var _is_oauth_user = {if $_G['member']['conuinsecret']}true{else}false{/if};
-		var _is_share_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
-		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
-		_is_feed_auth = true;
+		var _is_oauth_user = {if $_G['member']['conuinsecret'] || $_G['member']['conuintoken']}true{else}false{/if};
+		var _is_share_token_outofdate = {if $_G['member']['conuinsecret'] || $_G['member']['conuintoken']}false{else}true{/if};
+		var _is_feed_auth = true;
 		var _share_buttons = ['k_weiboshare', 'k_pengyoushare'];
 		function connect_share_init() {
 			for (var i = 0; i < _share_buttons.length; i++) {
@@ -413,18 +411,7 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 			window.open(_u);
 		}
 		</script>
-	<!--{/if}-->
-	<script type="text/javascript">
-		function postToQzone(){
-			var _url = encodeURIComponent(document.location.href);
-			var _site = encodeURIComponent("{$_G['setting']['bbname']}");
-			var _title = encodeURIComponent("{$connect_thread_subject}");
-			var _pics = "{$_G['connect']['share_images']}";
-			var _from = 'discuz';
-			var _u = '{$_G[connect][qzone_public_share_url]}?url='+_url+'&site='+_site+'&title='+_title+'&pics='+_pics+'&from='+_from;
-			window.open(_u);
-		}
-	</script>
+	<!--{/if}-->	
 	<!--{if $jsurl}-->
 		<script type="text/javascript">_attachEvent(window, 'load', function () { appendscript('{$jsurl}', '', 1, 'utf-8') }, document);</script>
 	<!--{/if}-->
@@ -521,19 +508,7 @@ $connect_openid = $_G['qc']['connect_openid'];
 $connect_tab_1 = $_GET['ac'] != 'bind' && $_G['setting']['regconnect'] ? ' class="a"' : '';
 $connect_tab_2 = $_GET['ac'] == 'bind' ? ' class="a"' : '';
 }
-<!--{block js2}-->
-	<style>
-		.loggingbox { width: 760px; margin: 40px auto 0; }
-		.loging_tit { border-bottom: 1px solid #CCC; _overflow:hidden; }
-		.ie_all .loging_tit { height:66px;}
-		.loggingbox .fm_box { border-bottom:0; padding: 20px 0; }
-		.loggingbox .welcome { font-size:14px; width:100%; line-height:30px;}
-		.loggingbox .welcome span { font-size:12px; }
-		.loggingbox .avt img { margin: 0 5px 5px 0; padding:0; border:0; width:60px; height:60px; }
-		.loggingbox .tb{ border-bottom: 0; margin-top: 0; padding-left: 0px; }
-		.loggingbox .tb a { background:#F6F6F6; padding:0 20px; }
-		.loggingbox .tb .a a { background:#FFF; }
-	</style>
+<!--{block js2}-->	
 	<!--{if $_GET['ac'] == 'bind' || $_G['setting']['regconnect']}-->
 	<div id="loggingbox" class="loggingbox">
 		<div class="loging_tit cl">
@@ -652,6 +627,18 @@ $js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
 			</div>
 		</form>
 	</div>
+	<style type="text/css">
+		.loggingbox { width: 760px; margin: 40px auto 0; }
+		.loging_tit { border-bottom: 1px solid #CCC; _overflow:hidden; }
+		.ie_all .loging_tit { height:66px;}
+		.loggingbox .fm_box { border-bottom:0; padding: 20px 0; }
+		.loggingbox .welcome { font-size:14px; width:100%; line-height:30px;}
+		.loggingbox .welcome span { font-size:12px; }
+		.loggingbox .avt img { margin: 0 5px 5px 0; padding:0; border:0; width:60px; height:60px; }
+		.loggingbox .tb{ border-bottom: 0; margin-top: 0; padding-left: 0px; }
+		.loggingbox .tb a { background:#F6F6F6; padding:0 20px; }
+		.loggingbox .tb .a a { background:#FFF; }
+	</style>
 	<script type="text/javascript">
 		<!--{if $_G['setting']['regconnect']}-->
 			$('reginfo_a').parentNode.className = '';

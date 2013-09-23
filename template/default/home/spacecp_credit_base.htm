@@ -111,9 +111,11 @@
 								<input type="text" class="px" id="cardid" name="cardid" />
 							</td>
 						</tr>
-						<!--{if $_G['setting']['seccodestatus'] & 16}-->
-							<!--{block sectpl}--><tr><th><sec></th><td colspan="2"><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></td></tr><!--{/block}-->
-							<tbody id="card_box_sec" style="{if $_G[setting][card][open] && $ecchecked}display:;{else}display:none;{/if}"><!--{subtemplate common/seccheck}--></tbody>
+						<!--{if $seccodecheck}-->
+							</table>
+							<!--{block sectpl}--><table id="card_box_sec" style="{if $_G[setting][card][open] && $ecchecked}display:;{else}display:none;{/if}" cellspacing="0" cellpadding="0" class="tfm mtn"><tr><th><sec></th><td colspan="2"><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></td></tr></table><!--{/block}-->
+							<!--{subtemplate common/seccheck}-->
+							<table cellspacing="0" cellpadding="0" class="tfm mtn">
 						<!--{/if}-->
 					<!--{/if}-->
 					<tr>

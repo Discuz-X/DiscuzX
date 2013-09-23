@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_plugin.php 33236 2013-05-08 06:04:22Z nemohou $
+ *      $Id: function_plugin.php 34010 2013-09-18 07:45:59Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,6 +33,19 @@ function plugininstall($pluginarray, $installtype = '', $available = 0) {
 			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(strip_tags($pluginarray['intro']), 1, 0);
 		}
 	}
+	if(!empty($pluginarray['uninstallfile'])) {
+		$pluginarray['plugin']['modules']['extra']['uninstallfile'] = $pluginarray['uninstallfile'];
+	}
+	if(!empty($pluginarray['checkfile'])) {
+		$pluginarray['plugin']['modules']['extra']['checkfile'] = $pluginarray['checkfile'];
+	}
+	if(!empty($pluginarray['enablefile'])) {
+		$pluginarray['plugin']['modules']['extra']['enablefile'] = $pluginarray['enablefile'];
+	}
+	if(!empty($pluginarray['disablefile'])) {
+		$pluginarray['plugin']['modules']['extra']['disablefile'] = $pluginarray['disablefile'];
+	}
+
 	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
 
 	$data = array();
@@ -136,6 +149,18 @@ function pluginupgrade($pluginarray, $installtype) {
 		}
 		$langexists && $pluginarray['plugin']['modules']['extra']['langexists'] = 1;
 	}
+	if(!empty($pluginarray['uninstallfile'])) {
+		$pluginarray['plugin']['modules']['extra']['uninstallfile'] = $pluginarray['uninstallfile'];
+	}
+	if(!empty($pluginarray['checkfile'])) {
+		$pluginarray['plugin']['modules']['extra']['checkfile'] = $pluginarray['checkfile'];
+	}
+	if(!empty($pluginarray['enablefile'])) {
+		$pluginarray['plugin']['modules']['extra']['enablefile'] = $pluginarray['enablefile'];
+	}
+	if(!empty($pluginarray['disablefile'])) {
+		$pluginarray['plugin']['modules']['extra']['disablefile'] = $pluginarray['disablefile'];
+	}
 	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
 
 	C::t('common_plugin')->update($plugin['pluginid'], array('version' => $pluginarray['plugin']['version'], 'modules' => $pluginarray['plugin']['modules']));
@@ -219,7 +244,7 @@ function createtable($sql, $dbcharset) {
 	$type = strtoupper(preg_replace("/^\s*CREATE TABLE\s+.+\s+\(.+?\).*(ENGINE|TYPE)\s*=\s*([a-z]+?).*$/isU", "\\2", $sql));
 	$type = in_array($type, array('MYISAM', 'HEAP')) ? $type : 'MYISAM';
 	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
-	(mysql_get_server_info() > '4.1' ? " ENGINE=$type DEFAULT CHARSET=$dbcharset" : " TYPE=$type");
+	(DB::$db->version() > '4.1' ? " ENGINE=$type DEFAULT CHARSET=$dbcharset" : " TYPE=$type");
 }
 
 function cron_create($pluginid, $filename, $name, $weekday, $day, $hour, $minute) {

@@ -413,6 +413,7 @@ function parsemedia($params, $url) {
 	$params = explode(',', $params);
 	$width = intval($params[1]) > 800 ? 800 : intval($params[1]);
 	$height = intval($params[2]) > 600 ? 600 : intval($params[2]);
+
 	$url = addslashes($url);
         if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'https:', 'ftp://', 'rtsp:/', 'mms://')) && !preg_match('/^static\//', $url) && !preg_match('/^data\//', $url)) {
 		$url = 'http://'.$url;

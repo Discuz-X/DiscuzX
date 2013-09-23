@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_visit.php 27372 2012-01-19 04:21:04Z chenmengshu $
+ *      $Id: magic_visit.php 33714 2013-08-07 01:42:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -123,6 +123,7 @@ class magic_visit {
 					'authorid' => $_G['uid'],
 					'author' => $_G['username'],
 					'ip' => $ip,
+					'port' => $_G['remoteport'],
 					'dateline' => $_G['timestamp'],
 					'message' => $message
 				);

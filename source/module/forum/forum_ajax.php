@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 33457 2013-06-19 04:15:44Z jeffjzhang $
+ *      $Id: forum_ajax.php 33772 2013-08-12 06:49:20Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -536,8 +536,7 @@ EOF;
 			krsort($list);
 		}
 	}
-	$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
-	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+	list($seccodecheck, $secqaacheck) = seccheck('post', 'reply');
 	include template('forum/ajax_quickreply');
 } elseif($_GET['action'] == 'getpost') {
 	$tid = intval($_GET['tid']);
@@ -673,6 +672,16 @@ EOF;
 		}
 		showmessage('do_success', dreferer(), array(), array('header'=>true));
 	}
+	exit;
+} elseif($_GET['action'] == 'checkpostrule') {
+	require_once libfile('function/post');
+	include template('common/header_ajax');
+	$_POST = array('action' => $_GET['ac']);
+	list($seccodecheck, $secqaacheck) = seccheck('post', $_GET['ac']);
+	if($seccodecheck || $secqaacheck) {
+		include template('forum/seccheck_post');
+	}
+	include template('common/footer_ajax');
 	exit;
 }
 

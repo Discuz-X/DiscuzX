@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_favorite.php 31313 2012-08-10 03:51:03Z zhangguosheng $
+ *      $Id: space_favorite.php 33832 2013-08-20 03:32:32Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -63,6 +63,7 @@ if($count) {
 		}
 	}
 	if(!empty($articles)) {
+		include_once libfile('function/portal');
 		$_urls = array();
 		foreach(C::t('portal_article_title')->fetch_all($articles) as $aid => $article) {
 			$_urls[$aid] = fetch_article_url($article);

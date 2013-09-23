@@ -176,7 +176,7 @@
 								</script>
 							</div>
 
-							<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+							<!--{if $secqaacheck || $seccodecheck}-->
 								<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 								<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
 							<!--{/if}-->
@@ -557,7 +557,7 @@
 					<!--{loop $list $fuid $fuser}-->
 						<li class="cl<!--{if in_array($fuser['uid'], $newfollower_list)}--> unread<!--{/if}-->">
 						<!--{if $do=='following'}-->
-							<a href="home.php?mod=space&uid=$fuser['followuid']" title="$fuser['fusername']" id="edit_avt" class="flw_avt" c="1" shref="home.php?mod=space&uid=$fuser['followuid']"><!--{avatar($fuser['followuid'],small)}--></a>
+							<a href="home.php?mod=space&uid=$fuser['followuid']" title="$fuser['fusername']" id="edit_avt" class="flw_avt" shref="home.php?mod=space&uid=$fuser['followuid']"><!--{avatar($fuser['followuid'],small)}--></a>
 							<!--{if $viewself}-->
 								<a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">{lang follow_del}</a>
 							<!--{elseif $fuser[followuid] != $_G[uid]}-->

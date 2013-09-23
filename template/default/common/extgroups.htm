@@ -9,7 +9,7 @@
 				{lang thread_groupupgrade}<p class="xi1">$upgradecredit {lang credits}</p>
 			</li>
 		<!--{/if}-->
-		<!--{if $_G['member'][adminid]}-->
+		<!--{if $_G['member'][adminid] > 0}-->
 			<li class="hm mtn">{lang manage_grade}: <!--{if $_G['member'][adminid] == 1}-->{lang manager}
 				<!--{elseif $_G['member'][adminid] == 2}-->{lang super_forummanager}
 				<!--{elseif $_G['member'][adminid] == 3}-->{lang forummanager}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: db_driver_mysql.php 28855 2012-03-15 05:48:02Z zhengqingpeng $
+ *      $Id: db_driver_mysql.php 33349 2013-05-30 09:00:26Z kamichen $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,7 @@ class db_driver_mysql
 {
 	var $tablepre;
 	var $version = '';
+	var $drivertype = 'mysql';
 	var $querynum = 0;
 	var $slaveid = 0;
 	var $curlink;
@@ -116,6 +117,7 @@ class db_driver_mysql
 	}
 
 	function fetch_array($query, $result_type = MYSQL_ASSOC) {
+		if($result_type == 'MYSQL_ASSOC') $result_type = MYSQL_ASSOC;
 		return mysql_fetch_array($query, $result_type);
 	}
 
@@ -208,6 +210,10 @@ class db_driver_mysql
 			$this->version = mysql_get_server_info($this->curlink);
 		}
 		return $this->version;
+	}
+
+	function escape_string($str) {
+		return mysql_escape_string($str);
 	}
 
 	function close() {

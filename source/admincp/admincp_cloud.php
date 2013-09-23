@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: admincp_cloud.php 29521 2012-04-17 09:24:42Z songlixin $
+ *	  $Id: admincp_cloud.php 33808 2013-08-15 11:22:45Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -226,7 +226,7 @@ EOT;
 } elseif($operation == 'applist') {
 
 	if($cloudstatus != 'cloud') {
-		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
+		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=plugins\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=plugins\'", 3000);</script>');
 	}
 
 	$signParams = array('refer' => $_G['siteurl'], 'ADTAG' => 'CP.DISCUZ.APPLIST');
@@ -239,15 +239,17 @@ EOT;
 
 } elseif(in_array($operation, array('manyou', 'connect', 'security', 'stats', 'search', 'smilies', 'qqgroup', 'union', 'storage'))) {
 	if($cloudstatus != 'cloud') {
-		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
+		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=plugins\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=plugins\'", 3000);</script>');
 	}
 
-	$apps = $appService->getCloudApps();
-	if(empty($apps) || empty($apps[$operation]) || $apps[$operation]['status'] == 'close') {
-		cpmsg('cloud_application_close', 'action=cloud&operation=applist', 'error');
-	}
-	if($apps[$operation]['status'] == 'disable') {
-		cpmsg('cloud_application_disable', 'action=cloud&operation=applist', 'error');
+	if($operation != 'security') {
+		$apps = $appService->getCloudApps();
+		if(empty($apps) || empty($apps[$operation]) || $apps[$operation]['status'] == 'close') {
+			cpmsg('cloud_application_close', 'action=plugins', 'error');
+		}
+		if($apps[$operation]['status'] == 'disable') {
+			cpmsg('cloud_application_disable', 'action=plugins', 'error');
+		}
 	}
 
 	require libfile("cloud/$operation", 'admincp');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_connect_logging.php 33177 2013-05-06 02:43:31Z theoliu $
+ *      $Id: member_connect_logging.php 33543 2013-07-03 06:01:33Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,7 @@ if(!empty($_POST)) {
 	$conuin = $this->connect_guest['conuin'];
 	$conuinsecret = $this->connect_guest['conuinsecret'];
 	$conopenid = $this->connect_guest['conopenid'];
+	$conuintoken = $this->connect_guest['conuintoken'];
 
 	$user_auth_fields = 1;
 	$conispublishfeed = 0;
@@ -29,8 +30,8 @@ if(!empty($_POST)) {
 
 	$is_use_qqshow = !empty($_GET['use_qqshow']) ? 1 : 0;
 
-	if ($conuin && $conopenid) {
-		C::t('#qqconnect#common_member_connect')->insert(array('uid' => $uid, 'conuin' => $conuin, 'conuinsecret' => $conuinsecret, 'conopenid' => $conopenid, 'conispublishfeed' => $conispublishfeed, 'conispublisht' => $conispublisht, 'conisregister' => '0', 'conisqzoneavatar' => '0', 'conisfeed' => $user_auth_fields, 'conisqqshow' => $is_use_qqshow), false, true);
+	if ($conopenid) {
+		C::t('#qqconnect#common_member_connect')->insert(array('uid' => $uid, 'conuin' => $conuin, 'conuinsecret' => $conuinsecret, 'conuintoken' => $conuintoken, 'conopenid' => $conopenid, 'conispublishfeed' => $conispublishfeed, 'conispublisht' => $conispublisht, 'conisregister' => '0', 'conisqzoneavatar' => '0', 'conisfeed' => $user_auth_fields, 'conisqqshow' => $is_use_qqshow), false, true);
 		C::t('common_member')->update($uid, array('conisbind' => '1'));
 		C::t('#qqconnect#connect_memberbindlog')->insert(array('uid' => $uid, 'uin' => $conopenid, 'type' => '1', 'dateline' => $_G['timestamp']));
 

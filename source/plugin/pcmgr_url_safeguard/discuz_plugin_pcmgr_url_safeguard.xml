@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
-	<item id="Version"><![CDATA[X3]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[0]]></item>
@@ -28,6 +27,6 @@
 				</item>
 			</item>
 		</item>
-		<item id="version"><![CDATA[X3]]></item>
+		<item id="version"><![CDATA[X3.1]]></item>
 	</item>
 </root>

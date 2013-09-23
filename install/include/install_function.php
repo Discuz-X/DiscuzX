@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 32753 2013-03-06 05:59:05Z chenmengshu $
+ *      $Id: install_function.php 33326 2013-05-28 08:52:45Z kamichen $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -58,12 +58,14 @@ function show_msg($error_no, $error_msg = 'ok', $success = 1, $quit = TRUE) {
 }
 
 function check_db($dbhost, $dbuser, $dbpw, $dbname, $tablepre) {
-	if(!function_exists('mysql_connect')) {
+	if(!function_exists('mysql_connect') && !function_exists('mysqli_connect')) {
 		show_msg('undefine_func', 'mysql_connect', 0);
 	}
-	if(!@mysql_connect($dbhost, $dbuser, $dbpw)) {
-		$errno = mysql_errno();
-		$error = mysql_error();
+	$mysqlmode = function_exists('mysql_connect') ? 'mysql' : 'mysqli';
+	$link = ($mysqlmode == 'mysql') ? @mysql_connect($dbhost, $dbuser, $dbpw) : new mysqli($dbhost, $dbuser, $dbpw);
+	if(!$link) {
+		$errno = ($mysqlmode == 'mysql') ? mysql_errno() : mysqli_errno();
+		$error = ($mysqlmode == 'mysql') ? mysql_error() : mysqli_error();
 		if($errno == 1045) {
 			show_msg('database_errno_1045', $error, 0);
 		} elseif($errno == 2003) {
@@ -72,8 +74,11 @@ function check_db($dbhost, $dbuser, $dbpw, $dbname, $tablepre) {
 			show_msg('database_connect_error', $error, 0);
 		}
 	} else {
-		if($query = @mysql_query("SHOW TABLES FROM $dbname")) {
-			while($row = mysql_fetch_row($query)) {
+		if($query = (($mysqlmode == 'mysql') ? @mysql_query("SHOW TABLES FROM $dbname") : $link->query("SHOW TABLES FROM $dbname"))) {
+			if(!$query) {
+				return false;
+			}
+			while($row = (($mysqlmode == 'mysql') ? mysql_fetch_row($query) : $query->fetch_row())) {
 				if(preg_match("/^$tablepre/", $row[0])) {
 					return false;
 				}
@@ -455,12 +460,12 @@ if(!function_exists('file_put_contents')) {
 	}
 }
 
-function createtable($sql) {
+function createtable($sql, $dbver) {
 
 	$type = strtoupper(preg_replace("/^\s*CREATE TABLE\s+.+\s+\(.+?\).*(ENGINE|TYPE)\s*=\s*([a-z]+?).*$/isU", "\\2", $sql));
 	$type = in_array($type, array('MYISAM', 'HEAP', 'MEMORY')) ? $type : 'MYISAM';
 	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
-	(mysql_get_server_info() > '4.1' ? " ENGINE=$type DEFAULT CHARSET=".DBCHARSET : " TYPE=$type");
+	($dbver > '4.1' ? " ENGINE=$type DEFAULT CHARSET=".DBCHARSET : " TYPE=$type");
 }
 
 function dir_writeable($dir) {
@@ -732,7 +737,7 @@ function runquery($sql) {
 			if(substr($query, 0, 12) == 'CREATE TABLE') {
 				$name = preg_replace("/CREATE TABLE ([a-z0-9_]+) .*/is", "\\1", $query);
 				showjsmessage(lang('create_table').' '.$name.' ... '.lang('succeed'));
-				$db->query(createtable($query));
+				$db->query(createtable($query, $db->version()));
 			} else {
 				$db->query($query);
 			}
@@ -767,7 +772,7 @@ function runucquery($sql, $tablepre) {
 			if(substr($query, 0, 12) == 'CREATE TABLE') {
 				$name = preg_replace("/CREATE TABLE ([a-z0-9_]+) .*/is", "\\1", $query);
 				showjsmessage(lang('create_table').' '.$name.' ... '.lang('succeed'));
-				$db->query(createtable($query));
+				$db->query(createtable($query, $db->version()));
 			} else {
 				$db->query($query);
 			}
@@ -936,7 +941,7 @@ function check_env() {
 	$errors = array('quit' => false);
 	$quit = false;
 
-	if(!function_exists('mysql_connect')) {
+	if(!function_exists('mysql_connect') && !function_exists('mysqli_connect')) {
 		$errors[] = 'mysql_unsupport';
 		$quit = true;
 	}
@@ -1146,8 +1151,8 @@ function save_uc_config($config, $file) {
 
 	list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = $config;
 
-	$link = mysql_connect($ucdbhost, $ucdbuser, $ucdbpw, 1);
-	$uc_connnect = $link && mysql_select_db($ucdbname, $link) ? 'mysql' : '';
+	$link = function_exists('mysql_connect') ? mysql_connect($ucdbhost, $ucdbuser, $ucdbpw, 1) : new mysqli($ucdbhost, $ucdbuser, $ucdbpw, $ucdbname);
+	$uc_connnect = $link ? 'mysql' : '';
 
 	$date = gmdate("Y-m-d H:i:s", time() + 3600 * 8);
 	$year = date('Y');

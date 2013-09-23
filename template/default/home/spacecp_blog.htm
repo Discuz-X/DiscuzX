@@ -210,9 +210,11 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-					<!--{eval $sectpl = '<tr><th><sec></th><td class="pns"><sec><div class="d"><sec></div></td></tr>';}-->
-					<!--{subtemplate common/seccheck}-->
+					<!--{if $secqaacheck || $seccodecheck}-->
+					</table>
+						<!--{eval $sectpl = '<table cellspacing="0" cellpadding="0" width="100%" class="tfm"><tr><th><sec></th><td class="pns"><sec><div class="d"><sec></div></td></tr></table>';}-->
+						<!--{subtemplate common/seccheck}-->
+					<table cellspacing="0" cellpadding="0" width="100%" class="tfm">
 					<!--{/if}-->
 					<tr>
 						<th>&nbsp;</th>

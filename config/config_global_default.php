@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 33337 2013-05-29 02:23:47Z andyzheng $
+ *      $Id: config_global_default.php 34020 2013-09-22 05:48:16Z nemohou $
  */
 
 $_config = array();
@@ -129,9 +129,6 @@ $_config['download']['xsendfile']['type'] = 0;
 
 // 启用 nginx X-sendfile 时，论坛附件目录的虚拟映射路径，请使用 / 结尾
 $_config['download']['xsendfile']['dir'] = '/down/';
-
-//  CONFIG CACHE
-$_config['cache']['type'] 			= 'sql';	// 缓存类型 file=文件缓存, sql=数据库缓存
 
 // 页面输出设置
 $_config['output']['charset'] 			= 'utf-8';	// 页面字符集

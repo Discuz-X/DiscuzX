@@ -25,6 +25,9 @@
 		<input type="hidden" name="referer" id="referer" value="<!--{if dreferer()}-->{echo dreferer()}<!--{else}-->forum.php?mobile=2<!--{/if}-->" />
 		<input type="hidden" name="fastloginfield" value="username">
 		<input type="hidden" name="cookietime" value="2592000">
+		<!--{if $auth}-->
+			<input type="hidden" name="auth" value="$auth" />
+		<!--{/if}-->
 	<div class="login_from">
 		<ul>
 			<li><input type="text" value="" tabindex="1" class="px p_fre" size="30" autocomplete="off" value="" name="username" placeholder="{lang inputyourname}" fwin="login"></li>
@@ -51,7 +54,7 @@
 			</li>
 			<li class="bl_none answerli" style="display:none;"><input type="text" name="answer" id="answer_{$loginhash}" class="px p_fre" size="30" placeholder="{lang security_a}"></li>
 		</ul>
-		<!--{if $secqaacheck || $seccodecheck}-->
+		<!--{if $seccodecheck}-->
 		<!--{subtemplate common/seccheck}-->
 		<!--{/if}-->
 	</div>
@@ -64,6 +67,7 @@
 	<!--{if $_G['setting']['regstatus']}-->
 	<p class="reg_link"><a href="member.php?mod={$_G[setting][regname]}">{lang noregister}</a></p>
 	<!--{/if}-->
+	<!--{hook/logging_bottom_mobile}-->
 </div>
 <!-- userinfo end -->
 

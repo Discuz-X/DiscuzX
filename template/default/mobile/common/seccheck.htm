@@ -1,20 +1,15 @@
 {eval
 	$sechash = 'S'.random(4);
 	$sectpl = !empty($sectpl) ? explode("<sec>", $sectpl) : array('<br />',': ','<br />','');
-	$secshow = !isset($secshow) ? 1 : $secshow;
-	$sectabindex = !isset($sectabindex) ? 1 : $sectabindex;
     $ran = random(5, 1);
 }
 <!--{if $secqaacheck}-->
 <!--{eval
-	include libfile('function/seccode');
-    $message = '';
-	$question = make_secqaa($sechash);
+	$message = '';
+	$question = make_secqaa();
 	$secqaa = lang('core', 'secqaa_tips').$question;
 }-->
 <!--{/if}-->
-<!--{block seccheckhtml}-->
-<input name="sechash" type="hidden" value="$sechash" />
 <!--{if $sectpl}-->
 	<!--{if $secqaacheck}-->
 		<p>
@@ -22,6 +17,7 @@
         <strong>{lang secqaa}</strong>
         <br />
         <span class="xg2">$secqaa</span>
+	<input name="secqaahash" type="hidden" value="$sechash" />
         <input name="secanswer" id="secqaaverify_$sechash" type="text" class="txt" />
         </p>
 	<!--{/if}-->
@@ -30,10 +26,8 @@
 		<strong>{lang seccode}</strong><br />
         <img src="misc.php?mod=seccode&update={$ran}&idhash={$sechash}&mobile=yes" />
         <br />
+	<input name="seccodehash" type="hidden" value="$sechash" />
         <input name="seccodeverify" id="seccodeverify_$sechash" type="text" autocomplete="off" class="txt" />
         </p>
 	<!--{/if}-->
 <!--{/if}-->
-<!--{/block}-->
-<!--{eval unset($secshow);}-->
-<!--{if empty($secreturn)}-->$seccheckhtml<!--{/if}-->

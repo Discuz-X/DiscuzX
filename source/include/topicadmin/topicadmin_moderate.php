@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderate.php 31971 2012-10-29 02:54:20Z monkey $
+ *      $Id: topicadmin_moderate.php 33825 2013-08-19 08:32:40Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -174,6 +174,7 @@ if(!submitcheck('modsubmit')) {
 				$stickmodify = 0;
 				foreach($threadlist as $thread) {
 					$stickmodify = (in_array($thread['displayorder'], array(2, 3)) || in_array($sticklevel, array(2, 3))) && $sticklevel != $thread['displayorder'] ? 1 : $stickmodify;
+					C::t('common_member_secwhite')->add($thread['authorid']);
 				}
 
 				if($_G['setting']['globalstick'] && $stickmodify) {
@@ -183,6 +184,7 @@ if(!submitcheck('modsubmit')) {
 
 				$modaction = $sticklevel ? ($expiration ? 'EST' : 'STK') : 'UST';
 				C::t('forum_threadmod')->update_by_tid_action($tidsarr, array('STK', 'UST', 'EST', 'UES'), array('status' => 0));
+				C::t('forum_threadhidelog')->delete_by_tid($tidsarr);
 
 				if(!$sticklevel) {
 					$stampaction = 'SPD';
@@ -211,9 +213,15 @@ if(!submitcheck('modsubmit')) {
 
 				C::t('forum_thread')->update($tidsarr, array('highlight'=>$highlight_style.$highlight_color, 'moderated'=>1, 'bgcolor' => $bgcolor), true);
 				C::t('forum_forumrecommend')->update($tidsarr, array('highlight' => $highlight_style.$highlight_color));
+				C::t('forum_threadhidelog')->delete_by_tid($tidsarr);
 
 				$modaction = ($highlight_style + $highlight_color) ? ($expiration ? 'EHL' : 'HLT') : 'UHL';
 				$expiration = $modaction == 'UHL' ? 0 : $expiration;
+
+				foreach($threadlist as $thread) {
+					C::t('common_member_secwhite')->add($thread['authorid']);
+				}
+
 				C::t('forum_threadmod')->update_by_tid_action($tidsarr, array('HLT', 'UHL', 'EHL', 'UEH'), array('status' => 0));
 
 			} elseif($operation == 'digest') {
@@ -225,6 +233,7 @@ if(!submitcheck('modsubmit')) {
 				$expirationdigest = $digestlevel ? $expirationdigest : 0;
 
 				C::t('forum_thread')->update($tidsarr, array('digest'=>$digestlevel, 'moderated'=>1), true);
+				C::t('forum_threadhidelog')->delete_by_tid($tidsarr);
 
 				foreach($threadlist as $thread) {
 					if($thread['digest'] != $digestlevel) {
@@ -240,6 +249,7 @@ if(!submitcheck('modsubmit')) {
 							$stampaction = 'SPD';
 						}
 						updatecreditbyaction('digest', $thread['authorid'], $extsql, '', $digestlevel - $thread['digest']);
+						C::t('common_member_secwhite')->add($thread['authorid']);
 					}
 				}
 
@@ -264,6 +274,7 @@ if(!submitcheck('modsubmit')) {
 
 				C::t('forum_threadmod')->update_by_tid_action($tidsarr, array('REC'), array('status' => 0));
 				if($isrecommend) {
+					C::t('forum_threadhidelog')->delete_by_tid($tidsarr);
 					$oldrecommendlist = $addthread = array();
 					foreach(C::t('forum_forumrecommend')->fetch_all($tidsarr) as $row) {
 						$oldrecommendlist[$row['tid']] = $row;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 33630 2013-07-22 08:24:23Z nemohou $
+ *      $Id: index.php 33892 2013-08-28 06:27:12Z hypowang $
  */
 
 if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
@@ -27,8 +27,8 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 			$_ENV['curapp'] = array_search($_SERVER['HTTP_HOST'], $_ENV['domain']['app']);
 			if($_ENV['curapp'] == 'mobile') {
 				$_ENV['curapp'] = 'forum';
-				if(@$_GET['mobile'] != 'no') {
-					@$_GET['mobile'] = 'yes';
+				if(!isset($_GET['mobile'])) {
+					@$_GET['mobile'] = '2';
 				}
 			}
 			if($_ENV['curapp'] == 'default' || !isset($_ENV['defaultapp'][$_ENV['curapp'].'.php'])) {
@@ -116,9 +116,9 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 if(!empty($url)) {
 	$delimiter = strrpos($url, '?') ? '&' : '?';
 	if(isset($_GET['fromuid']) && $_GET['fromuid']) {
-		$url .= $delimiter.'fromuid='.$_GET['fromuid'];
+		$url .= sprintf('%sfromuid=%d', $delimiter, $_GET['fromuid']);
 	} elseif(isset($_GET['fromuser']) && $_GET['fromuser']) {
-		$url .= $delimiter.'fromuser='.$_GET['fromuser'];
+		$url .= sprintf('%sfromuser=%s', $delimiter, rawurlencode($_GET['fromuser']));
 	}
 	header("HTTP/1.1 301 Moved Permanently");
 	header("location: $url");

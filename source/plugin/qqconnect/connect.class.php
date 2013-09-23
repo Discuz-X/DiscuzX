@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: connect.class.php 32901 2013-03-21 08:54:21Z liulanbo $
+ *		$Id: connect.class.php 33545 2013-07-04 07:06:27Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -169,16 +169,9 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		}
 
 		if(!empty($_G['cookie']['connect_js_name'])) {
-			if($_G['cookie']['connect_js_name'] == 'user_bind') {
-				$params = array('openid' => $_G['cookie']['connect_uin']);
-				$jsurl = $connectService->connectUserBindJs($params);
-				$loadJs['feedjs'] = array('jsurl' => $jsurl);
-			} elseif($_G['cookie']['connect_js_name'] == 'feed_resend') {
+			if($_G['cookie']['connect_js_name'] == 'feed_resend') {
 				$jsurl = $connectService->connectFeedResendJs();
 				$loadJs['feedjs'] = array('jsurl' => $jsurl);
-			} elseif($_G['cookie']['connect_js_name'] == 'guest_ptlogin') {
-				$jsurl = $connectService->connectGuestPtloginJs();
-				$loadJs['guestloginjs'] = array('jsurl' => $jsurl);
 			}
 
 			dsetcookie('connect_js_name');
@@ -748,19 +741,6 @@ class mobileplugin_qqconnect extends plugin_qqconnect_base {
 
 		if(!$this->allow || !empty($_G['inshowmessage'])) {
 			return;
-		}
-
-		$connectService = Cloud::loadClass('Service_Connect');
-
-		if(!empty($_G['cookie']['connect_js_name'])) {
-			if($_G['cookie']['connect_js_name'] == 'guest_ptlogin') {
-				$jsurl = $connectService->connectGuestPtloginJs();
-				return '<script type="text/javascript">function con_handle_response(response) {
-							return response;
-						}</script>
-						<script type="text/javascript" src="'.$jsurl.'"></script>';
-				dsetcookie('connect_js_name');
-			}
 		}
 	}
 

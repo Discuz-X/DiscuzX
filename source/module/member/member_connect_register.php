@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: member_connect_register.php 33177 2013-05-06 02:43:31Z theoliu $
+ *	  $Id: member_connect_register.php 33538 2013-07-02 05:01:37Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -58,14 +58,21 @@ if(empty($_POST)) {
 
 	$conuin = $this->connect_guest['conuin'];
 	$conuinsecret = $this->connect_guest['conuinsecret'];
+	$conuintoken = $this->connect_guest['conuintoken'];
 	$conopenid = $this->connect_guest['conopenid'];
 
 	$cookie_expires = 2592000;
 	dsetcookie('client_created', TIMESTAMP, $cookie_expires);
 	dsetcookie('client_token', 1, $cookie_expires);
 
-	if (!$conuin || !$conuinsecret || !$conopenid) {
-		showmessage('qqconnect:connect_get_request_token_failed');
+	if(!$_G['setting']['connect']['oauth2']) {
+		if (!$conuin || !$conuinsecret || !$conopenid) {
+			showmessage('qqconnect:connect_get_request_token_failed');
+		}
+	} else {
+		if (!$conuintoken || !$conopenid) {
+			showmessage('qqconnect:connect_get_request_token_failed');
+		}
 	}
 
 	if(C::t('#qqconnect#common_member_connect')->fetch_fields_by_openid($conopenid, 'uid')) {
@@ -88,6 +95,7 @@ if(empty($_POST)) {
 		'uid' => $uid,
 		'conuin' => $conuin,
 		'conuinsecret' => $conuinsecret,
+		'conuintoken' => $conuintoken,
 		'conopenid' => $conopenid,
 		'conispublishfeed' => $conispublishfeed,
 		'conispublisht' => $conispublisht,

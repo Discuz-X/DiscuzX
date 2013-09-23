@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dz_digest.php 33586 2013-07-12 06:34:05Z andyzheng $
+ *      $Id: dz_digest.php 33590 2013-07-12 06:39:08Z andyzheng $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');

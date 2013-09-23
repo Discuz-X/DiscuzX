@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 32883 2013-03-20 02:49:01Z monkey $
+ *      $Id: misc_initsys.php 34011 2013-09-18 08:03:54Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,11 +25,11 @@ if($_G['config']['output']['tplrefresh']) {
 	cleartemplatecache();
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'mobile', 'pcmgr_url_safeguard');
-$opens = array('mobile', 'pcmgr_url_safeguard');
-$allowcloses = array('pcmgr_url_safeguard');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'mobile', 'mobileoem', 'pcmgr_url_safeguard', 'manyou', 'cloudunion', 'cloudcaptcha');
+$opens = array('mobile', 'pcmgr_url_safeguard', 'security', 'cloudcaptcha');
+$checkcloses = array('cloudcaptcha');
 
-$cloudapps = array('qqconnect' => 'connect', 'cloudstat' => 'stats', 'soso_smilies' => 'smilies', 'cloudsearch' => 'search', 'qqgroup' => 'qqgroup', 'security' => 'security');
+$cloudapps = array('qqconnect' => 'connect', 'cloudstat' => 'stats', 'soso_smilies' => 'smilies', 'cloudsearch' => 'search', 'qqgroup' => 'qqgroup', 'security' => 'security', 'manyou' => 'manyou', 'cloudunion' => 'union', 'cloudcaptcha' => 'captcha');
 
 $apps = C::t('common_setting')->fetch('cloud_apps', true);
 if (!$apps) {
@@ -58,7 +58,7 @@ foreach($plugins as $pluginid) {
 	if(!file_exists($importfile)) {
 		continue;
 	}
-	$systemvalue = in_array($pluginid, $allowcloses) ? 1 : 2;
+	$systemvalue = 2;
 	$importtxt = @implode('', file($importfile));
 	$pluginarray = getimportdata('Discuz! Plugin', $importtxt);
 	$plugin = C::t('common_plugin')->fetch_by_identifier($pluginid);
@@ -98,6 +98,30 @@ foreach($plugins as $pluginid) {
 		if(file_exists($plugindir.'/'.$pluginarray['installfile'])) {
 			@include_once $plugindir.'/'.$pluginarray['installfile'];
 		}
+	}
+}
+
+if(!array_key_exists('security', $apps)) {
+	Cloud::loadFile('Service_Client_Cloud');
+	$Cloud_Service_Client_Cloud = new Cloud_Service_Client_Cloud;
+	$return = $Cloud_Service_Client_Cloud->appOpenWithRegister('security');
+	if($return['errCode']) {
+		$plugin = C::t('common_plugin')->fetch_by_identifier('security');
+		C::t('common_plugin')->update($plugin['pluginid'], array('available' => 0));
+	}
+	if($return['result']) {
+		if($return['result']['sId'] && $return['result']['sKey']) {
+			C::t('common_setting')->update_batch(array('my_siteid' => $return['result']['sId'], 'my_sitekey' => $return['result']['sKey']));
+			updatecache('setting');
+		}
+	}
+}
+
+loadcache('setting', 1);
+if(!$_G['setting']['my_siteid']) {
+	foreach($checkcloses as $pluginid) {
+		$plugin = C::t('common_plugin')->fetch_by_identifier($pluginid);
+		C::t('common_plugin')->update($plugin['pluginid'], array('available' => 0));
 	}
 }
 

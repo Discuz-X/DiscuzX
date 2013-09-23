@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 32972 2013-03-29 06:21:11Z zhangguosheng $
+ *      $Id: portalcp_article.php 33660 2013-07-29 07:51:05Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,8 +14,7 @@ if(!defined('IN_DISCUZ')) {
 $op = in_array($_GET['op'], array('edit', 'delete', 'related', 'batch', 'pushplus', 'verify', 'checkhtmlname')) ? $_GET['op'] : 'add';
 $aid = intval($_GET['aid']);
 $catid = intval($_GET['catid']);
-$seccodecheck = $_G['setting']['seccodestatus'] & 4;
-$secqaacheck = $_G['setting']['secqaa']['status'] & 2;
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 
 $article = $article_content = array();
 if($aid) {

@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: spacecp.inc.php 32901 2013-03-21 08:54:21Z liulanbo $
+ *	  $Id: spacecp.inc.php 33645 2013-07-25 01:32:20Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,37 +48,8 @@ if ($pluginop == 'config') {
 
 	$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid, 0);
 	$thread = C::t('forum_thread')->fetch_by_tid_displayorder($tid, 0);
-	$msglower = strtolower($post['message']);
-
-	if(strpos($msglower, '[/password]') !== FALSE) {
-		$post['message'] = '';
-	}
-
-	if(strpos($msglower, '[/postbg]') !== FALSE) {
-		$post['message'] = preg_replace("/\s?\[postbg\]\s*([^\[\<\r\n;'\"\?\(\)]+?)\s*\[\/postbg\]\s?/is", '', $post['message']);
-	}
-
-	if(strpos($msglower, '[/index]') !== FALSE) {
-		$post['message'] = preg_replace("/\s?\[index\](.+?)\[\/index\]\s?/is", '', $post['message']);
-	}
-
-	if(strpos($msglower, '[page]') !== FALSE) {
-		$post['message'] = preg_replace("/\s?\[page\]\s?/is", '', $post['message']);
-	}
-
-	if(strpos($msglower, '[/quote]') !== FALSE) {
-		$post['message'] = preg_replace('/\[quote\].*\[\/quote\](\r\n|\n|\r){0,}/is', '', $post['message']);
-	}
-	if(strpos($msglower, '[/media]') !== FALSE) {
-		$post['message'] = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", '', $post['message']);
-	}
-	if(strpos($msglower, '[/flash]') !== FALSE) {
-		$post['message'] = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", '', $post['message']);
-	}
-
-	if(strpos($msglower, '[/hide]') !== FALSE) {
-		$post['message'] = preg_replace("/\[hide[=]?(d\d+)?[,]?(\d+)?\]\s*(.*?)\s*\[\/hide\]/is", '', $post['message']);
-	}
+	require_once libfile('function/post');
+	$post['message'] = messagesafeclear($post['message']);
 	$html_content = $connectService->connectParseBbcode($post['message'], $thread['fid'], $post['pid'], $post['htmlon'], $attach_images);
 	if ($_G['group']['allowgetimage'] && $thread['price'] == 0 && $post['pid']) {
 		if ($attach_images && is_array($attach_images)) {
@@ -140,19 +111,8 @@ if ($pluginop == 'config') {
 	if($sh_type == 3) {
 
 		$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid, 0);
-		$msglower = strtolower($firstpost['message']);
-		if(strpos($msglower, '[/quote]') !== FALSE) {
-			$firstpost['message'] = preg_replace('/\[quote\].*\[\/quote\](\r\n|\n|\r){0,}/is', '', $firstpost['message']);
-		}
-		if(strpos($msglower, '[/media]') !== FALSE) {
-			$firstpost['message'] = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", '', $firstpost['message']);
-		}
-		if(strpos($msglower, '[/flash]') !== FALSE) {
-			$firstpost['message'] = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", '', $firstpost['message']);
-		}
-		if(strpos($msglower, '[/hide]') !== FALSE) {
-			$firstpost['message'] = preg_replace("/\[hide[=]?(d\d+)?[,]?(\d+)?\]\s*(.*?)\s*\[\/hide\]/is", '', $firstpost['message']);
-		}
+		require_once libfile('function/post');
+		$firstpost['message'] = messagesafeclear($firstpost['message']);
 		$summary = $connectService->connectParseBbcode($firstpost['message'], $firstpost['fid'], $firstpost['pid'], $firstpost['htmlon'], $attach_images);
 
 		$qzone_params = array(
@@ -164,10 +124,18 @@ if ($pluginop == 'config') {
 			'nswb' => '1',
 		);
 
-		try {
-			$response = $connectOAuthClient->connectAddShare($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $qzone_params);
-		} catch(Exception $e) {
-			$errorCode = $e->getCode();
+		if(!$_G['setting']['connect']['oauth2'] || !$_G['member']['conuintoken']) {
+			try {
+				$response = $connectOAuthClient->connectAddShare($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $qzone_params);
+			} catch(Exception $e) {
+				$errorCode = $e->getCode();
+			}
+		} else {
+			try {
+				$response = $connectOAuthClient->connectAddShare_V2($_G['member']['conopenid'], $_G['member']['conuintoken'], $qzone_params);
+			} catch(Exception $e) {
+				$errorCode = $e->getCode();
+			}
 		}
 
 		if($errorCode) {
@@ -207,10 +175,19 @@ if ($pluginop == 'config') {
 			$method = 'connectAddT';
 		}
 
-		try {
-			$response = $connectOAuthClient->$method($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $t_params);
-		} catch(Exception $e) {
-			$errorCode = $e->getCode();
+		if(!$_G['setting']['connect']['oauth2'] || !$_G['member']['conuintoken']) {
+			try {
+				$response = $connectOAuthClient->$method($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $t_params);
+			} catch(Exception $e) {
+				$errorCode = $e->getCode();
+			}
+		} else {
+			try {
+				$method = $method.'_V2';
+				$response = $connectOAuthClient->$method($_G['member']['conopenid'], $_G['member']['conuintoken'], $t_params);
+			} catch(Exception $e) {
+				$errorCode = $e->getCode();
+			}
 		}
 
 		if($errorCode) {
@@ -248,7 +225,7 @@ if ($pluginop == 'config') {
 			}
 			$code = $response['ret'];
 			$message = lang('plugin/qqconnect', 'connect_broadcast_success');
-    	}
+		}
 	}
 } elseif($pluginop == 'sync_tthread') {
 	if (trim($_GET['formhash']) != formhash()) {

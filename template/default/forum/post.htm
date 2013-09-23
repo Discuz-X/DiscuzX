@@ -10,8 +10,8 @@
 	var postminchars = parseInt('$_G['setting']['minpostsize']');
 	var postmaxchars = parseInt('$_G['setting']['maxpostsize']');
 	var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
-	var seccodecheck = parseInt('<!--{if checkperm('seccode') && $seccodecheck}-->1<!--{else}-->0<!--{/if}-->');
-	var secqaacheck = parseInt('<!--{if checkperm('seccode') && $secqaacheck}-->1<!--{else}-->0<!--{/if}-->');
+	var seccodecheck = parseInt('<!--{if $seccodecheck}-->1<!--{else}-->0<!--{/if}-->');
+	var secqaacheck = parseInt('<!--{if $secqaacheck}-->1<!--{else}-->0<!--{/if}-->');
 	var typerequired = parseInt('{$_G[forum][threadtypes][required]}');
 	var sortrequired = parseInt('{$_G[forum][threadsorts][required]}');
 	var special = parseInt('$special');
@@ -195,9 +195,12 @@
 
 			<!--{subtemplate forum/post_editor_attribute}-->
 
-			<!--{if $_GET[action] != 'edit' && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-				<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-				<div class="mtm"><!--{subtemplate common/seccheck}--></div>
+			<!--{if $_GET[action] != 'edit'}-->
+				<div id="seccheck">
+					<!--{if $secqaacheck || $seccodecheck}-->
+						<!--{subtemplate forum/seccheck_post}-->
+					<!--{/if}-->
+				</div>
 			<!--{/if}-->
 
 			<div class="mtm mbm pnpost">

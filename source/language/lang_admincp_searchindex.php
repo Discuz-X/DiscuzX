@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_searchindex.php 33440 2013-06-17 02:39:05Z nemohou $
+ *      $Id: lang_admincp_searchindex.php 33672 2013-07-31 05:17:28Z nemohou $
  *
  *	This file is automatically generate
  */
@@ -817,11 +817,11 @@ $lang = array (
   array (
     'index' =>
     array (
-      '审核新用户' => 'action=moderate&operation=members',
+      '审核用户' => 'action=moderate&operation=members',
     ),
     'text' =>
     array (
-      0 => '审核新用户',
+      0 => '审核用户',
     ),
   ),
   74 =>
@@ -1764,7 +1764,7 @@ $lang = array (
       5 => '设置是否允许审核用户发表的帖子，只在站点设置需要审核时有效',
       6 => 'admingroup_edit_mod_user',
       7 => '允许审核用户',
-      8 => '设置是否允许审核新注册用户，只在站点设置需要人工审核新用户时有效',
+      8 => '设置是否允许审核新注册用户，只在站点设置需要人工审核用户时有效',
       9 => 'admingroup_edit_ban_user',
       10 => '允许禁止用户发言',
       11 => '设置是否允许禁止用户发言',
@@ -6456,7 +6456,7 @@ $lang = array (
       65 => '开启防灌水验证机制可以防止灌水机等，但会增加用户操作易用度。修改密码不受此限制，开启防灌水验证码或验证问答后，该设置有效',
       66 => 'usergroups_edit_basic_forcesecques',
       67 => '强制设置安全提问',
-      68 => '选择“是”则此用户组的用户在登录后台前必须设置安全提问后才可登陆后台, config中为全局开关',
+      68 => '选择“是”则此用户组的用户在登录后台前必须设置安全提问后才可登录后台, config中为全局开关',
       69 => 'usergroups_edit_basic_disable_postctrl',
       70 => '发表不受限制',
       71 => '设置发表是否不受灌水预防和最大字数等',

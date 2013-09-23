@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_menu.php 32130 2012-11-14 09:20:40Z zhengqingpeng $
+ *      $Id: lang_admincp_menu.php 33867 2013-08-23 06:12:21Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,6 +31,7 @@ $lang = array
 	'header_bbs' => '站点首页',
 	'header_portal' => '门户',
 	'header_group' => '群组',
+	'header_safe' => '防灌水',
 	'header_founder' => '站长',
 	'header_cloudaddons' => '应用中心',
 
@@ -42,7 +43,7 @@ $lang = array
 	'menu_setting_access' => '注册与访问控制',
 	'menu_setting_customnav' => '导航设置',
 	'menu_setting_styles' => '界面设置',
-	'menu_setting_optimize' => '性能优化',
+	'menu_setting_optimize' => '优化大师',
 	'menu_setting_seo' => 'SEO设置',
 	'menu_setting_functions' => '站点功能',
 	'menu_setting_domain' => '域名设置',
@@ -83,7 +84,7 @@ $lang = array
 	'menu_members_profile_group' => '用户栏目分组',
 	'menu_members_verify_setting' => '认证设置',
 	'menu_members_stat' => '资料统计',
-	'menu_moderate_modmembers' => '审核新用户',
+	'menu_moderate_modmembers' => '审核用户',
 	'menu_profilefields' => '用户栏目定制',
 	'menu_admingroups' => '管理组',
 	'menu_usergroups' => '用户组',
@@ -133,6 +134,7 @@ $lang = array
 	'menu_patch' => '安全中心',
 	'menu_upgrade' => '在线升级',
 	'menu_optimizer' => '优化大师',
+	'menu_security' => '安全大师',
 
 	'menu_addons' => '应用中心',
 	'menu_plugins' => '插件',
@@ -196,8 +198,15 @@ $lang = array
 	'menu_group_level' => '群组等级',
 	'menu_group_mod' => '审核群组',
 
+	'menu_safe_setting' => '基本设置',
+	'menu_safe_security' => '防水墙',
+	'menu_safe_seccheck' => '验证设置',
+	'menu_safe_accountguard' => '帐号保镖',
+
 	'menu_setting_manyou' => 'Manyou 设置',
 	'menu_setting_qqconnect' => 'QQ 绑定设置',
+
+	'menu_cloud_doctor' => '诊断工具',
 
 	'admincp_title' => $_G['setting']['bbname'].' 管理中心',
 

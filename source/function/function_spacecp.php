@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_spacecp.php 33068 2013-04-18 01:46:12Z zhengqingpeng $
+ *      $Id: function_spacecp.php 33714 2013-08-07 01:42:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -238,6 +238,7 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 		'dateline' => $_G['timestamp'],
 		'filename' => addslashes($upload->attach['name']),
 		'postip' => $_G['clientip'],
+		'port' => $_G['remoteport'],
 		'title' => $title,
 		'type' => addslashes($upload->attach['ext']),
 		'size' => $upload->attach['size'],
@@ -358,6 +359,7 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 				'dateline' => $_G['timestamp'],
 				'filename' => $filename,
 				'postip' => $_G['clientip'],
+				'port' => $_G['remoteport'],
 				'title' => $title,
 				'type' => $fileext,
 				'size' => $size,

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install.php 32492 2013-01-29 05:45:03Z liulanbo $
+ *      $Id: install.php 33885 2013-08-27 06:28:19Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS pre_common_member_connect (
   `conisregister` tinyint(1) unsigned NOT NULL default '0',
   `conisqzoneavatar` tinyint(1) unsigned NOT NULL default '0',
   `conisqqshow` tinyint(1) unsigned NOT NULL default '0',
+  `conuintoken` char(32) NOT NULL DEFAULT '',
   PRIMARY KEY  (`uid`),
   KEY `conuin` (`conuin`),
   KEY `conopenid` (`conopenid`)
@@ -94,6 +95,7 @@ CREATE TABLE IF NOT EXISTS pre_common_connect_guest (
   `conuin` char(40) NOT NULL default '',
   `conuinsecret` char(16) NOT NULL default '',
   `conqqnick` char(100) NOT NULL default '',
+  `conuintoken` char(32) NOT NULL DEFAULT '',
   PRIMARY KEY (conopenid)
 ) TYPE=MyISAM;
 
@@ -184,6 +186,9 @@ if ($needCreateGroup) {
 	$connect['guest_groupid'] = $newGroupId;
 	updatecache('usergroups');
 }
+
+$https = json_decode(dfsockopen('https://graph.qq.com/user/get_user_info'));
+$connect['oauth2'] = $https->ret == -1 ? 1 : 0;
 
 C::t('common_setting')->update('connect', serialize($connect));
 updatecache('setting');

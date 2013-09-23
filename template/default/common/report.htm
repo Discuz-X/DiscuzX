@@ -3,27 +3,17 @@
 	<em>{lang report}</em>
 	<span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
 </h3>
-<form method="post" autocomplete="off" id="form_$_GET[handlekey]" name="form_$_GET[handlekey]" action="misc.php?mod=report" {if $_G[inajax]}onsubmit="if(!$('message').value) return false;ajaxpost(this.id, 'form_$_GET[handlekey]');"{/if}>
+<form style="width:28em" method="post" autocomplete="off" id="form_$_GET[handlekey]" name="form_$_GET[handlekey]" action="misc.php?mod=report" {if $_G[inajax]}onsubmit="if(!$('report_message').value) return false;ajaxpost(this.id, 'form_$_GET[handlekey]');"{/if}>
 	<div class="reason_slct c" id="return_$_GET[handlekey]">
 		<p>{lang report_reason}</p>
-		<ul id="reportreason" class="reasonselect pt mtn mbn"><!--{echo modreasonselect()}--></ul>
-		<textarea id="message" name="message" class="reasonarea pt" onkeydown="ctrlEnter(event, 'reportsubmit', 1);" onkeyup="strLenCalc(this, 'checklen');" rows="4"></textarea>
-		<script type="text/javascript" reload="1">
-		var reasonSelectOption = $('reportreason').getElementsByTagName('li');
-		if (reasonSelectOption) {
-			for (i=0; i<reasonSelectOption.length; i++) {
-				reasonSelectOption[i].onmouseover = function() { this.className = 'xi2 cur1'; }
-				reasonSelectOption[i].onmouseout = function() { this.className = ''; }
-				reasonSelectOption[i].onclick = function() {
-					$('message').value = this.innerHTML;
-				}
-			}
-		}
-		</script>
+		<p class="mtn mbn" id="report_reasons"></p>
+		<div id="report_other" style="display:none">
+			<textarea id="report_message" name="message" class="reasonarea pt mtn xg1" onfocus="this.innerHTML='';this.focus=null;this.className='reasonarea pt mtn'" onkeydown="ctrlEnter(event, 'reportsubmit', 1);" onkeyup="strLenCalc(this, 'checklen');" rows="4">{lang report_reason_other}</textarea>		
+		</div>
 	</div>
 	<p class="o pns">
-		<span class="z">{lang input_message1} <strong id="checklen">200</strong> {lang input_message2}</span>
-		<button type="submit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
+		<span id="report_msg" style="display:none"><span class="z">{lang input_message1} <strong id="checklen">200</strong> {lang input_message2}</span></span>
+		<button id="report_submit" type="submit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 	</p>
 	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="reportsubmit" value="true" />
@@ -40,4 +30,12 @@
 	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_GET[handlekey]" /><!--{/if}-->
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 </form>
+<script type="text/javascript" reload="1">
+var reasons = {lang report_reason_message};
+var reasonstring = '';
+for (i=0; i<reasons.length; i++) {
+	reasonstring += '<label><input type="radio" name="report_select" class="pr" onclick="$(\'report_other\').style.display=\'' + (i < reasons.length -1 ? 'none' : '') + '\';$(\'report_msg\').style.display=\'' + (i < reasons.length -1 ? 'none' : '') + '\'" value="' + reasons[i] + '"> ' + reasons[i] + '</label><br />';
+}
+$('report_reasons').innerHTML = reasonstring;
+</script>
 <!--{template common/footer}-->

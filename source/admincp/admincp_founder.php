@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_founder.php 29654 2012-04-24 05:48:42Z chenmengshu $
+ *      $Id: admincp_founder.php 33912 2013-08-30 06:00:06Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -40,7 +40,7 @@ if($operation == 'perm') {
 				showsubtitle(array('', 'founder_cpgroupname', ''));
 				foreach($groups as $id => $group) {
 					showtablerow('style="height:20px"', array('class="td25"', 'class="td24"'), array(
-						"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$id]\">",
+						"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$id\">",
 						"<input type=\"text\" class=\"txtnobd\" onblur=\"this.className='txtnobd'\" onfocus=\"this.className='txt'\" size=\"15\" name=\"name[$id]\" value=\"$group\">",
 						'<a href="'.ADMINSCRIPT.'?action=founder&operation=perm&do=group&id='.$id.'">'.cplang('edit').'</a>'
 						));
@@ -57,8 +57,8 @@ if($operation == 'perm') {
 					C::t('common_admincp_group')->insert(array('cpgroupname' => strip_tags($_GET['newcpgroupname'])));
 				}
 				if(!empty($_GET['delete'])) {
-					C::t('common_admincp_perm')->delete_by_cpgroupid_perm($cpgroupid);
-					C::t('common_admincp_member')->update($_GET['delete'], array('cpgroupid' => 0));
+					C::t('common_admincp_perm')->delete_by_cpgroupid_perm($_GET['delete']);
+					C::t('common_admincp_member')->update_cpgroupid_by_cpgroupid($_GET['delete'], array('cpgroupid' => 0));
 					C::t('common_admincp_group')->delete($_GET['delete']);
 				}
 				if(!empty($_GET['name'])) {

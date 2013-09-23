@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dbbak.php 29239 2012-03-30 06:37:30Z chenmengshu $
+ *      $Id: dbbak.php 33342 2013-05-30 02:26:21Z kamichen $
  */
 
 @define('IN_API', true);
@@ -191,6 +191,10 @@ class dbstuff {
 		return mysql_get_server_info($this->link);
 	}
 
+	function escape_string($str) {
+		return mysql_escape_string($str);
+	}
+
 	function close() {
 		return mysql_close($this->link);
 	}
@@ -199,8 +203,137 @@ class dbstuff {
 		api_msg('run_sql_error', $message.'<br /><br />'.$sql.'<br /> '.mysql_error());
 	}
 }
+class dbstuffi {
+	var $querynum = 0;
+	var $link;
+	var $histories;
+	var $time;
+	var $tablepre;
 
-$db = new dbstuff;
+	function connect($dbhost, $dbuser, $dbpw, $dbname = '', $dbcharset, $pconnect = 0, $tablepre='', $time = 0) {
+		$this->time = $time;
+		$this->tablepre = $tablepre;
+		$this->link = new mysqli();
+		if(!$this->link->real_connect($dbhost, $dbuser, $dbpw, $dbname, null, null, MYSQLI_CLIENT_COMPRESS)) {
+			$this->halt('Can not connect to MySQL server');
+		}
+
+		if($this->version() > '4.1') {
+			if($dbcharset) {
+				$this->link->set_charset($dbcharset);
+			}
+
+			if($this->version() > '5.0.1') {
+				$this->query("SET sql_mode=''");
+			}
+		}
+
+
+	}
+
+	function fetch_array($query, $result_type = MYSQLI_ASSOC) {
+		return $query ? $query->fetch_array($result_type) : null;
+	}
+
+	function result_first($sql) {
+		$query = $this->query($sql);
+		return $this->result($query, 0);
+	}
+
+	function fetch_first($sql) {
+		$query = $this->query($sql);
+		return $this->fetch_array($query);
+	}
+
+	function fetch_all($sql) {
+		$arr = array();
+		$query = $this->query($sql);
+		while($data = $this->fetch_array($query)) {
+			$arr[] = $data;
+		}
+		return $arr;
+	}
+
+	function cache_gc() {
+		$this->query("DELETE FROM {$this->tablepre}sqlcaches WHERE expiry<$this->time");
+	}
+
+	function query($sql, $type = '', $cachetime = FALSE) {
+		$resultmode = $type == 'UNBUFFERED' ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
+		if(!($query = $this->link->query($sql, $resultmode)) && $type != 'SILENT') {
+			$this->halt('MySQL Query Error', $sql);
+		}
+		$this->querynum++;
+		$this->histories[] = $sql;
+		return $query;
+	}
+
+	function affected_rows() {
+		return $this->link->affected_rows;
+	}
+
+	function error() {
+		return (($this->link) ? $this->link->error : mysqli_error());
+	}
+
+	function errno() {
+		return intval(($this->link) ? $this->link->errno : mysqli_errno());
+	}
+
+	function result($query, $row) {
+		if(!$query || $query->num_rows == 0) {
+			return null;
+		}
+		$query->data_seek($row);
+		$assocs = $query->fetch_row();
+		return $assocs[0];
+	}
+
+	function num_rows($query) {
+		$query = $query ? $query->num_rows : 0;
+		return $query;
+	}
+
+	function num_fields($query) {
+		return $query ? $query->field_count : 0;
+	}
+
+	function free_result($query) {
+		return $query ? $query->free() : false;
+	}
+
+	function insert_id() {
+		return ($id = $this->link->insert_id) >= 0 ? $id : $this->result($this->query("SELECT last_insert_id()"), 0);
+	}
+
+	function fetch_row($query) {
+		$query = $query ? $query->fetch_row() : null;
+		return $query;
+	}
+
+	function fetch_fields($query) {
+		return $query ? $query->fetch_field() : null;
+	}
+
+	function version() {
+		return $this->link->server_info;
+	}
+
+	function escape_string($str) {
+		return $this->link->escape_string($str);
+	}
+
+	function close() {
+		return $this->link->close();
+	}
+
+	function halt($message = '', $sql = '') {
+		api_msg('run_sql_error', $message.'<br /><br />'.$sql.'<br /> '.$this->link->error());
+	}
+}
+
+
+$db = function_exists("mysql_connect") ? new dbstuff() : new dbstuffi();
 $version = '';
 if($apptype == 'discuz') {
 
@@ -654,7 +787,7 @@ function sqldumptable($table, $currsize = 0) {
 		while($row = $db->fetch_row($rows)) {
 			$comma = $t = '';
 			for($i = 0; $i < $numfields; $i++) {
-				$t .= $comma.($usehex && !empty($row[$i]) && (strexists($tablefields[$i]['Type'], 'char') || strexists($tablefields[$i]['Type'], 'text')) ? '0x'.bin2hex($row[$i]) : '\''.mysql_escape_string($row[$i]).'\'');
+				$t .= $comma.($usehex && !empty($row[$i]) && (strexists($tablefields[$i]['Type'], 'char') || strexists($tablefields[$i]['Type'], 'text')) ? '0x'.bin2hex($row[$i]) : '\''.$db->escape_string($row[$i]).'\'');
 				$comma = ',';
 			}
 			if(strlen($t) + $currsize + strlen($tabledump) + 500 < $sizelimit * 1000) {

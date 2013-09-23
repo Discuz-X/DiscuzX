@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 33367 2013-06-03 04:24:27Z andyzheng $
+ *      $Id: function_admincp.php 33756 2013-08-10 06:32:48Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -279,7 +279,7 @@ function showmenu($key, $menus, $return = 0) {
 					$body .= '<li class="s"><div class="lsub'.($hide ? '' : ' desc').'" subid="'.$id.'"><div onclick="lsub(\''.$id.'\', this.parentNode)">'.$menu[0].'</div><ol style="display:'.($hide ? 'none' : '').'" id="'.$id.'">';
 				}
 				if($menu[2] == 2) {
-					$body .= '</ol></div></li>';
+					$body .= '<li class="sp"></li></ol></div></li>';
 				}
 			}
 		}
@@ -623,6 +623,11 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	global $_G;
 	$s = "\n";
 	$check = array();
+	$noborder = false;
+	if(substr($disabled, 0, 8) == 'noborder') {
+		$disabled = trim(substr($disabled, 8));
+		$noborder = 'class="noborder" ';
+	}
 	$check['disabled'] = $disabled ? ($disabled == 'readonly' ? ' readonly' : ' disabled') : '';
 	$check['disabledaltstyle'] = $disabled ? ', 1' : '';
 
@@ -812,7 +817,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	if(!isset($_G['showsetting_multi'])) {
 		if(!$nofaq) {
 			$faqurl = 'http://faq.comsenz.com?type=admin&ver='.$_G['setting']['version'].'&action='.rawurlencode($_GET['action']).'&operation='.rawurlencode($_GET['operation']).'&key='.rawurlencode($setname);
-			showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
+			showtablerow($noborder.'onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 		} else {
 			showtablerow('', 'colspan="2" class="td27" s="1"', $name);
 		}

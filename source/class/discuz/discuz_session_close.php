@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_session_close.php 28628 2012-03-06 09:33:10Z zhangguosheng $
+ *      $Id: discuz_session_close.php 33707 2013-08-06 08:22:12Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -175,7 +175,7 @@ class discuz_session_close {
 		static $updated = false;
 		if(!$updated && $this->isnew) {
 			global $_G;
-			C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'lastactivity' => TIMESTAMP, 'lastvisit' => TIMESTAMP));
+			C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'port' => $_G['remoteport'], 'lastactivity' => TIMESTAMP, 'lastvisit' => TIMESTAMP));
 			dsetcookie('ulastactivity', TIMESTAMP.'|'.getuserprofile('invisible'), 31536000);
 			$updated = true;
 		}

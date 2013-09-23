@@ -37,11 +37,12 @@
 			<!--{/if}-->
 	</h2>
 
+	<!--{eval $postcount = 0;}-->
 	<!--{loop $postlist $post}-->
 	<!--{eval $needhiddenreply = ($hiddenreplies && $_G['uid'] != $post['authorid'] && $_G['uid'] != $_G['forum_thread']['authorid'] && !$post['first'] && !$_G['forum']['ismoderator']);}-->
 	<!--{hook/viewthread_posttop_mobile $postcount}-->
-   <div class="plc cl">
-	   <span class="avatar"><img src="<!--{avatar($post[authorid], small, true)}-->" style="width:32px;height:32px;" /></span>
+   <div class="plc cl" id="pid$post[pid]">
+	   <span class="avatar"><img src="<!--{if !$post['authorid'] || $post['anonymous']}--><!--{avatar(0, small, true)}--><!--{else}--><!--{avatar($post[authorid], small, true)}--><!--{/if}-->" style="width:32px;height:32px;" /></span>
        <div class="display pi" href="#replybtn_$post[pid]">
 		   <ul class="authi">
 				<li class="grey">
@@ -59,7 +60,7 @@
 
 					<!--{else}-->
 						<!--{if !$post['authorid']}-->
-						<a href="javascript:;">{lang guest} <em>$post[useip]</em></a>
+						<a href="javascript:;">{lang guest} <em>$post[useip]{if $post[port]}:$post[port]{/if}</em></a>
 						<!--{elseif $post['authorid'] && $post['username'] && $post['anonymous']}-->
 						<!--{if $_G['forum']['ismoderator']}--><a href="home.php?mod=space&uid=$post[authorid]" target="_blank">{lang anonymous}</a><!--{else}-->{lang anonymous}<!--{/if}-->
 						<!--{else}-->

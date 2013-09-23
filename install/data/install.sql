@@ -2,7 +2,7 @@
 -- DiscuzX INSTALL MAKE SQL DUMP V1.0
 -- DO NOT modify this file
 --
--- Create: 2013-02-26 15:47:38
+-- Create: 2013-08-27 16:12:45
 --
 DROP TABLE IF EXISTS pre_common_admincp_cmenu;
 CREATE TABLE pre_common_admincp_cmenu (
@@ -520,6 +520,15 @@ CREATE TABLE pre_common_domain (
   KEY idtype (idtype)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_common_failedip;
+CREATE TABLE pre_common_failedip (
+  ip char(7) NOT NULL DEFAULT '',
+  lastupdate int(10) unsigned NOT NULL DEFAULT '0',
+  count tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (ip,lastupdate),
+  KEY lastupdate (lastupdate)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_common_failedlogin;
 CREATE TABLE pre_common_failedlogin (
   ip char(15) NOT NULL DEFAULT '',
@@ -659,11 +668,13 @@ CREATE TABLE pre_common_member (
   allowadmincp tinyint(1) NOT NULL DEFAULT '0',
   onlyacceptfriendpm tinyint(1) NOT NULL DEFAULT '0',
   conisbind tinyint(1) unsigned NOT NULL DEFAULT '0',
+  freeze tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (uid),
   UNIQUE KEY username (username),
   KEY email (email),
   KEY groupid (groupid),
-  KEY conisbind (conisbind)
+  KEY conisbind (conisbind),
+  KEY regdate (regdate)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_member_action_log;
@@ -821,7 +832,7 @@ CREATE TABLE pre_common_member_medal (
 
 DROP TABLE IF EXISTS pre_common_member_newprompt;
 CREATE TABLE pre_common_member_newprompt (
-  uid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL,
   `data` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (uid)
 ) TYPE=MyISAM;
@@ -919,6 +930,13 @@ CREATE TABLE pre_common_member_security (
   KEY dateline (dateline)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_common_member_secwhite;
+CREATE TABLE pre_common_member_secwhite (
+  uid int(10) NOT NULL,
+  dateline int(10) NOT NULL,
+  PRIMARY KEY (uid)
+) TYPE=HEAP;
+
 DROP TABLE IF EXISTS pre_common_member_stat_field;
 CREATE TABLE pre_common_member_stat_field (
   optionid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -936,6 +954,7 @@ CREATE TABLE pre_common_member_status (
   uid mediumint(8) unsigned NOT NULL,
   regip char(15) NOT NULL DEFAULT '',
   lastip char(15) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   lastvisit int(10) unsigned NOT NULL DEFAULT '0',
   lastactivity int(10) unsigned NOT NULL DEFAULT '0',
   lastpost int(10) unsigned NOT NULL DEFAULT '0',
@@ -1155,6 +1174,15 @@ CREATE TABLE pre_common_relatedlink (
   PRIMARY KEY (id)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_common_remote_port;
+CREATE TABLE pre_common_remote_port (
+  id mediumint(8) unsigned NOT NULL DEFAULT '0',
+  idtype char(15) NOT NULL DEFAULT '',
+  useip char(15) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id,idtype)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_common_report;
 CREATE TABLE pre_common_report (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1191,6 +1219,19 @@ CREATE TABLE pre_common_searchindex (
   PRIMARY KEY (searchid),
   KEY srchmod (srchmod)
 ) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_seccheck;
+CREATE TABLE pre_common_seccheck (
+  ssid int(10) NOT NULL AUTO_INCREMENT,
+  dateline int(10) NOT NULL,
+  `code` char(6) NOT NULL,
+  succeed tinyint(1) NOT NULL,
+  verified tinyint(1) NOT NULL,
+  PRIMARY KEY (ssid),
+  KEY dateline (dateline),
+  KEY succeed (succeed),
+  KEY verified (verified)
+) TYPE=HEAP;
 
 DROP TABLE IF EXISTS pre_common_secquestion;
 CREATE TABLE pre_common_secquestion (
@@ -1549,6 +1590,7 @@ CREATE TABLE pre_common_usergroup_field (
   allowcommentcollection tinyint(1) unsigned NOT NULL DEFAULT '0',
   allowcreatecollection smallint(6) unsigned NOT NULL DEFAULT '0',
   forcesecques tinyint(1) unsigned NOT NULL DEFAULT '0',
+  forcelogin tinyint(1) unsigned NOT NULL DEFAULT '0',
   closead tinyint(1) unsigned NOT NULL DEFAULT '0',
   buildgroupcredits smallint(6) unsigned NOT NULL DEFAULT '0',
   allowimgcontent tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -2064,6 +2106,7 @@ CREATE TABLE pre_forum_collectioncomment (
   message text NOT NULL,
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   useip varchar(16) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   rate float NOT NULL DEFAULT '0',
   PRIMARY KEY (cid),
   KEY ctid (ctid,dateline),
@@ -2589,6 +2632,7 @@ CREATE TABLE pre_forum_post (
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   message mediumtext NOT NULL,
   useip varchar(15) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   invisible tinyint(1) NOT NULL DEFAULT '0',
   anonymous tinyint(1) NOT NULL DEFAULT '0',
   usesig tinyint(1) NOT NULL DEFAULT '0',
@@ -2663,6 +2707,7 @@ CREATE TABLE pre_forum_postcomment (
   `comment` varchar(255) NOT NULL DEFAULT '',
   score tinyint(1) NOT NULL DEFAULT '0',
   useip varchar(15) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   rpid int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY tid (tid),
@@ -2823,6 +2868,7 @@ CREATE TABLE pre_forum_thread (
   maxposition int(8) unsigned NOT NULL DEFAULT '0',
   bgcolor char(8) NOT NULL DEFAULT '',
   comments int(10) unsigned NOT NULL DEFAULT '0',
+  hidden smallint(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (tid),
   KEY digest (digest),
   KEY sortid (sortid),
@@ -2886,6 +2932,13 @@ CREATE TABLE pre_forum_threaddisablepos (
   PRIMARY KEY (tid)
 ) TYPE=HEAP;
 
+DROP TABLE IF EXISTS pre_forum_threadhidelog;
+CREATE TABLE pre_forum_threadhidelog (
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  UNIQUE KEY uid (tid,uid)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_forum_threadhot;
 CREATE TABLE pre_forum_threadhot (
   cid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2943,7 +2996,7 @@ CREATE TABLE pre_forum_threadpartake (
 DROP TABLE IF EXISTS pre_forum_threadpreview;
 CREATE TABLE pre_forum_threadpreview (
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  relay int(10) unsigned NOT NULL DEFAULT '0',
+  `relay` int(10) unsigned NOT NULL DEFAULT '0',
   content text NOT NULL,
   PRIMARY KEY (tid)
 ) TYPE=MyISAM;
@@ -3084,7 +3137,7 @@ CREATE TABLE pre_forum_tradelog (
   buyermsg varchar(200) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
-  `offline` tinyint(1) NOT NULL DEFAULT '0',
+  offline tinyint(1) NOT NULL DEFAULT '0',
   buyername varchar(50) NOT NULL,
   buyerzip varchar(10) NOT NULL,
   buyerphone varchar(20) NOT NULL,
@@ -3284,6 +3337,7 @@ CREATE TABLE pre_home_blogfield (
   tag varchar(255) NOT NULL DEFAULT '',
   message mediumtext NOT NULL,
   postip varchar(255) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   related text NOT NULL,
   relatedtime int(10) unsigned NOT NULL DEFAULT '0',
   target_ids text NOT NULL,
@@ -3338,6 +3392,7 @@ CREATE TABLE pre_home_comment (
   authorid mediumint(8) unsigned NOT NULL DEFAULT '0',
   author varchar(15) NOT NULL DEFAULT '',
   ip varchar(20) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   message text NOT NULL,
   magicflicker tinyint(1) NOT NULL DEFAULT '0',
@@ -3382,6 +3437,7 @@ CREATE TABLE pre_home_doing (
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   message text NOT NULL,
   ip varchar(20) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   replynum int(10) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (doid),
@@ -3580,6 +3636,7 @@ CREATE TABLE pre_home_pic (
   username varchar(15) NOT NULL DEFAULT '',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   postip varchar(255) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   filename varchar(255) NOT NULL DEFAULT '',
   title varchar(255) NOT NULL DEFAULT '',
   `type` varchar(255) NOT NULL DEFAULT '',
@@ -3910,6 +3967,7 @@ CREATE TABLE pre_portal_comment (
   id mediumint(8) unsigned NOT NULL DEFAULT '0',
   idtype varchar(20) NOT NULL DEFAULT '',
   postip varchar(255) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   message text NOT NULL,

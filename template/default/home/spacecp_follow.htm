@@ -47,7 +47,7 @@
 			<div class="c">
 				<p>{lang follow_add_note}:</p>
 				<textarea id="note_{$tid}" name="note" cols="50" rows="5" class="pt mtn" style="width: 425px;" onkeydown="ctrlEnter(event, 'relaysubmit_btn')" onkeyup="strLenCalc(this, 'checklen{$tid}', 140);"></textarea>
-				<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+				<!--{if $secqaacheck || $seccodecheck}-->
 				<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 				<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->
@@ -99,7 +99,7 @@
 				</tr>
 			</table>
 
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+			<!--{if $secqaacheck || $seccodecheck}-->
 			<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 			<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->

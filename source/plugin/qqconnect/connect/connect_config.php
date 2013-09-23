@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 32901 2013-03-21 08:54:21Z liulanbo $
+ *      $Id: connect_config.php 33543 2013-07-03 06:01:33Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,8 +66,6 @@ if(submitcheck('connectsubmit')) {
 					showmessage('profile_passwd_illegal', $referer);
 				}
 			}
-
-			$connectService->connectUserUnbind();
 
 		} else { // debug 因为老用户access token等信息，所以没法通知connect，所以直接在本地解绑就行了，不fopen connect
 

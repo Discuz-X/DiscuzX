@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 32915 2013-03-22 08:25:34Z zhangjie $
+ *      $Id: forum_group.php 33695 2013-08-03 04:39:22Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -176,8 +176,7 @@ if($action == 'index') {
 			$livepost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_G['forum']['livetid']);
 			$livemessage = messagecutstr($livepost['message'], 200);
 			$liveallowpostreply = $groupuser['uid'] && $groupuser['level'] ? true : false;
-			$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
-			$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+			list($seccodecheck, $secqaacheck) = seccheck('post', 'newthread');
 		}
 
 	} else {

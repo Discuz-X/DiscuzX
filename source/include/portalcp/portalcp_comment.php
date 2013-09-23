@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_comment.php 26963 2011-12-28 08:27:31Z svn_project_zhangjie $
+ *      $Id: portalcp_comment.php 33715 2013-08-07 01:59:25Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -63,7 +63,7 @@ if($_GET['op'] == 'requote') {
 			$comment_status = 0;
 		}
 
-		C::t('portal_comment')->update($comment['cid'], array('message' => $message, 'status' => $comment_status));
+		C::t('portal_comment')->update($comment['cid'], array('message' => $message, 'status' => $comment_status, 'postip' => $_G['clientip'], 'port' => $_G['remoteport']));
 
 		showmessage('do_success', dreferer());
 	}
@@ -91,8 +91,7 @@ if($_GET['op'] == 'requote') {
 	}
 
 }
-$seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
-$secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
+list($seccodecheck, $secqaacheck) = seccheck('publish');
 
 if(submitcheck('commentsubmit', 0, $seccodecheck, $secqaacheck)) {
 

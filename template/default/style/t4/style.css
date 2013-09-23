@@ -4,7 +4,7 @@
 Powered by Discuz! X
 */
 
-body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
+body { background: #FFF url(bgimg.jpg) no-repeat 50% 28px; }
 #nv { background-color: #9934B7; background-image: url(nv.png); }
 	#nv li, #nv li a:hover, #nv li.hover a, #nv li.hover a:hover { background-image: url(nv_a.png) !important; }
 	#nv li.a { background-color: #6C1992; }

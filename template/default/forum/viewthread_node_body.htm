@@ -157,51 +157,23 @@
 		<!--{/if}-->
 		
 		<!--{if $_G['setting']['allowfastreply'] && $post['first'] && $fastpost && $allowpostreply && !$_G['forum_thread']['archiveid'] && $_GET['from'] != 'preview'}-->
-			<div id="vfastpost" class="fullvfastpost">
-				<form method="post" autocomplete="off" id="vfastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&fromvf=1&extra=$_G[gp_extra]&replysubmit=yes{if $_G['gp_ordertype'] != 1}&infloat=yes&handlekey=vfastpost{/if}{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onsubmit="this.message.value = parseurl(this.message.value);ajaxpost('vfastpostform', 'return_reply', 'return_reply', 'onerror');return false;">
-					<input type="hidden" name="formhash" value="{FORMHASH}" />
-					<table cellspacing="0" cellpadding="0" id="vfastposttb">
-						<tr>
-							<td id="vf_l"></td>
-							<td id="vf_m">
-								<input type="text" name="message" id="vmessage" onKeyDown="seditor_ctlent(event, '$(\'vfastpostform\').submit()');"/>
-							</td>
-							<td id="vf_r"></td>
-							<td id="vf_b">
-								<button type="submit" class="pn pnc" name="replysubmit" id="vreplysubmit" value="true" style="">post_newreply</button>
-							</td>
-						</tr>
-					</table>
-				</form>
+			<form method="post" autocomplete="off" id="vfastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&fromvf=1&extra=$_G[gp_extra]&replysubmit=yes{if $_G['gp_ordertype'] != 1}&infloat=yes&handlekey=vfastpost{/if}{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onsubmit="this.message.value = parseurl(this.message.value);ajaxpost('vfastpostform', 'return_reply', 'return_reply', 'onerror');return false;">
+			<div id="vfastpost" class="fullvfastpost">				
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<table cellspacing="0" cellpadding="0" id="vfastposttb">
+					<tr>
+						<td id="vf_l"></td>
+						<td id="vf_m"><input type="text" name="message" id="vmessage" onKeyDown="seditor_ctlent(event, '$(\'vfastpostform\').submit()');"/></td>
+						<td id="vf_r"></td>						
+						<td id="vf_b">
+							<button type="submit" class="pn pnc" name="replysubmit" id="vreplysubmit" value="true" style="">post_newreply</button>								
+						</td>						
+					</tr>
+				</table>				
 			</div>
-			<script type="text/javascript">
-				//$('note_{$tid}').focus();
-				function succeedhandle_vfastpost(url, message, param) {
-					$('vmessage').value = '';
-					succeedhandle_fastpost(url, message, param);
-					showCreditPrompt();
-				}
-				var vf_tips = '{lang forum_live_fastreply_notice}';
-				$('vmessage').value = vf_tips;
-				$('vmessage').style.color = '#CDCDCD';
-				$('vmessage').onclick = function() {
-					if($('vmessage').value==vf_tips) {
-						$('vmessage').value='';
-						$('vmessage').style.color="#000";
-					}
-				}
-				$('vmessage').onblur = function() {
-					if(!$('vmessage').value) {
-						$('vmessage').value=vf_tips;
-						$('vmessage').style.color="#CDCDCD";
-					}
-				}
-				$('vreplysubmit').onclick = function() {
-					if($('vmessage').value == vf_tips) {
-						return false;
-					}
-				}
-			</script>
+			<div id="vfastpostseccheck"></div>				
+			</form>
+			<script type="text/javascript">vmessage();</script>
 		<!--{/if}-->
 		
 	</div>
@@ -227,7 +199,7 @@
 					<!--{/if}-->
 					<span class="xg1">
 						{lang poston} <!--{date($comment[dateline], 'u')}-->
-						<!--{if $comment['useip'] && $_G['group']['allowviewip']}-->&nbsp;IP:$comment[useip]<!--{/if}-->
+						<!--{if $comment['useip'] && $_G['group']['allowviewip']}-->&nbsp;IP:$comment[useip]{if $comment[port]}:$comment[port]{/if}<!--{/if}-->
 						<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->&nbsp;<a href="javascript:;" onclick="modaction('delcomment', $comment[id])">{lang delete}</a><!--{/if}-->
 					</span>
 				</div>

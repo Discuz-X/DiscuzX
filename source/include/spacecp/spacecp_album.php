@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 32863 2013-03-15 09:48:15Z zhengqingpeng $
+ *      $Id: spacecp_album.php 33714 2013-08-07 01:42:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -328,6 +328,7 @@ if($_GET['op'] == 'edit') {
 				'username' => $_G['username'],
 				'dateline' => $attach['dateline'],
 				'postip' => $_G['clientip'],
+				'port' => $_G['remoteport'],
 				'filename' => censor($attach['filename']),
 				'title' => censor(cutstr(dhtmlspecialchars($attach['description']), 100)),
 				'type' => fileext($attach['attachment']),

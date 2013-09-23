@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 32739 2013-03-05 08:16:30Z monkey $
+ *      $Id: spacecp_usergroup.php 34024 2013-09-22 08:55:00Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,6 +36,11 @@ $activeus = array();
 $activeus[$do] = ' class="a"';
 
 if(in_array($do, array('buy', 'exit'))) {
+
+	if($_G['groupid'] == 4 && $_G['member']['groupexpiry'] > 0 && $_G['member']['groupexpiry'] > TIMESTAMP) {
+		showmessage('usergroup_switch_not_allow');
+	}
+
 	$groupid = intval($_GET['groupid']);
 
 	$group = C::t('common_usergroup')->fetch($groupid);

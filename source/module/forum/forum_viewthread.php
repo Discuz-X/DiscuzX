@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 33587 2013-07-12 06:34:29Z hypowang $
+ *      $Id: forum_viewthread.php 33695 2013-08-03 04:39:22Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,6 +50,10 @@ $_G['action']['tid'] = $_G['tid'];
 if($_G['fid'] == $_G['setting']['followforumid'] && $_G['adminid'] != 1) {
 	dheader("Location: home.php?mod=follow");
 }
+
+$st_p = $_G['uid'].'|'.TIMESTAMP;
+dsetcookie('st_p', $st_p.'|'.md5($st_p.$_G['config']['security']['authkey']));
+
 $close_leftinfo = intval($_G['setting']['close_leftinfo']);
 if($_G['setting']['close_leftinfo_userctrl']) {
 	if($_G['cookie']['close_leftinfo'] == 1) {
@@ -277,8 +281,7 @@ if($_G['forum_thread']['attachment']) {
 $exemptvalue = $_G['forum']['ismoderator'] ? 64 : 8;
 $_G['forum_attachmentdown'] = $_G['group']['exempt'] & $exemptvalue;
 
-$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
-$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+list($seccodecheck, $secqaacheck) = seccheck('post', 'reply');
 $usesigcheck = $_G['uid'] && $_G['group']['maxsigsize'];
 
 $postlist = $_G['forum_attachtags'] = $attachlist = $_G['forum_threadstamp'] = array();
@@ -365,7 +368,6 @@ if($_G['forum_thread']['special'] == 2) {
 	$specialadd2 = 1;
 
 } elseif($_G['forum_thread']['special'] == 5) {
-	$_GET['stand'] = isset($_GET['stand']) && in_array($_GET['stand'], array(0, 1, 2)) ? $_GET['stand'] : null;
 	if(isset($_GET['stand'])) {
 		$specialadd2 = 1;
 		$specialextra = "&amp;stand=$_GET[stand]";

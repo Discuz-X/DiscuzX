@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memory_driver_redis.php 33337 2013-05-29 02:23:47Z andyzheng $
+ *      $Id: memory_driver_redis.php 33336 2013-05-29 02:05:10Z andyzheng $
  */
 
 class memory_driver_redis

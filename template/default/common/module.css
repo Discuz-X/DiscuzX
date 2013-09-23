@@ -179,7 +179,7 @@ Created & Modified by Alice, Monkey, Lushnis, Pony, Dfox & DragonLee.
 /** end **/
 
 /** forum::forumdisplay,forum::viewthread,group::viewthread **/
-#vfastpost{background:#E5EDF2;padding:3px;position:relative;}
+#vfastpost{background:#E5EDF2;padding:3px;}
 .previewvfastpost{margin:0px 10px 3px 10px;}
 .fullvfastpost{margin-top:30px;}
 #vfastpost th, #vfastpost td{padding: 0px;}
@@ -589,12 +589,10 @@ Created & Modified by Alice, Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.emptb th, .emptb td { padding: 0; border-bottom: none; }
 			.tl tr:hover th, .tl tr:hover td { background-color: {COMMONBG}; }
 			.tl .threadpre td, .tl .threadpre:hover td { background-color: #FCFCFC; }
-			.tl .threadpre .threadpretd { border-left: 1px solid {CONTENTSEPARATE}; border-right: 1px solid {CONTENTSEPARATE};  }
+			.tl .threadpre .threadpretd { border-left: 1px solid {CONTENTSEPARATE}; border-right: 1px solid {CONTENTSEPARATE}; }
 			.tl th .tdpre, .tl td.fn .tdpre { visibility: hidden; display: inline; width: 31px; height: 17px; margin-top: 3px; background-image: url({IMGDIR}/preview.png); text-indent: -999em; overflow:hidden; }
 			.tl th:hover .tdpre, .tl td.fn:hover .tdpre  { visibility: visible; }
 			.ie6 .tl th .tdpre, .ie6 .tl td.fn .tdpre { display: none; }
-			
-
 			.fastpreview { position: relative; }
 			.icon_preview { position: absolute; display: block; left: 80px; top: -13px; width: 11px; height: 8px; background: url({IMGDIR}/icon_preview.png); overflow: hidden; }
 			a.icon_up { display: block; margin:0 10px; height: 25px; background: #F2F2F2 url({IMGDIR}/arrow_up.png) no-repeat 50% 50%; overflow: hidden; border:1px dashed rgb(194, 213, 227); border-radius: 3px; }
@@ -819,10 +817,15 @@ a.thread_mod { background: url({IMGDIR}/bigimg.png) no-repeat 0 -38px; padding-l
 	Explain:		帖子列表页隐藏置顶帖的按钮样式
 	Last Modify:	Jane
 */
-.showhide { width: 12px; height: 12px; background: url({IMGDIR}/close.gif) no-repeat 0 0; text-indent: -999em; cursor: pointer; overflow: hidden; margin: 5px 0px 0px 5px; }
+.showhide { width: 12px; height: 12px; background: url({IMGDIR}/close.gif) no-repeat 0 0; text-indent: -999em; cursor: pointer; overflow: hidden; margin: 5px 5px 0px 5px; }
 .showhide:hover { background-position: 0 -12px; }
 .ie6 .showhide { display: none; }
 .pcb .jammer { font-size: 10px; color: {WRAPBG}; }
+/* 屏蔽提示 */
+#hiddenthread { border-top: 1px solid #C2D5E3; border-bottom: 1px solid #C2D5E3; line-height:40px;padding-left:20px;background: #FFFAF3; font-size: 12px; text-align: center; }
+#hiddenthread.last, .ie6 #hiddenthread, .ie7 #hiddenthread, .ie8 #hiddenthread { border-top: none; }
+#hiddenthread a { display: block; text-indent: 25px; height: 29px; line-height: 29px; color: #EFAA00; }
+#hiddenthread a:hover { text-decoration: none; }
 /** end **/
 
 

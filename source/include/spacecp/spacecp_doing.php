@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_doing.php 30866 2012-06-27 06:00:03Z liulanbo $
+ *      $Id: spacecp_doing.php 33714 2013-08-07 01:42:26Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,6 +51,7 @@ if(helper_access::check_module('doing')) {
 			'dateline' => $_G['timestamp'],
 			'message' => $message,
 			'ip' => $_G['clientip'],
+			'port' => $_G['remoteport'],
 			'status' => $doing_status,
 		);
 		$newdoid = C::t('home_doing')->insert($setarr, 1);

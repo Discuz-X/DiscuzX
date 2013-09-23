@@ -334,8 +334,8 @@ jQuery.extend({
 			var img = document.createElement('img');
 			img.onload = function() {
 				$this = $(this);
-				var imgwidth = $this.width();
-				var imgheight = $this.height();
+				var imgwidth = this.width ? this.width : $this.width();
+				var imgheight = this.height ? this.height : $this.height();
 
 				var canvaswidth = maxwidth;
 				var canvasheight = maxheight;

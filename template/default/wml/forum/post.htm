@@ -28,7 +28,7 @@
 			{lang thread_subject}:<input type="text" name="subject" value="" maxlength="80" format="M*m" /><br />
 		<!--{/if}-->
 			{lang thread_content}:<input type="text" name="message" value="" format="M*m" /><br />
-		<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+		<!--{if $secqaacheck || $seccodecheck}-->
 		<!--{subtemplate common/seccheck}-->
 		<!--{/if}-->
 		<anchor title="{lang submit}">{lang submit}
@@ -44,7 +44,7 @@
 		<!--{if $isfirstpost && !empty($_G['forum'][threadtypes][types])}-->
 			<postfield name="typeid" value="$(typeid)" />
 		<!--{/if}-->
-		<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+		<!--{if $secqaacheck || $seccodecheck}-->
 		<postfield name="sechash" value="$(sechash)" />
 		<postfield name="secanswer" value="$(secanswer)" />
 		<postfield name="seccodeverify" value="$(seccodeverify)" />
