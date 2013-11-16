@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: seccode_cloudcaptcha.php 33997 2013-09-17 06:46:37Z nemohou $
+ *      $Id: seccode_cloudcaptcha.php 34041 2013-09-24 09:48:15Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,6 +42,15 @@ class seccode_cloudcaptcha {
 		    'var cloudCaptchaTimer = setInterval(function(){if(typeof cloudCaptcha != "undefined"){'.
 		    'clearInterval(cloudCaptchaTimer);'.
 		    'cloudCaptcha.run("'.$src.'&refresh=" + refresh, "'.$idhash.'", "'.$tips.'");}}, 50);</script>';
+	}
+
+	function image($idhash, $modid) {
+		global $_G;
+		if(!$_G['setting']['my_siteid']) {
+			return;
+		}
+		$rand = random(10);
+		return $_G['siteurl'].'plugin.php?id=cloudcaptcha:get&rand='.$rand.'&modid='.$modid;
 	}
 
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_image.php 33614 2013-07-17 03:20:20Z nemohou $
+ *      $Id: class_image.php 34038 2013-09-24 02:21:19Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -314,7 +314,7 @@ class image {
 		switch($this->param['thumbtype']) {
 			case 'fixnone':
 			case 1:
-				if($this->imginfo['width'] > $this->param['thumbwidth'] || $this->imginfo['height'] > $this->param['thumbheight']) {
+				if($this->imginfo['width'] >= $this->param['thumbwidth'] || $this->imginfo['height'] >= $this->param['thumbheight']) {
 					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -geometry '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->source.' '.$this->target;
 					$return = exec($exec_str);
 					if(!file_exists($this->target)) {

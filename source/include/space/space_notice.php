@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 33412 2013-06-08 03:26:12Z kamichen $
+ *      $Id: space_notice.php 34047 2013-09-25 04:41:45Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -122,9 +122,7 @@ if($view == 'userapp') {
 		}
 
 		$multi = '';
-		if($isread) {
-			$multi = multi($count, $perpage, $page, "home.php?mod=space&do=$do&isread=1");
-		}
+		$multi = multi($count, $perpage, $page, "home.php?mod=space&do=$do&isread=1");
 	}
 
 	if($newnotify) {

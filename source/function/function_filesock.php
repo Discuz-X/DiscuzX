@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_filesock.php 33711 2013-08-06 09:38:31Z nemohou $
+ *      $Id: function_filesock.php 34110 2013-10-11 10:23:17Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,7 +18,6 @@ function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FAL
 	$host = $matches['host'];
 	$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
 	$port = !empty($matches['port']) ? $matches['port'] : ($scheme == 'http' ? '80' : '');
-	$encodetype = 'FORMDATA';
 	$boundary = $encodetype == 'URLENCODE' ? '' : random(40);
 
 	if($post) {
@@ -80,7 +79,7 @@ function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FAL
 
 	if($post) {
 		if($encodetype == 'URLENCODE') {
-			$data = $post;
+			$data = http_build_query($post);
 		} else {
 			$data = '';
 			foreach($post as $k => $v) {

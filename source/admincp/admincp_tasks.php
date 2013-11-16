@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tasks.php 30363 2012-05-24 07:16:47Z monkey $
+ *      $Id: admincp_tasks.php 34093 2013-10-09 05:41:18Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -130,7 +130,7 @@ if(!($operation)) {
 	$task_name = $task_description = $task_icon = $task_period = $task_periodtype = $task_conditions = '';
 	if(in_array($_GET['script'], $custom_scripts)) {
 		$escript = explode(':', $_GET['script']);
-		if(count($escript) > 1) {
+		if(count($escript) > 1 && preg_match('/^[\w\_:]+$/', $_GET['script'])) {
 			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
 			$taskclass = 'task_'.$escript[1];
 		} else {
@@ -356,7 +356,7 @@ if(!($operation)) {
 		showtableheader(cplang('tasks_edit').' - '.$task['name'], 'fixpadding');
 		showsetting('tasks_add_name', 'name', $task['name'], 'text');
 		showsetting('tasks_add_desc', 'description', $task['description'], 'textarea');
-		if(count($escript) > 1 && file_exists(DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif')) {
+		if(count($escript) > 1 && preg_match('/^[\w\_:]+$/', $task['scriptname']) && file_exists(DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif')) {
 			$defaulticon = 'source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.gif';
 		} else {
 			$defaulticon = 'static/image/task/task.gif';
@@ -452,7 +452,7 @@ if(!($operation)) {
 
 		showtitle('tasks_add_conditions');
 
-		if(count($escript) > 1) {
+		if(count($escript) > 1 && preg_match('/^[\w\_:]+$/', $task['scriptname'])) {
 			include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
 			$taskclass = 'task_'.$escript[1];
 		} else {
@@ -592,7 +592,7 @@ if(!($operation)) {
 	}
 
 	$escript = explode(':', $_GET['script']);
-	if(count($escript) > 1) {
+	if(count($escript) > 1 && preg_match('/^[\w\_:]+$/', $_GET['script'])) {
 		include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
 		$taskclass = 'task_'.$escript[1];
 	} else {
@@ -626,7 +626,7 @@ if(!($operation)) {
 	}
 
 	$escript = explode(':', $_GET['script']);
-	if(count($escript) > 1) {
+	if(count($escript) > 1 && preg_match('/^[\w\_:]+$/', $_GET['script'])) {
 		include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
 		$taskclass = 'task_'.$escript[1];
 	} else {
@@ -645,7 +645,7 @@ if(!($operation)) {
 } elseif($operation == 'upgrade' && $_GET['script']) {
 
 	$escript = explode(':', $_GET['script']);
-	if(count($escript) > 1) {
+	if(count($escript) > 1 && preg_match('/^[\w\_:]+$/', $_GET['script'])) {
 		include_once DISCUZ_ROOT.'./source/plugin/'.$escript[0].'/task/task_'.$escript[1].'.php';
 		$taskclass = 'task_'.$escript[1];
 	} else {

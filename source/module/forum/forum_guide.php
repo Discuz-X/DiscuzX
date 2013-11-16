@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_guide.php 32049 2012-11-02 04:07:14Z liulanbo $
+ *      $Id: forum_guide.php 34066 2013-09-27 08:36:09Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -233,8 +233,7 @@ function get_my_threads($viewtype, $fid = 0, $filter = '', $searchkey = '', $sta
 	$dglue = '=';
 	if($viewtype == 'thread') {
 		$authorid = $_G['uid'];
-		$displayorder = -1;
-		$dglue = '!=';
+		$dglue = '=';
 		if($filter == 'recyclebin') {
 			$displayorder = -1;
 		} elseif($filter == 'aduit') {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 33968 2013-09-10 08:01:23Z nemohou $
+ *      $Id: admincp_adv.php 34093 2013-10-09 05:41:18Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -54,7 +54,7 @@ if($operation == 'ad') {
 		$typeadd = $advfile = '';
 		if($type) {
 			$etype = explode(':', $type);
-			if(count($etype) > 1) {
+			if(count($etype) > 1 && preg_match('/^[\w\_:]+$/', $type)) {
 				if(ispluginkey($etype[0]) && preg_match('/^\w$/', $etype[1])) {
 					$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
 					$advclass = 'adv_'.$etype[1];
@@ -106,11 +106,9 @@ if($operation == 'ad') {
 			if(!$type) {
 				$advfile = '';
 				$etype = explode(':', $adv['type']);
-				if(count($etype) > 1) {
-					if(ispluginkey($etype[0]) && preg_match('/^\w$/', $etype[1])) {
-						$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
-						$advclass = 'adv_'.$etype[1];
-					}
+				if(count($etype) > 1 && preg_match('/^[\w\_:]+$/', $adv['type'])) {
+					$advfile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
+					$advclass = 'adv_'.$etype[1];
 				} else {
 					$advfile = libfile('adv/'.$adv['type'], 'class');
 					$advclass = 'adv_'.$adv['type'];
@@ -242,7 +240,7 @@ if($operation == 'ad') {
 		}
 
 		$etype = explode(':', $type);
-		if(count($etype) > 1) {
+		if(count($etype) > 1 && preg_match('/^[\w\_:]+$/', $type)) {
 			include_once DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
 			$advclass = 'adv_'.$etype[1];
 		} else {
@@ -287,7 +285,7 @@ if($operation == 'ad') {
 		echo '<script type="text/javascript" src="static/js/calendar.js"></script>'.
 			'<div class="colorbox"><h4>'.lang('adv/'.$type, $advclass->name).'</h4>'.
 			'<table cellspacing="0" cellpadding="3"><tr><td>'.
-			(count($etype) > 1 ? (file_exists(DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.gif') ? '<img src="source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.gif" />' : '')
+			(count($etype) > 1 && preg_match('/^[\w\_:]+$/', $type) ? (file_exists(DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.gif') ? '<img src="source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.gif" />' : '')
 			: (file_exists(DISCUZ_ROOT.'./static/image/admincp/'.$type.'.gif') ? '<img src="static/image/admincp/'.$type.'.gif" />' : '')).
 			'</td><td valign="top">'.lang('adv/'.$type, $advclass->description).'</td></tr></table>'.
 			'<div style="width:95%" align="right">'.lang('adv/'.$type, $advclass->copyright).'</div></div>';
@@ -421,7 +419,7 @@ if($operation == 'ad') {
 		}
 
 		$etype = explode(':', $type);
-		if(count($etype) > 1) {
+		if(count($etype) > 1 && preg_match('/^[\w\_:]+$/', $type)) {
 			include_once DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/adv/adv_'.$etype[1].'.php';
 			$advclass = 'adv_'.$etype[1];
 		} else {

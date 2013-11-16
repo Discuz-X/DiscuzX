@@ -229,7 +229,7 @@
 			<!--{if !$this->setting['autoidselect']}-->
 				simulateSelect('loginfield_$loginhash');
 			<!--{/if}-->
-		<!--{elseif $seccodecheck}-->
+		<!--{elseif $seccodecheck && !(empty($_GET['auth']) || $questionexist)}-->
 			if($('loginform_$loginhash')) {
 				safescript('seccodefocus', function() {$('loginform_$loginhash').seccodeverify.focus()}, 500, 10);
 			}			

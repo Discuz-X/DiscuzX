@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 33998 2013-09-17 06:55:02Z nemohou $
+ *      $Id: admincp_setting.php 34093 2013-10-09 05:41:18Z nemohou $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -1607,7 +1607,7 @@ EOF;
 		$setting['accountguard'] = dunserialize($setting['accountguard']);
 		$usergroups = C::t('common_usergroup_field')->fetch_all(array_keys($_G['cache']['usergroups']));
 		showtableheader('', 'nobottom');
-		$forcelogin = '<tr class="header"><td></td><td>'.cplang('usergroups_edit_basic_forcelogin_none').'</td><td>'.cplang('usergroups_edit_basic_forcelogin_qq').'</td><td>'.cplang('usergroups_edit_basic_forcelogin_mail').'</td></tr>';
+		$forcelogin = '<tr class="header"><td></td><td>'.cplang('usergroups_edit_basic_forcelogin_none').'</td>'.($_G['setting']['connect']['allow'] ? '<td>'.cplang('usergroups_edit_basic_forcelogin_qq').'</td>' : '').'<td>'.cplang('usergroups_edit_basic_forcelogin_mail').'</td></tr>';
 		ksort($_G['cache']['usergroups']);
 		foreach($_G['cache']['usergroups'] as $gid => $usergroup) {
 			if(in_array($gid, array(7, 8))) {
@@ -2381,7 +2381,6 @@ EOT;
 		showtagheader('tbody', 'mobileext', $setting['mobile']['allowmobile'], 'sub');
 		showsetting('setting_mobile_mobileforward', 'settingnew[mobile][mobileforward]', $setting['mobile']['mobileforward'], 'radio');
 		showsetting('setting_mobile_register', 'settingnew[mobile][mobileregister]', $setting['mobile']['mobileregister'], 'radio');
-		showsetting('setting_mobile_seccode', 'settingnew[mobile][mobileseccode]', $setting['mobile']['mobileseccode'], 'radio');
 		showsetting('setting_mobile_hotthread', 'settingnew[mobile][mobilehotthread]', $setting['mobile']['mobilehotthread'], 'radio');
 		showsetting('setting_mobile_displayorder3', 'settingnew[mobile][mobiledisplayorder3]', $setting['mobile']['mobiledisplayorder3'], 'radio');
 		showsetting('setting_mobile_simpletype', 'settingnew[mobile][mobilesimpletype]', $setting['mobile']['mobilesimpletype'], 'radio');
@@ -2843,6 +2842,9 @@ EOT;
 
 
 	if($operation == 'seccheck') {
+		if(!is_numeric($settingnew['seccodedata']['type']) && !preg_match('/^[\w\_]+:[\w\_]+$/', $settingnew['seccodedata']['type'])) {
+			$settingnew['seccodedata']['type'] = 0;
+		}
 		$settingnew['seccodestatus'] = $settingnew['seccodedata']['rule']['register']['allow'] || $settingnew['seccodedata']['rule']['login']['allow'] || $settingnew['seccodedata']['rule']['post']['allow'] || $settingnew['seccodedata']['rule']['password']['allow'] || $settingnew['seccodedata']['rule']['card']['allow'] ? 1 : 0;
 		if(is_array($_GET['delete'])) {
 			C::t('common_secquestion')->delete($_GET['delete']);
@@ -2860,7 +2862,9 @@ EOT;
 		C::t('common_secquestion')->delete_by_type(1);
 		if(is_array($_GET['secqaaext'])) {
 			foreach($_GET['secqaaext'] as $ext) {
-				DB::insert('common_secquestion', array('type' => '1', 'question' => $ext));
+				if(preg_match('/^[\w\_:]+$/', $ext)) {
+					DB::insert('common_secquestion', array('type' => '1', 'question' => $ext));
+				}
 			}
 		}
 

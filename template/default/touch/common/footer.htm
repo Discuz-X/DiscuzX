@@ -12,10 +12,10 @@
 <!--{if !$nofooter}-->
 <div class="footer">
 	<div>
-		<!--{if !$_G[uid]}-->
+		<!--{if !$_G[uid] && !$_G['connectguest']}-->
 		<a href="forum.php">{lang mobilehome}</a> | <a href="member.php?mod=logging&action=login" title="{lang login}">{lang login}</a> | <a href="<!--{if $_G['setting']['regstatus']}-->member.php?mod={$_G[setting][regname]}<!--{else}-->javascript:;" style="color:#D7D7D7;<!--{/if}-->" title="{$_G['setting']['reglinkname']}">{lang register}</a>
 		<!--{else}-->
-		<a href="home.php?mod=space&uid={$_G[uid]}&do=profile&mycenter=1">$_G[username]</a> , <a href="member.php?mod=logging&action=logout&formhash={FORMHASH}" title="{lang logout}" class="dialog">{lang logout}</a>
+		<a href="home.php?mod=space&uid={$_G[uid]}&do=profile&mycenter=1">{$_G['member']['username']}</a> , <a href="member.php?mod=logging&action=logout&formhash={FORMHASH}" title="{lang logout}" class="dialog">{lang logout}</a>
 		<!--{/if}-->
 	</div>
     <div>

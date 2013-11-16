@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_manage.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: userapp_manage.php 34075 2013-10-08 03:59:47Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,7 +51,7 @@ if(empty($_GET['my_suffix'])) {
 		$my_suffix = $_GET['ac'] == 'menu' ? '/userapp/list' : '/app/list';
 	}
 } else {
-	$my_suffix = $_GET['my_suffix'];
+	$my_suffix = htmlspecialchars($_GET['my_suffix']);
 }
 $my_extra = isset($_GET['my_extra']) ? $_GET['my_extra'] : '';
 

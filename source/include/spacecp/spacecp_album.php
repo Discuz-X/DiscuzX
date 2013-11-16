@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 33714 2013-08-07 01:42:26Z andyzheng $
+ *      $Id: spacecp_album.php 34045 2013-09-25 03:39:47Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -311,7 +311,7 @@ if($_GET['op'] == 'edit') {
 			showmessage('parameters_error');
 		}
 		$attach = C::t('forum_attachment_n')->fetch('aid:'.$aid, $aid);
-		if(empty($attach)) {
+		if(empty($attach) || $attach['uid'] != $_G['uid'] || !$attach['isimage']) {
 			showmessage('parameters_error');
 		}
 		if($albumid) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_app.php 33079 2013-04-18 09:50:53Z zhengqingpeng $
+ *      $Id: userapp_app.php 34091 2013-10-09 04:04:17Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,7 +39,7 @@ if($app['displayuserpanel']) {
 }
 
 $my_appId = $appid;
-$my_suffix = base64_decode(urldecode($_GET['my_suffix']));
+$my_suffix = htmlspecialchars(base64_decode($_GET['my_suffix']));
 
 $my_prefix = getsiteurl();
 

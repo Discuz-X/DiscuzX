@@ -49,6 +49,8 @@ function build_cache_plugin_mobile() {
 
 	require_once './source/plugin/mobile/mobile.class.php';
 
+	define('IN_MOBILE_API', 1);
+
 	$data = array('mobilecheck' => mobile_core::json($array));
 	writetocache('mobile', getcachevars($data));
 }
