@@ -59,7 +59,7 @@ if($op == 'search') {
 			}
 		}
 	}
-} elseif($op == 'set') {
+} elseif($op == 'set' && $_GET['formhash'] == FORMHASH && $_G['group']['allowmanagetag']) {
 	$class_tag = new tag();
 	$tagstr = $class_tag->update_field($_GET['tags'], $_G['tid'], 'tid', $_G['thread']);
 	C::t('forum_post')->update_by_tid('tid:'.$_G['tid'], $_G['tid'], array('tags' => $tagstr), false, false, 1);

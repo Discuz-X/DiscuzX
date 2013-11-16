@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 32010 2012-10-31 02:12:04Z zhengqingpeng $
+ *      $Id: function_space.php 34052 2013-09-25 06:18:43Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -562,7 +562,7 @@ function getblockhtml($blockname,$parameters = array()) {
 				} else {
 					$parameters['config']['height'] .= 'px';
 				}
-				$html = "<script language=\"javascript\" type=\"text/javascript\">document.write(AC_FL_RunContent('id', 'mp3player', 'name', 'mp3player', 'devicefont', 'false', 'width', '100%', 'height', '".$parameters['config']['height']."', 'src', '$swfurl', 'menu', 'false',  'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent'));</script>";
+				$html = "<script language=\"javascript\" type=\"text/javascript\">document.write(AC_FL_RunContent('id', 'mp3player', 'name', 'mp3player', 'devicefont', 'false', 'width', '100%', 'height', '".$parameters['config']['height']."', 'src', '$swfurl', 'menu', 'false',  'allowScriptAccess', 'never', 'swLiveConnect', 'true', 'wmode', 'transparent'));</script>";
 			} else {
 				$html = lang('space', 'music_no_content');
 			}

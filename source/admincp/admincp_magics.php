@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_magics.php 30333 2012-05-23 07:16:05Z monkey $
+ *      $Id: admincp_magics.php 34093 2013-10-09 05:41:18Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -168,7 +168,7 @@ if($operation == 'admin') {
 		echo '<br />';
 
 		$eidentifier = explode(':', $magic['identifier']);
-		if(count($eidentifier) > 1) {
+		if(count($eidentifier) > 1 && preg_match('/^[\w\_:]+$/', $magic['identifier'])) {
 			include_once DISCUZ_ROOT.'./source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.php';
 			$magicclass = 'magic_'.$eidentifier[1];
 		} else {
@@ -254,7 +254,7 @@ if($operation == 'admin') {
 		$magicperm['targetgroups'] = is_array($_GET['targetgroupsperm']) && !empty($_GET['targetgroupsperm']) ? "\t".implode("\t",$_GET['targetgroupsperm'])."\t" : '';
 
 		$eidentifier = explode(':', $magic['identifier']);
-		if(count($eidentifier) > 1) {
+		if(count($eidentifier) > 1 && preg_match('/^[\w\_:]+$/', $magic['identifier'])) {
 			include_once DISCUZ_ROOT.'./source/plugin/'.$eidentifier[0].'/magic/magic_'.$eidentifier[1].'.php';
 			$magicclass = 'magic_'.$eidentifier[1];
 		} else {

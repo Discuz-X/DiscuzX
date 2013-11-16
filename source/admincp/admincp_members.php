@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 33829 2013-08-20 02:43:59Z nemohou $
+ *      $Id: admincp_members.php 34090 2013-10-09 03:44:16Z nemohou $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -3052,6 +3052,7 @@ function notifymembers($operation, $variable) {
 			if(!empty($setarr)) {
 				$limit = 2000;
 				set_time_limit(0);
+				$i = 0;
 				while(true) {
 					$uids = searchmembers($search_condition, $limit, $i*$limit);
 					$allcount = C::t('common_member_count')->fetch_all($uids);
@@ -3065,6 +3066,7 @@ function notifymembers($operation, $variable) {
 						C::t('common_member_count')->clear_extcredits($uids, $setarr);
 					}
 					if(count($uids) < $limit) break;
+					$i++;
 				}
 			} else {
 				cpmsg('members_reward_invalid', '', 'error');

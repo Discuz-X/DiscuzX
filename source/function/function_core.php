@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 33993 2013-09-17 01:39:13Z nemohou $
+ *      $Id: function_core.php 34052 2013-09-25 06:18:43Z andyzheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -724,6 +724,8 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		$tformat = getglobal('setting/timeformat');
 		$dtformat = $dformat.' '.$tformat;
 		$offset = getglobal('member/timeoffset');
+		$sysoffset = getglobal('setting/timeoffset');
+		$offset = $offset == 9999 ? ($sysoffset ? $sysoffset : 0) : $offset;
 		$lang = lang('core', 'date');
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
@@ -1329,7 +1331,7 @@ function getfocus_rand($module) {
 	if(empty($_G['cache']['focus']['data']) || !is_array($_G['cache']['focus']['data'])) {
 		return null;
 	}
-	$focusid = $_G['setting']['focus'][$module][array_rand($_G['setting']['focus'][$modulemake_secqaa])];
+	$focusid = $_G['setting']['focus'][$module][array_rand($_G['setting']['focus'][$module])];
 	return $focusid;
 }
 

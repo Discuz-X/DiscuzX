@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 33958 2013-09-06 04:26:39Z nemohou $
+ *      $Id: class_member.php 34054 2013-09-25 07:57:38Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -203,7 +203,7 @@ class logging_ctl {
 					}
 					if($seccodecheck && !$secchecklogin2) {
 						clearcookies();
-						$auth = authcode($_GET['username']."\t".$_GET['password']."\t".($result['ucresult']['uid'] == -3 ? 1 : 0)."\t1", 'ENCODE', $_G['config']['security']['authkey']);
+						$auth = authcode($_GET['username']."\t".$_GET['password']."\t".($_GET['questionid'] ? 1 : 0)."\t1", 'ENCODE', $_G['config']['security']['authkey']);
 						$location = 'member.php?mod=logging&action=login&auth='.rawurlencode($auth).'&referer='.rawurlencode(dreferer()).(!empty($_GET['cookietime']) ? '&cookietime=1' : '');
 						if(defined('IN_MOBILE')) {
 							showmessage('login_seccheck2', $location);
@@ -314,7 +314,7 @@ class logging_ctl {
 		$ucsynlogout = $this->setting['allowsynlogin'] ? uc_user_synlogout() : '';
 
 		if($_GET['formhash'] != $_G['formhash']) {
-			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout, 'referer' => dreferer()));
+			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout, 'referer' => rawurlencode(dreferer())));
 		}
 
 		clearcookies();
@@ -324,9 +324,9 @@ class logging_ctl {
 		$_G['setting']['styleid'] = $this->setting['styleid'];
 
 		if(defined('IN_MOBILE')) {
-			showmessage('location_logout_succeed_mobile', dreferer(), array('formhash' => FORMHASH, 'referer' => dreferer()));
+			showmessage('location_logout_succeed_mobile', dreferer(), array('formhash' => FORMHASH, 'referer' => rawurlencode(dreferer())));
 		} else {
-			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout, 'referer' => dreferer()));
+			showmessage('logout_succeed', dreferer(), array('formhash' => FORMHASH, 'ucsynlogout' => $ucsynlogout, 'referer' => rawurlencode(dreferer())));
 		}
 	}
 

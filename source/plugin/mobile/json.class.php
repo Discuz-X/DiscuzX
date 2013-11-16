@@ -1,5 +1,5 @@
 <?php
-if(!defined('IN_DISCUZ')) {
+if(!defined('IN_MOBILE_API')) {
 	exit('Access Denied');
 }
 

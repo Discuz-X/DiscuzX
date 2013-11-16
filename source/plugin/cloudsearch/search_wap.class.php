@@ -3,7 +3,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_wap.class.php 30263 2012-05-17 13:44:07Z zhouxiaobo $
+ *      $Id: search_wap.class.php 34044 2013-09-25 02:55:02Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,10 @@ class mobileplugin_cloudsearch {
 		$this->allow = $cloudAppService->getCloudAppStatus('search');
 		if($this->allow) {
 			include_once template('cloudsearch:module');
+			if(!function_exists('tpl_global_header_mobile')) {
+				$this->allow = false;
+				return;
+			}
 
 			if (!$searchparams) {
 				$searchHelper = Cloud::loadClass('Cloud_Service_SearchHelper');

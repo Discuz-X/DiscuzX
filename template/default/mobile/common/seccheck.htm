@@ -24,7 +24,7 @@
 	<!--{if $seccodecheck}-->
     	<p>
 		<strong>{lang seccode}</strong><br />
-        <img src="misc.php?mod=seccode&update={$ran}&idhash={$sechash}&mobile=yes" />
+        <img src="misc.php?mod=seccode&update={$ran}&idhash={$sechash}&mobile=yes&modid={$_G[basescript]}::{CURMODULE}" />
         <br />
 	<input name="seccodehash" type="hidden" value="$sechash" />
         <input name="seccodeverify" id="seccodeverify_$sechash" type="text" autocomplete="off" class="txt" />

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 32647 2013-02-27 09:13:03Z monkey $
+ *      $Id: admincp_misc.php 34088 2013-10-09 03:24:15Z hypowang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1542,7 +1542,7 @@ EOT;
 			if(is_array($_GET['titlenew'])) {
 				foreach($_GET['titlenew'] as $id => $title) {
 					$_GET['urlnew'][$id] = rawurlencode($_GET['urlnew'][$id]);
-					$title = dhtmlspecialchars($_GET['langnew'][$id] && lang($_GET['langnew'][$id], false) ? $_GET['langnew'][$id] : $title);
+					$title = dhtmlspecialchars($_GET['langnew'][$id] && cplang($_GET['langnew'][$id], false) ? $_GET['langnew'][$id] : $title);
 					$ordernew = intval($_GET['displayordernew'][$id]);
 					C::t('common_admincp_cmenu')->update($id, array('title' => $title, 'displayorder' => $ordernew, 'url' => dhtmlspecialchars($_GET['urlnew'][$id])));
 				}

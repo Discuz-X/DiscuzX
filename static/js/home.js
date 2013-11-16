@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 32590 2013-02-22 09:42:48Z monkey $
+	$Id: home.js 34052 2013-09-25 06:18:43Z andyzheng $
 */
 
 var note_step = 0;
@@ -262,16 +262,16 @@ function showFlash(host, flashvar, obj, shareid) {
 	    + '<param name="movie" value="FLASHADDR" />'
 	    + '<param name="quality" value="high" />'
 	    + '<param name="bgcolor" value="#FFFFFF" />'
-	    + '<param name="allowScriptAccess" value="none" />'
+	    + '<param name="allowScriptAccess" value="never" />'
 	    + '<param name="allowNetworking" value="internal" />'
-	    + '<embed width="480" height="400" menu="false" quality="high" allowScriptAccess="none" allowNetworking="internal" src="FLASHADDR" type="application/x-shockwave-flash" />'
+	    + '<embed width="480" height="400" menu="false" quality="high" allowScriptAccess="never" allowNetworking="internal" src="FLASHADDR" type="application/x-shockwave-flash" />'
 	    + '</object>';
 	var videoFlash = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="480" height="450">'
 		+ '<param value="transparent" name="wmode"/>'
 		+ '<param value="FLASHADDR" name="movie" />'
-		+ '<param name="allowScriptAccess" value="none" />'
+		+ '<param name="allowScriptAccess" value="never" />'
 		+ '<param name="allowNetworking" value="none" />'
-		+ '<embed src="FLASHADDR" wmode="transparent" allowfullscreen="true" type="application/x-shockwave-flash" width="480" height="450" allowScriptAccess="none" allowNetworking="internal"></embed>'
+		+ '<embed src="FLASHADDR" wmode="transparent" allowfullscreen="true" type="application/x-shockwave-flash" width="480" height="450" allowScriptAccess="never" allowNetworking="internal"></embed>'
 		+ '</object>';
 	var musicFlash = '<object id="audioplayer_SHAREID" height="24" width="290" data="' + STATICURL + 'image/common/player.swf" type="application/x-shockwave-flash">'
 		+ '<param value="' + STATICURL + 'image/common/player.swf" name="movie"/>'

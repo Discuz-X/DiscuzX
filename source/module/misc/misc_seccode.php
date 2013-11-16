@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_seccode.php 33997 2013-09-17 06:46:37Z nemohou $
+ *      $Id: misc_seccode.php 34093 2013-10-09 05:41:18Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,11 +23,11 @@ if($_GET['action'] == 'update') {
 	$ani = $_G['setting']['seccodedata']['animator'] ? '_ani' : '';
 	if($_G['setting']['seccodedata']['type'] == 2) {
 		$htmlcode = extension_loaded('ming') ?
-			"$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent('width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', 'misc.php?mod=seccode&update=$rand&idhash=$idhash','quality', 'high', 'wmode', 'transparent', 'bgcolor', '#ffffff','align', 'middle', 'menu', 'false', 'allowScriptAccess', 'sameDomain');" :
-			"$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent('width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', '$_G[siteurl]static/image/seccode/flash/flash2.swf', 'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');";
+			"$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent('width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', 'misc.php?mod=seccode&update=$rand&idhash=$idhash','quality', 'high', 'wmode', 'transparent', 'bgcolor', '#ffffff','align', 'middle', 'menu', 'false', 'allowScriptAccess', 'never');" :
+			"$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent('width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', '$_G[siteurl]static/image/seccode/flash/flash2.swf', 'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'never', 'swLiveConnect', 'true', 'wmode', 'transparent');";
 		$message = '<span id="seccodeswf_'.$idhash.'"></span>';
 	} elseif($_G['setting']['seccodedata']['type'] == 3) {
-		$htmlcode = "$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_sound_tips')."' + AC_FL_RunContent('id', 'seccodeplayer_$idhash', 'name', 'seccodeplayer_$idhash', 'width', '0', 'height', '0', 'src', '$_G[siteurl]static/image/seccode/flash/flash1.swf', 'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');";
+		$htmlcode = "$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_sound_tips')."' + AC_FL_RunContent('id', 'seccodeplayer_$idhash', 'name', 'seccodeplayer_$idhash', 'width', '0', 'height', '0', 'src', '$_G[siteurl]static/image/seccode/flash/flash1.swf', 'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'never', 'swLiveConnect', 'true', 'wmode', 'transparent');";
 		$message = '<span id="seccodeswf_'.$idhash.'"></span>'.lang('forum/misc', 'seccode_player', array('idhash' => $idhash));
 	} else {
 		if(!is_numeric($_G['setting']['seccodedata']['type'])) {
@@ -95,36 +95,65 @@ EOF;
 		exit('Access Denied');
 	}
 
-	$seccode = make_seccode();
+	if(is_numeric($_G['setting']['seccodedata']['type'])) {
 
-	if(!$_G['setting']['nocacheheaders']) {
-		@header("Expires: -1");
-		@header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
-		@header("Pragma: no-cache");
+		if(IN_MOBILE && in_array($_G['setting']['seccodedata']['type'], array(2, 3))) {
+			exit;
+		}
+
+		$seccode = make_seccode();
+
+		if(!$_G['setting']['nocacheheaders']) {
+			@header("Expires: -1");
+			@header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
+			@header("Pragma: no-cache");
+		}
+
+		require_once libfile('class/seccode');
+
+		$code = new seccode();
+		$code->code = $seccode;
+		$code->type = $_G['setting']['seccodedata']['type'];
+		$code->width = $_G['setting']['seccodedata']['width'];
+		$code->height = $_G['setting']['seccodedata']['height'];
+		$code->background = $_G['setting']['seccodedata']['background'];
+		$code->adulterate = $_G['setting']['seccodedata']['adulterate'];
+		$code->ttf = $_G['setting']['seccodedata']['ttf'];
+		$code->angle = $_G['setting']['seccodedata']['angle'];
+		$code->warping = $_G['setting']['seccodedata']['warping'];
+		$code->scatter = $_G['setting']['seccodedata']['scatter'];
+		$code->color = $_G['setting']['seccodedata']['color'];
+		$code->size = $_G['setting']['seccodedata']['size'];
+		$code->shadow = $_G['setting']['seccodedata']['shadow'];
+		$code->animator = $_G['setting']['seccodedata']['animator'];
+		$code->fontpath = DISCUZ_ROOT.'./static/image/seccode/font/';
+		$code->datapath = DISCUZ_ROOT.'./static/image/seccode/';
+		$code->includepath = DISCUZ_ROOT.'./source/class/';
+
+		$code->display();
+
+	} else {
+		$etype = explode(':', $_G['setting']['seccodedata']['type']);
+		if(count($etype) > 1) {
+			$codefile = DISCUZ_ROOT.'./source/plugin/'.$etype[0].'/seccode/seccode_'.$etype[1].'.php';
+			$class = $etype[1];
+		} else {
+			$codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class');
+			$class = $_G['setting']['seccodedata']['type'];
+		}
+		if(file_exists($codefile)) {
+			@include_once $codefile;
+			$class = 'seccode_'.$class;
+			if(class_exists($class)) {
+				make_seccode();
+				$code = new $class();
+				$image = $code->image($idhash, $modid);
+				if($image) {
+					dheader('location: '.$image);
+				}
+			}
+		}
 	}
-
-	require_once libfile('class/seccode');
-
-	$code = new seccode();
-	$code->code = $seccode;
-	$code->type = $_G['setting']['seccodedata']['type'];
-	$code->width = $_G['setting']['seccodedata']['width'];
-	$code->height = $_G['setting']['seccodedata']['height'];
-	$code->background = $_G['setting']['seccodedata']['background'];
-	$code->adulterate = $_G['setting']['seccodedata']['adulterate'];
-	$code->ttf = $_G['setting']['seccodedata']['ttf'];
-	$code->angle = $_G['setting']['seccodedata']['angle'];
-	$code->warping = $_G['setting']['seccodedata']['warping'];
-	$code->scatter = $_G['setting']['seccodedata']['scatter'];
-	$code->color = $_G['setting']['seccodedata']['color'];
-	$code->size = $_G['setting']['seccodedata']['size'];
-	$code->shadow = $_G['setting']['seccodedata']['shadow'];
-	$code->animator = $_G['setting']['seccodedata']['animator'];
-	$code->fontpath = DISCUZ_ROOT.'./static/image/seccode/font/';
-	$code->datapath = DISCUZ_ROOT.'./static/image/seccode/';
-	$code->includepath = DISCUZ_ROOT.'./source/class/';
-
-	$code->display();
 
 }
 

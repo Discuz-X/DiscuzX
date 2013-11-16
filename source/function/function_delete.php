@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 33824 2013-08-19 08:26:11Z nemohou $
+ *      $Id: function_delete.php 34074 2013-10-08 01:30:38Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,7 +65,7 @@ function deletemember($uids, $delpost = true) {
 	C::t('common_moderate')->delete($arruids, 'uid_cid');
 	C::t('common_member_forum_buylog')->delete_by_uid($arruids);
 	C::t('forum_threadhidelog')->delete_by_uid($arruids);
-
+	C::t('common_member_crime')->delete_by_uid($arruids);
 
 	foreach(C::t('forum_collectionfollow')->fetch_all_by_uid($arruids) as $follow) {
 		C::t('forum_collection')->update_by_ctid($follow['ctid'], 0, -1);

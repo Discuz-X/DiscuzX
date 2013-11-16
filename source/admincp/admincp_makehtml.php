@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_makehtml.php 33048 2013-04-12 08:50:27Z zhangjie $
+ *      $Id: admincp_makehtml.php 34065 2013-09-27 07:17:10Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -437,15 +437,7 @@ EOT;
 		$settingnew = $_GET['settingnew'];
 		if(isset($settingnew['makehtml'])) {
 			$settingnew['makehtml']['flag'] = intval($settingnew['makehtml']['flag']);
-			if(!$settingnew['makehtml']['extendname']) {
-				$settingnew['makehtml']['extendname'] = 'html';
-			} else {
-				$re = NULL;
-				preg_match_all('/[^\w\d\_\.]/',$settingnew['makehtml']['extendname'],$re);
-				if(!empty($re[0]) || strpos('..', $settingnew['makehtml']['extendname']) !== false) {
-					cpmsg(cplang('setting_functions_makehtml_extendname_invalid').','.cplang('return'), NULL, 'error');
-				}
-			}
+			$settingnew['makehtml']['extendname'] = !$settingnew['makehtml']['extendname'] || !in_array($settingnew['makehtml']['extendname'], array('htm', 'html')) ? 'html' : $settingnew['makehtml']['extendname'];
 			if(!$settingnew['makehtml']['indexname']) {
 				$settingnew['makehtml']['indexname'] = 'index';
 			} else {

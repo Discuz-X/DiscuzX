@@ -79,14 +79,11 @@ function profile_node_upgradeprogress($post, $s, $e, $upgrademenu = 1) {
 
 function profile_node_upgrade_menu($post) {
 	global $_G;
-	static $run = 0;
-	if($run) return;
 -->
 <!--{/eval}-->
 <!--{block return}--><div id="g_up$post[pid]_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c">$post['authortitle'], {lang credits} $post['credits'], {lang thread_groupupgrade} $post['upgradecredit'] {lang credits}</div></div><!--{/block}-->
 <!--{eval}-->
 <!--
-	$run = 1;
 	return $return;
 }
 
