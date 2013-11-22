@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: mobile.php 33977 2013-09-11 02:34:45Z nemohou $
+ *	  $Id: mobile.php 34241 2013-11-21 08:34:48Z nemohou $
  */
 
 define('IN_MOBILE_API', 1);
@@ -21,8 +21,14 @@ if((empty($_G['uid']) || $_GET['formhash'] != FORMHASH)) {
 	exit(oemjson(array('status' => -2)));
 }
 
-if(in_array($_GET['module'], array('register', 'refreshpush', 'sendtopc', 'pushlist', 'pushtomobile', 'removepush'))) {
-	require_once 'source/plugin/mobileoem/api/'.$_GET['module'].'.php';
+if(empty($_GET['module']) || !preg_match('/^[\w\.]+$/', $_GET['module'])) {
+	exit(oemjson(array('status' => -3)));
+}
+
+$apifile = 'source/plugin/mobileoem/api/'.$_GET['module'].'.php';
+
+if(file_exists($apifile)) {
+	require_once $apifile;
 } else {
 	exit(oemjson(array('status' => -3)));
 }

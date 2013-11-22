@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_sort.php 30771 2012-06-19 03:25:36Z liulanbo $
+ *      $Id: extend_thread_sort.php 34202 2013-11-04 06:52:04Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -97,7 +97,7 @@ class extend_thread_sort extends extend_thread_base {
 			if($this->forum['threadsorts']['types'][$parameters['sortid']] && $_G['forum_optiondata'] && is_array($_G['forum_optiondata'])) {
 				$sql = $separator = $filedname = $valuelist = '';
 				foreach($_G['forum_optiondata'] as $optionid => $value) {
-					$value = censor($value);
+					$value = censor(daddslashes($value));
 					if($_G['forum_optionlist'][$optionid]['type'] == 'image') {
 						$identifier = $_G['forum_optionlist'][$optionid]['identifier'];
 						$newsortaid = intval($_GET['typeoption'][$identifier]['aid']);

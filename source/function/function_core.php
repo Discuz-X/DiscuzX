@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 34052 2013-09-25 06:18:43Z andyzheng $
+ *      $Id: function_core.php 34155 2013-10-25 00:54:00Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1493,7 +1493,7 @@ function dmkdir($dir, $mode = 0777, $makeindex = TRUE){
 function dreferer($default = '') {
 	global $_G;
 
-	$default = empty($default) ? $_ENV['curapp'].'.php' : '';
+	$default = empty($default) && $_ENV['curapp'] ? $_ENV['curapp'].'.php' : '';
 	$_G['referer'] = !empty($_GET['referer']) ? $_GET['referer'] : $_SERVER['HTTP_REFERER'];
 	$_G['referer'] = substr($_G['referer'], -1) == '?' ? substr($_G['referer'], 0, -1) : $_G['referer'];
 
