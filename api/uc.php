@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 30176 2012-05-15 08:25:28Z zhangguosheng $
+ *      $Id: uc.php 34214 2013-11-11 02:33:40Z hypowang $
  */
 
 error_reporting(0);
@@ -277,7 +277,7 @@ class uc_note {
 
 		$UC_API = '';
 		if($post['UC_API']) {
-			$UC_API = $post['UC_API'];
+			$UC_API = str_replace(array('\'', '"', '\\', "\0", "\n", "\r"), '', $post['UC_API']);
 			unset($post['UC_API']);
 		}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collectionthread.php 27785 2012-02-14 07:49:59Z chenmengshu $
+ *      $Id: table_forum_collectionthread.php 34219 2013-11-14 08:09:32Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,7 +62,7 @@ class table_forum_collectionthread extends discuz_table
 	}
 
 	public function delete_by_ctid_tid($ctid, $tid) {
-		if(!$ctid && !$uid) {
+		if(!$ctid && !$tid) {
 			return false;
 		}
 

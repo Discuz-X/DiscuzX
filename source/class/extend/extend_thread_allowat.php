@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_allowat.php 32746 2013-03-05 10:29:02Z liulanbo $
+ *      $Id: extend_thread_allowat.php 34144 2013-10-21 05:56:02Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -45,6 +45,7 @@ class extend_thread_allowat extends extend_thread_base {
 					$atreplace[] = "[url=home.php?mod=space&uid=$atuid]@{$atusername}[/url] ";
 				}
 				$this->param['message'] = preg_replace($atsearch, $atreplace, $parameters['message'].' ', 1);
+				$this->param['message'] = substr($this->param['message'], 0, strlen($this->param['message']) - 1);
 			}
 		}
 	}
@@ -105,6 +106,7 @@ class extend_thread_allowat extends extend_thread_base {
 					$atreplace[] = "[url=home.php?mod=space&uid=$atuid]@{$atusername}[/url] ";
 				}
 				$this->param['message'] = preg_replace($atsearch, $atreplace, $parameters['message'].' ', 1);
+				$this->param['message'] = substr($this->param['message'], 0, strlen($this->param['message']) - 1);
 			}
 		}
 	}
@@ -163,6 +165,7 @@ class extend_thread_allowat extends extend_thread_base {
 						$atreplace[] = "[url=home.php?mod=space&uid=$atuid]@{$atusername}[/url] ";
 					}
 					$parameters['message'] = preg_replace($atsearch, $atreplace, $parameters['message'].' ', 1);
+					$parameters['message'] = substr($parameters['message'], 0, strlen($parameters['message']) - 1);
 				}
 			}
 		}

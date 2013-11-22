@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ConnectOAuth.php 33542 2013-07-03 05:15:00Z nemohou $
+ *      $Id: ConnectOAuth.php 34191 2013-10-30 08:07:15Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -79,7 +79,7 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 			$apiIp = $_G['setting']['connect_api_ip'] ? $_G['setting']['connect_api_ip'] : '';
 		}
 
-		if($apiIp) {
+		if($apiIp && !$_G['setting']['connect']['oauth2']) {
 			$this->setApiIp($apiIp);
 		}
 	}

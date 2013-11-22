@@ -10,13 +10,14 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[mobileoem/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.0]]></item>
+			<item id="version"><![CDATA[1.1.2]]></item>
 			<item id="__modules">
 				<item id="0">
-					<item id="name"><![CDATA[mobileoem]]></item>
-					<item id="menu"><![CDATA[]]></item>
-					<item id="url"><![CDATA[]]></item>
-					<item id="type"><![CDATA[11]]></item>
+					<item id="name"><![CDATA[am]]></item>
+					<item id="param"><![CDATA[]]></item>
+					<item id="menu"><![CDATA[设置]]></item>
+					<item id="url"><![CDATA[http://am.discuz.qq.com]]></item>
+					<item id="type"><![CDATA[29]]></item>
 					<item id="adminid"><![CDATA[0]]></item>
 					<item id="displayorder"><![CDATA[0]]></item>
 					<item id="navtitle"><![CDATA[]]></item>
@@ -25,10 +26,37 @@
 					<item id="navsuburl"><![CDATA[]]></item>
 				</item>
 				<item id="1">
+					<item id="name"><![CDATA[setting]]></item>
+					<item id="param"><![CDATA[]]></item>
+					<item id="menu"><![CDATA[模板]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="2">
 					<item id="name"><![CDATA[mobileoem]]></item>
+					<item id="param"><![CDATA[]]></item>
 					<item id="menu"><![CDATA[]]></item>
 					<item id="url"><![CDATA[]]></item>
 					<item id="type"><![CDATA[28]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="3">
+					<item id="name"><![CDATA[mobileoem]]></item>
+					<item id="param"><![CDATA[]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
 					<item id="adminid"><![CDATA[0]]></item>
 					<item id="displayorder"><![CDATA[0]]></item>
 					<item id="navtitle"><![CDATA[]]></item>
@@ -45,6 +73,10 @@
 				<item id="sendtopcnotice"><![CDATA[您成功跨屏穿越了主题 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a>]]></item>
 				<item id="touch_tipsa"><![CDATA[安装手机客户端，有回复及时提醒]]></item>
 				<item id="touch_tipsb"><![CDATA[下载手机客户端，永久登录，回复提醒，更方便的阅读]]></item>
+				<item id="default_tpl"><![CDATA[掌上论坛默认模板]]></item>
+				<item id="default_tpl_comment"><![CDATA[设置掌上论坛独立版的默认模板，更多掌上论坛模板您可以在<a href="{ADMINSCRIPT}?action=cloudaddons">应用中心</a>下载]]></item>
+				<item id="tpl_nofound"><![CDATA[模板未找到]]></item>
+				<item id="tpl_updated"><![CDATA[掌上论坛默认模板已更新]]></item>
 			</item>
 			<item id="templatelang">
 				<item id="pushtitle"><![CDATA[穿越]]></item>
@@ -55,6 +87,17 @@
 				<item id="dg_android"><![CDATA[Android版]]></item>
 				<item id="dg_ios"><![CDATA[iOS版/其他版本<br />敬请期待！]]></item>
 				<item id="dg_firstlogin"><![CDATA[如果您已经安装手机客户端，请在<span class="txt-blue">手机客户端上登录</span>在进行穿越！]]></item>
+				<item id="more_page_loading"><![CDATA[页面加载中...]]></item>
+				<item id="post_hide_reply_hidden"><![CDATA[，如果您要查看本帖隐藏内容请回复]]></item>
+				<item id="special_message_1"><![CDATA[抱歉，手机版暂不支持投票帖展示，请到浏览器查看此帖]]></item>
+				<item id="special_message_2"><![CDATA[抱歉，手机版暂不支持商品帖展示，请到浏览器查看此帖]]></item>
+				<item id="special_message_3"><![CDATA[抱歉，手机版暂不支持悬赏帖展示，请到浏览器查看此帖]]></item>
+				<item id="special_message_4"><![CDATA[抱歉，手机版暂不支持活动帖展示，请到浏览器查看此帖]]></item>
+				<item id="special_message_5"><![CDATA[抱歉，手机版暂不支持辩论帖展示，请到浏览器查看此帖]]></item>
+				<item id="click_view"><![CDATA[点击查看]]></item>				
+				<item id="click_login"><![CDATA[点击登录]]></item>
+				<item id="attach_nopermission_login"><![CDATA[，您需要登录后才可以下载或查看。]]></item>
+				<item id="attach_nopermission"><![CDATA[，您所在的用户组无法下载或查看附件。]]></item>
 			</item>
 		</item>
 		<item id="installfile"><![CDATA[install.php]]></item>

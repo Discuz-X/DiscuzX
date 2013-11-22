@@ -4,12 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: my.php 29263 2012-03-31 05:45:08Z yexinhao $
+ *      $Id: my.php 34170 2013-10-28 02:58:29Z nemohou $
  */
 
 define('IN_API', true);
 define('CURSCRIPT', 'api');
 define('DISABLEDEFENSE', true);
+define('DISABLEXSSCHECK', true);
 require_once('../../source/class/class_core.php');
 require_once('../../source/function/function_home.php');
 

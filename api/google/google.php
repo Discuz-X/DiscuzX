@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: google.php 33593 2013-07-12 06:44:40Z andyzheng $
+ *      $Id: google.php 34247 2013-11-22 02:41:52Z nemohou $
  */
 
 @define('IN_API', true);
@@ -30,7 +30,7 @@ $google->run();
 class GoogleAPI
 {
 	var $core;
-	var $version = '1.0.0';
+	var $version = '2.0.0';
 	function GoogleAPI(&$core) {
 		$this->core = &$core;
 	}
@@ -50,7 +50,7 @@ class GoogleAPI
 	function authcheck() {
 		$siteuniqueid = C::t('common_setting')->fetch('siteuniqueid');
 		$auth = md5($siteuniqueid.'DISCUZ*COMSENZ*GOOGLE*API'.substr(time(), 0, 6));
-		if($auth != getgpc('s') && ip2long($_SERVER['REMOTE_ADDR']) != 2096036344 && ip2long($_SERVER['REMOTE_ADDR']) != 2096036256) {
+		if($auth != getgpc('s')) {
 			$this->error('Access error');
 		}
 	}
@@ -95,11 +95,19 @@ class GoogleAPI
 	}
 
 	function on_gtt() {
+		global $_G;
 		$tids = explode(',', getgpc('t'));
 		$msg = getgpc('msg') ? true : false;
+		$att = getgpc('att') ? true : false;
+		$posts = getgpc('post') ? explode(',', getgpc('post')) : array();
+		if($posts) {
+			$posts[0] = intval($posts[0]);
+			$posts[1] = intval($posts[1]);
+			$posts = implode(',', $posts);
+		}
 		$xmlcontent .= "<threadsdata>\n";
 		if(is_array($tids) && !empty($tids)) {
-			$ftid = array();
+			$ftid = $threadlist = $postlist = $attachlist = $pattachlist = array();
 			foreach ($tids as $tid) {
 				if(is_numeric($tid)) {
 					$ftid[] = $tid;
@@ -120,9 +128,51 @@ class GoogleAPI
 				}
 				if($msg) {
 					foreach($tablenamelist AS $tablename => $tids) {
-						$pquery = DB::query("SELECT tid, message FROM ".DB::table($tablename)." WHERE tid IN (".dimplode($tids).") AND first=1", 'SILENT');
+						$pquery = DB::query("SELECT tid, message, pid FROM ".DB::table($tablename)." WHERE tid IN (".dimplode($tids).") AND first=1", 'SILENT');
 						while($pquery && $post = DB::fetch($pquery)) {
 							$threadlist[$post['tid']]['message'] = dhtmlspecialchars($post['message']);
+							if($att) {
+								$_tid = (string)$post['tid'];
+								$attachtablename = 'forum_attachment_'.intval($_tid{strlen($_tid)-1});
+								$aquery = DB::query("SELECT dateline, filename, filesize, attachment, remote, description, readperm, price, isimage, width FROM ".DB::table($attachtablename)." WHERE pid='$post[pid]'");
+								$attachs = '';
+								while($aquery && $attach = DB::fetch($aquery)) {
+									$attach['url'] = (($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/').$attach['attachment'];
+									unset($attach['attachment'], $attach['remote']);
+									$attachs .= '<attach>';
+									foreach($attach as $_k => $_v) {
+										$attachs .= '<'.$_k.'>'.$_v.'</'.$_k.'>';
+									}
+									$attachs .= '</attach>';
+									$attachlist[$_tid] = $attachs;
+								}
+							}
+						}
+						if($posts) {
+							$pquery = DB::query("SELECT tid, pid, authorid, message FROM ".DB::table($tablename)." WHERE tid IN (".dimplode($tids).") AND first=0 LIMIT $posts", 'SILENT');
+							while($pquery && $post = DB::fetch($pquery)) {
+								if($att) {
+									$_tid = (string)$post['tid'];
+									$attachtablename = 'forum_attachment_'.intval($_tid{strlen($_tid)-1});
+									$aquery = DB::query("SELECT dateline, filename, filesize, attachment, remote, description, readperm, price, isimage, width FROM ".DB::table($attachtablename)." WHERE pid='$post[pid]'", 'SILENT');
+									$attachs = '';
+									while($aquery && $attach = DB::fetch($aquery)) {
+										$attach['url'] = (($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/').$attach['attachment'];
+										unset($attach['attachment'], $attach['remote']);
+										$attachs .= '<attach>';
+										foreach($attach as $_k => $_v) {
+											$attachs .= '<'.$_k.'>'.$_v.'</'.$_k.'>';
+										}
+										$attachs .= '</attach>';
+									}
+								}
+								$postlist[$post['tid']] .= "<post>\n".
+									"	<pid>".$post['pid']."</pid>\n".
+									"	<authorid>".$post['authorid']."</authorid>\n".
+									"	<message>".dhtmlspecialchars($post['message'])."</message>\n".
+									($attachs ? "		<attachments>$attachs</attachments>\n" : '').
+									"</post>\n";
+							}
 						}
 					}
 					unset($tablenamelist);
@@ -142,7 +192,9 @@ class GoogleAPI
 					"		<dateline>$thread[dateline]</dateline>\n".
 					"		<lastpost>$thread[lastpost]</lastpost>\n".
 					($msg ? "		<message>$thread[message]</message>\n" : '').
-					"	</thread>\n";
+					($attachlist[$tid] ? "		<attachments>$attachlist[$tid]</attachments>\n" : '').
+					"	</thread>\n".
+					($postlist[$tid] ? "		<posts>$postlist[$tid]</posts>\n" : '');
 				}
 			}
 

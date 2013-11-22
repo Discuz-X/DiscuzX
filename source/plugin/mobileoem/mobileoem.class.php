@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobileoem.class.php 34006 2013-09-18 05:38:59Z nemohou $
+ *      $Id: mobileoem.class.php 34241 2013-11-21 08:34:48Z nemohou $
  */
 
 class plugin_mobileoem{
@@ -58,7 +58,7 @@ class plugin_mobileoem_forum extends plugin_mobileoem {
 	function viewthread_useraction() {
 		global $_G;
 		$this->checkCloud();
-		if(!$_G['cache']['mobileoem_data']['iframeUrl']) {
+		if(!$_G['uid'] || !$_G['cache']['mobileoem_data']['iframeUrl']) {
 			return '';
 		}
 		include_once template('mobileoem:module');

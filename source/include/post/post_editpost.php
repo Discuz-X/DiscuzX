@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 33417 2013-06-08 08:25:16Z andyzheng $
+ *      $Id: post_editpost.php 34144 2013-10-21 05:56:02Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -353,7 +353,7 @@ if(!submitcheck('editsubmit')) {
 
 
 		$feed = array();
-		if($special == 127) {
+		if($isfirstpost && $special == 127) {
 			$message .= chr(0).chr(0).chr(0).$specialextra;
 		}
 
