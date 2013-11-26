@@ -1,0 +1,3 @@
+[submodule "template/vizto_yeeidream"]
+	path = template/vizto_yeeidream
+	url = git@git.oschina.net:fantasyoui/vizto_yeeidream.git
