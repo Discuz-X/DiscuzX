@@ -436,7 +436,8 @@ INSERT INTO pre_common_setting VALUES ('report_reward','a:2:{s:3:\"min\";i:-3;s:
 INSERT INTO pre_common_setting VALUES ('rewardforumid','0');
 INSERT INTO pre_common_setting VALUES ('rewritecompatible','');
 INSERT INTO pre_common_setting VALUES ('rewritestatus','0');
-INSERT INTO pre_common_setting VALUES ('rssstatus','0');--默认关闭RSS
+--默认关闭RSS
+INSERT INTO pre_common_setting VALUES ('rssstatus','0');
 INSERT INTO pre_common_setting VALUES ('rssttl','60');
 INSERT INTO pre_common_setting VALUES ('runwizard','1');
 INSERT INTO pre_common_setting VALUES ('search', 'a:6:{s:6:\"portal\";a:4:{s:6:\"status\";i:1;s:10:\"searchctrl\";i:10;s:6:\"maxspm\";i:10;s:16:\"maxsearchresults\";i:500;}s:5:\"forum\";a:4:{s:6:\"status\";i:1;s:10:\"searchctrl\";i:10;s:6:\"maxspm\";i:10;s:16:\"maxsearchresults\";i:500;}s:4:\"blog\";a:4:{s:6:\"status\";i:1;s:10:\"searchctrl\";i:10;s:6:\"maxspm\";i:10;s:16:\"maxsearchresults\";i:500;}s:5:\"album\";a:4:{s:6:\"status\";i:1;s:10:\"searchctrl\";i:10;s:6:\"maxspm\";i:10;s:16:\"maxsearchresults\";i:500;}s:5:\"group\";a:4:{s:6:\"status\";i:1;s:10:\"searchctrl\";i:10;s:6:\"maxspm\";i:10;s:16:\"maxsearchresults\";i:500;}s:10:\"collection\";a:4:{s:6:\"status\";i:1;s:10:\"searchctrl\";i:10;s:6:\"maxspm\";i:10;s:16:\"maxsearchresults\";i:500;}}');
