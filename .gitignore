@@ -127,6 +127,15 @@ Thumbs.db
 Desktop.ini
 
 
+############
+## Intellij
+############
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
 
 ############
 ## Discuz!X
