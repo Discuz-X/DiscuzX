@@ -155,7 +155,7 @@ if($isfounder) {
 }
 
 if($securityadvise) {
-	showtableheader('home_security_tips', '', '', 0);
+	showtableheader('home_security_tips', 'hide', '', 0);// WebPower 版 隐藏 安全提示
 	showtablerow('', 'class="tipsblock"', '<ul>'.$securityadvise.'</ul>');
 	showtablefooter();
 }
@@ -171,7 +171,8 @@ foreach($admincp_session as $uid => $online) {
 echo '<div id="boardnews"></div>';
 
 echo '<style>.rssbook{margin:8px 0 0 25px;}</style>';
-echo '<script >var nId = "4d1e7b6dd9c5070d1a82aeb8be5e72fc64db42701a1bc4d4",nWidth="400px",sColor="light",sText="'.cplang('subscribe_comsenz_email').'" ;</script><script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>';
+/* WebPower 版 隐藏 discuz 安全订阅 */
+//echo '<script >var nId = "4d1e7b6dd9c5070d1a82aeb8be5e72fc64db42701a1bc4d4",nWidth="400px",sColor="light",sText="'.cplang('subscribe_comsenz_email').'" ;</script><script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>';
 showtableheader('', 'nobottom fixpadding');
 if($membersmod || $threadsmod || $postsmod || $medalsmod || $blogsmod || $picturesmod || $doingsmod || $sharesmod || $commentsmod || $articlesmod || $articlecommentsmod || $topiccommentsmod || $threadsdel || !empty($verify)) {
 	showtablerow('', '', '<h3 class="left margintop">'.cplang('home_mods').': </h3><p class="left difflink">'.
@@ -260,7 +261,7 @@ showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallf
 ));
 showtablefooter();
 
-showtableheader('home_dev', 'fixpadding');
+showtableheader('home_dev', 'fixpadding hide'); /* WebPower 版 隐藏 Discuz 开发团队信息 */
 showtablerow('', array('class="vtop td24 lineheight"'), array(
 	cplang('home_dev_copyright'),
 	'<span class="bold"><a href="http://www.comsenz.com" class="lightlink2" target="_blank">&#x5317;&#x4EAC;&#x5EB7;&#x76DB;&#x65B0;&#x521B;&#x79D1;&#x6280;&#x6709;&#x9650;&#x8D23;&#x4EFB;&#x516C;&#x53F8;</a></span>'

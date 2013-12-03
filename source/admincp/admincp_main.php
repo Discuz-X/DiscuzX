@@ -39,7 +39,8 @@ if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && ($_G['setting']['showpatc
 	if($_G['setting']['showpatchnotice'] == 1) {
 		$notice = $discuz_patch->fetch_patch_notice();
 		if($notice['data']) {
-			$shownotice = '<div class="notice"><a href="'.$basescript.'?action=patch" id="notice">'.($notice['fixed'] ? $lang['patch_fix_complete'] : $lang['patch_fix_rigth_now']).'</a></div>';
+			//WebPower 版 隐藏升级提示
+			$shownotice = '<div class="notice hide"><a href="'.$basescript.'?action=patch" id="notice">'.($notice['fixed'] ? $lang['patch_fix_complete'] : $lang['patch_fix_rigth_now']).'</a></div>';
 		}
 	}
 	if(!isset($_G['cookie']['checkpatch'])) {
@@ -47,13 +48,15 @@ if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && ($_G['setting']['showpatc
 	}
 }
 if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && !$shownotice && $_G['setting']['upgrade']) {
-	$shownotice = '<div class="notice"><a href="'.$basescript.'?action=upgrade" id="notice">'.$lang['upgrade_right_now'].'</a></div>';
+	//WebPower 版 隐藏升级提示
+	$shownotice = '<div class="notice hide"><a href="'.$basescript.'?action=upgrade" id="notice">'.$lang['upgrade_right_now'].'</a></div>';
 }
 if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && !isset($_G['cookie']['checkupgrade'])) {
 	$discuz_upgrade = new discuz_upgrade();
 	if($discuz_upgrade->check_upgrade()) {
 		if(empty($shownotice)) {
-			$shownotice = '<div class="notice"><a href="'.$basescript.'?action=upgrade" id="notice">'.$lang['upgrade_right_now'].'</a></div>';
+			//WebPower 版 隐藏升级提示
+			$shownotice = '<div class="notice hide"><a href="'.$basescript.'?action=upgrade" id="notice">'.$lang['upgrade_right_now'].'</a></div>';
 		}
 	}
 	dsetcookie('checkupgrade', 1, 7200);
@@ -75,7 +78,7 @@ $shownotice
 <tr>
 <td colspan="2" height="90">
 <div class="mainhd">
-<a href="$basescript?frames=yes&action=index" class="logo">Discuz! Administrator's Control Panel</a>
+<a href="$basescript?frames=yes&action=index" class="logo">WebPower! Administrator's Control Panel</a><!-- WebPower 版 标识 -->
 <div class="uinfo" id="frameuinfo">
 <p>$header_welcome, $cpadmingroup <em>{$_G['member']['username']}</em> [<a href="$basescript?action=logout" target="_top">$header_logout</a>]</p>
 <p class="btnlink"><a href="index.php" target="_blank">$header_bbs</a></p>
@@ -149,8 +152,8 @@ echo <<<EOT
 	<span onclick="menuScroll(1)"><img src="static/image/admincp/scrollu.gif" /></span><span onclick="menuScroll(2)"><img src="static/image/admincp/scrolld.gif" /></span>
 </div>
 <div class="copyright">
-	<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz!</a> {$_G['setting']['version']}</p>
-	<p>&copy; 2001-2013, <a href="http://www.comsenz.com/" target="_blank">Comsenz Inc.</a></p>
+	<p>Powered by <a >WebPower!</a> {$_G['setting']['version']}</p><!--WebPower 版 标识-->
+	<p>&copy; 2001-2013, <a >WebPower Inc.</a></p><!--WebPower 版 标识-->
 </div>
 
 <div id="cpmap_menu" class="custom" style="display: none">

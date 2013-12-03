@@ -67,8 +67,8 @@ EOT;
 <table class="logintb">
 <tr>
 	<td class="login">
-		<h1>Discuz! Administrator's Control Panel</h1>
-		<p>$tips</p>
+		<h1>WebPower! Administrator's Control Panel</h1>
+		<p style="visibility:hidden;">$tips</p><!-- WebPower 版 隐藏 -->
 	</td>
 
 	<td>
@@ -87,8 +87,8 @@ function html_login_footer($halt = true) {
 <tr>
 	<td colspan="2" class="footer">
 		<div class="copyright">
-			<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz!</a> $version </p>
-			<p>&copy; 2001-2013, <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</p>
+			<p>Powered by <a >WebPower!</a> $version </p><!-- WebPower 版 标注 -->
+			<p>&copy; 2001-2013, <a >WebPower</a> Inc.</p><!-- WebPower 版 标注 -->
 		</div>
 	</td>
 </tr>

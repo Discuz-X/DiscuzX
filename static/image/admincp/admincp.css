@@ -51,8 +51,8 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 
 /* mainbox */
 .mainhd{ position:relative; overflow:hidden; text-align:left; height:90px; line-height:88px; background:url(bg_repx.gif) repeat-x; }
-	.logo{ display: block; text-indent:-9999px; width:135px; height:80px; background:url(logo.gif) no-repeat 15px 13px; margin-left: 25px; }
-		.logo:hover{ background-image:url(logo_hover.gif); }
+	.logo{ display: block; text-indent:-9999px; width:215px; height:80px; background:url(logo.jpg) no-repeat 0px 0px; /*margin-left: 25px;*/ } /* WebPower 版 标识 */
+		/*.logo:hover{ background-image:url(logo_hover.gif); }*/ /* WebPower 版 标识 */
 	.uinfo{ position:absolute; z-index:4; line-height:32px; top:10px; right:15px; }
 		.uinfo a{ color:#666; }
 		.uinfo em{ margin-right:5px; font-weight:700; }
@@ -145,7 +145,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .copyright{ position:absolute; z-index:10; left:5px; bottom:3px; padding-top:3px; border-top:1px dashed #DDD; text-align:center; line-height:150%; font-family:Tahoma; font-size:11px; -webkit-text-size-adjust: none; width:213px; }
 .logintb{ text-align:left; margin:120px auto 0; width:600px; }
 .login{ padding-right:30px; width:310px; height:150px; background:url(bg_login.gif) right 50% no-repeat; }
-	.login h1{ text-indent:-9999px; margin-bottom:10px; width:262px; height:26px; background:url(login_title.gif) no-repeat; }
+	.login h1{ text-indent:-9999px; margin-bottom:10px; width:262px; height:26px; background:url(login_title.jpg) /* WebPower版 登陆LOGO */ no-repeat; }
 	.login p{ line-height:150%; }
 .logintitle, .loginform { margin:2px 0; height:22px; line-height:22px; font-size:14px; }
 .logintitle{ float:left; clear:left; width:60px; font-weight:700; color:#666; }
@@ -561,3 +561,6 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 /* 模板预览图 */
 .stylepreview { width: 110px; height: 120px; }
 	.tb.tb2 input[type="radio"] { margin: 0 2px 2px 5px }
+
+/* 隐藏区域 */
+.hide { display: none; }
