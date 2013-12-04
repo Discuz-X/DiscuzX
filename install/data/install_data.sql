@@ -1644,6 +1644,8 @@ INSERT INTO `pre_common_admincp_group` (`cpgroupid`, `cpgroupname`) VALUES (2, '
 INSERT INTO `pre_common_admincp_group` (`cpgroupid`, `cpgroupname`) VALUES (3, '群组管理员');
 INSERT INTO `pre_common_admincp_group` (`cpgroupid`, `cpgroupname`) VALUES (4, '空间管理员');
 INSERT INTO `pre_common_admincp_group` (`cpgroupid`, `cpgroupname`) VALUES (5, '用户管理员');
+//WebPower 版 添加客户管理账户权限
+INSERT INTO `pre_common_admincp_group` (`cpgroupid`, `cpgroupname`) VALUES (6, '企业管理员');
 
 INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (1, 'albumcategory');
 INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (1, 'article');
@@ -1712,5 +1714,16 @@ INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (5, 'specialu
 INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (5, 'usergroups');
 INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (5, '_allowpost');
 INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (5, 'verify_verify');
+//WebPower 版 添加客户管理账户权限
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'article');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'block');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'company');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'diytemplate');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'portalcategory');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'setting_basic');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, 'topic');
+INSERT INTO `pre_common_admincp_perm` (`cpgroupid`, `perm`) VALUES (6, '_allowpost');
+//WebPower 版 添加用户
+INSERT INTO `pre_common_member` (`uid`, `email`, `username`, `password`, `status`, `emailstatus`, `avatarstatus`, `videophotostatus`, `adminid`, `groupid`, `groupexpiry`, `extgroupids`, `regdate`, `credits`, `notifysound`, `timeoffset`, `newpm`, `newprompt`, `accessmasks`, `allowadmincp`, `onlyacceptfriendpm`, `conisbind`, `freeze`) VALUES (2, 'ceo@webpower.cc', 'CEO', 'b289249e12534aa301097c21fa0f8e92', 0, 0, 0, 0, 1, 1, 0, '', 1386122891, 2, 0, '9999', 0, 0, 0, 1, 0, 0, 0);
 
 INSERT INTO `pre_forum_threadprofile` (`id`, `name`, `template`, `global`) VALUES (1, '默认方案', 'a:2:{s:4:\"left\";s:399:\"{numbercard}\r\n{groupicon}<p>{*}</p>{/groupicon}\r\n{authortitle}<p><em>{*}</em></p>{/authortitle}\r\n{customstatus}<p class=\"xg1\">{*}</p>{/customstatus}\r\n{star}<p>{*}</p>{/star}\r\n{upgradeprogress}<p>{*}</p>{/upgradeprogress}\r\n<dl class=\"pil cl\">\r\n\t<dt>{baseinfo=credits,1}</dt><dd>{baseinfo=credits,0}</dd>\r\n</dl>\r\n{medal}<p class=\"md_ctrl\">{*}</p>{/medal}\r\n<dl class=\"pil cl\">{baseinfo=field_qq,0}</dl>\";s:3:\"top\";s:82:\"<dl class=\"cl\">\r\n<dt>{baseinfo=credits,1}</dt><dd>{baseinfo=credits,0}</dd>\r\n</dl>\";}', 1);
