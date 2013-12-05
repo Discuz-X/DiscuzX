@@ -7,25 +7,25 @@ global $_G;
 if(!submitcheck('companysubmit')) {
 	$_CA = C::t('common_setting')->fetch_all(null);
 	$company = (array)dunserialize($_CA['company']);
-//var_export($_CA['company']);
+
 	if(!$operation || $operation == 'mytest') {
 		shownav('global', 'message_company');
+		showsubmenu('message_company', array());
 
 		showformheader('company');
 		showhiddenfields(array('operation' => $operation));
 
-		showsubmenu('message_company', array());
-
 		showtableheader('');
 		showsetting('message_company_phone', 'companynew[phone]', $company['phone'], 'text');
 		showsetting('message_company_fax', 'companynew[fax]', $company['fax'], 'text');
+		showsetting('message_company_master', 'companynew[master]', $company['master'], 'text');
+		showsetting('message_company_handphone', 'companynew[handphone]', $company['handphone'], 'text');
 		showsetting('message_company_address', 'companynew[address]', $company['address'], 'text');
 		//showsetting('message_company_adminemail', 'companynew[adminemail]', $company['adminemail'], 'text');
 		//showsetting('message_company_site_qq', 'companynew[site_qq]', $company['site_qq'], 'text', $disabled = '', $hidden = 0, $comment = '', $extra = 'id="settingnew[site_qq]"');
 		//showsetting('message_company_icp', 'companynew[icp]', $company['icp'], 'text');
 		//showsetting('message_company_boardlicensed', 'companynew[boardlicensed]', $company['boardlicensed'], 'radio');
 		//showsetting('message_company_stat', 'companynew[statcode]', $company['statcode'], 'textarea');
-
 		showsubmit('companysubmit', 'submit');
 		showtablefooter();
 		showformfooter();
@@ -39,14 +39,9 @@ if(!submitcheck('companysubmit')) {
 	}
 
 } else {
-
-
 	$settingnew = $_GET['settingnew'];
-
 	$companynew = $_GET['companynew'];
-
 	//$settingnew['company']['address'] = $companynew['address'];
-
 //	if (is_array($_GET['hooker'])) {
 //		foreach ($_GET['hooker'] as $templatehookerid => $val) {
 //			//$templatehookerid = intval($templatehookerid);
@@ -96,5 +91,4 @@ if(!submitcheck('companysubmit')) {
 	C::t('common_setting')->update_batch($settingnew);
 	updatecache('setting');
 	cpmsg('setting_update_succeed', 'action=company', 'succeed');
-
 }
