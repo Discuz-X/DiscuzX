@@ -275,9 +275,9 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.multicol { float:left; width: 270px !important; }
 	.staton{ text-indent:-9999px; width:20px; height:17px; background:url(bg_repno.gif) no-repeat -280px -250px; }
 	.statoff{ text-indent:-9999px; background:url(bg_repno.gif) no-repeat -250px -347px; }
-	.rowform{ width:306px; overflow:auto; }
+	.rowform{ width:346px; overflow:auto; }/* 加宽后台文本输入框表格宽度 */
 		.tb2 .rowform{ padding-left:5px; }
-		.rowform .txt, .rowform textarea{ margin-right:10px; width:250px; }
+		.rowform .txt, .rowform textarea{ margin-right:10px; width:290px; }/* 加宽后台文本输入框宽度 */
 		.rowform select{ margin-right:10px; width:256px; }
 		.rowform .radio{ margin-top:-2px !important; *margin-top:0 !important; *margin-top:-2px; }
 		.rowform li{ overflow:hidden; float:left; margin-right:10px; white-space:nowrap; cursor:pointer; }
