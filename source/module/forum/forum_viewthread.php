@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 33695 2013-08-03 04:39:22Z nemohou $
+ *      $Id: forum_viewthread.php 34125 2013-10-15 09:24:41Z jeffjzhang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,7 +69,7 @@ if($_GET['from'] == 'portal' && !$_G['setting']['portalstatus']) {
 	$_GET['from'] = '';
 } elseif($_GET['from'] == 'preview' && !$_G['inajax']) {
 	$_GET['from'] = '';
-} elseif($_GET['from'] == 'album' && ($_G['setting']['guestviewthumb']['flag'] && !$_G['uid'] || !$_G['group']['allowgetimage'])) {
+} elseif($_GET['from'] == 'album' && ($_G['setting']['guestviewthumb']['flag'] && !$_G['uid'] && IN_MOBILE != 2 || !$_G['group']['allowgetimage'])) {
 	$_GET['from'] = '';
 }
 

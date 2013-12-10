@@ -107,7 +107,7 @@ Created & Modified by Alice, Monkey, Lushnis, Pony, Dfox & DragonLee.
 			#category_grid .newimgbox:hover h4 span, #category_grid .subjectbox:hover h4 span, #category_grid .replaybox:hover h4 span, #category_grid .hottiebox:hover h4 span, #category_grid .goodtiebox:hover h4 span { width:6px; background:url({IMGDIR}/grid.png) no-repeat 0 0;transition:width 0.2s ease 0s; overflow:hidden; }
 			#category_grid .newimgbox:hover h4 span.tit_newimg { background-position:0 -30px; } 
 			#category_grid .subjectbox:hover h4 span.tit_subject { background-position:0 0; }
-			#category_grid .repalybox:hover h4 span.tit_replay { background-position:0 -30px; }
+			#category_grid .replaybox:hover h4 span.tit_replay { background-position:0 -30px; }
 			#category_grid .hottiebox:hover h4 span.tit_hottie { background-position:0 -60px; }
 			#category_grid .goodtiebox:hover h4 span.tit_goodtie { background-position:0 -90px; }
 /** end **/

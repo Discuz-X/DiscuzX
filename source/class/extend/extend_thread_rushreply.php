@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: extend_thread_rushreply.php 33048 2013-04-12 08:50:27Z zhangjie $
+ *      $Id: extend_thread_rushreply.php 34216 2013-11-14 02:32:06Z hypowang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,7 +18,7 @@ class extend_thread_rushreply extends extend_thread_base {
 		if($this->group['allowpostrushreply']) {
 			$_GET['rushreplyfrom'] = strtotime($_GET['rushreplyfrom']);
 			$_GET['rushreplyto'] = strtotime($_GET['rushreplyto']);
-			$_GET['rewardfloor'] = trim($_GET['rewardfloor']);
+			$_GET['rewardfloor'] = preg_replace('#[^0-9|*|,]#', '', $_GET['rewardfloor']);
 			$_GET['stopfloor'] = intval($_GET['stopfloor']);
 			$_GET['replylimit'] = intval($_GET['replylimit']);
 			$_GET['creditlimit'] = $_GET['creditlimit'] == '' ? '-996' : intval($_GET['creditlimit']);
@@ -83,7 +83,7 @@ class extend_thread_rushreply extends extend_thread_base {
 			if($rushreply) {
 				$_GET['rushreplyfrom'] = strtotime($_GET['rushreplyfrom']);
 				$_GET['rushreplyto'] = strtotime($_GET['rushreplyto']);
-				$_GET['rewardfloor'] = trim($_GET['rewardfloor']);
+				$_GET['rewardfloor'] = preg_replace('#[^0-9|*|,]#', '', $_GET['rewardfloor']);
 				$_GET['stopfloor'] = intval($_GET['stopfloor']);
 				$_GET['replylimit'] = intval($_GET['replylimit']);
 				$_GET['creditlimit'] = $_GET['creditlimit'] == '' ? '-996' : intval($_GET['creditlimit']);

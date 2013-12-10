@@ -11,7 +11,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[mobile/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.2.1]]></item>
+			<item id="version"><![CDATA[1.3.1]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[mobile]]></item>
@@ -82,7 +82,7 @@
 				<item id="wapmode"><![CDATA[或者通过以下地址访问:]]></item>
 				<item id="qqregmode1"><![CDATA[完善帐号信息]]></item>
 				<item id="qqregmode2"><![CDATA[绑定已有帐号]]></item>
-				<item id="register_validate_email_tips"><![CDATA[注册需要验证邮箱，请务必填写正确的邮箱，提交后请及时查收邮件。]]></item>
+				<item id="register_validate_email_tips"><![CDATA[注册需要验证邮箱，请务必填写正确的邮箱，提交后请及时查收邮件。]]></item>				
 			</item>
 		</item>
 		<item id="installfile"><![CDATA[install.php]]></item>

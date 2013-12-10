@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 34025 2013-09-23 02:33:55Z nemohou $
+ *      $Id: discuz_application.php 34170 2013-10-28 02:58:29Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -317,9 +317,6 @@ class discuz_application extends discuz_base{
 
 	private function _init_output() {
 
-		if($this->config['security']['urlxssdefend'] && $_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_SERVER['REQUEST_URI'])) {
-			$this->_xss_check();
-		}
 
 		if($this->config['security']['attackevasive'] && (!defined('CURSCRIPT') || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')) && !defined('DISABLEDEFENSE'))) {
 			require_once libfile('misc/security', 'include');
@@ -351,10 +348,30 @@ class discuz_application extends discuz_base{
 	}
 
 	private function _xss_check() {
-		$temp = strtoupper(urldecode(urldecode($_SERVER['REQUEST_URI'])));
-		if(strpos($temp, '<') !== false || strpos($temp, '"') !== false || strpos($temp, 'CONTENT-TRANSFER-ENCODING') !== false) {
+
+		static $check = array('"', '>', '<', '\'', '(', ')', 'CONTENT-TRANSFER-ENCODING');
+
+		if(isset($_GET['formhash']) && $_GET['formhash'] !== formhash()) {
 			system_error('request_tainting');
 		}
+
+		if($_SERVER['REQUEST_METHOD'] == 'GET' ) {
+			$temp = $_SERVER['REQUEST_URI'];
+		} elseif(empty ($_GET['formhash'])) {
+			$temp = $_SERVER['REQUEST_URI'].file_get_contents('php://input');
+		} else {
+			$temp = '';
+		}
+
+		if(!empty($temp)) {
+			$temp = strtoupper(urldecode(urldecode($temp)));
+			foreach ($check as $str) {
+				if(strpos($temp, $str) !== false) {
+					system_error('request_tainting');
+				}
+			}
+		}
+
 		return true;
 	}
 
@@ -530,6 +547,11 @@ class discuz_application extends discuz_base{
 	}
 
 	private function _init_misc() {
+
+		if($this->config['security']['urlxssdefend'] && !defined('DISABLEXSSCHECK')) {
+			$this->_xss_check();
+		}
+
 		if(!$this->init_misc) {
 			return false;
 		}

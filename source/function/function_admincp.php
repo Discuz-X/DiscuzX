@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 33756 2013-08-10 06:32:48Z nemohou $
+ *      $Id: function_admincp.php 34217 2013-11-14 04:00:21Z hypowang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -956,7 +956,7 @@ function cpfooter() {
 		echo '<script type="text/JavaScript">';
 		foreach($kws as $kw) {
 			$kw = addslashes($kw);
-			echo 'parsetag(\''.dhtmlspecialchars($kw).'\');';
+			echo 'parsetag(\''.dhtmlspecialchars($kw, ENT_QUOTES).'\');';
 		}
 		echo '</script>';
 	}

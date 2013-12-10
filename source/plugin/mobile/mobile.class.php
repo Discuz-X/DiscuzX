@@ -4,10 +4,10 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 33995 2013-09-17 02:57:59Z nemohou $
+ *      $Id: mobile.class.php 34241 2013-11-21 08:34:48Z nemohou $
  */
 
-define("MOBILE_PLUGIN_VERSION", "2");
+define("MOBILE_PLUGIN_VERSION", "3");
 
 class mobile_core {
 
@@ -16,8 +16,8 @@ class mobile_core {
 		ob_end_clean();
 		function_exists('ob_gzhandler') ? ob_start('ob_gzhandler') : ob_start();
 		header("Content-type: application/json");
-		$result = mobile_core::format($result);
-		echo mobile_core::json($result);
+		$result = mobile_core::json(mobile_core::format($result));
+		echo empty($_GET['jsoncallback_'.FORMHASH]) ? $result : $_GET['jsoncallback_'.FORMHASH].'('.$result.')';
 		exit;
 	}
 
@@ -118,6 +118,19 @@ class mobile_core {
 			}
 			$message_result = strip_tags($message_result);
 
+			if(defined('IS_WEBVIEW') && IS_WEBVIEW && in_array('mobileoem', $_G['setting']['plugins']['available'])) {
+				include_once DISCUZ_ROOT.'./source/plugin/mobileoem/discuzcode.func.php';
+				include mobileoem_template('common/showmessage');
+				if(!empty($_GET['debug'])) {
+					exit;
+				}
+				$content = ob_get_contents();
+				ob_end_clean();
+				$xml['Variables']['datatype'] = -1;
+				$xml['Variables']['webview_page'] = $content;
+				return $xml;
+			}
+
 			if($_G['messageparam'][4]) {
 				$_G['messageparam'][0] = "custom";
 			}
@@ -133,6 +146,17 @@ class mobile_core {
 			}
 		}
 		return $xml;
+	}
+
+	function diconv_array($variables, $in_charset, $out_charset) {
+		foreach($variables as $_k => $_v) {
+			if(is_array($_v)) {
+				$variables[$_k] = mobile_core::diconv_array($_v, $in_charset, $out_charset);
+			} elseif(is_string($_v)) {
+				$variables[$_k] = diconv($_v, $in_charset, $out_charset);
+			}
+		}
+		return $variables;
 	}
 
 }
@@ -157,21 +181,38 @@ class base_plugin_mobile {
 		$_G['siteurl'] = preg_replace('/api\/mobile\/$/', '', $_G['siteurl']);
 		$_G['setting']['msgforward'] = '';
 		$_G['setting']['cacheindexlife'] = $_G['setting']['cachethreadlife'] = false;
+		if(function_exists('diconv') && !empty($_GET['charset'])) {
+			$_GET = mobile_core::diconv_array($_GET, $_GET['charset'], $_G['charset']);
+		}
 		if(class_exists('mobile_api', 'common')) {
 			mobile_api::common();
 		}
 	}
 
-	function discuzcode() {
-		if(!defined('IN_MOBILE_API')) {
+	function discuzcode($param) {
+		if(!defined('IN_MOBILE_API') || $param['caller'] != 'discuzcode') {
 			return;
 		}
 		global $_G;
-		$_G['discuzcodemessage'] = preg_replace(array(
-			"/\[size=(\d{1,2}?)\]/i",
-			"/\[size=(\d{1,2}(\.\d{1,2}+)?(px|pt)+?)\]/i",
-			"/\[\/size]/i",
-		), '', $_G['discuzcodemessage']);
+		if(defined('IS_WEBVIEW') && IS_WEBVIEW && in_array('mobileoem', $_G['setting']['plugins']['available'])) {
+			include_once DISCUZ_ROOT.'./source/plugin/mobileoem/discuzcode.func.php';
+			include_once mobileoem_template('forum/discuzcode');
+			$_G['discuzcodemessage'] = mobileoem_discuzcode($param['param']);
+			if(in_array('soso_smilies', $_G['setting']['plugins']['available'])) {
+				$sosoclass = DISCUZ_ROOT.'./source/plugin/soso_smilies/soso.class.php';
+				if(file_exists($sosoclass)) {
+					include_once $sosoclass;
+					$soso_class = new plugin_soso_smilies;
+					$soso_class->discuzcode($param);
+				}
+			}
+		} else {
+			$_G['discuzcodemessage'] = preg_replace(array(
+				"/\[size=(\d{1,2}?)\]/i",
+				"/\[size=(\d{1,2}(\.\d{1,2}+)?(px|pt)+?)\]/i",
+				"/\[\/size]/i",
+			), '', $_G['discuzcodemessage']);
+		}
 	}
 
 	function global_mobile() {
