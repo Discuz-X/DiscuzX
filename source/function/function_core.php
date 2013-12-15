@@ -967,6 +967,12 @@ function rewriteoutput($type, $returntype, $host) {
 		$r = array(
 			'{name}' => $name,
 		);
+	} elseif($type == 'portal_list') {//添加门户文章列表页伪静态
+		list(,,, $catid, $page, $extra) = func_get_args();
+		$r = array(
+			'{catid}' => $catid,
+			'{page}' => $page ? $page : 1,
+		);
 	} elseif($type == 'portal_article') {
 		list(,,, $id, $page, $extra) = func_get_args();
 		$r = array(
