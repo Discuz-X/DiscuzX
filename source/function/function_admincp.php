@@ -1332,6 +1332,11 @@ function rewritedata($alldata = 1) {
 			$data['search']['portal_topic'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=topic&(amp;)?topic\=([^#]+?)?\"([^\>]*)\>/e";
 			$data['replace']['portal_topic'] = "rewriteoutput('portal_topic', 0, '\\1', '\\3', '\\4')";
 		}
+		//添加门户文章列表页伪静态
+		if(in_array('portal_list', $_G['setting']['rewritestatus'])) {
+			$data['search']['portal_list'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=list&(amp;)?catid\=(\d+)(&(?:amp;)?page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['portal_list'] = "rewriteoutput('portal_list', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
 
 		if(in_array('portal_article', $_G['setting']['rewritestatus'])) {
 			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
@@ -1376,6 +1381,11 @@ function rewritedata($alldata = 1) {
 		$data['rulesearch']['portal_topic'] = 'topic-{name}.html';
 		$data['rulereplace']['portal_topic'] = 'portal.php?mod=topic&topic={name}';
 		$data['rulevars']['portal_topic']['{name}'] = '(.+)';
+		//添加门户文章列表页伪静态
+		$data['rulesearch']['portal_list'] = 'list-{catid}-{page}.html';
+		$data['rulereplace']['portal_list'] = 'portal.php?mod=list&catid={catid}&page={page}';
+		$data['rulevars']['portal_list']['{catid}'] = '([0-9]+)';
+		$data['rulevars']['portal_list']['{page}'] = '([0-9]+)';
 
 		$data['rulesearch']['portal_article'] = 'article-{id}-{page}.html';
 		$data['rulereplace']['portal_article'] = 'portal.php?mod=view&aid={id}&page={page}';

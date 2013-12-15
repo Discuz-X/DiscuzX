@@ -1511,6 +1511,7 @@ $lang = array
 	'setting_seo_rewritestatus_home_blog' => '用户日志内容页',
 	'setting_seo_rewritestatus_group_group' => '群组主题列表页',
 	'setting_seo_rewritestatus_portal_topic' => '门户专题页',
+	'setting_seo_rewritestatus_portal_list' => '门户文章列表页',//添加门户文章列表页伪静态中文表述
 	'setting_seo_rewritestatus_portal_article' => '门户文章页',
 	'setting_seo_rewritestatus_forum_archiver' => '论坛 Archiver 页',
 	'setting_seo_rewritestatus_plugin' => '插件',
