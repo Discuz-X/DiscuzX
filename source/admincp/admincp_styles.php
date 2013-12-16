@@ -259,13 +259,7 @@ if($operation == 'admin') {
 			updatecache(array('setting', 'styles'));
 			loadcache('style_default', true);
 			updatecache('updatediytemplate');
-			$tpl = dir(DISCUZ_ROOT.'./data/template');
-			while($entry = $tpl->read()) {
-				if(preg_match("/\.tpl\.php$/", $entry)) {
-					@unlink(DISCUZ_ROOT.'./data/template/'.$entry);
-				}
-			}
-			$tpl->close();
+			cleartemplatecache();//统一缓存清除接口
 			cpmsg('csscache_update', 'action=styles', 'succeed');
 		} else {
 
@@ -609,13 +603,7 @@ function imgpre_switch(id) {
 
 		updatecache(array('setting', 'styles'));
 
-		$tpl = dir(DISCUZ_ROOT.'./data/template');
-		while($entry = $tpl->read()) {
-			if(preg_match("/\.tpl\.php$/", $entry)) {
-				@unlink(DISCUZ_ROOT.'./data/template/'.$entry);
-			}
-		}
-		$tpl->close();
+		cleartemplatecache();//统一缓存清除接口
 		cpmsg('styles_edit_succeed', 'action=styles'.($newcvar && $newcsubst ? '&operation=edit&id='.$id : ''), 'succeed');
 
 	}
