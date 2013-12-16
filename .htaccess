@@ -42,6 +42,8 @@ RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
 RewriteCond %{QUERY_STRING} ^(.*)$
 RewriteRule ^topic-(.+)\.html$ portal.php?mod=topic&topic=$1&%1
 RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^list-([0-9]+)-([0-9]+)\.html$ portal.php?mod=list&catid=$1&page=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
 RewriteRule ^article-([0-9]+)-([0-9]+)\.html$ portal.php?mod=view&aid=$1&page=$2&%1
 RewriteCond %{QUERY_STRING} ^(.*)$
 RewriteRule ^forum-(\w+)-([0-9]+)\.html$ forum.php?mod=forumdisplay&fid=$1&page=$2&%1
