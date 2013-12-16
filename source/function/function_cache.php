@@ -166,6 +166,7 @@ function cleartemplatecache() {
 	}
 	$tpl->close();
 	//添加CSS清除
+	/*暂缓
 	$tpl = dir(DISCUZ_ROOT.'./data/cache');
 	while($entry = $tpl->read()) {
 		if(preg_match("/\.css$/", $entry)) {
@@ -173,6 +174,7 @@ function cleartemplatecache() {
 		}
 	}
 	$tpl->close();
+	*/
 }
 
 ?>
