@@ -2078,23 +2078,23 @@ function browserversion($type) {
 	}
 	return $return[$type];
 }
-
+//重写currentlang函数
 function currentlang() {
 	$charset = strtoupper(CHARSET);
-	if($charset == 'GBK') {
-		return 'SC_GBK';
-	} elseif($charset == 'BIG5') {
-		return 'TC_BIG5';
-	} elseif($charset == 'UTF-8') {
+	if($charset == 'GBK') return 'SC_GBK';
+	if($charset == 'BIG5') return 'TC_BIG5';
+	if($charset == 'UTF-8') {
 		global $_G;
-		if($_G['config']['output']['language'] == 'zh_cn') {
-			return 'SC_UTF8';
-		} elseif ($_G['config']['output']['language'] == 'zh_tw') {
-			return 'TC_UTF8';
+		switch($_G['config']['output']['language']) {
+			case 'zh_cn':
+				return 'SC_UTF8';
+			case 'zh_tw':
+				return 'TC_UTF8';
+			default:
+				null;
 		}
-	} else {
-		return '';
 	}
+	return '';
 }
 
 
