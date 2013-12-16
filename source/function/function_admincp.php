@@ -1423,7 +1423,7 @@ function rewritedata($alldata = 1) {
 		$data['rulevars']['forum_archiver']['{action}'] = '(fid|tid)';
 		$data['rulevars']['forum_archiver']['{value}'] = '([0-9]+)';
 
-		$data['rulesearch']['plugin'] = '{pluginid}-{module}.html';
+		$data['rulesearch']['plugin'] = 'plugin-{pluginid}-{module}.html';//修改插件页伪静态默认设置
 		$data['rulereplace']['plugin'] = 'plugin.php?id={pluginid}:{module}';
 		$data['rulevars']['plugin']['{pluginid}'] = '([a-z]+[a-z0-9_]*)';
 		$data['rulevars']['plugin']['{module}'] = '([a-z0-9_\-]+)';
