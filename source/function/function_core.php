@@ -518,6 +518,13 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primaltpl='') {
 	global $_G;
 
+	$tflags = explode(',', $_G['setting']['templateflags']);
+	$commonheader = array();
+	$commonfooter = array();
+	foreach($tflags as $tflag){
+		$commonheader[] = 'common/header_'.trim($tflag);
+		$commonfooter[] = 'common/footer_'.trim($tflag);
+	}
 	static $_init_style = false;
 	if($_init_style === false) {
 		C::app()->_init_style();
@@ -582,14 +589,14 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 		}
 	}
 
-	$file .= !empty($_G['inajax']) && ($file == 'common/header' || $file == 'common/footer') ? '_ajax' : '';
+	$file .= !empty($_G['inajax']) && ($file == 'common/header' || $file == 'common/footer' || in_array($file, $commonheader) || in_array($file, $commonfooter)) ? '_ajax' : '';
 	$tpldir = $tpldir ? $tpldir : (defined('TPLDIR') ? TPLDIR : '');
 	$templateid = $templateid ? $templateid : (defined('TEMPLATEID') ? TEMPLATEID : '');
 	$filebak = $file;
 
 	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT') && strpos($file, $_G['mobiletpl'][IN_MOBILE].'/') === false || (isset($_G['forcemobilemessage']) && $_G['forcemobilemessage'])) {
 		if(IN_MOBILE == 2) {
-			$oldfile .= !empty($_G['inajax']) && ($oldfile == 'common/header' || $oldfile == 'common/footer') ? '_ajax' : '';
+			$oldfile .= !empty($_G['inajax']) && ($oldfile == 'common/header' || $oldfile == 'common/footer' || in_array($file, $commonheader) || in_array($file, $commonfooter)) ? '_ajax' : '';
 		}
 		$file = $_G['mobiletpl'][IN_MOBILE].'/'.$oldfile;
 	}
@@ -599,7 +606,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	}
 	$tplfile = $tpldir.'/'.$file.'.htm';
 
-	$file == 'common/header' && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.$_G['basescript'].'_'.CURMODULE;
+	($file == 'common/header' || in_array($file, $commonheader)) && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.$_G['basescript'].'_'.CURMODULE;
 
 	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
 		if(strpos($tpldir, 'plugin')) {
