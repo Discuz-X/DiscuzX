@@ -14,6 +14,8 @@ $extend_lang = array(
 	'message_company_handphone_comment' => '企业联系人手机，例:13800000000',
 	'message_company_address' => '企业地址',
 	'message_company_address_comment' => '企业所在地址，例:广东省佛山市禅城区XXX路XXX号',
+	'message_company_adminemail' => '企业负责人电邮',
+	'message_company_adminemail_comment' => '企业负责人电子邮箱，例：abcd@abc.com',
 );
 
 $GLOBALS['admincp_actions_normal'][] = 'company';
