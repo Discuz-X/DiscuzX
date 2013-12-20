@@ -1,3 +1,6 @@
+[submodule "lib/cvi"]
+	path = lib/cvi
+	url = git@git.oschina.net:fantasyoui/CVI.git
 [submodule "template/vizto_yeeidream"]
 	path = template/vizto_yeeidream
 	url = git@git.oschina.net:fantasyoui/vizto_yeeidream.git
