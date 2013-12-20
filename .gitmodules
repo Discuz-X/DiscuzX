@@ -1,0 +1,3 @@
+[submodule "lib/CVI"]
+	path = lib/CVI
+	url = git@git.oschina.net:fantasyoui/CVI.git
