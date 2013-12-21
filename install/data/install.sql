@@ -3923,6 +3923,12 @@ CREATE TABLE pre_portal_category (
   catname varchar(255) NOT NULL DEFAULT '',
   articles mediumint(8) unsigned NOT NULL DEFAULT '0',
   allowcomment tinyint(1) NOT NULL DEFAULT '1',
+  --WebPower版列表页边栏显示其他分类
+  allowlistshowothers tinyint(1) NOT NULL DEFAULT '0',
+  --WebPower版文章页边栏显示其他分类
+  allowviewshowothers tinyint(1) NOT NULL DEFAULT '0',
+  --WebPower版文章页边栏显示子分类
+  allowviewshowsubs tinyint(1) NOT NULL DEFAULT '0',
   displayorder smallint(6) NOT NULL DEFAULT '0',
   notinheritedarticle tinyint(1) NOT NULL DEFAULT '0',
   notinheritedblock tinyint(1) NOT NULL DEFAULT '0',
