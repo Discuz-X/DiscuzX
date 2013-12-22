@@ -425,17 +425,25 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 function lang($file, $langvar = null, $vars = array(), $default = null) {
 	global $_G;
 	$fileinput = $file;
-	list($path, $file) = explode('/', $file);
-	if(!$file) {
-		$file = $path;
-		$path = '';
-	}
 	if(strpos($file, ':') !== false) {
 		$path = 'plugin';
 		list($file) = explode(':', $file);
-	}
-
-	if($path != 'plugin') {
+		if(empty($_G['config']['plugindeveloper'])) {
+			loadcache('pluginlanguage_script');
+		} elseif(!isset($_G['cache']['pluginlanguage_script'][$file]) && preg_match("/^[a-z]+[a-z0-9_]*$/i", $file)) {
+			if(@include(DISCUZ_ROOT.'./data/plugindata/'.$file.'.lang.php')) {
+				$_G['cache']['pluginlanguage_script'][$file] = $scriptlang[$file];
+			} else {
+				loadcache('pluginlanguage_script');
+			}
+		}
+		$returnvalue = & $_G['cache']['pluginlanguage_script'];
+		$key = &$file;
+	} else {
+		$path = '';
+		if(strpos($file, '/') !== false) {
+			list($path, $file) = explode('/', $file);
+		}
 		$key = $path == '' ? $file : $path.'_'.$file;
 		if(!isset($_G['lang'][$key])) {
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
@@ -455,18 +463,6 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			$_G['hooklang'][$fileinput] = true;
 		}
 		$returnvalue = &$_G['lang'];
-	} else {
-		if(empty($_G['config']['plugindeveloper'])) {
-			loadcache('pluginlanguage_script');
-		} elseif(!isset($_G['cache']['pluginlanguage_script'][$file]) && preg_match("/^[a-z]+[a-z0-9_]*$/i", $file)) {
-			if(@include(DISCUZ_ROOT.'./data/plugindata/'.$file.'.lang.php')) {
-				$_G['cache']['pluginlanguage_script'][$file] = $scriptlang[$file];
-			} else {
-				loadcache('pluginlanguage_script');
-			}
-		}
-		$returnvalue = & $_G['cache']['pluginlanguage_script'];
-		$key = &$file;
 	}
 	$return = $langvar !== null ? (isset($returnvalue[$key][$langvar]) ? $returnvalue[$key][$langvar] : null) : $returnvalue[$key];
 	$return = $return === null ? ($default !== null ? $default : $langvar) : $return;
