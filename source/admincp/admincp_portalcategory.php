@@ -432,6 +432,7 @@ SCRIPT;
 		showsetting('portalcategory_allowlistshowothers', 'allowlistshowothers', $cate['allowlistshowothers'], 'radio');//WebPower版列表页显示其他分类
 		showsetting('portalcategory_allowviewshowothers', 'allowviewshowothers', $cate['allowviewshowothers'], 'radio');//WebPower版文章页显示其他分类
 		showsetting('portalcategory_allowviewshowsubs', 'allowviewshowsubs', $cate['allowviewshowsubs'], 'radio');//WebPower版文章页显示子分类
+		showsetting('portalcategory_asclist', 'asclist', $cate['asclist'], 'radio');//WebPower版列表页按发布时间顺序显示
 		showsetting('portalcategory_allowpublish', 'allowpublish', $cate['disallowpublish'] ? 0 : 1, 'radio');
 		showsetting('portalcategory_notshowarticlesummay', 'notshowarticlesummay', $cate['notshowarticlesummay'] ? 0 : 1, 'radio');
 		showsetting('portalcategory_allowcomment', 'allowcomment', $cate['allowcomment'], 'radio');
@@ -504,6 +505,7 @@ SCRIPT;
 			'allowlistshowothers' => $_GET['allowlistshowothers'],//WebPower版列表页显示其他分类设置保存
 			'allowviewshowothers' => $_GET['allowviewshowothers'],//WebPower版文章页显示其他分类设置保存
 			'allowviewshowsubs' => $_GET['allowviewshowsubs'],//WebPower版文章页显示子分类设置保存
+			'asclist' => $_GET['asclist'],//WebPower版列表页按发布时间顺序显示设置保存
 			'perpage' => $perpage,
 			'maxpages' => $maxpages,
 			'noantitheft' => intval($_GET['noantitheft']),
