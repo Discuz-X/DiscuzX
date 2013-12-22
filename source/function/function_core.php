@@ -422,8 +422,11 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 	}
 }
 
-function lang($file, $langvar = null, $vars = array(), $default = null) {
+function lang($file, $langvar = null, $vars = array(), $default = null, $language = 0) {
 	global $_G;
+	if($language == 0 || !preg('/^[a-z]{2}_[a-z]{2}$/i', $language)) {
+		$language = $_G['config']['output']['language'];
+	}
 	$fileinput = $file;
 	if(strpos($file, ':') !== false) {
 		$path = 'plugin';
