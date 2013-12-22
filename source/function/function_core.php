@@ -426,7 +426,7 @@ function lang_isset($lang, $langvar){
 	return isset($lang) && is_array($lang) && isset($lang[$langvar]);
 }
 
-function lang($file, $langvar = null, $vars = array(), $default = null, $language = 0) {
+function lang($file, $langvar = null, $language = 0, $vars = array(), $default = null) {
 	global $_G;
 	if($language == 0 || !preg('/^[a-z]{2}_[a-z]{2}$/i', $language)) {
 		$language = $_G['config']['output']['language'];
