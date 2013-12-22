@@ -422,13 +422,13 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 	}
 }
 
-function lang_isset($lang, $langvar){
+function lang_isset($lang, $langvar){//添加函数：判断语言文件有否添加特定语种数组
 	return isset($lang) && is_array($lang) && isset($lang[$langvar]);
 }
 
-function lang($file, $langvar = null, $language = 0, $vars = array(), $default = null) {
+function lang($file, $langvar = null, $language = 0/*添加指定语言参数*/, $vars = array(), $default = null) {
 	global $_G;
-	if($language == 0 || !preg('/^[a-z]{2}_[a-z]{2}$/i', $language)) {
+	if($language == 0 || !preg('/^[a-z]{2}_[a-z]{2}$/i', $language)) {//语言参数为空或非特定格式标识，则复位
 		$language = $_G['config']['output']['language'];
 	}
 	$fileinput = $file;
@@ -472,8 +472,8 @@ function lang($file, $langvar = null, $language = 0, $vars = array(), $default =
 		$returnvalue = &$_G['lang'];
 	}
 	$return = $langvar !== null ?
-		(lang_isset($returnvalue[$key][$language], $langvar) ? $returnvalue[$key][$language][$langvar] :
-			(lang_isset($returnvalue[$key][$_G['config']['output']['language']], $langvar) ? $returnvalue[$key][$_G['config']['output']['language']][$langvar] :
+		(lang_isset($returnvalue[$key][$language], $langvar) ? $returnvalue[$key][$language][$langvar] ://若存在指定语言数组，并存在指定字符串，则返回
+			(lang_isset($returnvalue[$key][$_G['config']['output']['language']], $langvar) ? $returnvalue[$key][$_G['config']['output']['language']][$langvar] ://若存在默认语言数组，并存在指定字符串，则返回
 				(isset($returnvalue[$key][$langvar]) ? $returnvalue[$key][$langvar] : null)))
 		: $returnvalue[$key];
 	$return = $return === null ? ($default !== null ? $default : $langvar) : $return;
