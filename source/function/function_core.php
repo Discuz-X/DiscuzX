@@ -422,6 +422,10 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 	}
 }
 
+function lang_isset($lang, $langvar){
+	return isset($lang) && is_array($lang) && isset($lang[$langvar]);
+}
+
 function lang($file, $langvar = null, $vars = array(), $default = null, $language = 0) {
 	global $_G;
 	if($language == 0 || !preg('/^[a-z]{2}_[a-z]{2}$/i', $language)) {
@@ -467,7 +471,11 @@ function lang($file, $langvar = null, $vars = array(), $default = null, $languag
 		}
 		$returnvalue = &$_G['lang'];
 	}
-	$return = $langvar !== null ? (isset($returnvalue[$key][$langvar]) ? $returnvalue[$key][$langvar] : null) : $returnvalue[$key];
+	$return = $langvar !== null ?
+		(lang_isset($returnvalue[$key][$language], $langvar) ? $returnvalue[$key][$language][$langvar] :
+			(lang_isset($returnvalue[$key][$_G['config']['output']['language']], $langvar) ? $returnvalue[$key][$_G['config']['output']['language']][$langvar] :
+				(isset($returnvalue[$key][$langvar]) ? $returnvalue[$key][$langvar] : null)))
+		: $returnvalue[$key];
 	$return = $return === null ? ($default !== null ? $default : $langvar) : $return;
 	$searchs = $replaces = array();
 	if($vars && is_array($vars)) {
