@@ -37,6 +37,14 @@ CREATE TABLE uc_members (
   KEY email(email)
 ) TYPE=MyISAM;
 
+--
+-- 转存表中的数据 `uc_members`
+-- CEO 账号 密码：12345678
+--
+
+INSERT INTO `pre_ucenter_members` (`uid`, `username`, `password`, `email`, `myid`, `myidkey`, `regip`, `regdate`, `lastloginip`, `lastlogintime`, `salt`, `secques`) VALUES
+(2, 'CEO', '0eaecf1dd78ad333a655ef7b534863df', 'CEO@WebPower.cc', '', '', '27.36.147.88', 1387784760, 0, 0, '8be76a', '');
+
 DROP TABLE IF EXISTS uc_memberfields;
 CREATE TABLE uc_memberfields (
   uid mediumint(8) unsigned NOT NULL,
