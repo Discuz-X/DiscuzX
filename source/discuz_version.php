@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 if(!defined('DISCUZ_VERSION')) {
 	define('DISCUZ_VERSION', 'X3.1');
 	define('DISCUZ_RELEASE', '20131122');
-	define('DISCUZ_MODIFY', '20131217');//自定义版本
+	define('DISCUZ_MODIFY', '20131224');//自定义版本
 	define('DISCUZ_FIXBUG', '30000000');
 }
 
