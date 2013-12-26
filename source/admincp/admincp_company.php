@@ -22,6 +22,7 @@ if(!submitcheck('companysubmit')) {
 		showsetting('message_company_handphone', 'companynew[handphone]', $company['handphone'], 'text');
 		showsetting('message_company_address', 'companynew[address]', $company['address'], 'text');
 		showsetting('message_company_adminemail', 'companynew[adminemail]', $company['adminemail'], 'text');
+		showsetting('message_company_zipcode', 'companynew[zipcode]', $company['zipcode'], 'text');
 		//showsetting('message_company_site_qq', 'companynew[site_qq]', $company['site_qq'], 'text', $disabled = '', $hidden = 0, $comment = '', $extra = 'id="settingnew[site_qq]"');
 		//showsetting('message_company_icp', 'companynew[icp]', $company['icp'], 'text');
 		//showsetting('message_company_boardlicensed', 'companynew[boardlicensed]', $company['boardlicensed'], 'radio');

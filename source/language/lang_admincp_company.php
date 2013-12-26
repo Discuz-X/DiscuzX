@@ -16,6 +16,8 @@ $extend_lang = array(
 	'message_company_address_comment' => '企业所在地址，例:广东省佛山市禅城区XXX路XXX号',
 	'message_company_adminemail' => '企业负责人电邮',
 	'message_company_adminemail_comment' => '企业负责人电子邮箱，例：abcd@abc.com',
+	'message_company_zipcode' => '企业地区邮编',
+	'message_company_zipcode_comment' => '企业所在地区邮政编码，例：528100',
 );
 
 $GLOBALS['admincp_actions_normal'][] = 'company';
