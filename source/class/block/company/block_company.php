@@ -52,6 +52,7 @@ class block_company {
 			'address' => array('name' => '公司地址', 'formtype' => 'text', 'datatype' => 'string'),
 			'companyname' => array('name' => '公司名称', 'formtype' => 'text', 'datatype' => 'string'),
 			'adminemail' => array('name' => '公司负责人电邮', 'formtype' => 'text', 'datatype' => 'string'),
+			'handphone' => array('name' => '公司负责人手机', 'formtype' => 'text', 'datatype' => 'string'),
 		);
 	}
 
@@ -129,6 +130,7 @@ class block_company {
 					'address' => $company['address'],
 					'companyname' => $_G['setting']['bbname'],
 					'adminemail' => $company['adminemail'],
+					'handphone' => $company['handphone'],
 				)
 			)
 		);
