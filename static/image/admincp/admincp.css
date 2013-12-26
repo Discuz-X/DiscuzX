@@ -257,7 +257,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.td21{ width:150px; font-weight:700; }
 	.td22{ width:100px; font-weight:700; }
 	.td23{ width:100px; }
-	.td24{ width:120px; }
+	.td24{ width:140px; }/* 加长后台td24列宽 */
 	.td25{ width:50px; }
 		.td25 .txt{ width:40px; }
 	.td26{}
