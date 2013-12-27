@@ -426,10 +426,8 @@ function lang_isset($lang, $langvar){//添加函数：判断语言文件有否�
 	return isset($lang) && is_array($lang) && isset($lang[$langvar]);
 }
 
-function lang($file, $langvar = null, $language = 0/*添加指定语言参数*/, $vars = array(), $default = null) {
+function lang($file, $langvar = null, $vars = array(), $default = null, $language = 0/*添加指定语言参数*/) {
 	global $_G;
-	is_string($vars) && $default = $vars;//向后兼容，将检索的参数向后移
-	is_array($language) && ($vars = $language) && ($language = 0);//向后兼容，将检索的参数向后移
 	if($language == 0 || !preg('/^[a-z]{2}_[a-z]{2}$/i', $language)) {//语言参数为空或非特定格式标识，则复位
 		$language = $_G['config']['output']['language'];
 	}
