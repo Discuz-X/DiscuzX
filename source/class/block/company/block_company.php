@@ -51,6 +51,7 @@ class block_company {
 			'fax' => array('name' => '企业传真', 'formtype' => 'text', 'datatype' => 'string'),
 			'address' => array('name' => '公司地址', 'formtype' => 'text', 'datatype' => 'string'),
 			'companyname' => array('name' => '公司名称', 'formtype' => 'text', 'datatype' => 'string'),
+			'master' => array('name' => '公司联系人', 'formtype' => 'text', 'datatype' => 'string'),
 			'adminemail' => array('name' => '公司负责人电邮', 'formtype' => 'text', 'datatype' => 'string'),
 			'handphone' => array('name' => '公司负责人手机', 'formtype' => 'text', 'datatype' => 'string'),
 		);
@@ -129,6 +130,7 @@ class block_company {
 					'fax' => $company['fax'],
 					'address' => $company['address'],
 					'companyname' => $_G['setting']['bbname'],
+					'master' => $company['master'],
 					'adminemail' => $company['adminemail'],
 					'handphone' => $company['handphone'],
 				)
