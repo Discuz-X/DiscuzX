@@ -16,7 +16,7 @@ if(!defined('DISCUZ_VERSION')) {
 	define('DISCUZ_RELEASE', '20131122');
 	define('DISCUZ_MODIFY', '20140103');//自定义版本
 	define('DISCUZ_FIXBUG', '30000000');
-	define('DISCUZ_WEBPOWER', '20131231');//WebPower 版本
+	define('DISCUZ_WEBPOWER', '20140103');//WebPower 版本
 }
 
 ?>
