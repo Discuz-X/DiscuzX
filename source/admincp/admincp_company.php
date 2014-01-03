@@ -88,6 +88,10 @@ if(!submitcheck('companysubmit')) {
 //			}
 //		}
 //	}
+	function trim_value(&$value) {
+		$value = trim($value);
+	}
+	array_walk($companynew, 'trim_value');
 	$settingnew['company'] = serialize($companynew);
 	C::t('common_setting')->update_batch($settingnew);
 	updatecache('setting');
