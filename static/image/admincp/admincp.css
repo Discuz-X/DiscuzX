@@ -24,7 +24,7 @@ textarea, input, select, .html { padding:2px; border:1px solid; border-color:#66
 .txtnobd{ border:1px solid #FFF; background:#FFF; cursor:pointer; }
 .radio, .checkbox, .pr, .pc { border:none; background:none; vertical-align:middle; }
 .checkbox{ height:14px; }
-.btn{ margin:3px 0; padding:2px 30px;/* 加宽后台按钮，提高操作便利性 */ *padding:4px 5px 1px; border: 1px solid; border-color:#ddd #666 #666 #ddd; background:#DDD; color:#000; cursor:pointer; vertical-align:middle; }
+.btn{ margin:3px 0; padding:2px 30px;/* 加宽后台按钮，提高操作便利性 */ *padding:4px 30px 1px; border: 1px solid; border-color:#ddd #666 #666 #ddd; background:#DDD; color:#000; cursor:pointer; vertical-align:middle; }
 	.btn:hover { text-decoration: none; }
 .btn_big { display: inline-block; width: 90px; height: 30px; line-height: 30px; text-align: center; background: url(btn_big.png) no-repeat 0 0; font-size: 14px; font-weight: 700; color: #FFF; }
 	.btn_big:hover { text-decoration: none; }
