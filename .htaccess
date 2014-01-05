@@ -4,6 +4,8 @@ RewriteEngine On
 # 修改以下语句中的 /discuz 为您的论坛目录地址，如果程序放在根目录中，请将 /discuz 修改为 /
 RewriteBase /bbs
 
+DirectoryIndex index.php index.html index.htm
+
 #400	错误的请求
 #401	认证失败
 #402	需要付费
