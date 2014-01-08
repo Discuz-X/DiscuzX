@@ -1085,6 +1085,8 @@ function output() {
 function output_replace($content) {
 	global $_G;
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
+	//临时修正伪静态文章列表页问题,虽然页面上所有同级页面链接都应精简,但如此处理并不规范
+	$content = str_replace('<a href="'.$_G['siteurl'], '<a href="', $content);
 	if(!empty($_G['setting']['output']['str']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
 			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
