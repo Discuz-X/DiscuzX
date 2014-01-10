@@ -3861,7 +3861,8 @@ CREATE TABLE pre_portal_article_title (
   author varchar(255) NOT NULL DEFAULT '',
   `from` varchar(255) NOT NULL DEFAULT '',
   fromurl varchar(255) NOT NULL DEFAULT '',
-  url varchar(255) NOT NULL DEFAULT '',
+--修改跳转路径字段容量，但MySQL版本必须大于5.0.3
+  url varchar(2083) NOT NULL DEFAULT '',
   summary varchar(255) NOT NULL DEFAULT '',
   pic varchar(255) NOT NULL DEFAULT '',
   thumb tinyint(1) NOT NULL DEFAULT '0',
