@@ -1,0 +1,89 @@
+<!--{eval}-->
+<!--
+
+function mobileoem_codedisp($code) {
+-->
+<!--{/eval}-->
+<!--{block return}--><div class="blockcode"><span></span><ol><li>$code</ol></div><!--{/block}-->
+<!--{eval}-->
+<!--
+	return $return;
+}
+
+function mobileoem_quote() {
+-->
+<!--{/eval}-->
+<!--{block return}--><div class="reply_wrap">\\1</div><!--{/block}-->
+<!--{eval}-->
+<!--
+	return $return;
+}
+
+function mobileoem_free() {
+-->
+<!--{/eval}-->
+<!--{block return}--><div class="reply_wrap">\\1</div><!--{/block}-->
+<!--{eval}-->
+<!--
+	return $return;
+}
+
+function mobileoem_image($url, $extra) {
+-->
+<!--{/eval}-->
+<!--{block imagecode}--><a href="javascript:AppInterface.openImage('$url')"><img src="$url" $extra/></a><!--{/block}-->
+<!--{eval}-->
+<!--
+	if(!empty($_GET['image'])) {
+		return '<div class="img">'.$imagecode.'</div>';
+	} else {
+		$imagecode = rawurlencode($imagecode);
+<!--{/eval}-->
+<!--{block return}--><div class="img_wrap pic" onclick="reloadImage(this, '$imagecode')"><a href="javascript:;"></a></div><!--{/block}-->
+<!--{eval}-->
+<!--
+		return $return;
+	}
+}
+
+function mobileoem_gif($url, $extra) {
+-->
+<!--{/eval}-->
+<!--{block imagecode}--><a href="javascript:AppInterface.openGif('$url')"><img src="$url" $extra/></a><!--{/block}-->
+<!--{eval}-->
+<!--
+	if(!empty($_GET['image'])) {
+		return '<div class="img">'.$imagecode.'</div>';
+	} else {
+		$imagecode = rawurlencode($imagecode);
+<!--{/eval}-->
+<!--{block return}--><div class="img_wrap pic" onclick="reloadImage(this, '$imagecode')"><a href="javascript:;"></a></div><!--{/block}-->
+<!--{eval}-->
+<!--
+		return $return;
+	}
+}
+
+function mobileoem_hide_reply() {
+	global $_G;
+-->
+<!--{/eval}-->
+<!--{block return}--><div class="showhide"><h4>{lang post_hide}</h4>\\1</div>
+<!--{/block}-->
+<!--{eval}-->
+<!--
+	return $return;
+}
+
+function mobileoem_hide_reply_hidden() {
+	global $_G;
+-->
+<!--{/eval}-->
+<!--{block return}--><div class="locked"><!--{if $_G[uid]}-->{$_G[username]}<!--{else}-->{lang guest}<!--{/if}-->{lang mobileoem:post_hide_reply_hidden}</div><!--{/block}-->
+<!--{eval}-->
+<!--
+	return $return;
+}
+
+-->
+<!--{/eval}-->

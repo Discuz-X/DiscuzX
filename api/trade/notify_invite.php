@@ -4,11 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: notify_invite.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: notify_invite.php 34252 2013-11-25 03:12:09Z nemohou $
  */
 
 define('IN_API', true);
 define('CURSCRIPT', 'api');
+define('DISABLEXSSCHECK', true);
 
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';

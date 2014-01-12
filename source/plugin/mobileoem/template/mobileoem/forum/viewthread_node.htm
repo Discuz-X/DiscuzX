@@ -1,0 +1,25 @@
+<!--{eval
+$needhiddenreply = ($hiddenreplies && $_G['uid'] != $post['authorid'] && $_G['uid'] != $_G['forum_thread']['authorid'] && !$post['first'] && !$_G['forum']['ismoderator']);
+$postshowavatars = !($_G['setting']['bannedmessages'] & 2 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || ($post['status'] & 1)));
+}-->
+<!--{if $post['first']}-->
+	<!--{if empty($_GET['more'])}-->
+		<div class="post_con">
+			<div class="article_tit">
+				<h1>$_G[forum_thread][subject]</h1>
+			</div>
+			<div class="article_con">
+				{eval include mobileoem_template('forum/viewthread_node_body');}
+			</div>
+		</div>	
+		<!--{eval $commentstart = $_G['page'] == 1 ? true : false;}-->
+	<!--{/if}-->
+<!--{else}-->
+	<!--{if $commentstart}-->
+		<div class="comment_wrap"><div class="comment_tit"><h2>{lang reply}</h2></div><div id="morepage">
+		<!--{eval $commentstart = false;}-->
+	<!--{/if}-->
+	<div class="comment_con">
+		{eval include mobileoem_template('forum/viewthread_node_body');}
+	</div>
+<!--{/if}-->

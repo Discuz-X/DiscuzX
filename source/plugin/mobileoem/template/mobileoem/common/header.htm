@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="{CHARSET}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="description" content="{if !empty($metadescription)}{echo dhtmlspecialchars($metadescription)} {/if}{if empty($nobbname)},$_G['setting']['bbname']{/if}"/>
+	<meta name="keywords" content="{if !empty($metakeywords)}{echo dhtmlspecialchars($metakeywords)}{/if}" />	
+	<title><!--{if !empty($navtitle)}-->$navtitle - <!--{/if}--><!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}--> Powered by Discuz!</title>
+	<style>
+		<!--{eval $imageurl = $_G[siteurl].'/source/plugin/mobileoem/static/image'}-->
+		html{-webkit-text-size-adjust:none;}
+		body,h1,h2,article,ol,li{margin: 0;padding: 0;}
+		article{display:block;}
+		img{border: none;}
+		.icon_reply{width: 12px;height: 12px;display: inline-block;background: url({$imageurl}/icon_reply.png) no-repeat;}
+		.detail_wrap{background: #fdfdfd;line-height: 150%;color: #333;}
+		.detail_wrap article{word-break:break-all;}
+		.article_tit{padding: 8px 15px 3px;}
+		.article_tit h1{font-size: 18px;}
+		.article_con{padding: 3px 15px 6px;}
+		.article_con article{font-size: 16px;}
+		.article_con .blockcode{background: #F7F7F7;border: 1px solid #ccc;position: relative;margin: 5px 0;}
+		.article_con .blockcode span{width:32px;position: absolute;left: 0;top:0;bottom: 0;background: #ededed;border-right: 1px solid #ccc;z-index: 0;}
+		.article_con .blockcode ol{position: relative;z-index: 1;padding: 5px 5px 8px 35px;}
+		.article_con .blockcode li{list-style-type: decimal-leading-zero;font-size: 14px;list-style-position: outside;}
+		.article_con .img_wrap{padding-top: 5px;}
+		.user_info{padding-bottom: 4px;overflow: hidden;}
+		.user_info .avatar {width:21px;height:21px;}
+		.user_info img{vertical-align: middle;}
+		.user_info span{vertical-align: middle;display: inline-block;line-height: 22px;font-size: 12px;color: #999;margin-left: 10px;}
+		.user_role{float: right;font-style: normal;font-size: 12px;margin-top: 3px;height:13px;}
+		.article_con .user_role{color: #27a7c9;}
+		.comment_wrap{border-top: 1px solid #e4e4e4;}
+		.comment_tit{line-height: 35px;background: #f5f5f5;border-bottom: 1px solid #f0f0f0;}
+		.comment_tit h2{font-size: 15px;border-top: 2px solid #fbfbfb;border-bottom: 1px solid #e4e4e4;padding-left: 15px;}
+		.comment_con{margin: 6px 15px 0;padding-bottom:8px;border-bottom: 1px solid #ededed;}
+		.comment_con article{font-size: 16px;position: relative;}
+		.comment_con .icon_reply{text-indent: -9999px;background-size: 12px 12px;position: absolute;right: 1px;bottom: 5px;}
+		.reply_wrap{background: #F7F7F7;padding:0 10px 6px;margin:5px 0 10px;color: #666;border: 1px dashed #aaa;}
+		.reply_wrap .user_info{padding-bottom: 0;}
+		.reply_wrap .user_info span{margin-left: 0;color: #999;margin-right: 10px;}
+		.reply_wrap .user_info .user_role{float: none;color: #999;}
+		.comment_con .reply_wrap article{font-size: 14px;}
+		.img_wrap{width: 90px;height:65px;}
+		.img_wrap a{display: block;width: 90px;height: 65px;}
+		.pic{background: url({$imageurl}/load_pic.png) no-repeat;background-size: 90px 65px;}
+		.jammer{color:#fdfdfd;}
+		.article_con .blockcode .jammer, .reply_wrap .jammer{color:#F7F7F7;}
+		.locked{margin: 6px 15px 0;padding:6px;border: 1px solid #ededed;}
+		.message{margin: 6px 15px 0;padding:6px;border: 1px solid #ededed;}
+		#moreing { font-size: 14px; text-align: center; margin: 5px; font-weight: bold; }
+	</style>
+	<script src="{$_G['siteurl']}static/js/mobile/jquery-1.8.3.min.js"></script>	
+</head>
