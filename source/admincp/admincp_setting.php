@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 34093 2013-10-09 05:41:18Z nemohou $
+ *      $Id: admincp_setting.php 34295 2013-12-26 02:32:57Z hypowang $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -2592,6 +2592,9 @@ EOT;
 			$settingnew[$k] = dhtmlspecialchars($settingnew[$k]);
 		}
 	}
+	if(isset($settingnew['statcode'])) {
+		$settingnew['statcode'] = str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $settingnew['statcode']);
+	}
 
 	if($operation == 'access') {
 		$settingnew['pwlength'] = intval($settingnew['pwlength']);
@@ -2721,6 +2724,10 @@ EOT;
 
 	if(!empty($settingnew['thumbstatus']) && !function_exists('imagejpeg')) {
 		$settingnew['thumbstatus'] = 0;
+	}
+
+	if(!empty($settingnew['imageimpath']) && !is_dir($settingnew['imageimpath'])) {
+		$settingnew['imageimpath'] = '';
 	}
 
 	if(!empty($settingnew['memory'])) {

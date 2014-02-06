@@ -1,0 +1,12 @@
+<!--{if $_G['page'] == 1 && empty($_GET['more'])}-->
+	<!--{eval include mobileoem_template('common/header');}-->
+	<script type="text/javascript" src="{$_G[siteurl]}source/plugin/mobileoem/static/js/viewthread.js"></script>
+	<script type="text/javascript">$(function(){autoLoadNextPage('{$_G[siteurl]}api/mobile/?{$nexturl}&jsoncallback_{FORMHASH}=?&page=', '{lang mobileoem:more_page_loading}', {if $_G['ppp'] > count($postlist)}1{else}2{/if});imgwidth();AppInterface.notifyForum($('#forumname').text());});</script>
+	<body>
+	<span id="forumname" style="display:none">$forum['name']</span>
+	<div class="detail_wrap">
+<!--{/if}-->
+<!--{loop $postlist $post}-->
+	{LF}<!--{eval include mobileoem_template('forum/viewthread_node');}-->{LF}
+<!--{/loop}-->
+<a name="bottom"></a>

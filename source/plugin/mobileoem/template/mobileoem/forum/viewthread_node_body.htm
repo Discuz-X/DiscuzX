@@ -1,0 +1,73 @@
+<div class="user_info">
+	<a href="javascript:AppInterface.viewUser('$post[authorid]')"><img src="{avatar($post[authorid], 'small', 1, 0)}" class="avatar"></a>
+	<!--{if !$post['anonymous']}-->
+		<span>$post[author]</span>		
+	<!--{else}-->
+		<span>$_G[setting][anonymoustext]</span>
+	<!--{/if}-->
+	<span>$post[dateline]</span>
+	<!--{if isset($post[isstick])}-->
+		<em class="user_role">{lang replystick} {lang from} {$post[number]}{$postnostick}</em>
+	<!--{elseif $post[number] == -1}-->
+		<em class="user_role">{lang recommend}</em>
+	<!--{else}-->
+		<!--{if !empty($postno[$post[number]])}-->
+			<em class="user_role">$postno[$post[number]]</em>
+		<!--{else}-->
+			<em class="user_role">{$post[number]}{$postno[0]}</em>
+		<!--{/if}-->
+	<!--{/if}-->
+</div>
+<article>
+	<!--{if !$_G['forum']['ismoderator'] && $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))}-->
+		<div class="locked">{lang message_banned}</div>
+	<!--{elseif !$_G['forum']['ismoderator'] && $post['status'] & 1}-->
+		<div class="locked">{lang message_single_banned}</div>
+	<!--{elseif $needhiddenreply}-->
+		<div class="locked">{lang message_ishidden_hiddenreplies}</div>
+	<!--{elseif $post['first'] && $_G['forum_threadpay']}-->
+		<!--{if $thread['freemessage']}-->
+			$thread[freemessage]
+		<!--{/if}-->
+		<div class="locked">
+			<!--{if $_G[forum_thread][price] > 0}-->{lang pay_comment}<!--{/if}-->
+			<!--{if $thread[endtime]}--><br />{lang pay_free_time}<!--{/if}-->
+		</div>
+	<!--{elseif $_G['forum_discuzcode']['passwordlock'][$post[pid]]}-->
+		<div class="locked">{lang message_password_exists}</div>
+	<!--{else}-->
+		<!--{if $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))}-->
+			<div class="locked">{lang admin_message_banned}</div>
+		<!--{elseif $post['status'] & 1}-->
+			<div class="locked">{lang admin_message_single_banned}</div>
+		<!--{/if}-->
+		<!--{if !$post['first'] && $hiddenreplies && $_G['forum']['ismoderator']}-->
+			<div class="locked">{lang message_ishidden_hiddenreplies}</div>
+		<!--{/if}-->
+		<!--{if $_G['forum_discuzcode']['passwordauthor'][$post[pid]]}-->
+			<div class="locked">{lang message_password_exists}</div>
+		<!--{/if}-->
+		<!--{if $post['first'] && $_G['thread']['special']}-->
+			<div class="locked" align="center">
+			<!--{if $_G['thread']['special'] == 1}-->
+				{lang mobileoem:special_message_1}
+			<!--{elseif $_G['thread']['special'] == 2}-->
+				{lang mobileoem:special_message_2}
+			<!--{elseif $_G['thread']['special'] == 3}-->
+				{lang mobileoem:special_message_3}
+			<!--{elseif $_G['thread']['special'] == 4}-->
+				{lang mobileoem:special_message_4}
+			<!--{elseif $_G['thread']['special'] == 5}-->
+				{lang mobileoem:special_message_5}
+			<!--{/if}-->
+			<br /><a href="{$_G[siteurl]}forum.php?mod=viewthread&tid=$_G[tid]&mobile=yes" target="_blank">{lang mobileoem:click_view}</a></div>
+		<!--{/if}-->
+		$post[message]		
+		<!--{if !$post['first']}-->
+			<a href="javascript:AppInterface.replayPost('$post[pid]')" class="icon_reply">{lang reply}</a>
+		<!--{/if}-->
+		<!--{if $post['attachment']}-->
+			<div class="locked">{lang attach_nopermission_notice}<!--{if !$_G['uid']}-->{lang mobileoem:attach_nopermission_login}<a href="javascript:AppInterface.toLogin()">{lang mobileoem:click_login}</a><!--{else}-->{lang mobileoem:attach_nopermission}<!--{/if}--></div>
+		<!--{/if}-->
+	<!--{/if}-->
+</article>
