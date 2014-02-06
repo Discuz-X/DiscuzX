@@ -296,6 +296,19 @@ class image {
 					imagecopymerge($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
 				}
 				break;
+			case 'fixwh':
+			case 3:
+				$this->param['thumbwidth'] = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
+				$this->param['thumbheight'] = $_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300;
+				$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
+				$bgcolor = imagecolorallocate($thumb_photo, 255, 255, 255);
+				imagefill($thumb_photo, 0, 0, $bgcolor);
+				$ratioThumb = $this->param['thumbwidth'] / $this->param['thumbheight'];
+				$ratioInfo = $this->imginfo['width'] / $this->imginfo['height'];
+				$inWidth = $ratioThumb > $ratioInfo ? $this->param['thumbheight'] / $this->imginfo['height'] * $this->imginfo['width'] : $this->param['thumbwidth'];
+				$inHeight = $ratioThumb < $ratioInfo ? $this->param['thumbwidth'] / $this->imginfo['width'] * $this->imginfo['height'] : $this->param['thumbheight'];
+				imagecopyresampled($thumb_photo, $attach_photo, ($this->param['thumbwidth'] - $inWidth) / 2, ($this->param['thumbheight'] - $inHeight) / 2, 0, 0, $inWidth, $inHeight, $this->imginfo['width'], $this->imginfo['height']);
+				break;
 		}
 		clearstatcache();
 		if($thumb_photo) {
