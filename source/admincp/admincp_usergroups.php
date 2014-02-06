@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 33686 2013-08-01 11:17:55Z nemohou $
+ *      $Id: admincp_usergroups.php 34297 2013-12-26 03:36:51Z hypowang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -378,7 +378,7 @@ EOT;
 		} elseif($_GET['type'] == 'system') {
 			if(is_array($_GET['group_title'])) {
 				foreach($_GET['group_title'] as $id => $title) {
-					C::t('common_usergroup')->update($id, array('grouptitle' => $_GET['group_title'][$id], 'stars' => $_GET['group_stars'][$id], 'color' => $_GET['group_color'][$id], 'icon' => $_GET['group_icon'][$id]));
+					C::t('common_usergroup')->update($id, array('grouptitle' => $_GET['group_title'][$id], 'stars' => $_GET['group_stars'][$id], 'color' => $_GET['group_color'][$id]));
 					C::t('forum_onlinelist')->update_by_groupid($id, array('title' => $_GET['group_title'][$id]));
 				}
 			}

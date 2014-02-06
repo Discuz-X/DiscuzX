@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_makehtml.php 34065 2013-09-27 07:17:10Z laoguozhang $
+ *      $Id: admincp_makehtml.php 34286 2013-12-13 05:55:14Z laoguozhang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -458,6 +458,22 @@ EOT;
 			preg_match_all('/[^\w\d\_\\]/',$settingnew['makehtml']['topichtmldir'],$re);
 			if(!empty($re[0])) {
 				cpmsg(cplang('setting_functions_makehtml_topichtmldir_invalid').','.cplang('return'), NULL, 'error');
+			}
+			$topichtmldir = realpath($settingnew['makehtml']['topichtmldir']);
+			if($topichtmldir === false) {
+				dmkdir($settingnew['makehtml']['topichtmldir'], 777, false);
+				$topichtmldir = realpath($settingnew['makehtml']['topichtmldir']);
+				rmdir($settingnew['makehtml']['topichtmldir']);
+				if($topichtmldir === false) {
+					cpmsg(cplang('setting_functions_makehtml_topichtmldir_invalid').','.cplang('return'), NULL, 'error');
+				}
+			}
+			$topichtmldir = str_replace(DISCUZ_ROOT, '', $topichtmldir);
+			$sysdir = array('api', 'archiver', 'config', 'data/diy', 'data\diy', 'install', 'source', 'static', 'template', 'uc_client', 'uc_server');
+			foreach($sysdir as $_dir) {
+				if(stripos($topichtmldir, $_dir) === 0) {
+					cpmsg(cplang('setting_functions_makehtml_topichtmldir_invalid').','.cplang('return'), NULL, 'error');
+				}
 			}
 			$settingnew['makehtml']['htmldirformat'] = intval($settingnew['makehtml']['htmldirformat']);
 			C::t('common_setting')->update('makehtml', $settingnew['makehtml']);
