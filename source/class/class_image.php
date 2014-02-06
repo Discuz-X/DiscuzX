@@ -41,7 +41,7 @@ class image {
 	}
 
 
-	function Thumb($source, $target, $thumbwidth, $thumbheight, $thumbtype = 1, $nosuffix = 0) {
+	function Thumb($source, $target, $thumbwidth, $thumbheight, $thumbtype = 1, $nosuffix = 0, $fixedHeight = 0 /*增加是否锁定高度参数，默认为否以兼容*/) {
 		$return = $this->init('thumb', $source, $target, $nosuffix);
 		if($return <= 0) {
 			return $this->returncode($return);
@@ -51,7 +51,7 @@ class image {
 			return $this->returncode(0);
 		}
 		$this->param['thumbwidth'] = intval($thumbwidth);
-		if(!$thumbheight || $thumbheight > $this->imginfo['height']) {
+		if(!$thumbheight || ($thumbheight > $this->imginfo['height'] && !$fixedHeight/*若锁定高度，这里不作高度调整*/)) {
 			$thumbheight = $thumbwidth > $this->imginfo['width'] ? $this->imginfo['height'] : $this->imginfo['height']*($thumbwidth/$this->imginfo['width']);
 		}
 		$this->param['thumbheight'] = intval($thumbheight);
@@ -299,8 +299,6 @@ class image {
 			//增加缩略图生成模式>>>
 			case 'fixwh':
 			case 3:
-				$this->param['thumbwidth'] = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
-				$this->param['thumbheight'] = $_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300;
 				$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
 				$bgcolor = imagecolorallocate($thumb_photo, 255, 255, 255);
 				imagefill($thumb_photo, 0, 0, $bgcolor);
