@@ -296,6 +296,7 @@ class image {
 					imagecopymerge($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
 				}
 				break;
+			//增加缩略图生成模式>>>
 			case 'fixwh':
 			case 3:
 				$this->param['thumbwidth'] = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
@@ -309,6 +310,7 @@ class image {
 				$inHeight = $ratioThumb < $ratioInfo ? $this->param['thumbwidth'] / $this->imginfo['width'] * $this->imginfo['height'] : $this->param['thumbheight'];
 				imagecopyresampled($thumb_photo, $attach_photo, ($this->param['thumbwidth'] - $inWidth) / 2, ($this->param['thumbheight'] - $inHeight) / 2, 0, 0, $inWidth, $inHeight, $this->imginfo['width'], $this->imginfo['height']);
 				break;
+			//增加缩略图生成模式<<<
 		}
 		clearstatcache();
 		if($thumb_photo) {
