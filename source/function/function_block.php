@@ -407,12 +407,12 @@ function block_template($bid) {
 							if($_G['setting']['ftp']['on']) {
 								$ftp = & discuz_ftp::instance();
 								$ftp->connect();
-								if($ftp->connectid && $ftp->ftp_size($thumbpath) > 0 || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 2) && $ftp->upload($_G['setting']['attachurl'].'/'.$thumbpath, $thumbpath))) {
+								if($ftp->connectid && $ftp->ftp_size($thumbpath) > 0 || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 3, false, true/* WebPower 版 调整缩略图生成模式 */) && $ftp->upload($_G['setting']['attachurl'].'/'.$thumbpath, $thumbpath))) {
 									$picflag = 1; //common_block_pic表中的picflag标识（0本地，1远程）
 									$_G['block_makethumb'] = true;
 									@unlink($_G['setting']['attachdir'].'./'.$thumbpath);
 								}
-							} elseif(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 2))) {
+							} elseif(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 3, false, true/* WebPower 版 调整缩略图生成模式 */))) {
 								$picflag = 0; //common_block_pic表中的picflag标识（0本地，1远程）
 								$_G['block_makethumb'] = true;
 							}
