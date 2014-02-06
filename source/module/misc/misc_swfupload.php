@@ -190,7 +190,7 @@ if($_GET['operation'] == 'upload') {
 			$image = new image();
 			$thumbimgwidth = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
 			$thumbimgheight = $_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300;
-			$attach['thumb'] = $image->Thumb($attach['target'], '', $thumbimgwidth, $thumbimgheight, 2);
+			$attach['thumb'] = $image->Thumb($attach['target'], '', $thumbimgwidth, $thumbimgheight, 3);//WebPower 版 调整缩略图生成模式
 			$image->Watermark($attach['target'], '', 'portal');
 		}
 
