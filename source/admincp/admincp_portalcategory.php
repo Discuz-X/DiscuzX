@@ -433,6 +433,23 @@ SCRIPT;
 		showsetting('portalcategory_allowviewshowothers', 'allowviewshowothers', $cate['allowviewshowothers'], 'radio');//WebPower版文章页显示其他分类
 		showsetting('portalcategory_allowviewshowsubs', 'allowviewshowsubs', $cate['allowviewshowsubs'], 'radio');//WebPower版文章页显示子分类
 		showsetting('portalcategory_asclist', 'asclist', $cate['asclist'], 'radio');//WebPower版列表页按发布时间顺序显示
+
+		//门户文章封面各分类可制定尺寸>>>
+		showsetting('portalcategory_specialthumbsize', array('specialthumbsize', array(
+			array(1, cplang('yes'), array('thumbsize' => '')),
+			array(0, cplang('no'), array('thumbsize' => 'none')),
+		)), $cate['specialthumbsize'], 'mradio');//
+		showtagheader('tbody', 'thumbsize', $cate['specialthumbsize'], 'sub');
+		showsetting('portalcategory_thumbsize', array(
+			'thumbsizewidth',
+			'thumbsizeheight'
+		), array(
+			intval($cate['thumbsizewidth']),
+			intval($cate['thumbsizeheight'])
+		), 'multiply');
+		showtagfooter('tbody');
+		//门户文章封面各分类可制定尺寸<<<
+
 		showsetting('portalcategory_allowpublish', 'allowpublish', $cate['disallowpublish'] ? 0 : 1, 'radio');
 		showsetting('portalcategory_notshowarticlesummay', 'notshowarticlesummay', $cate['notshowarticlesummay'] ? 0 : 1, 'radio');
 		showsetting('portalcategory_allowcomment', 'allowcomment', $cate['allowcomment'], 'radio');
@@ -506,6 +523,13 @@ SCRIPT;
 			'allowviewshowothers' => $_GET['allowviewshowothers'],//WebPower版文章页显示其他分类设置保存
 			'allowviewshowsubs' => $_GET['allowviewshowsubs'],//WebPower版文章页显示子分类设置保存
 			'asclist' => $_GET['asclist'],//WebPower版列表页按发布时间顺序显示设置保存
+
+			//门户文章封面各分类可制定尺寸>>>
+			'specialthumbsize' => $_GET['specialthumbsize'],
+			'thumbsizewidth' => $_GET['thumbsizewidth'],
+			'thumbsizeheight' => $_GET['thumbsizeheight'],
+			//门户文章封面各分类可制定尺寸<<<
+
 			'perpage' => $perpage,
 			'maxpages' => $maxpages,
 			'noantitheft' => intval($_GET['noantitheft']),

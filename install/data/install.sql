@@ -3932,6 +3932,12 @@ CREATE TABLE pre_portal_category (
   allowviewshowsubs tinyint(1) NOT NULL DEFAULT '0',
 --WebPower版列表页按发布时间顺序显示
   asclist tinyint(1) NOT NULL DEFAULT '0',
+--增加各分类可否指定缩略图尺寸开关
+  specialthumbsize tinyint(1) NOT NULL DEFAULT '0',
+--指定的该分类缩略图宽
+  thumbsizewidth smallint(6) NOT NULL DEFAULT '0',
+--指定的该分类缩略图高
+  thumbsizeheight smallint(6) NOT NULL DEFAULT '0',
   displayorder smallint(6) NOT NULL DEFAULT '0',
   notinheritedarticle tinyint(1) NOT NULL DEFAULT '0',
   notinheritedblock tinyint(1) NOT NULL DEFAULT '0',

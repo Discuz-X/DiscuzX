@@ -6589,6 +6589,12 @@ $lang = array
 	'portalcategory_allowviewshowsubs_comment' => '设置此频道下文章页边栏是否显示子分类列表',//WebPower版设置此频道下文章页边栏是否显示子分类列表
 	'portalcategory_asclist' => '列表页文章顺序显示',//WebPower版列表页文章顺序显示
 	'portalcategory_asclist_comment' => '设置此频道下列表页文章按发布时间顺序显示',//WebPower版设置此频道下列表页文章按发布时间顺序显示
+
+	'portalcategory_specialthumbsize' => '指定缩略图尺寸',//定制各栏目缩略图尺寸
+	'portalcategory_specialthumbsize_comment' => '是否指定此分类的缩略图尺寸而不沿用全局门户设置',//定制各栏目缩略图尺寸
+	'portalcategory_thumbsize' => '指定的缩略图尺寸',//定制各栏目缩略图尺寸
+	'portalcategory_thumbsize_comment' => '指定的缩略图尺寸',//定制各栏目缩略图尺寸
+
 	'portalcategory_allowpublish' => '发布文章',
 	'portalcategory_allowpublish_comment' => '设置此频道下是否允许发布文章',
 	'portalcategory_edit_succeed' => '频道栏目编辑成功 ',
