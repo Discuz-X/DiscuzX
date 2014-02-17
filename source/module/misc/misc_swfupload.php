@@ -188,8 +188,9 @@ if($_GET['operation'] == 'upload') {
 		if($attach['isimage'] && empty($_G['setting']['portalarticleimgthumbclosed'])) {
 			require_once libfile('class/image');
 			$image = new image();
-			$thumbimgwidth = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
-			$thumbimgheight = $_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300;
+			$category = C::t('portal_category')->fetch($catid);//搜索分类设置
+			$thumbimgwidth = $category['specialthumbsize'] && $category['thumbsizewidth'] ? $category['thumbsizewidth'] : ($_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300);//应用分类特定宽值
+			$thumbimgheight = $category['specialthumbsize'] && $category['thumbsizeheight'] ? $category['thumbsizeheight'] : ($_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300);//应用分类特定高值
 			$attach['thumb'] = $image->Thumb($attach['target'], '', $thumbimgwidth, $thumbimgheight, 3, false, true);//WebPower 版 调整缩略图生成模式
 			$image->Watermark($attach['target'], '', 'portal');
 		}
