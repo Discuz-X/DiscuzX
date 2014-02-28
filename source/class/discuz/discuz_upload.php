@@ -24,9 +24,9 @@ Class discuz_upload{
 
 	}
 
-	function init($attach, $type = 'temp', $extid = 0, $forcename = '') {
+	function init($attach, $type = 'temp', $extid = 0, $forcename = '', $check = true) {
 
-		if(!is_array($attach) || empty($attach) || !$this->is_upload_file($attach['tmp_name']) || trim($attach['name']) == '' || $attach['size'] == 0) {
+		if($check && (!is_array($attach) || empty($attach) || !$this->is_upload_file($attach['tmp_name']) || trim($attach['name']) == '' || $attach['size'] == 0)) {
 			$this->attach = array();
 			$this->errorcode = -1;
 			return false;
@@ -57,9 +57,9 @@ Class discuz_upload{
 
 	}
 
-	function save($ignore = 0) {
+	function save($ignore = 0, $ignoreCheck = 0) {
 		if($ignore) {
-			if(!$this->save_to_local($this->attach['tmp_name'], $this->attach['target'])) {
+			if(!$this->save_to_local($this->attach['tmp_name'], $this->attach['target'], $ignoreCheck)) {
 				$this->errorcode = -103;
 				return false;
 			} else {
@@ -74,9 +74,9 @@ Class discuz_upload{
 			$this->errorcode = -102;
 		} elseif(in_array($this->type, array('common')) && (!$this->attach['isimage'] && $this->attach['ext'] != 'ext')) {
 			$this->errorcode = -102;
-		} elseif(!$this->save_to_local($this->attach['tmp_name'], $this->attach['target'])) {
+		} elseif(!$this->save_to_local($this->attach['tmp_name'], $this->attach['target'], $ignoreCheck)) {
 			$this->errorcode = -103;
-		} elseif(($this->attach['isimage'] || $this->attach['ext'] == 'swf') && (!$this->attach['imageinfo'] = $this->get_image_info($this->attach['target'], true))) {
+		} elseif(($this->attach['isimage'] || $this->attach['ext'] == 'swf') && !($this->attach['imageinfo'] = $this->get_image_info($this->attach['target'], true))) {
 			$this->errorcode = -104;
 			@unlink($this->attach['target']);
 		} else {
@@ -185,8 +185,8 @@ Class discuz_upload{
 		return $res;
 	}
 
-	function save_to_local($source, $target) {
-		if(!discuz_upload::is_upload_file($source)) {
+	function save_to_local($source, $target, $ignore = 0) {
+		if(!discuz_upload::is_upload_file($source) && !$ignore) {
 			$succeed = false;
 		}elseif(@copy($source, $target)) {
 			$succeed = true;
