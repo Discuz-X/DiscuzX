@@ -135,7 +135,8 @@ class dbstuff {
 	}
 
 	function query($sql, $type = '', $cachetime = FALSE) {
-		$func = $type == 'UNBUFFERED' && @function_exists('mysql_unbuffered_query') ? 'mysql_unbuffered_query' : 'mysql_query';
+        //代码规范化修正
+		$func = ($type == 'UNBUFFERED' && function_exists('mysql_unbuffered_query')) ? 'mysql_unbuffered_query' : 'mysql_query';
 		if(!($query = $func($sql, $this->link)) && $type != 'SILENT') {
 			$this->halt('MySQL Query Error', $sql);
 		}
