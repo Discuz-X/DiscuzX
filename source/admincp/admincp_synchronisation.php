@@ -385,11 +385,11 @@ HTML;
             }
 
 
-            echo('<br />' . substr(iconv('GBK', 'UTF-8', $file), strrpos($file, '/') + 1) . '<br />');
+            echo('<br />' . str_replace('.jpg', '', substr(iconv('GBK', 'UTF-8', $file), strrpos($file, '/') + 1)) . '<br />');
 
             $_GET['conver'] = $coverstr;
             $_POST['attach_ids'] = "{$setarr[attachid]}";
-            $_POST['title'] = substr(iconv('GBK', 'UTF-8', $file), strrpos($file, '/')+1);
+            $_POST['title'] = str_replace('.jpg', '', substr(iconv('GBK', 'UTF-8', $file), strrpos($file, '/') + 1));
             $_POST['content'] = '<p><a href="'.$bigimg.'"><img src="'.$smallimg.'" /></a></p>';
             $article = $article_content = array();
 
