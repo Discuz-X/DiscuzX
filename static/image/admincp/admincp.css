@@ -521,7 +521,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 			.tfm th .rq { float: right; font-size: 14px; }
 			.tfm .pt, .tfm .px { margin-right: 3px; width: 282px; }
 		.tfm .c, .tfm .tedt, .m_c .tfm .tedt { width: 290px; }
-		.tfm .d { clear: both; margin: 5px 0; color: {LIGHTTEXT}; }
+		.tfm .d { clear: both; margin: 5px 0; /*color: {LIGHTTEXT}; 阻止一般情况下不需要用的样式，避免编辑器提示语法错误 */ }
 			.tfm .d em { margin-left: 5px; color: red; }
 			.tfm .d strong { margin-left: 5px; }
 		.tfm .p { text-align: right; }
@@ -754,3 +754,5 @@ input[type="submit"].btn-block,
 input[type="file"]:focus,
 	input[type="radio"]:focus,
 	input[type="checkbox"]:focus { outline: thin dotted; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; }
+
+.btn:focus { outline: none; }/* 阻止Webkit出现焦点高光 */
