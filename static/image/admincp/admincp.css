@@ -24,7 +24,7 @@ textarea, input, select, .html { padding:2px; border:1px solid; border-color:#66
 .txtnobd{ border:1px solid #FFF; background:#FFF; cursor:pointer; }
 .radio, .checkbox, .pr, .pc { border:none; background:none; vertical-align:middle; }
 .checkbox{ height:14px; }
-.btn{ margin:3px 0; padding:2px 30px;/* 加宽后台按钮，提高操作便利�? */ *padding:4px 30px 1px; border: 1px solid; border-color:#ddd #666 #666 #ddd; background:#DDD; color:#000; cursor:pointer; vertical-align:middle; }
+.btn{ margin:3px 0; padding:2px 30px;/* 加宽后台按钮，提高操作便利性 */ *padding:4px 30px 1px; border: 1px solid; border-color:#ddd #666 #666 #ddd; background:#DDD; color:#000; cursor:pointer; vertical-align:middle; }
 	.btn:hover { text-decoration: none; }
 .btn_big { display: inline-block; width: 90px; height: 30px; line-height: 30px; text-align: center; background: url(btn_big.png) no-repeat 0 0; font-size: 14px; font-weight: 700; color: #FFF; }
 	.btn_big:hover { text-decoration: none; }
@@ -275,10 +275,10 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.multicol { float:left; width: 270px !important; }
 	.staton{ text-indent:-9999px; width:20px; height:17px; background:url(bg_repno.gif) no-repeat -280px -250px; }
 	.statoff{ text-indent:-9999px; background:url(bg_repno.gif) no-repeat -250px -347px; }
-	.rowform{ width:346px; overflow:auto; }/* 加宽后台文本输入框表格宽�?*/
+	.rowform{ width:346px; overflow:auto; }/* 加宽后台文本输入框表格宽度 */
 		.tb2 .rowform{ padding-left:5px; }
-		.rowform .txt, .rowform textarea{ margin-right:10px; width:290px; }/* 加宽后台文本输入框宽�?*/
-		.rowform select{ margin-right:10px; width:296px; }/* 加宽后台选择框宽�?*/
+		.rowform .txt, .rowform textarea{ margin-right:10px; width:290px; }/* 加宽后台文本输入框宽度 */
+		.rowform select{ margin-right:10px; width:296px; }/* 加宽后台选择框宽度 */
 		.rowform .radio{ margin-top:-2px !important; *margin-top:0 !important; *margin-top:-2px; }
 		.rowform li{ overflow:hidden; float:left; margin-right:10px; white-space:nowrap; cursor:pointer; }
 			.rowform .clear{ clear:both; float:none; margin-bottom:10px; }
@@ -512,7 +512,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.up .prmc { padding-top: 5px; padding-bottom: 0; background-position: -650px 0; }
 		.up li { border-bottom: none; line-height: 160%; }
 
-/* 通用的表单样�?*/
+/* 通用的表单样式 */
 	.tfm { width: 100%; }
 		.tfm caption, .tfm th, .tfm td { padding: 10px 2px; }
 			.tfm caption h2 { font-size: 16px; }
@@ -521,7 +521,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 			.tfm th .rq { float: right; font-size: 14px; }
 			.tfm .pt, .tfm .px { margin-right: 3px; width: 282px; }
 		.tfm .c, .tfm .tedt, .m_c .tfm .tedt { width: 290px; }
-		.tfm .d { clear: both; margin: 5px 0; color: {LIGHTTEXT}; }
+		.tfm .d { clear: both; margin: 5px 0; /*color: {LIGHTTEXT}; 阻止一般情况下不需要用的样式，避免编辑器提示语法错误 */ }
 			.tfm .d em { margin-left: 5px; color: red; }
 			.tfm .d strong { margin-left: 5px; }
 		.tfm .p { text-align: right; }
@@ -531,7 +531,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.bn .tfm caption, .bn .tfm th, .bn .tfm td { padding-top: 5px; padding-bottom: 5px; }
 		.bn .tfm th { font-weight: 400; }
 
-/* 普�?数据列表 datatable by michael */
+/* 普通数据列表 datatable by michael */
 
 .dt { border-top: 1px solid #CDCDCD; width: 100%; }
 	.dt th { background: #F2F2F2; }
@@ -540,7 +540,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.dt .px { height: 16px !important; font-size: 12px; }
 
 
-/* 外边�?Margin，三组从窄到宽，级别分别为：n, m, w */
+/* 外边距 Margin，三组从窄到宽，级别分别为：n, m, w */
 	.mtn { margin-top: 5px !important; }
 	.mbn { margin-bottom: 5px !important; }
 	.mtm { margin-top: 10px !important; }
@@ -553,12 +553,12 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.psetting a.memo { color: #999; margin-left: 20px; }
 	.psetting div.memo { margin:5px;padding: 5px; border: 1px dotted #DEEFFB; background: #FFF; }
 
-/* 进度�?*/
+/* 进度条 */
 .pbg { position: relative; margin: 10px 0; width: 200px; height: 16px; background: url(bg_progressbar.png) 0 0 repeat-x; border-radius: 5px; }
 	.pbr { height: 16px; width: 200px; background-image: url(bg_progressbar.png); background-color: #5AAF4A; background-position: 0 -16px; background-repeat: repeat-x; border-radius: 5px; }
 	.pbg .xs0 { position: absolute; top: 0; right: 8px; }
 
-/* 模板预览�?*/
+/* 模板预览图 */
 .stylepreview { width: 110px; height: 120px; }
 	.tb.tb2 input[type="radio"] { margin: 0 2px 2px 5px }
 
@@ -754,3 +754,5 @@ input[type="submit"].btn-block,
 input[type="file"]:focus,
 	input[type="radio"]:focus,
 	input[type="checkbox"]:focus { outline: thin dotted; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; }
+
+.btn:focus { outline: none; }/* 阻止Webkit出现焦点高光 */
