@@ -73,6 +73,7 @@ if($operation == 'tag') {
 				$catids[] = intval($article['catid']);
 				$inserts[] = array (
 					'aid' => $article['aid'],
+                    'displayorder' => $article['displayorder'],//增加显示顺序字段数据捕获
 					'catid' => $article['catid'],
 					'uid' => $article['uid'],
 					'username' => $article['username'],
@@ -207,7 +208,7 @@ if($operation == 'tag') {
 				$catids[] = intval($value['catid']);
 			}
 		}
-		if(empty($articles)) {
+		if(empty($articles) && $_POST['optype'] != 'order'/* 调整列表强制选择判断 */) {
 			cpmsg('article_choose_at_least_one_article', 'action=article&catid='.$catid.'&perpage='.$perpage.'&page='.$page, 'error');
 		}
 		$aids = array_keys($articles);
@@ -230,6 +231,15 @@ if($operation == 'tag') {
 				C::t('portal_category')->update($catid, array('articles'=>dintval($cnt)));
 			}
 			cpmsg('article_move_succeed', 'action=article&catid='.$catid.'&perpage='.$perpage.'&page='.$page, 'succeed');
+        // 新增显示顺序数据库写入功能区>>>
+        } elseif($_POST['optype'] == 'order') {
+            //var_export($_GET['displayordernew']);
+            foreach($_GET['displayordernew'] as $aid => $order) {
+                //echo (string)$aid.'+'.(string)$order.'<br />';
+                C::t('portal_article_title')->update($aid, array('displayorder' => dintval($order)));
+            }
+            cpmsg('article_order_succeed', 'action=article&catid=' . $catid . '&perpage=' . $perpage . '&page=' . $page, 'succeed');
+        // 新增显示顺序数据库写入功能区<<<
 
 		} else {
 			cpmsg('article_choose_at_least_one_operation', 'action=article&catid='.$catid.'&perpage='.$perpage.'&page='.$page, 'error');
@@ -278,7 +288,7 @@ if($operation == 'tag') {
 
 		$categoryselect = category_showselect('portal', 'catid', true, $_GET['catid']);
 		$searchlang = array();
-		$keys = array('search', 'likesupport', 'resultsort', 'defaultsort', 'orderdesc', 'orderasc', 'perpage_10', 'perpage_20', 'perpage_50', 'perpage_100',
+		$keys = array('search', 'likesupport', 'resultsort', 'defaultsort', 'orderdesc', 'orderasc', 'perpage_10', 'perpage_20', 'perpage_50', 'perpage_100', 'perpage_200', 'perpage_500',/* 增加 ‘每页200’, ‘每页500’选项标示捕获 */
 		'article_dateline', 'article_id', 'article_title', 'article_uid', 'article_username', 'article_category', 'article_tag');
 		foreach ($keys as $key) {
 			$searchlang[$key] = cplang($key);
@@ -332,6 +342,8 @@ if($operation == 'tag') {
 							<option value="20"$perpages[20]>$searchlang[perpage_20]</option>
 							<option value="50"$perpages[50]>$searchlang[perpage_50]</option>
 							<option value="100"$perpages[100]>$searchlang[perpage_100]</option>
+							<option value="200"$perpages[200]>$searchlang[perpage_200]</option>
+							<option value="500"$perpages[500]>$searchlang[perpage_500]</option>
 							</select>
 							<input type="hidden" name="action" value="article">
 							<input type="submit" name="searchsubmit" value="$searchlang[search]" class="btn">
@@ -347,7 +359,7 @@ SEARCH;
 		$makehtmlflag = !empty($_G['setting']['makehtml']['flag']);
 		showformheader('article&operation=list');
 		showtableheader('article_list');
-		$subtitle = array('', 'article_title', 'article_category', 'article_username', 'article_dateline');
+		$subtitle = array('', 'display_order'/* 新增显示顺序列表头 */, 'article_title', 'article_category', 'article_username', 'article_dateline');
 		if($makehtmlflag) {
 			$subtitle[] = 'HTML';
 		}
@@ -376,6 +388,7 @@ SEARCH;
 				}
 				$tablerow = array(
 						"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[aid]\">",
+                        "<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$value[aid]]\" value=\"$value[displayorder]\"  readonly=\"readonly\">",//新增显示顺序列
 						"<a href=\"portal.php?mod=view&aid=$value[aid]\" target=\"_blank\">$value[title]</a>".($taghtml ? $taghtml : ''),
 						'<a href="'.ADMINSCRIPT.'?action=article&operation=list&catid='.$value['catid'].'">'.$category[$value['catid']]['catname'].'</a>',
 						"<a href=\"".ADMINSCRIPT."?action=article&uid=$value[uid]\">$value[username]</a>",
@@ -386,7 +399,7 @@ SEARCH;
 				}
 				$tablerow[] = ($makehtmlflag ? ($category[$value['catid']]['fullfoldername'] ? "<a href='javascript:void(0);' onclick=\"make_html('portal.php?mod=view&aid=$value[aid]', $('mkhtml_$value[aid]'))\">".cplang('setting_functions_makehtml_make')."</a>" : cplang('setting_functions_makehtml_make_has_no_foldername')) : '')
 						." <a href=\"portal.php?mod=portalcp&ac=article&aid=$value[aid]\" target=\"_blank\">".cplang('edit')."</a>";
-				showtablerow('', array('class="td25"', 'width="480"', 'class="td28"'), $tablerow);
+				showtablerow('', array('class="td25"', 'class="td25"'/* 添加'显示顺序'列样式 */, 'width="480"', 'class="td28"'), $tablerow);
 			}
 			$multipage = multi($count, $perpage, $page, $mpurl);
 			if($repairs) {
@@ -395,10 +408,30 @@ SEARCH;
 		}
 
 		$optypehtml = ''
-			.'<input type="hidden" name="hiddenpage" id="hiddenpage" value="'.$page.'"/><input type="hidden" name="hiddencatid" id="hiddencatid" value="'.$catid.'"/><input type="hidden" name="hiddenperpage" id="hiddenperpage" value="'.$perpage.'"/><input type="radio" name="optype" id="optype_trash" value="trash" class="radio" /><label for="optype_trash">'.cplang('article_optrash').'</label>&nbsp;&nbsp;'
-			.'<input type="radio" name="optype" id="optype_move" value="move" class="radio" /><label for="optype_move">'.cplang('article_opmove').'</label> '
+            //增加操作切换项为调整顺序
+			.'<input type="hidden" name="hiddenpage" id="hiddenpage" value="'.$page.'"/><input type="hidden" name="hiddencatid" id="hiddencatid" value="'.$catid.'"/><input type="hidden" name="hiddenperpage" id="hiddenperpage" value="'.$perpage.'"/>'
+            .'<input type="radio" name="optype" id="optype_order" value="order" class="radio" onchange="toggleOrderField()" /><label for="optype_order">'.cplang('article_oporder').'</label>&nbsp;&nbsp;'
+            .'<input type="radio" name="optype" id="optype_trash" value="trash" class="radio" onchange="toggleOrderField()" /><label for="optype_trash">'.cplang('article_optrash').'</label>&nbsp;&nbsp;'
+			.'<input type="radio" name="optype" id="optype_move" value="move" class="radio" onchange="toggleOrderField()" /><label for="optype_move">'.cplang('article_opmove').'</label> '
 			.category_showselect('portal', 'tocatid', false)
 			.'&nbsp;&nbsp;';
+        //增加切换项切换时响应变化>>>
+        $optypehtml .= <<<HTML
+<script>
+function toggleOrderField() {
+	var cpform, inputs, status;
+	(status = document.getElementById('optype_order').checked);
+	(cpform = document.getElementById('cpform')) && (inputs = cpform.getElementsByTagName('INPUT'));
+	for(var i in inputs) {
+		if(typeof inputs[i] == 'object' && inputs[i].type == 'text') {
+			inputs[i].readOnly = !status;
+		}
+	}
+}
+</script>
+HTML;
+        //增加切换项切换时响应变化<<<
+
 		showsubmit('', '', '', '<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'ids\')" /><label for="chkall">'.cplang('select_all').'</label>&nbsp;&nbsp;'.$optypehtml.'<input type="submit" class="btn" name="articlesubmit" value="'.cplang('submit').'" />', $multipage);
 		showtablefooter();
 		showformfooter();

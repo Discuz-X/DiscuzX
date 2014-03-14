@@ -145,6 +145,7 @@ $lang = array (
   'article_trash_is_empty' => '垃圾箱已清空',
   'article_trash_succeed' => '文章移入垃圾箱成功 ',
   'article_move_succeed' => '文章成功移动到指定分类',
+  'article_order_succeed' => '成功更新文章的显示顺序',//添加文章排序调整成功标示
 
   'block_delete_succeed' => '删除模块成功 ',
   'block_choose_at_least_one_block' => '请至少选择一个模块',
