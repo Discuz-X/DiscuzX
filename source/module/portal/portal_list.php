@@ -120,7 +120,7 @@ function category_get_list($cat, $wheresql, $page = 1, $perpage = 0) {
 	$multi = '';
 	$count = C::t('portal_article_title')->fetch_all_by_sql($wheresql, '', 0, 0, 1, 'at');
 	if($count) {
-		$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY at.dateline DESC', $start, $perpage, 0, 'at');
+        $query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY at.displayorder DESC, at.dateline ' . ($cat['asclist'] ? 'ASC' : 'DESC'), $start, $perpage, 0, 'at');//增加列表页排序逻辑调整
 		foreach($query as $value) {
 			$value['catname'] = $value['catid'] == $cat['catid'] ? $cat['catname'] : $_G['cache']['portalcategory'][$value['catid']]['catname'];
 			$value['onerror'] = '';
@@ -168,7 +168,7 @@ function category_get_list_more($cat, $wheresql, $hassub = true,$hasnew = true,$
 				$dateline = TIMESTAMP - 3600 * 24 * 90;
 				$query = C::t('portal_article_count')->fetch_all_hotarticle($wheresql, $dateline);
 			} elseif($key == 'portalnewarticle') {
-				$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY at.dateline DESC', 0, 10, 0, 'at');
+                $query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY at.displayorder DESC, at.dateline ' . ($cat['asclist'] ? 'ASC' : 'DESC'), 0, 10, 0, 'at');//增加列表页排序逻辑调整
 			} elseif(substr($key, 0, 7) == 'subcate') {
 				$cacheid = intval(str_replace('subcate', '', $key));
 				if(!empty($_G['cache']['portalcategory'][$cacheid])) {
@@ -180,7 +180,7 @@ function category_get_list_more($cat, $wheresql, $hassub = true,$hasnew = true,$
 						$where = 'at.catid='.$cacheid;
 					}
 					$where .= " AND at.status='0'";
-					$query = C::t('portal_article_title')->fetch_all_by_sql($where, 'ORDER BY at.dateline DESC', 0, 10, 0, 'at');
+                    $query = C::t('portal_article_title')->fetch_all_by_sql($where, 'ORDER BY at.displayorder DESC, at.dateline ' . ($cat['asclist'] ? 'ASC' : 'DESC'), 0, 10, 0, 'at');//增加列表页排序逻辑调整
 				}
 			}
 
