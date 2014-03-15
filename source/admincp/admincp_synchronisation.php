@@ -15,7 +15,7 @@ if($operation == 'batchupload'){
         echo <<<HTML
 
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="static/css/bootstrap.min.css">
+<!--<link rel="stylesheet" href="static/css/bootstrap.min.css">-->
 <style>.btn{padding: 3px 12px;}</style>
 <!-- blueimp Gallery styles -->
 <link rel="stylesheet" href="static/css/blueimp-gallery.min.css">
