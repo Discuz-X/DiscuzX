@@ -3852,6 +3852,8 @@ CREATE TABLE pre_portal_article_related (
 DROP TABLE IF EXISTS pre_portal_article_title;
 CREATE TABLE pre_portal_article_title (
   aid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+--增加列表页显示排序字段
+  displayorder mediumint(8) unsigned NOT NULL DEFAULT '0',
   catid mediumint(8) unsigned NOT NULL DEFAULT '0',
   bid mediumint(8) unsigned NOT NULL DEFAULT '0',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
