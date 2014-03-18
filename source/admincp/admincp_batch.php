@@ -713,13 +713,12 @@ if($operation == 'publishone') {
                 $newaid = intval($newaid);
                 if($newaid) ($newaids[$newaid] = $newaid) &&
                 (print_r("UPDATE `{$portal_attachment}` SET  `aid` =  '{$aid}' WHERE  `{$portal_attachment}`.`attachid` ={$newaid};")
-                    && (print_r('<br />')));
+                    && (print_r('<br />'))) && ($attachments[] = array($newaid, $aid));
             }
             //var_export($newaids);
             //var_export($aid);
             //echo '######################################<br />';
             if($newaids) {
-                $attachments[] = array($newaids, $aid);
                 //C::t('portal_attachment')->update_to_used($newaids, $aid);
             }
 
@@ -782,7 +781,7 @@ if($operation == 'publishone') {
         }
 
         foreach($attachments as $key => $attachment) {
-            C::t('portal_attachment')->update_to_used($attachment[0], $attachment[1]);
+            C::t('portal_attachment')->update($attachment[0], array('aid' => $attachment[1]));
         }
 
     }
