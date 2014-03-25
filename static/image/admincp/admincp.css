@@ -16,7 +16,7 @@ label, .pointer { cursor:pointer; }
 .highlight { color: #C00; font-weight: 700; }
 
 /* form */
-textarea, input, select, .html { padding:2px; border:1px solid; border-color:#666 #ccc #ccc #666; background:#F9F9F9; color:#333; resize: none; }
+textarea, input, select, .html { padding:2px; border:1px solid; border-color: #B1B1B1 /* 修改后台文本框边框样式 */ /* #666 #ccc #ccc #666 */; background:#F9F9F9; color:#333; resize: none; }
 .txt, select, .vmiddle { vertical-align:middle; }
 .txt:hover, .txt:focus, textarea:hover, textarea:focus{ border-color:#09C; background:#F5F9FD; }
 .hover:hover { background:#F5F9FD; }
