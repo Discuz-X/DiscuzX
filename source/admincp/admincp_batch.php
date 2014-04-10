@@ -15,6 +15,8 @@ require_once libfile('function/portalcp');
 require_once libfile('function/home');
 require_once libfile('function/portal');
 
+mb_detect_order("GBK,UTF-8");
+
 if($operation == 'publishone') {
     if(!submitcheck('publishsubmit')) {
         showformheader('batch');
@@ -24,6 +26,9 @@ if($operation == 'publishone') {
         showsubmit('publishsubmit', 'submit');
         showtablefooter();
         showformfooter();
+
+        $list = glob(DISCUZ_ROOT.'data/plugindata/images/*');
+        var_export($list);
     } else {
         $catid = intval($_GET['catid']);
 
@@ -404,6 +409,13 @@ if($operation == 'publishone') {
         showsubmit('publishsubmit', 'submit');
         showtablefooter();
         showformfooter();
+
+        $list = glob(DISCUZ_ROOT.'data/plugindata/images/*');
+        //var_export($list);
+        foreach($list as $item){
+            echo ($encoding = mb_detect_encoding($item)).'<br>';
+            echo iconv($encoding, 'UTF-8', $item).'<br>';
+        }
     } else {
         $catid = intval($_GET['catid']);
         $portal_attachment = DB::table('portal_attachment');
@@ -432,8 +444,12 @@ if($operation == 'publishone') {
         foreach($list as $num => $file) {
             if(!is_file($file) || !is_image($file)) continue;
 
-            $ConveredCodeFilePath = iconv('GBK', 'UTF-8', $file);
-            $ConveredCodeFileName = substr($ConveredCodeFilePath, strrpos($ConveredCodeFilePath, '/') + 1);
+            //echo $file.'<vr />';
+            //echo mb_detect_encoding($file);
+            //continue;
+            echo($fileNameEncoding = mb_detect_encoding($file));
+            echo($ConveredCodeFilePath = iconv($fileNameEncoding, 'UTF-8', $file));
+            echo($ConveredCodeFileName = substr($ConveredCodeFilePath, strrpos($ConveredCodeFilePath, '/') + 1));
 
             $upload = new discuz_upload();
             $upload->init(array(
@@ -927,4 +943,13 @@ function is_image($file) {
     $imgs_arr = array("jpg", "jpeg", "png", "gif"); //图片的后缀 ，自己可以添加
     $ext      = strtolower(end(explode(".", $file)));
     return !empty($ext) && in_array($ext, $imgs_arr);
+}
+
+function detect_encoding($str) {
+    $array = array('ASCII', 'GBK', 'UTF-8');
+    foreach($array as $value) {
+        if($str === mb_convert_encoding(mb_convert_encoding($str, "UTF-32", $value), $value, "UTF-32"))
+            return $value;
+    }
+    return false;
 }
