@@ -11,9 +11,9 @@
 define('UC_CONNECT', 'mysql');				// 连接 UCenter 的方式: mysql/NULL, 默认为空时为 fscoketopen(), mysql 是直接连接的数据库, 为了效率, 建议采用 mysql
 // 数据库相关 (mysql 连接时)
 define('UC_DBHOST', 'localhost');			// UCenter 数据库主机
+define('UC_DBNAME', 'ucenter');				// UCenter 数据库名称
 define('UC_DBUSER', 'root');				// UCenter 数据库用户名
 define('UC_DBPW', 'root');				// UCenter 数据库密码
-define('UC_DBNAME', 'ucenter');				// UCenter 数据库名称
 define('UC_DBCHARSET', 'utf8');				// UCenter 数据库字符集
 define('UC_DBTABLEPRE', '`ucenter`.uc_');		// UCenter 数据库表前缀
 define('UC_DBCONNECT', '0');				// UCenter 数据库持久连接 0=关闭, 1=打开

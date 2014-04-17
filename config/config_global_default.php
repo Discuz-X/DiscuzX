@@ -133,20 +133,20 @@ $_config['download']['xsendfile']['dir'] = '/down/';
 // 页面输出设置
 $_config['output']['charset'] 			= 'utf-8';	// 页面字符集
 $_config['output']['forceheader']		= 1;		// 强制输出页面字符集，用于避免某些环境乱码
-$_config['output']['gzip'] 			= 0;		// 是否采用 Gzip 压缩输出
+$_config['output']['gzip'] 				= 0;		// 是否采用 Gzip 压缩输出
 $_config['output']['tplrefresh'] 		= 1;		// 模板自动刷新开关 0=关闭, 1=打开
 $_config['output']['language'] 			= 'zh_cn';	// 页面语言 zh_cn/zh_tw
-$_config['output']['staticurl'] 		= 'static/';	// 站点静态文件路径，“/”结尾
+$_config['output']['staticurl'] 		= 'static/';// 站点静态文件路径，“/”结尾
 $_config['output']['ajaxvalidate']		= 0;		// 是否严格验证 Ajax 页面的真实性 0=关闭，1=打开
 $_config['output']['iecompatible']		= 0;		// 页面 IE 兼容模式
 
 // COOKIE 设置
-$_config['cookie']['cookiepre'] 		= 'discuz_'; 	// COOKIE前缀
+$_config['cookie']['cookiepre'] 		= 'discuz_';// COOKIE前缀
 $_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE作用域
 $_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE作用路径
 
 // 站点安全设置
-$_config['security']['authkey']			= 'asdfasfas';	// 站点加密密钥
+$_config['security']['authkey']				= 'asdfasfas';// 站点加密密钥
 $_config['security']['urlxssdefend']		= true;		// 自身 URL XSS 防御
 $_config['security']['attackevasive']		= 0;		// CC 攻击防御 1|2|4|8
 
@@ -158,7 +158,7 @@ $_config['security']['querysafe']['dlikehex']	= 1;
 $_config['security']['querysafe']['afullnote']	= 0;
 
 $_config['admincp']['founder']			= '1';		// 站点创始人：拥有站点管理后台的最高权限，每个站点可以设置 1名或多名创始人
-								// 可以使用uid，也可以使用用户名；多个创始人之间请使用逗号“,”分开;
+													// 可以使用uid，也可以使用用户名；多个创始人之间请使用逗号“,”分开;
 $_config['admincp']['forcesecques']		= 0;		// 管理人员必须设置安全提问才能进入系统设置 0=否, 1=是[安全]
 $_config['admincp']['checkip']			= 1;		// 后台管理操作是否验证管理员的 IP, 1=是[安全], 0=否。仅在管理员无法登陆后台时设置 0。
 $_config['admincp']['runquery']			= 0;		// 是否允许后台运行 SQL 语句 1=是 0=否[安全]
@@ -184,4 +184,6 @@ $_config['remote']['cron'] = 0;
 // $_GET|$_POST的兼容处理，0为关闭，1为开启；开启后即可使用$_G['gp_xx'](xx为变量名，$_GET和$_POST集合的所有变量名)，值为已经addslashes()处理过
 $_config['input']['compatible'] = 1;
 
+// ----------------------  CONFIG PLUGINDEVELOPER  ---------------------- //
+$_config['plugindeveloper'] = 1;
 ?>
