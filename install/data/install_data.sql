@@ -1728,3 +1728,6 @@ INSERT INTO `pre_common_member` (`uid`, `email`, `username`, `password`, `status
 INSERT INTO `pre_common_admincp_member` (`uid`, `cpgroupid`, `customperm`) VALUES (2, 6, 'a:0:{}');
 
 INSERT INTO `pre_forum_threadprofile` (`id`, `name`, `template`, `global`) VALUES (1, '默认方案', 'a:2:{s:4:\"left\";s:399:\"{numbercard}\r\n{groupicon}<p>{*}</p>{/groupicon}\r\n{authortitle}<p><em>{*}</em></p>{/authortitle}\r\n{customstatus}<p class=\"xg1\">{*}</p>{/customstatus}\r\n{star}<p>{*}</p>{/star}\r\n{upgradeprogress}<p>{*}</p>{/upgradeprogress}\r\n<dl class=\"pil cl\">\r\n\t<dt>{baseinfo=credits,1}</dt><dd>{baseinfo=credits,0}</dd>\r\n</dl>\r\n{medal}<p class=\"md_ctrl\">{*}</p>{/medal}\r\n<dl class=\"pil cl\">{baseinfo=field_qq,0}</dl>\";s:3:\"top\";s:82:\"<dl class=\"cl\">\r\n<dt>{baseinfo=credits,1}</dt><dd>{baseinfo=credits,0}</dd>\r\n</dl>\";}', 1);
+
+-- WebPower 版 默认关闭管理员发布验证码
+UPDATE `pre_common_usergroup_field` SET `seccode`='0' WHERE `groupid`='1';
