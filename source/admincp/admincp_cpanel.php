@@ -29,11 +29,13 @@ class AdminSession {
 	function adminsession($uid, $groupid, $adminid, $ip) {
 		global $_G;
 
+        $timeout = intval($_G['config']['admincp']['timeout']);
+
 		$this->panel = defined('IN_ADMINCP') ? 1 : (defined('IN_MODCP') ? 2 : -1);
 
 		$this->inadmincp = defined('IN_ADMINCP');
 		$this->uid = $uid;
-		$this->timelimit = time() - 1800;
+		$this->timelimit = time() - $timeout * 60;
 		$this->db = &$db;
 		$this->tablepre = &$tablepre;
 		if($uid < 1 || $adminid < 1 || ($this->inadmincp && $adminid != 1)) {

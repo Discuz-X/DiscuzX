@@ -163,6 +163,7 @@ $_config['admincp']['forcesecques']		= 0;		// 管理人员必须设置安全提�
 $_config['admincp']['checkip']			= 1;		// 后台管理操作是否验证管理员的 IP, 1=是[安全], 0=否。仅在管理员无法登陆后台时设置 0。
 $_config['admincp']['runquery']			= 0;		// 是否允许后台运行 SQL 语句 1=是 0=否[安全]
 $_config['admincp']['dbimport']			= 1;		// 是否允许后台恢复论坛数据  1=是 0=否[安全]
+$_config['admincp']['timeout']			= 24 * 60;	// 后台登陆超时，上线后请修改至30
 
 /**
  * 系统远程调用功能模块
