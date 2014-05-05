@@ -7,12 +7,14 @@ global $_G;
 $anchors = array(
     'info',
     'board',
+    'extra',
 );
 
 if(!submitcheck('companysubmit')) {
     $_CA = C::t('common_setting')->fetch_all(null);
     $company = (array)dunserialize($_CA['company']);
     $companyboard = (array)dunserialize($_CA['companyboard']);
+    $companyextra = (array)dunserialize($_CA['companyextra']);
 
     in_array($_GET['anchor'], $anchors) || ($_GET['anchor'] = 'info');
     $menulist = array();
@@ -55,6 +57,11 @@ if(!submitcheck('companysubmit')) {
         }
         showtablefooter();
 
+        showtableheader('', 'nobottom', 'id="board"' . ($_GET['anchor'] != 'extra' ? ' style="display: none"' : ''));
+        showsetting('message_company_extratop', 'companyextranew[top]', $companyextra['top'], 'textarea');
+        showsetting('message_company_extrabottom', 'companyextranew[bottom]', $companyextra['bottom'], 'textarea');
+        showtablefooter();
+
         showtableheader('', 'notop');
         showsubmit('companysubmit', 'submit');
         showtablefooter();
@@ -73,6 +80,7 @@ if(!submitcheck('companysubmit')) {
 } else {
     $settingnew = $_GET['settingnew'];
     $companynew = $_GET['companynew'];
+    $companyextranew = $_GET['companyextranew'];
 
     $valueSlot = array('companyname');
     foreach($companynew as $name => $value) {
@@ -94,6 +102,16 @@ if(!submitcheck('companysubmit')) {
         $arraySort[$name] = $companyboardnew[$name];
     }
     $companyboardnew = $arraySort;
+
+
+
+
+    if(isset($companyextranew['top'])) {
+        $companyextranew['top'] = str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $companyextranew['top']);
+    }
+    if(isset($companyextranew['bottom'])) {
+        $companyextranew['bottom'] = str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $companyextranew['bottom']);
+    }
     //$settingnew['company']['address'] = $companynew['address'];
     //	if (is_array($_GET['hooker'])) {
     //		foreach ($_GET['hooker'] as $templatehookerid => $val) {
@@ -147,6 +165,7 @@ if(!submitcheck('companysubmit')) {
     array_walk($companynew, 'trim_value');
     $settingnew['company'] = serialize($companynew);
     $settingnew['companyboard'] = serialize($companyboardnew);
+    $settingnew['companyextra'] = serialize($companyextranew);
     //var_export($settingnew['companyboard']);
     C::t('common_setting')->update_batch($settingnew);
     updatecache('setting');
