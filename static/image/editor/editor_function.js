@@ -7,24 +7,27 @@ function uploadEdit(obj) {
 }
 
 function edit_save() {
-	var p = window.frames['uchome-ifrHtmlEditor'];
-	var obj = p.window.frames['HtmlEditor'];
-	var status = p.document.getElementById('uchome-editstatus').value;
-	if(status == 'code') {
-		$('uchome-ttHtmlEditor').value = p.document.getElementById('sourceEditor').value;
-	} else if(status == 'text') {
-		if(BROWSER.ie) {
-			obj.document.body.innerText = p.document.getElementById('dvtext').value;
-			$('uchome-ttHtmlEditor').value = obj.document.body.innerHTML;
+	var editors = ['content', 'specital', 'performance', 'video', 'case'];
+	for(var i = editors.length, editor; editor = editors[--i]; null) {
+		var p = window.frames['uchome-ifrHtmlEditor-' + editor];
+		var obj = p.window.frames['HtmlEditor'];
+		var status = p.document.getElementById('uchome-editstatus').value;
+		if(status == 'code') {
+			$('uchome-ttHtmlEditor-' + editor).value = p.document.getElementById('sourceEditor').value;
+		} else if(status == 'text') {
+			if(BROWSER.ie) {
+				obj.document.body.innerText = p.document.getElementById('dvtext').value;
+				$('uchome-ttHtmlEditor-' + editor).value = obj.document.body.innerHTML;
+			} else {
+				obj.document.body.textContent = p.document.getElementById('dvtext').value;
+				var sOutText = obj.document.body.innerHTML;
+				$('uchome-ttHtmlEditor-' + editor).value = sOutText.replace(/\r\n|\n/g, "<br>");
+			}
 		} else {
-			obj.document.body.textContent = p.document.getElementById('dvtext').value;
-			var sOutText = obj.document.body.innerHTML;
-			$('uchome-ttHtmlEditor').value = sOutText.replace(/\r\n|\n/g,"<br>");
+			$('uchome-ttHtmlEditor-' + editor).value = obj.document.body.innerHTML;
 		}
-	} else {
-		$('uchome-ttHtmlEditor').value = obj.document.body.innerHTML;
 	}
-	backupContent($('uchome-ttHtmlEditor').value);
+	backupContent($('uchome-ttHtmlEditor-content').value);
 }
 
 function relatekw() {
@@ -53,7 +56,7 @@ function downRemoteFile() {
 }
 function backupContent(sHTML) {
 	if(sHTML.length > 11) {
-		var obj = $('uchome-ttHtmlEditor').form;
+		var obj = $('uchome-ttHtmlEditor-content').form;
 		if(!obj) return;
 		var data = subject = message = '';
 		for(var i = 0; i < obj.elements.length; i++) {

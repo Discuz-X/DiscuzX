@@ -39,7 +39,11 @@ if(empty($catid) && $article) {
 $htmlstatus = !empty($_G['setting']['makehtml']['flag']) && $portalcategory[$catid]['fullfoldername'];
 
 if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
-
+die('content:'.$_POST['content'].'<br>---------------------------------<br>'.
+'specital:'.$_POST['specital'].'<br>-----------------------------------<br>'.
+'performance:'.$_POST['performance'].'<br>------------------------------<br>'.
+'video:'.$_POST['video'].'<br>------------------------------------<br>'.
+'case:'.$_POST['case'].'<br>------------------------------------<br>');
 	if($aid) {
 		check_articleperm($article['catid'], $aid, $article);
 	} else {
